@@ -11,7 +11,7 @@ public class TopBar extends JPanel {
         setLayout(new BorderLayout());
 
         add(createTopBar(), BorderLayout.WEST);
-        add(profileButton(), BorderLayout.EAST);
+        add(menuButton(), BorderLayout.EAST);
     }
 
     private JButton logo() {
@@ -61,10 +61,15 @@ public class TopBar extends JPanel {
         return topBarButtons;
     }
 
-    private JButton profileButton() {
-        JButton profile = new JButton("Profile");
+    private JButton menuButton() {
+        ImageIcon kebabMenuIcon = new ImageIcon("images/icons/kebab.png");
+        JButton profile = new JButton();
+        profile.setIcon(kebabMenuIcon);
         profile.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(18f));
-        profile.setPreferredSize(new Dimension(150, 50));
+        profile.setPreferredSize(new Dimension(100, 50));
+        profile.setBorderPainted(false); // no border
+        profile.setFocusPainted(false); // no highlight
+        profile.setContentAreaFilled(false); // no fill
 
         return profile;
     }
