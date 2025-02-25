@@ -33,8 +33,8 @@ public class TopBar extends JPanel {
     }
 
     private JButton[] createButtons() {
-        JButton[] topBarButtons = new JButton[5];
-        String[] topBarButtonsLabels = { "Home", "Vehicles", "Details", "About Us", "Contact Us" };
+        JButton[] topBarButtons = new JButton[4];
+        String[] topBarButtonsLabels = { "Home", "Vehicles", "About Us", "Contact Us" };
 
         for (int i = 0; i < topBarButtonsLabels.length; i++) {
             topBarButtons[i] = new JButton(topBarButtonsLabels[i]);
