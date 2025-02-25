@@ -5,23 +5,12 @@ public class TopBar extends JPanel {
 
     public TopBar(JFrame frame) {
         setBackground(Color.WHITE);
+        setPreferredSize(new Dimension(frame.getWidth(), 80));
         setLayout(new GridBagLayout());
 
-        add(createContainer());
-        setPreferredSize(new Dimension(frame.getWidth(), 80));
-    }
+        add(logoLabel());
+        add(createButtonContainer());
 
-    private JPanel createContainer() {
-        JPanel topBarContainer = new JPanel();
-        topBarContainer.setBackground(Color.WHITE);
-        topBarContainer.add(logoLabel());
-
-        JButton[] buttons = createButtons();
-        for (JButton button : buttons) {
-            topBarContainer.add(button);
-        }
-
-        return topBarContainer;
     }
 
     private JLabel logoLabel() {
@@ -30,6 +19,18 @@ public class TopBar extends JPanel {
         logoLabel.setForeground(Color.BLUE);
 
         return logoLabel;
+    }
+
+    private JPanel createButtonContainer() {
+        JPanel topBarContainer = new JPanel();
+        topBarContainer.setBackground(Color.WHITE);
+
+        JButton[] buttons = createButtons();
+        for (JButton button : buttons) {
+            topBarContainer.add(button);
+        }
+
+        return topBarContainer;
     }
 
     private JButton[] createButtons() {
