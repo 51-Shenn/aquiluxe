@@ -13,7 +13,7 @@ public class App {
             // initialize frame
             setTitle("AQUILUXE");
             setLayout(new BorderLayout());
-            setMinimumSize(new Dimension(500, 500));
+            setMinimumSize(new Dimension(1280, 720));
             setExtendedState(JFrame.MAXIMIZED_BOTH);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

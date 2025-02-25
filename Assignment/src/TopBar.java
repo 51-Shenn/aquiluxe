@@ -7,31 +7,43 @@ public class TopBar extends JPanel {
         setBackground(Color.WHITE);
         setLayout(new GridBagLayout());
 
-        add(logo());
+        add(createContainer());
         setPreferredSize(new Dimension(frame.getWidth(), 80));
     }
 
-    private JPanel logo() {
-        JPanel container = new JPanel();
-        container.setBackground(Color.WHITE);
+    private JPanel createContainer() {
+        JPanel topBarContainer = new JPanel();
+        topBarContainer.setBackground(Color.WHITE);
+        topBarContainer.add(logoLabel());
 
+        JButton[] buttons = createButtons();
+        for (JButton button : buttons) {
+            topBarContainer.add(button);
+        }
+
+        return topBarContainer;
+    }
+
+    private JLabel logoLabel() {
         JLabel logoLabel = new JLabel("AQUILUXE");
         logoLabel.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(30f));
         logoLabel.setForeground(Color.BLUE);
-        container.add(logoLabel);
 
+        return logoLabel;
+    }
+
+    private JButton[] createButtons() {
         JButton[] topBarButtons = new JButton[5];
-        String[] topBarButtonsLabels = {"Home", "Vehicles", "Details", "About Us", "Contact Us"};
+        String[] topBarButtonsLabels = { "Home", "Vehicles", "Details", "About Us", "Contact Us" };
 
-        for(int i = 0; i < topBarButtonsLabels.length; i++) {
+        for (int i = 0; i < topBarButtonsLabels.length; i++) {
             topBarButtons[i] = new JButton(topBarButtonsLabels[i]);
             topBarButtons[i].setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
             topBarButtons[i].setBorderPainted(false); // no border
             topBarButtons[i].setFocusPainted(false); // no highlight
             topBarButtons[i].setContentAreaFilled(false); // no fill
-            container.add(topBarButtons[i]);
         }
 
-        return container;
+        return topBarButtons;
     }
 }
