@@ -1,3 +1,5 @@
+package code;
+
 import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;

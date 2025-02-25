@@ -1,4 +1,4 @@
-Open Sans Variable CustomFonts
+Open Sans Variable code.CustomFonts
 =======================
 
 This download contains Open Sans as both variable fonts and static fonts.
