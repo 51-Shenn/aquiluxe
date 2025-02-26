@@ -1,9 +1,9 @@
-package code;
+package gui;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class App {
+public class MainApp {
     public static void main(String[] args) {
 
         new MainWindow();
@@ -22,9 +22,8 @@ public class App {
             ImageIcon carLogoIcon = new ImageIcon("images/icons/carLogo.png");
             setIconImage(carLogoIcon.getImage()); // Window Icon
 
-//            add(new TopBar(this), BorderLayout.NORTH);
+            // add(new TopBar(this), BorderLayout.NORTH);
             add(new LoginPage());
-
 
             setVisible(true);
         }

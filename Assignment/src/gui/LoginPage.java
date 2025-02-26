@@ -1,4 +1,4 @@
-package code;
+package gui;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -104,6 +104,7 @@ public class LoginPage extends JPanel {
 
         return fullNamePanel;
     }
+
     private JPanel createGenderContainer() {
         // gender
         JPanel genderPanel = new JPanel(new BorderLayout());
@@ -142,6 +143,7 @@ public class LoginPage extends JPanel {
 
         return genderPanel;
     }
+
     private JPanel createEmailContainer() {
         // email address
         JPanel emailPanel = new JPanel(new GridBagLayout());
@@ -166,6 +168,7 @@ public class LoginPage extends JPanel {
 
         return emailPanel;
     }
+
     private JPanel createPhoneContainer() {
         // phone number
         JPanel phonePanel = new JPanel(new GridBagLayout());

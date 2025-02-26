@@ -1,4 +1,4 @@
-package code;
+package gui;
 
 import java.awt.*;
 import java.io.IOException;
