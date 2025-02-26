@@ -19,10 +19,12 @@ public class App {
             setExtendedState(JFrame.MAXIMIZED_BOTH);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            ImageIcon carLogoIcon = new ImageIcon("images/icons/carlogo.png");
+            ImageIcon carLogoIcon = new ImageIcon("images/icons/carLogo.png");
             setIconImage(carLogoIcon.getImage()); // Window Icon
 
-            add(new TopBar(this), BorderLayout.NORTH);
+//            add(new TopBar(this), BorderLayout.NORTH);
+            add(new LoginPage());
+
 
             setVisible(true);
         }

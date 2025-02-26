@@ -63,14 +63,13 @@ public class TopBar extends JPanel {
 
     private JButton menuButton() {
         ImageIcon kebabMenuIcon = new ImageIcon("images/icons/kebab.png");
-        JButton profile = new JButton();
-        profile.setIcon(kebabMenuIcon);
-        profile.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(18f));
-        profile.setPreferredSize(new Dimension(100, 50));
-        profile.setBorderPainted(false); // no border
-        profile.setFocusPainted(false); // no highlight
-        profile.setContentAreaFilled(false); // no fill
+        JButton menu = new JButton();
+        menu.setIcon(kebabMenuIcon);
+        menu.setPreferredSize(new Dimension(100, 50));
+        menu.setBorderPainted(false); // no border
+        menu.setFocusPainted(false); // no highlight
+        menu.setContentAreaFilled(false); // no fill
 
-        return profile;
+        return menu;
     }
 }
