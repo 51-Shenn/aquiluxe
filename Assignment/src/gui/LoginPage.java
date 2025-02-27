@@ -26,7 +26,7 @@ public class LoginPage extends JPanel {
         // left panel for description or background image
         JLabel backgroundLabel = new JLabel();
         backgroundLabel.setOpaque(false);
-        ImageIcon backgroundImage = new ImageIcon("images/icons/pic.png");
+        ImageIcon backgroundImage = new ImageIcon("images/icons/carBackground.png");
         Image image = backgroundImage.getImage().getScaledInstance(960, 1080, Image.SCALE_SMOOTH);
 
         backgroundLabel.setLayout(new GridBagLayout());
