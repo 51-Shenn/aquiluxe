@@ -31,10 +31,8 @@ public class LoginPage extends JPanel {
 
         backgroundLabel.setLayout(new GridBagLayout());
         backgroundLabel.setIcon(new ImageIcon(image));
-//        backgroundLabel.setIcon(backgroundImage);
         JPanel leftPanel = new JPanel(new GridBagLayout());
         leftPanel.setOpaque(false);
-//        leftPanel.setBackground(Color.WHITE);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.NORTHEAST;
@@ -58,8 +56,9 @@ public class LoginPage extends JPanel {
 
         rightPanel.add(createTitle(), gbc);
 
-        gbc.weighty = 1;
-        gbc.insets = new Insets(100, 0, 0, 0);
+        gbc.weighty = 2;
+        gbc.weightx = 0;
+        gbc.insets = new Insets(0, 0, 0, 0);
         rightPanel.add(createInputContainer(), gbc);
 
         container.add(backgroundLabel);
