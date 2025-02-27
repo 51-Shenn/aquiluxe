@@ -3,9 +3,9 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 
-public class TopBar extends JPanel {
+public class GUIComponents extends JPanel {
 
-    public TopBar(JFrame frame) {
+    public GUIComponents(JFrame frame) {
         setBackground(Color.WHITE);
         setPreferredSize(new Dimension(frame.getWidth(), 80));
         setLayout(new BorderLayout());
