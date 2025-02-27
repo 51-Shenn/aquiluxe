@@ -1,12 +1,19 @@
 package gui;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
+import javax.swing.border.*;
 import java.awt.*;
 
 public class LoginPage extends JPanel {
 
-    LoginPage() {
+    private final float TITLE_TEXT_SIZE = 22.5f;
+    private final float NORMAL_TEXT_SIZE = 30f;
+    private final float BUTTON_TEXT_SIZE = 30f;
+    private final int HEIGHT = 60;
+    private final Border BORDER = new LineBorder(Color.BLACK, 2);
+    private final Border PADDING = new EmptyBorder(10, 15, 10, 15);
+
+    public LoginPage() {
         setLayout(new GridLayout(1, 1));
         setBackground(Color.BLACK);
         add((createLoginPage()));
@@ -17,15 +24,32 @@ public class LoginPage extends JPanel {
         JPanel container = new JPanel(new GridLayout(1, 2));
 
         // left panel for description or background image
-        JPanel leftPanel = new JPanel(new BorderLayout());
-        leftPanel.setBackground(Color.BLUE);
+        JLabel backgroundLabel = new JLabel();
+        backgroundLabel.setOpaque(false);
+        ImageIcon backgroundImage = new ImageIcon("images/icons/pic.png");
+        Image image = backgroundImage.getImage().getScaledInstance(960, 1080, Image.SCALE_SMOOTH);
+
+        backgroundLabel.setLayout(new GridBagLayout());
+        backgroundLabel.setIcon(new ImageIcon(image));
+//        backgroundLabel.setIcon(backgroundImage);
+        JPanel leftPanel = new JPanel(new GridBagLayout());
+        leftPanel.setOpaque(false);
+//        leftPanel.setBackground(Color.WHITE);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTHEAST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(70, 100, 0, 0);
+        gbc.weighty = 1;
+
+        leftPanel.add(createTaglineContainer());
+        backgroundLabel.add(leftPanel, gbc);
 
         // right panel for sign in and sign up
         JPanel rightPanel = new JPanel();
         rightPanel.setBackground(Color.WHITE);
         rightPanel.setLayout(new GridBagLayout());
 
-        GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
         gbc.gridwidth = rightPanel.getWidth();
@@ -36,9 +60,9 @@ public class LoginPage extends JPanel {
 
         gbc.weighty = 1;
         gbc.insets = new Insets(100, 0, 0, 0);
-        rightPanel.add(createTextInputContainer(), gbc);
+        rightPanel.add(createInputContainer(), gbc);
 
-        container.add(leftPanel);
+        container.add(backgroundLabel);
         container.add(rightPanel);
         return container;
     }
@@ -49,16 +73,16 @@ public class LoginPage extends JPanel {
         titleContainer.setBackground(Color.WHITE);
 
         JLabel titleLabel = new JLabel("Sign Up");
-        titleLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(50f));
+        titleLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(60f));
         titleLabel.setForeground(Color.BLACK);
         titleContainer.add(titleLabel);
 
         return titleContainer;
     }
 
-    private JPanel createTextInputContainer() {
+    private JPanel createInputContainer() {
         // create container that contains relevant info for sign in or sign up
-        JPanel textInputContainer = new JPanel(new BorderLayout());
+        JPanel InputContainer = new JPanel(new BorderLayout());
 
         JPanel container = new JPanel(new GridBagLayout());
         container.setBackground(Color.WHITE);
@@ -79,10 +103,12 @@ public class LoginPage extends JPanel {
 
         container.add(createEmailContainer(), gbc);
         container.add(createPhoneContainer(), gbc);
+//        container.add(createLicenseContainer(), gbc);
+        container.add(createProceedContainer(), gbc);
 
-        textInputContainer.add(container);
+        InputContainer.add(container);
 
-        return textInputContainer;
+        return InputContainer;
     }
 
     private JPanel createFullNameContainer() {
@@ -91,13 +117,14 @@ public class LoginPage extends JPanel {
         fullNamePanel.setBackground(Color.WHITE);
 
         JLabel fullNameLabel = new JLabel("Full Name: ");
-        fullNameLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
+        fullNameLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(TITLE_TEXT_SIZE));
         fullNameLabel.setForeground(Color.BLACK);
 
         JTextField fullNameInput = new JTextField();
-        fullNameInput.setPreferredSize(new Dimension(350, 50));
-        fullNameInput.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
-        fullNameInput.setBorder(new LineBorder(Color.BLACK, 2));
+        fullNameInput.setPreferredSize(new Dimension(440, HEIGHT));
+        fullNameInput.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(NORMAL_TEXT_SIZE));
+        fullNameInput.setForeground(Color.BLACK);
+        fullNameInput.setBorder(new CompoundBorder(BORDER, PADDING));
 
         fullNamePanel.add(fullNameLabel, BorderLayout.NORTH);
         fullNamePanel.add(fullNameInput, BorderLayout.CENTER);
@@ -111,7 +138,7 @@ public class LoginPage extends JPanel {
         genderPanel.setBackground(Color.WHITE);
 
         JLabel genderLabel = new JLabel("Gender: ");
-        genderLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
+        genderLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(TITLE_TEXT_SIZE));
         genderLabel.setForeground(Color.BLACK);
 
         JPanel genderButtonsPanel = new JPanel(new BorderLayout());
@@ -119,19 +146,19 @@ public class LoginPage extends JPanel {
 
         // male button
         JButton maleButton = new JButton("M");
-        maleButton.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(25f));
-        maleButton.setPreferredSize(new Dimension(100, 50));
+        maleButton.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(BUTTON_TEXT_SIZE));
+        maleButton.setPreferredSize(new Dimension(100, HEIGHT));
         maleButton.setFocusPainted(false);
-        maleButton.setBackground(Color.GRAY);
-        maleButton.setForeground(Color.WHITE);
+        maleButton.setBackground(Color.WHITE);
+        maleButton.setForeground(Color.BLACK);
 
         // female button
         JButton femaleButton = new JButton("F");
-        femaleButton.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(25f));
-        femaleButton.setPreferredSize(new Dimension(100, 50));
+        femaleButton.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(BUTTON_TEXT_SIZE));
+        femaleButton.setPreferredSize(new Dimension(100, HEIGHT));
         femaleButton.setFocusPainted(false);
-        femaleButton.setBackground(Color.GRAY);
-        femaleButton.setForeground(Color.WHITE);
+        femaleButton.setBackground(Color.WHITE);
+        femaleButton.setForeground(Color.BLACK);
 
         // add both buttons to panel
         genderButtonsPanel.add(maleButton, BorderLayout.WEST);
@@ -155,13 +182,14 @@ public class LoginPage extends JPanel {
         gbc.insets = new Insets(10, 0, 0, 0);
 
         JLabel emailLabel = new JLabel("Email Address: ");
-        emailLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
+        emailLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(TITLE_TEXT_SIZE));
         emailLabel.setForeground(Color.BLACK);
 
         JTextField emailInput = new JTextField();
-        emailInput.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
-        emailInput.setPreferredSize(new Dimension(600, 50));
-        emailInput.setBorder(new LineBorder(Color.BLACK, 2));
+        emailInput.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(NORMAL_TEXT_SIZE));
+        emailInput.setPreferredSize(new Dimension(700, HEIGHT));
+        emailInput.setForeground(Color.BLACK);
+        emailInput.setBorder(new CompoundBorder(BORDER, PADDING));
 
         emailPanel.add(emailLabel, gbc);
         emailPanel.add(emailInput);
@@ -180,23 +208,24 @@ public class LoginPage extends JPanel {
         gbc.insets = new Insets(10, 0, 0, 0);
 
         JLabel phoneLabel = new JLabel("Phone Number: ");
-        phoneLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
+        phoneLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(TITLE_TEXT_SIZE));
         phoneLabel.setForeground(Color.BLACK);
 
         JPanel phoneInputPanel = new JPanel(new GridBagLayout());
         JButton countryCode = new JButton();
         countryCode.setText("+60");
-        countryCode.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(25f));
-        countryCode.setPreferredSize(new Dimension(100, 50));
+        countryCode.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(BUTTON_TEXT_SIZE));
+        countryCode.setPreferredSize(new Dimension(100, HEIGHT));
         countryCode.setFocusPainted(false);
         countryCode.setBackground(Color.BLACK);
         countryCode.setForeground(Color.WHITE);
         countryCode.setBorder(new LineBorder(Color.BLACK, 2));
 
         JTextField phoneInput = new JTextField();
-        phoneInput.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
-        phoneInput.setPreferredSize(new Dimension(500, 50));
-        phoneInput.setBorder(new LineBorder(Color.BLACK, 2));
+        phoneInput.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(NORMAL_TEXT_SIZE));
+        phoneInput.setPreferredSize(new Dimension(600, HEIGHT));
+        phoneInput.setForeground(Color.BLACK);
+        phoneInput.setBorder(new CompoundBorder(BORDER, PADDING));
 
         phoneInputPanel.add(countryCode);
         phoneInputPanel.add(phoneInput);
@@ -205,5 +234,67 @@ public class LoginPage extends JPanel {
         phonePanel.add(phoneInputPanel);
 
         return phonePanel;
+    }
+
+    private JPanel createLicenseContainer() {
+        // driving license
+        JPanel licenseContainer = new JPanel(new GridBagLayout());
+        licenseContainer.setBackground(Color.WHITE);
+
+        JLabel licenseLabel = new JLabel("Driving License: ");
+        licenseLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(TITLE_TEXT_SIZE));
+        licenseLabel.setForeground(Color.BLACK);
+
+        JFileChooser licenseInput = new JFileChooser("c:");
+
+        licenseContainer.add(licenseLabel);
+        licenseContainer.add(licenseInput);
+        return licenseContainer;
+    }
+
+    private JPanel createProceedContainer() {
+        JPanel container = new JPanel(new GridBagLayout());
+        container.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(50, 0, 0, 320);
+
+        JButton linkButton = new JButton("Already have an account?");
+        linkButton.setBackground(Color.WHITE);
+        linkButton.setForeground(Color.BLUE);
+        linkButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(17f));
+        linkButton.setBorderPainted(false);
+        linkButton.setFocusPainted(false);
+
+        JButton nextButton = new JButton("Next");
+        nextButton.setBackground(Color.BLUE);
+        nextButton.setForeground(Color.WHITE);
+        nextButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(BUTTON_TEXT_SIZE));
+        nextButton.setBorderPainted(false);
+        nextButton.setFocusPainted(false);
+        nextButton.setPreferredSize(new Dimension(150, 70));
+
+        container.add(linkButton, gbc);
+        gbc.insets = new Insets(50, 0, 0, 0);
+        container.add(nextButton, gbc);
+        return container;
+    }
+
+    private JPanel createTaglineContainer() {
+        JPanel taglineContainer = new JPanel(new GridBagLayout());
+        taglineContainer.setOpaque(false);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.anchor = GridBagConstraints.NORTHEAST;
+
+        String[] texts = {"Rent a Car,", "Drive with Ease!"};
+        for (String text : texts) {
+            JLabel lines = new JLabel(text);
+            lines.setForeground(Color.BLACK);
+            lines.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(70f));
+            taglineContainer.add(lines, gbc);
+        }
+
+        return taglineContainer;
     }
 }
