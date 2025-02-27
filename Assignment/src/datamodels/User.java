@@ -3,17 +3,23 @@ package datamodels;
 public class User {
     private int userId;
     private String fullName;
+    private String gender;
     private String license;
     private String phoneNumber;
     private String userEmail;
     private String username;
     private String password;
 
+    // Default Constructor : for subclassing
+    public User() {
+    }
+
     // Constructor
-    public User(int userId, String fullName, String license, String phoneNumber, String userEmail, String username,
-            String password) {
+    public User(int userId, String fullName, String gender, String license, String phoneNumber, String userEmail,
+            String username, String password) {
         this.userId = userId;
         this.fullName = fullName;
+        this.gender = gender;
         this.license = license;
         this.phoneNumber = phoneNumber;
         this.userEmail = userEmail;
@@ -36,6 +42,14 @@ public class User {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getLicense() {
