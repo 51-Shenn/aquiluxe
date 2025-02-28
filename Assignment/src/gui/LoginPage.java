@@ -91,7 +91,7 @@ public abstract class LoginPage extends JPanel {
             eyeButton.setFocusPainted(false);
             eyeButton.setContentAreaFilled(false);
             eyeButton.setPreferredSize(new Dimension(100, HEIGHT));
-            eyeButton.addActionListener(_ -> {
+            eyeButton.addActionListener(e -> {
                 if(eyeButton.getIcon() == eyeOffIcon) {
                     eyeButton.setIcon(eyeOnIcon);
                     passwordField.setEchoChar((char) 0);
