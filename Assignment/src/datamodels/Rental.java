@@ -26,6 +26,7 @@ public class Rental {
         this.paymentStatus = paymentStatus;
     }
 
+    // Restrict Status Variations
     public enum RentalStatus {
         PENDING, COMPLETED, CANCELLED, OVERDUE
     }
@@ -34,6 +35,7 @@ public class Rental {
         PAID, FAILED
     }
 
+    // Getters and Setters
     public int getRentalId() {
         return rentalId;
     }
