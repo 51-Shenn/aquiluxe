@@ -1,5 +1,6 @@
 package gui;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
@@ -48,8 +49,9 @@ public class CustomFonts {
             // create font
             return Font.createFont(Font.TRUETYPE_FONT,
                     Objects.requireNonNull(CustomFonts.class.getClassLoader().getResourceAsStream(path)));
-        } catch (IOException | FontFormatException e) {
-            throw new RuntimeException("Failed to load font: " + path, e);
+        } catch (IOException | FontFormatException | ExceptionInInitializerError | NullPointerException e) {
+            JOptionPane.showMessageDialog(null, "Failed to load font: " + path);
+            return new Font("Sans Serif", Font.BOLD, 16);
         }
     }
 }

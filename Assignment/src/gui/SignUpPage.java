@@ -5,6 +5,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.io.File;
 
 public class SignUpPage extends LoginPage {
 
@@ -18,11 +19,16 @@ public class SignUpPage extends LoginPage {
     protected JLabel createWallpaperLabel() {
         JLabel wallpaperLabel = new JLabel();
         wallpaperLabel.setOpaque(false);
-        ImageIcon backgroundImage = new ImageIcon("images/icons/carBackground2.png");
-        Image image = backgroundImage.getImage().getScaledInstance(960, 1080, Image.SCALE_SMOOTH);
+        File imageFile = new File("images/icons/carBackground2.png");
+        if (!imageFile.exists()) {
+            JOptionPane.showMessageDialog(null, "Failed to load image");
+        } else {
+            ImageIcon backgroundImage = new ImageIcon(imageFile.toString());
+            Image image = backgroundImage.getImage().getScaledInstance(960, 1080, Image.SCALE_SMOOTH);
+            wallpaperLabel.setIcon(new ImageIcon(image));
+        }
 
         wallpaperLabel.setLayout(new GridBagLayout());
-        wallpaperLabel.setIcon(new ImageIcon(image));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.NORTHEAST;
@@ -147,7 +153,7 @@ public class SignUpPage extends LoginPage {
         maleButton.setFocusPainted(false);
         maleButton.setBackground(Color.WHITE);
         maleButton.setForeground(Color.BLACK);
-        maleButton.addActionListener(_ -> {
+        maleButton.addActionListener(e -> {
             femaleButton.setBackground(Color.WHITE);
             femaleButton.setForeground(Color.BLACK);
 
@@ -164,7 +170,7 @@ public class SignUpPage extends LoginPage {
         femaleButton.setFocusPainted(false);
         femaleButton.setBackground(Color.WHITE);
         femaleButton.setForeground(Color.BLACK);
-        femaleButton.addActionListener(_ -> {
+        femaleButton.addActionListener(e -> {
             maleButton.setBackground(Color.WHITE);
             maleButton.setForeground(Color.BLACK);
 
@@ -248,7 +254,7 @@ public class SignUpPage extends LoginPage {
         linkButton.setContentAreaFilled(false);
         linkButton.setBorder(new EmptyBorder(0, 0, 0, 0));
         linkButton.setHorizontalAlignment(SwingConstants.LEFT);
-        linkButton.addActionListener(_ -> {
+        linkButton.addActionListener(e -> {
             frame.setContentPane(new SignInPage(frame));
             frame.revalidate();
             frame.repaint();
@@ -266,7 +272,7 @@ public class SignUpPage extends LoginPage {
         nextButton.setFocusPainted(false);
         nextButton.setPreferredSize(new Dimension(150, 70));
         nextButton.setMinimumSize(new Dimension(150, HEIGHT));
-        nextButton.addActionListener(_ -> {
+        nextButton.addActionListener(e -> {
             panel.removeAll();
             panel.revalidate();
             panel.repaint();

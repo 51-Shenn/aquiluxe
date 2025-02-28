@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.io.File;
 
 public class SignInPage extends LoginPage {
 
@@ -17,11 +18,16 @@ public class SignInPage extends LoginPage {
     protected JLabel createWallpaperLabel() {
         JLabel wallpaperLabel = new JLabel();
         wallpaperLabel.setOpaque(false);
-        ImageIcon backgroundImage = new ImageIcon("images/icons/carBackground3.png");
-        Image image = backgroundImage.getImage().getScaledInstance(960, 1080, Image.SCALE_SMOOTH);
+        File imageFile = new File("images/icons/carBackground3.png");
+        if (!imageFile.exists()) {
+            JOptionPane.showMessageDialog(null, "Failed to load image: " + imageFile);
+        } else {
+            ImageIcon backgroundImage = new ImageIcon(imageFile.toString());
+            Image image = backgroundImage.getImage().getScaledInstance(960, 1080, Image.SCALE_SMOOTH);
+            wallpaperLabel.setIcon(new ImageIcon(image));
+        }
 
         wallpaperLabel.setLayout(new GridBagLayout());
-        wallpaperLabel.setIcon(new ImageIcon(image));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.NORTHEAST;
@@ -154,7 +160,7 @@ public class SignInPage extends LoginPage {
         linkButton.setFocusPainted(false);
         linkButton.setContentAreaFilled(false);
         linkButton.setBorder(new EmptyBorder(0, 0, 0, 0));
-        linkButton.addActionListener(_ -> {
+        linkButton.addActionListener(e -> {
             frame.setContentPane(new SignUpPage(frame));
             frame.revalidate();
             frame.repaint();

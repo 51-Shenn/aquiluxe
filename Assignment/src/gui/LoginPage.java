@@ -3,6 +3,7 @@ package gui;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
+import java.io.File;
 
 public abstract class LoginPage extends JPanel {
 
@@ -14,8 +15,6 @@ public abstract class LoginPage extends JPanel {
     protected final Border PADDING = new EmptyBorder(10, 15, 10, 15);
     protected final Font TITLE_FONT = CustomFonts.ROBOTO_SEMI_BOLD;
     protected final Font INPUT_FONT = CustomFonts.OPEN_SANS_REGULAR;
-    protected final ImageIcon EYE_ON_ICON = new ImageIcon("images/icons/eyeOn.png");
-    protected final ImageIcon EYE_OFF_ICON = new ImageIcon("images/icons/eyeOff.png");
 
     public LoginPage() {
         setLayout(new GridBagLayout());
@@ -25,16 +24,17 @@ public abstract class LoginPage extends JPanel {
 
     protected JPanel createLoginPage() {
         // container that separate left and right panel
-        JPanel container = new JPanel(new GridLayout(1, 2));
+        JPanel container = new JPanel(new GridLayout(1, 1));
+        container.setBorder(BORDER);
 
         // left panel for description or background image
         JPanel leftPanel = new JPanel(new BorderLayout());
-        leftPanel.setBorder(new LineBorder(Color.BLACK, 1));
+        leftPanel.setBorder(BORDER);
         leftPanel.add(createWallpaperLabel());
 
         // right panel for sign in and sign up
         JPanel rightPanel = new JPanel(new BorderLayout());
-        rightPanel.setBorder(new LineBorder(Color.BLACK, 1));
+        rightPanel.setBorder(BORDER);
         rightPanel.setBackground(Color.WHITE);
         rightPanel.add(createContentPanel());
 
@@ -76,22 +76,32 @@ public abstract class LoginPage extends JPanel {
     }
     protected JButton createEyeButton(JPasswordField passwordField) {
         JButton eyeButton = new JButton();
-        eyeButton.setIcon(EYE_OFF_ICON);
-        eyeButton.setBackground(Color.WHITE);
-        eyeButton.setBorderPainted(false);
-        eyeButton.setFocusPainted(false);
-        eyeButton.setContentAreaFilled(false);
-        eyeButton.setPreferredSize(new Dimension(100, HEIGHT));
-        eyeButton.addActionListener(_ -> {
-            if(eyeButton.getIcon() == EYE_OFF_ICON) {
-                eyeButton.setIcon(EYE_ON_ICON);
-                passwordField.setEchoChar((char) 0);
-            }
-            else {
-                eyeButton.setIcon(EYE_OFF_ICON);
-                passwordField.setEchoChar('•');
-            }
-        });
+        File eyeOn = new File("images/icons/eyeOn.png");
+        File eyeOff = new File("images/icons/eyeOff.png");
+
+        if (!eyeOn.exists() || !eyeOff.exists()) {
+            JOptionPane.showMessageDialog(null, "Failed to load image:\n" + eyeOn + "\n" + eyeOff);
+        } else {
+            ImageIcon eyeOnIcon = new ImageIcon(eyeOn.toString());
+            ImageIcon eyeOffIcon = new ImageIcon(eyeOff.toString());
+
+            eyeButton.setIcon(eyeOffIcon);
+            eyeButton.setBackground(Color.WHITE);
+            eyeButton.setBorderPainted(false);
+            eyeButton.setFocusPainted(false);
+            eyeButton.setContentAreaFilled(false);
+            eyeButton.setPreferredSize(new Dimension(100, HEIGHT));
+            eyeButton.addActionListener(_ -> {
+                if(eyeButton.getIcon() == eyeOffIcon) {
+                    eyeButton.setIcon(eyeOnIcon);
+                    passwordField.setEchoChar((char) 0);
+                }
+                else {
+                    eyeButton.setIcon(eyeOffIcon);
+                    passwordField.setEchoChar('•');
+                }
+            });
+        }
 
         return eyeButton;
     }
