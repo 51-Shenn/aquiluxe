@@ -74,4 +74,25 @@ public abstract class LoginPage extends JPanel {
 
         return emailPanel;
     }
+    protected JButton createEyeButton(JPasswordField passwordField) {
+        JButton eyeButton = new JButton();
+        eyeButton.setIcon(EYE_OFF_ICON);
+        eyeButton.setBackground(Color.WHITE);
+        eyeButton.setBorderPainted(false);
+        eyeButton.setFocusPainted(false);
+        eyeButton.setContentAreaFilled(false);
+        eyeButton.setPreferredSize(new Dimension(100, HEIGHT));
+        eyeButton.addActionListener(_ -> {
+            if(eyeButton.getIcon() == EYE_OFF_ICON) {
+                eyeButton.setIcon(EYE_ON_ICON);
+                passwordField.setEchoChar((char) 0);
+            }
+            else {
+                eyeButton.setIcon(EYE_OFF_ICON);
+                passwordField.setEchoChar('•');
+            }
+        });
+
+        return eyeButton;
+    }
 }

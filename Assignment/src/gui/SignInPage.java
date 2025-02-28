@@ -4,12 +4,10 @@ import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class SignInPage extends LoginPage {
 
-    private JFrame frame;
+    private final JFrame frame;
 
     SignInPage(JFrame frame) {
         this.frame = frame;
@@ -37,7 +35,7 @@ public class SignInPage extends LoginPage {
 
     @Override
     protected JPanel createTitle() {
-        // title container to indicate sign in or sign up
+        // title container to indicate sign in
         JPanel titleContainer = new JPanel();
         titleContainer.setBackground(Color.WHITE);
 
@@ -51,6 +49,7 @@ public class SignInPage extends LoginPage {
 
     @Override
     protected JPanel createContentPanel() {
+        // content panel that contains title and the required input for sign in
         JPanel contentPanel = new JPanel(new GridBagLayout());
         contentPanel.setBackground(Color.WHITE);
 
@@ -72,7 +71,7 @@ public class SignInPage extends LoginPage {
 
     @Override
     protected JPanel createInputContainer() {
-        // create container that contains relevant info for sign in or sign up
+        // create container that contains relevant input for sign in
         JPanel InputContainer = new JPanel(new BorderLayout());
 
         JPanel container = new JPanel(new GridBagLayout());
@@ -115,27 +114,6 @@ public class SignInPage extends LoginPage {
         passwordInput.setForeground(Color.BLACK);
         passwordInput.setBorder(new CompoundBorder(BORDER, PADDING));
 
-        JButton eyeButton = new JButton();
-        eyeButton.setIcon(EYE_OFF_ICON);
-        eyeButton.setBackground(Color.WHITE);
-        eyeButton.setBorderPainted(false);
-        eyeButton.setFocusPainted(false);
-        eyeButton.setContentAreaFilled(false);
-        eyeButton.setPreferredSize(new Dimension(100, HEIGHT));
-        eyeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(eyeButton.getIcon() == EYE_OFF_ICON) {
-                    eyeButton.setIcon(EYE_ON_ICON);
-                    passwordInput.setEchoChar((char) 0);
-                }
-                else {
-                    eyeButton.setIcon(EYE_OFF_ICON);
-                    passwordInput.setEchoChar((char) '•');
-                }
-            }
-        });
-
         JButton forgotPasswordLink = new JButton("Forgot Password?");
         forgotPasswordLink.setForeground(Color.BLUE);
         forgotPasswordLink.setFont(TITLE_FONT.deriveFont(17f));
@@ -147,7 +125,7 @@ public class SignInPage extends LoginPage {
         passwordPanel.add(passwordLabel, gbc);
         passwordPanel.add(passwordInput);
         gbc.insets = new Insets(0, 0, 0, 0);
-        passwordPanel.add(eyeButton, gbc);
+        passwordPanel.add(createEyeButton(passwordInput), gbc);
         gbc.insets = new Insets(10, 0, 0, 0);
         passwordPanel.add(forgotPasswordLink, gbc);
 
@@ -155,11 +133,19 @@ public class SignInPage extends LoginPage {
     }
 
     private JPanel createProceedContainer() {
+        // 2 buttons that let user change to sign up page or continue
         JPanel container = new JPanel(new GridBagLayout());
         container.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(50, 10, 0, 340);
 
+        container.add(createLinkButton(), gbc);
+        gbc.insets = new Insets(50, 0, 0, 0);
+        container.add(createNextButton(), gbc);
+        return container;
+    }
+
+    private JButton createLinkButton() {
         JButton linkButton = new JButton("Don't have an account yet?");
         linkButton.setBackground(Color.WHITE);
         linkButton.setForeground(Color.BLUE);
@@ -168,15 +154,16 @@ public class SignInPage extends LoginPage {
         linkButton.setFocusPainted(false);
         linkButton.setContentAreaFilled(false);
         linkButton.setBorder(new EmptyBorder(0, 0, 0, 0));
-        linkButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.setContentPane(new SignUpPage(frame));
-                frame.revalidate();
-                frame.repaint();
-            }
+        linkButton.addActionListener(_ -> {
+            frame.setContentPane(new SignUpPage(frame));
+            frame.revalidate();
+            frame.repaint();
         });
 
+        return linkButton;
+    }
+
+    private JButton createNextButton() {
         JButton nextButton = new JButton("Next");
         nextButton.setBackground(Color.BLUE);
         nextButton.setForeground(Color.WHITE);
@@ -186,13 +173,11 @@ public class SignInPage extends LoginPage {
         nextButton.setPreferredSize(new Dimension(150, 70));
         nextButton.setMinimumSize(new Dimension(150, HEIGHT));
 
-        container.add(linkButton, gbc);
-        gbc.insets = new Insets(50, 0, 0, 0);
-        container.add(nextButton, gbc);
-        return container;
+        return nextButton;
     }
 
     private JPanel createTaglineContainer() {
+        // contains description or quote that will display above the wallpaper
         JPanel taglineContainer = new JPanel(new GridBagLayout());
         taglineContainer.setOpaque(false);
 
