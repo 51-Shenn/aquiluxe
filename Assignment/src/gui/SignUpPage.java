@@ -255,7 +255,7 @@ public class SignUpPage extends LoginPage {
         JPanel container = new JPanel(new GridBagLayout());
         container.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(50, 0, 0, 340);
+        gbc.insets = new Insets(50, 0, 0, 350);
 
         JButton linkButton = new JButton("Already have an account?");
         linkButton.setBackground(Color.WHITE);
