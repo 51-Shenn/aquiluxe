@@ -6,7 +6,7 @@ public class Rental {
     private int rentalId;
     private User customer;
     private Vehicle vehicle;
-    // private Payment payment;
+    private Payment payment;
     private LocalDate startDate;
     private LocalDate endDate;
     private double totalCost;
@@ -14,7 +14,7 @@ public class Rental {
     private PaymentStatus paymentStatus;
 
     // Constructor
-    public Rental(int rentalId, User customer, Vehicle vehicle, LocalDate startDate, LocalDate endDate,
+    public Rental(int rentalId, User customer, Vehicle vehicle, Payment payment, LocalDate startDate, LocalDate endDate,
             double totalCost, RentalStatus rentalStatus, PaymentStatus paymentStatus) {
         this.rentalId = rentalId;
         this.customer = customer;
@@ -58,6 +58,14 @@ public class Rental {
 
     public void setRentVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
+    }
+
+    public Payment getRentPayment() {
+        return payment;
+    }
+
+    public void setRentPayment(Payment payment) {
+        this.payment = payment;
     }
 
     public LocalDate getRentStartDate() {
