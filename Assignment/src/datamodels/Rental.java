@@ -1,5 +1,6 @@
 package datamodels;
 
+import java.time.LocalTime;
 import java.time.LocalDate;
 
 public class Rental {
@@ -9,18 +10,23 @@ public class Rental {
     private Payment payment;
     private LocalDate startDate;
     private LocalDate endDate;
+    private LocalTime pickupTime;
+    private LocalTime dropoffTime;
     private double totalCost;
     private RentalStatus rentalStatus;
     private PaymentStatus paymentStatus;
 
     // Constructor
     public Rental(int rentalId, User customer, Vehicle vehicle, Payment payment, LocalDate startDate, LocalDate endDate,
-            double totalCost, RentalStatus rentalStatus, PaymentStatus paymentStatus) {
+            LocalTime pickupTime, LocalTime dropoffTime, double totalCost, RentalStatus rentalStatus,
+            PaymentStatus paymentStatus) {
         this.rentalId = rentalId;
         this.customer = customer;
         this.vehicle = vehicle;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.pickupTime = pickupTime;
+        this.dropoffTime = dropoffTime;
         this.totalCost = totalCost;
         this.rentalStatus = rentalStatus;
         this.paymentStatus = paymentStatus;
@@ -82,6 +88,22 @@ public class Rental {
 
     public void setRentEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public LocalTime getPickUpTime() {
+        return pickupTime;
+    }
+
+    public void setPickUpTime(LocalTime pickupTime) {
+        this.pickupTime = pickupTime;
+    }
+
+    public LocalTime getDropoffTime() {
+        return dropoffTime;
+    }
+
+    public void setDropoffTime(LocalTime dropoffTime) {
+        this.dropoffTime = dropoffTime;
     }
 
     public double getRentTotalCost() {
