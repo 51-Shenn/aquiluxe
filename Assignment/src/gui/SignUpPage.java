@@ -1,11 +1,9 @@
 package gui;
 
-import javax.sound.sampled.Line;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.plaf.DimensionUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -138,25 +136,50 @@ public class SignUpPage extends LoginPage {
         genderLabel.setForeground(Color.BLACK);
 
         JPanel genderButtonsPanel = new JPanel(new BorderLayout());
-        genderButtonsPanel.setBorder(new LineBorder(Color.BLACK, 3));
+        genderButtonsPanel.setBorder(new LineBorder(Color.BLACK, 1));
 
         // male button
         JButton maleButton = new JButton("M");
-        maleButton.setFont(INPUT_FONT.deriveFont(BUTTON_TEXT_SIZE));
+        JButton femaleButton = new JButton("F");
+
+        maleButton.setFont(TITLE_FONT.deriveFont(BUTTON_TEXT_SIZE));
         maleButton.setPreferredSize(new Dimension(100, HEIGHT));
         maleButton.setMinimumSize(new Dimension(100, HEIGHT));
+        maleButton.setBorder(new LineBorder(Color.BLACK, 1));
         maleButton.setFocusPainted(false);
         maleButton.setBackground(Color.WHITE);
         maleButton.setForeground(Color.BLACK);
+        maleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                femaleButton.setBackground(Color.WHITE);
+                femaleButton.setForeground(Color.BLACK);
+
+                maleButton.setBackground(Color.BLUE);
+                maleButton.setForeground(Color.WHITE);
+                genderLabel.setText("Gender: (Male)");
+            }
+        });
 
         // female button
-        JButton femaleButton = new JButton("F");
-        femaleButton.setFont(INPUT_FONT.deriveFont(BUTTON_TEXT_SIZE));
+        femaleButton.setFont(TITLE_FONT.deriveFont(BUTTON_TEXT_SIZE));
         femaleButton.setPreferredSize(new Dimension(100, HEIGHT));
         femaleButton.setMinimumSize(new Dimension(100, HEIGHT));
+        femaleButton.setBorder(new LineBorder(Color.BLACK, 1));
         femaleButton.setFocusPainted(false);
         femaleButton.setBackground(Color.WHITE);
         femaleButton.setForeground(Color.BLACK);
+        femaleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                maleButton.setBackground(Color.WHITE);
+                maleButton.setForeground(Color.BLACK);
+
+                femaleButton.setBackground(Color.BLUE);
+                femaleButton.setForeground(Color.WHITE);
+                genderLabel.setText("Gender: (Female)");
+            }
+        });
 
         // add both buttons to panel
         genderButtonsPanel.add(maleButton, BorderLayout.WEST);
@@ -186,13 +209,13 @@ public class SignUpPage extends LoginPage {
         JPanel phoneInputPanel = new JPanel(new GridBagLayout());
         JButton countryCode = new JButton();
         countryCode.setText("+60");
-        countryCode.setFont(INPUT_FONT.deriveFont(BUTTON_TEXT_SIZE));
+        countryCode.setFont(TITLE_FONT.deriveFont(BUTTON_TEXT_SIZE));
         countryCode.setPreferredSize(new Dimension(100, HEIGHT));
         countryCode.setMinimumSize(new Dimension(100, HEIGHT));
         countryCode.setFocusPainted(false);
         countryCode.setBackground(Color.BLACK);
         countryCode.setForeground(Color.WHITE);
-        countryCode.setBorder(new LineBorder(Color.BLACK, 2));
+        countryCode.setBorder(BORDER);
 
         JTextField phoneInput = new JTextField();
         phoneInput.setFont(INPUT_FONT.deriveFont(NORMAL_TEXT_SIZE));
@@ -352,6 +375,7 @@ public class SignUpPage extends LoginPage {
         eyeButton.setBackground(Color.WHITE);
         eyeButton.setBorderPainted(false);
         eyeButton.setFocusPainted(false);
+        eyeButton.setContentAreaFilled(false);
         eyeButton.setPreferredSize(new Dimension(100, HEIGHT));
         eyeButton.addActionListener(new ActionListener() {
             @Override
@@ -400,6 +424,7 @@ public class SignUpPage extends LoginPage {
         eyeButton.setBackground(Color.WHITE);
         eyeButton.setBorderPainted(false);
         eyeButton.setFocusPainted(false);
+        eyeButton.setContentAreaFilled(false);
         eyeButton.setPreferredSize(new Dimension(100, HEIGHT));
         eyeButton.addActionListener(new ActionListener() {
             @Override

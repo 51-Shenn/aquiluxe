@@ -120,6 +120,7 @@ public class SignInPage extends LoginPage {
         eyeButton.setBackground(Color.WHITE);
         eyeButton.setBorderPainted(false);
         eyeButton.setFocusPainted(false);
+        eyeButton.setContentAreaFilled(false);
         eyeButton.setPreferredSize(new Dimension(100, HEIGHT));
         eyeButton.addActionListener(new ActionListener() {
             @Override
