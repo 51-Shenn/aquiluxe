@@ -167,33 +167,6 @@ public class SignUpPage extends LoginPage {
         return genderPanel;
     }
 
-    private JPanel createEmailContainer() {
-        // email address
-        JPanel emailPanel = new JPanel(new GridBagLayout());
-        emailPanel.setBackground(Color.WHITE);
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.gridwidth = emailPanel.getWidth();
-        gbc.insets = new Insets(10, 0, 0, 0);
-
-        JLabel emailLabel = new JLabel("Email Address: ");
-        emailLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
-        emailLabel.setForeground(Color.BLACK);
-
-        JTextField emailInput = new JTextField();
-        emailInput.setFont(INPUT_FONT.deriveFont(NORMAL_TEXT_SIZE));
-        emailInput.setPreferredSize(new Dimension(700, HEIGHT));
-        emailInput.setMinimumSize(new Dimension(700, HEIGHT));
-        emailInput.setForeground(Color.BLACK);
-        emailInput.setBorder(new CompoundBorder(BORDER, PADDING));
-
-        emailPanel.add(emailLabel, gbc);
-        emailPanel.add(emailInput);
-
-        return emailPanel;
-    }
-
     private JPanel createPhoneContainer() {
         // phone number
         JPanel phonePanel = new JPanel(new GridBagLayout());
