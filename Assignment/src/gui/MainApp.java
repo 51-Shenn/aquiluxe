@@ -24,7 +24,7 @@ public class MainApp {
             ImageIcon carLogoIcon = new ImageIcon("images/icons/carLogo.png");
             setIconImage(carLogoIcon.getImage()); // Window Icon
 
-//             add(new GUIComponents(this), BorderLayout.NORTH);
+            // add(new GUIComponents(this), BorderLayout.NORTH);
             add(new SignUpPage(this));
 
             setVisible(true);

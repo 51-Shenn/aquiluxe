@@ -208,7 +208,7 @@ public class SignInPage extends LoginPage {
         String logoText = "- AQUILUXE";
         JLabel logo = new JLabel(logoText);
         logo.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(30f));
-        logo.setForeground(Color.LIGHT_GRAY);
+        logo.setForeground(Color.DARK_GRAY);
 
         String[] texts = {"Your Journey,", "Our Wheels."};
         for (String text : texts) {
