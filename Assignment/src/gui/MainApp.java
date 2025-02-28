@@ -1,13 +1,23 @@
 package gui;
 
 import javax.swing.*;
-
 import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class MainApp {
     public static void main(String[] args) {
 
-        new MainWindow();
+        // testing haha
+        try {
+            Desktop desktop = Desktop.getDesktop();
+            desktop.browse(new URI("https://www.youtube.com/watch?v=Kmgo00avvEw&t=2835s"));
+        } catch (URISyntaxException | IOException e) {
+            throw new RuntimeException(e);
+        }
+
+//        new MainWindow();
     }
 
     public static class MainWindow extends JFrame {
