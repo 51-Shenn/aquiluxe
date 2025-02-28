@@ -108,12 +108,32 @@ public class SignInPage extends LoginPage {
         passwordLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
         passwordLabel.setForeground(Color.BLACK);
 
-        JTextField passwordInput = new JTextField();
+        JPasswordField passwordInput = new JPasswordField();
         passwordInput.setFont(INPUT_FONT.deriveFont(NORMAL_TEXT_SIZE));
-        passwordInput.setPreferredSize(new Dimension(700, HEIGHT));
-        passwordInput.setMinimumSize(new Dimension(700, HEIGHT));
+        passwordInput.setPreferredSize(new Dimension(600, HEIGHT));
+        passwordInput.setMinimumSize(new Dimension(600, HEIGHT));
         passwordInput.setForeground(Color.BLACK);
         passwordInput.setBorder(new CompoundBorder(BORDER, PADDING));
+
+        JButton eyeButton = new JButton();
+        eyeButton.setIcon(EYE_OFF_ICON);
+        eyeButton.setBackground(Color.WHITE);
+        eyeButton.setBorderPainted(false);
+        eyeButton.setFocusPainted(false);
+        eyeButton.setPreferredSize(new Dimension(100, HEIGHT));
+        eyeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(eyeButton.getIcon() == EYE_OFF_ICON) {
+                    eyeButton.setIcon(EYE_ON_ICON);
+                    passwordInput.setEchoChar((char) 0);
+                }
+                else {
+                    eyeButton.setIcon(EYE_OFF_ICON);
+                    passwordInput.setEchoChar((char) '•');
+                }
+            }
+        });
 
         JButton forgotPasswordLink = new JButton("Forgot Password?");
         forgotPasswordLink.setForeground(Color.BLUE);
@@ -124,9 +144,10 @@ public class SignInPage extends LoginPage {
         forgotPasswordLink.setBorder(new EmptyBorder(0, 0, 0, 0));
 
         passwordPanel.add(passwordLabel, gbc);
-        gbc.insets = new Insets(0, 0, 10, 0);
-        passwordPanel.add(passwordInput, gbc);
+        passwordPanel.add(passwordInput);
         gbc.insets = new Insets(0, 0, 0, 0);
+        passwordPanel.add(eyeButton, gbc);
+        gbc.insets = new Insets(10, 0, 0, 0);
         passwordPanel.add(forgotPasswordLink, gbc);
 
         return passwordPanel;

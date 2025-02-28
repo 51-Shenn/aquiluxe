@@ -1,9 +1,11 @@
 package gui;
 
+import javax.sound.sampled.Line;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.plaf.DimensionUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -338,15 +340,36 @@ public class SignUpPage extends LoginPage {
         passwordLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
         passwordLabel.setForeground(Color.BLACK);
 
-        JTextField passwordInput = new JTextField();
+        JPasswordField passwordInput = new JPasswordField();
         passwordInput.setFont(INPUT_FONT.deriveFont(NORMAL_TEXT_SIZE));
-        passwordInput.setPreferredSize(new Dimension(700, HEIGHT));
-        passwordInput.setMinimumSize(new Dimension(700, HEIGHT));
+        passwordInput.setPreferredSize(new Dimension(600, HEIGHT));
+        passwordInput.setMinimumSize(new Dimension(600, HEIGHT));
         passwordInput.setForeground(Color.BLACK);
         passwordInput.setBorder(new CompoundBorder(BORDER, PADDING));
 
+        JButton eyeButton = new JButton();
+        eyeButton.setIcon(EYE_OFF_ICON);
+        eyeButton.setBackground(Color.WHITE);
+        eyeButton.setBorderPainted(false);
+        eyeButton.setFocusPainted(false);
+        eyeButton.setPreferredSize(new Dimension(100, HEIGHT));
+        eyeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(eyeButton.getIcon() == EYE_OFF_ICON) {
+                    eyeButton.setIcon(EYE_ON_ICON);
+                    passwordInput.setEchoChar((char) 0);
+                }
+                else {
+                    eyeButton.setIcon(EYE_OFF_ICON);
+                    passwordInput.setEchoChar((char) '•');
+                }
+            }
+        });
+
         passwordPanel.add(passwordLabel, gbc);
         passwordPanel.add(passwordInput);
+        passwordPanel.add(eyeButton);
 
         return passwordPanel;
     }
@@ -365,15 +388,36 @@ public class SignUpPage extends LoginPage {
         confirmPasswordLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
         confirmPasswordLabel.setForeground(Color.BLACK);
 
-        JTextField confirmPasswordInput = new JTextField();
+        JPasswordField confirmPasswordInput = new JPasswordField();
         confirmPasswordInput.setFont(INPUT_FONT.deriveFont(NORMAL_TEXT_SIZE));
-        confirmPasswordInput.setPreferredSize(new Dimension(700, HEIGHT));
-        confirmPasswordInput.setMinimumSize(new Dimension(700, HEIGHT));
+        confirmPasswordInput.setPreferredSize(new Dimension(600, HEIGHT));
+        confirmPasswordInput.setMinimumSize(new Dimension(600, HEIGHT));
         confirmPasswordInput.setForeground(Color.BLACK);
         confirmPasswordInput.setBorder(new CompoundBorder(BORDER, PADDING));
 
+        JButton eyeButton = new JButton();
+        eyeButton.setIcon(EYE_OFF_ICON);
+        eyeButton.setBackground(Color.WHITE);
+        eyeButton.setBorderPainted(false);
+        eyeButton.setFocusPainted(false);
+        eyeButton.setPreferredSize(new Dimension(100, HEIGHT));
+        eyeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(eyeButton.getIcon() == EYE_OFF_ICON) {
+                    eyeButton.setIcon(EYE_ON_ICON);
+                    confirmPasswordInput.setEchoChar((char) 0);
+                }
+                else {
+                    eyeButton.setIcon(EYE_OFF_ICON);
+                    confirmPasswordInput.setEchoChar((char) '•');
+                }
+            }
+        });
+
         confirmPasswordPanel.add(confirmPasswordLabel, gbc);
         confirmPasswordPanel.add(confirmPasswordInput);
+        confirmPasswordPanel.add(eyeButton);
 
         return confirmPasswordPanel;
     }

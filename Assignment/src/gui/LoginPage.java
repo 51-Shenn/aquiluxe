@@ -14,6 +14,8 @@ public abstract class LoginPage extends JPanel {
     protected final Border PADDING = new EmptyBorder(10, 15, 10, 15);
     protected final Font TITLE_FONT = CustomFonts.ROBOTO_BOLD;
     protected final Font INPUT_FONT = CustomFonts.OPEN_SANS_BOLD;
+    protected final ImageIcon EYE_ON_ICON = new ImageIcon("images/icons/eyeOn.png");
+    protected final ImageIcon EYE_OFF_ICON = new ImageIcon("images/icons/eyeOff.png");
 
     public LoginPage() {
         setLayout(new GridBagLayout());
