@@ -1,6 +1,7 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -142,46 +143,40 @@ public class SignUpPage extends LoginPage {
         JPanel genderButtonsPanel = new JPanel(new BorderLayout());
         genderButtonsPanel.setBorder(new LineBorder(Color.BLACK, 1));
 
-        JButton maleButton = new JButton("M");
-        JButton femaleButton = new JButton("F");
+        String[] genderButtonsText = {"M", "F"};
+        JButton[] genderJButtons = new JButton[2];
+        for (int i = 0; i < genderButtonsText.length; i++) {
+            JButton genderButton = new JButton();
+            genderJButtons[i] = genderButton;
+            genderButton.setText(genderButtonsText[i]);
+            genderButton.setFont(TITLE_FONT.deriveFont(BUTTON_TEXT_SIZE));
+            genderButton.setPreferredSize(new Dimension(100, HEIGHT));
+            genderButton.setMinimumSize(new Dimension(100, HEIGHT));
+            genderButton.setBorder(new LineBorder(Color.BLACK, 1));
+            genderButton.setFocusPainted(false);
+            genderButton.setBackground(Color.WHITE);
+            genderButton.setForeground(Color.BLACK);
+            genderButton.addActionListener(e -> {
+                for (JButton button : genderJButtons) {
+                    button.setBackground(Color.WHITE);
+                    button.setForeground(Color.BLACK);
+                }
+                
+                genderButton.setBackground(Color.BLUE);
+                genderButton.setForeground(Color.WHITE);
 
-        // male button
-        maleButton.setFont(TITLE_FONT.deriveFont(BUTTON_TEXT_SIZE));
-        maleButton.setPreferredSize(new Dimension(100, HEIGHT));
-        maleButton.setMinimumSize(new Dimension(100, HEIGHT));
-        maleButton.setBorder(new LineBorder(Color.BLACK, 1));
-        maleButton.setFocusPainted(false);
-        maleButton.setBackground(Color.WHITE);
-        maleButton.setForeground(Color.BLACK);
-        maleButton.addActionListener(e -> {
-            femaleButton.setBackground(Color.WHITE);
-            femaleButton.setForeground(Color.BLACK);
+                if (genderButton.getText().equals("M")) 
+                    genderLabel.setText("Gender: (Male)");
+                else 
+                    genderLabel.setText("Gender: (Female)");
+            });
+            
+            if (genderButtonsText[i].equals("M"))
+                genderButtonsPanel.add(genderButton, BorderLayout.WEST);
+            else
+                genderButtonsPanel.add(genderButton, BorderLayout.EAST);
+        }
 
-            maleButton.setBackground(Color.BLUE);
-            maleButton.setForeground(Color.WHITE);
-            genderLabel.setText("Gender: (Male)");
-        });
-
-        // female button
-        femaleButton.setFont(TITLE_FONT.deriveFont(BUTTON_TEXT_SIZE));
-        femaleButton.setPreferredSize(new Dimension(100, HEIGHT));
-        femaleButton.setMinimumSize(new Dimension(100, HEIGHT));
-        femaleButton.setBorder(new LineBorder(Color.BLACK, 1));
-        femaleButton.setFocusPainted(false);
-        femaleButton.setBackground(Color.WHITE);
-        femaleButton.setForeground(Color.BLACK);
-        femaleButton.addActionListener(e -> {
-            maleButton.setBackground(Color.WHITE);
-            maleButton.setForeground(Color.BLACK);
-
-            femaleButton.setBackground(Color.BLUE);
-            femaleButton.setForeground(Color.WHITE);
-            genderLabel.setText("Gender: (Female)");
-        });
-
-        // add both buttons to panel
-        genderButtonsPanel.add(maleButton, BorderLayout.WEST);
-        genderButtonsPanel.add(femaleButton, BorderLayout.EAST);
 
         // add both components inside gender panel
         genderPanel.add(genderLabel, BorderLayout.NORTH);
