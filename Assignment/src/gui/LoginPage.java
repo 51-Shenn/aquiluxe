@@ -16,6 +16,8 @@ public abstract class LoginPage extends JPanel {
     protected final Font TITLE_FONT = CustomFonts.ROBOTO_SEMI_BOLD;
     protected final Font INPUT_FONT = CustomFonts.OPEN_SANS_REGULAR;
 
+    protected JTextField emailInput;
+
     public LoginPage() {
         setLayout(new GridBagLayout());
         setBackground(Color.BLACK);
@@ -62,7 +64,7 @@ public abstract class LoginPage extends JPanel {
         emailLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
         emailLabel.setForeground(Color.BLACK);
 
-        JTextField emailInput = new JTextField();
+        emailInput = new JTextField();
         emailInput.setFont(INPUT_FONT.deriveFont(NORMAL_TEXT_SIZE));
         emailInput.setPreferredSize(new Dimension(700, HEIGHT));
         emailInput.setMinimumSize(new Dimension(700, HEIGHT));

@@ -1,5 +1,7 @@
 package gui;
 
+import controllers.UserController;
+
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -10,6 +12,9 @@ import java.io.File;
 public class SignUpPage extends LoginPage {
 
     private final JFrame frame;
+    private JTextField fullNameInput;
+    private String genderInput;
+    private JTextField phoneInput;
 
     SignUpPage(JFrame frame) {
         this.frame = frame;
@@ -117,7 +122,7 @@ public class SignUpPage extends LoginPage {
         fullNameLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
         fullNameLabel.setForeground(Color.BLACK);
 
-        JTextField fullNameInput = new JTextField();
+        fullNameInput = new JTextField();
         fullNameInput.setPreferredSize(new Dimension(440, HEIGHT));
         fullNameInput.setMinimumSize(new Dimension(440, HEIGHT));
         fullNameInput.setFont(INPUT_FONT.deriveFont(NORMAL_TEXT_SIZE));
@@ -164,10 +169,14 @@ public class SignUpPage extends LoginPage {
                 genderButton.setBackground(Color.BLUE);
                 genderButton.setForeground(Color.WHITE);
 
-                if (genderButton.getText().equals("M")) 
+                if (genderButton.getText().equals("M")) {
                     genderLabel.setText("Gender: (Male)");
-                else 
+                    genderInput = "Male";
+                }
+                else {
                     genderLabel.setText("Gender: (Female)");
+                    genderInput = "Female";
+                }
             });
             
             if (genderButtonsText[i].equals("M"))
@@ -209,7 +218,7 @@ public class SignUpPage extends LoginPage {
         countryCode.setForeground(Color.WHITE);
         countryCode.setBorder(BORDER);
 
-        JTextField phoneInput = new JTextField();
+        phoneInput = new JTextField();
         phoneInput.setFont(INPUT_FONT.deriveFont(NORMAL_TEXT_SIZE));
         phoneInput.setPreferredSize(new Dimension(600, HEIGHT));
         phoneInput.setMinimumSize(new Dimension(600, HEIGHT));
@@ -267,10 +276,13 @@ public class SignUpPage extends LoginPage {
         nextButton.setPreferredSize(new Dimension(150, 70));
         nextButton.setMinimumSize(new Dimension(150, HEIGHT));
         nextButton.addActionListener(e -> {
-            panel.removeAll();
-            panel.revalidate();
-            panel.repaint();
-            panel.add(createPasswordInputContainer());
+            boolean isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput, emailInput.getText(), phoneInput.getText());
+            if(isValidUserDetails) {
+                panel.removeAll();
+                panel.revalidate();
+                panel.repaint();
+                panel.add(createPasswordInputContainer());
+            }
         });
 
         return nextButton;
