@@ -91,4 +91,30 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    // Debug
+    @Override
+    public String toString() {
+        return "User { " +
+                "userId = " + userId +
+                ", fullName = '" + fullName + '\'' +
+                ", gender = '" + gender + '\'' +
+                ", license = '" + license + '\'' +
+                ", phoneNumber = '" + phoneNumber + '\'' +
+                ", userEmail = '" + userEmail + '\'' +
+                ", username = '" + username + '\'' +
+                " }";
+    }
+
+    public void setUser(int userId, String fullName, String gender, String license, String phoneNumber,
+            String userEmail, String username, String password) {
+        this.userId = userId;
+        this.fullName = fullName;
+        this.gender = gender;
+        this.license = license;
+        this.phoneNumber = phoneNumber;
+        this.userEmail = userEmail;
+        this.username = username;
+        this.password = password;
+    }
 }

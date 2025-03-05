@@ -16,6 +16,10 @@ public class Rental {
     private RentalStatus rentalStatus;
     private PaymentStatus paymentStatus;
 
+    public Rental() {
+
+    }
+
     // Constructor
     public Rental(int rentalId, User customer, Vehicle vehicle, Payment payment, LocalDate startDate, LocalDate endDate,
             LocalTime pickupTime, LocalTime dropoffTime, double totalCost, RentalStatus rentalStatus,
@@ -127,6 +131,23 @@ public class Rental {
     }
 
     public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    // Debug
+    public void setRental(int rentalId, User customer, Vehicle vehicle, Payment payment, LocalDate startDate,
+            LocalDate endDate,
+            LocalTime pickupTime, LocalTime dropoffTime, double totalCost, RentalStatus rentalStatus,
+            PaymentStatus paymentStatus) {
+        this.rentalId = rentalId;
+        this.customer = customer;
+        this.vehicle = vehicle;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.pickupTime = pickupTime;
+        this.dropoffTime = dropoffTime;
+        this.totalCost = totalCost;
+        this.rentalStatus = rentalStatus;
         this.paymentStatus = paymentStatus;
     }
 }
