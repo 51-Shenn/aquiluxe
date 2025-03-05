@@ -9,6 +9,10 @@ public class Payment {
     private String paymentMethod;
     private LocalDate paymentDate;
 
+    // Default Constructor
+    public Payment() {
+    }
+
     // Constructor
     public Payment(int paymentId, Rental rental, double amount, String paymentMethod,
             LocalDate paymentDate) {

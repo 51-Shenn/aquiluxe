@@ -16,11 +16,11 @@ public class Rental {
     private RentalStatus rentalStatus;
     private PaymentStatus paymentStatus;
 
+    // Default Constructor
     public Rental() {
-
     }
 
-    // Constructor
+    // Parameterized Constructor
     public Rental(int rentalId, User customer, Vehicle vehicle, Payment payment, LocalDate startDate, LocalDate endDate,
             LocalTime pickupTime, LocalTime dropoffTime, double totalCost, RentalStatus rentalStatus,
             PaymentStatus paymentStatus) {

@@ -14,7 +14,7 @@ public class User {
     public User() {
     }
 
-    // Constructor
+    // Parameterized Constructor
     public User(int userId, String fullName, String gender, String license, String phoneNumber, String userEmail,
             String username, String password) {
         this.userId = userId;

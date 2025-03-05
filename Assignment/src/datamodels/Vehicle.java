@@ -24,7 +24,11 @@ public class Vehicle {
     private boolean availability;
     private List<String> features;
 
-    // Constructor
+    // Default Constructor
+    public Vehicle() {
+    }
+
+    // Parameterized Constructor
     public Vehicle(int vehicleId, String imagePath, String brand, String model, int year, int capacity,
             int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
             double rentalPriceDay, String drivetrain, String transmission, String fuelType, int seatingCapacity,
