@@ -1,5 +1,7 @@
 package services;
 
+import datamodels.User;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,6 +40,9 @@ public class UserService {
 
         // password validation
         boolean isValidPassword = passwordValidation(password, confirmPassword);
+
+        if(isValidFullName && isValidGender && isValidEmailAddress && isValidPhoneNumber && isValidPassword)
+            createNewUserAccount(fullName, gender, email, phone, password);
 
         return isValidFullName && isValidGender && isValidEmailAddress && isValidPhoneNumber && isValidPassword;
     }
@@ -123,5 +128,10 @@ public class UserService {
             return false;
         }
         return true;
+    }
+
+    public static void createNewUserAccount(String fullName, String gender, String email, String phone, char[] password) {
+        String userPassword = new String(password);
+        User newUser = new User(1, fullName, gender, "X", email, phone, "username", userPassword);
     }
 }

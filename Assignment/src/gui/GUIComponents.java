@@ -73,11 +73,10 @@ public class GUIComponents extends JPanel {
         menu.setFocusPainted(false); // no highlight
         menu.setContentAreaFilled(false); // no fill
         menu.addActionListener(e -> {
-                frame.getContentPane().removeAll();
-                frame.add(new SignUpPage(this.frame));
-                frame.validate();
-            }
-        );
+            frame.getContentPane().removeAll();
+            frame.add(new SignInPage(this.frame));
+            frame.validate();
+        });
 
         return menu;
     }

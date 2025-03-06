@@ -42,13 +42,39 @@ public class SignInPage extends LoginPage {
     @Override
     protected JPanel createTitle() {
         // title container to indicate sign in
-        JPanel titleContainer = new JPanel();
+        JPanel titleContainer = new JPanel(new GridBagLayout());
         titleContainer.setBackground(Color.WHITE);
 
         JLabel titleLabel = new JLabel("Sign In");
         titleLabel.setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(60f));
         titleLabel.setForeground(Color.BLACK);
-        titleContainer.add(titleLabel);
+
+        JButton closeButton = new JButton();
+        File closeImage = new File("images/icons/close.png");
+        if (!closeImage.exists()) {
+            JOptionPane.showMessageDialog(null, "Failed to load image:\n" + closeImage + "\n");
+        } else {
+            ImageIcon closeIcon = new ImageIcon(closeImage.toString());
+            closeButton.setPreferredSize(new Dimension(100, 100));
+            closeButton.setBackground(Color.WHITE);
+            closeButton.setIcon(closeIcon);
+            closeButton.setBorderPainted(false);
+            closeButton.setContentAreaFilled(false);
+            closeButton.setFocusPainted(false);
+            closeButton.addActionListener(e -> {
+                JPanel newContentPane = new JPanel(new BorderLayout());
+                frame.setContentPane(newContentPane);
+                frame.add(new GUIComponents(frame), BorderLayout.NORTH);
+                frame.revalidate();
+                frame.repaint();
+            });
+        }
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(0, 250, 0, 0);
+        titleContainer.add(titleLabel, gbc);
+        gbc.insets = new Insets(0, 150, 0, 0);
+        titleContainer.add(closeButton, gbc);
 
         return titleContainer;
     }
@@ -85,7 +111,7 @@ public class SignInPage extends LoginPage {
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(30, 30, 20, 30);
-        gbc.gridwidth = container.getWidth();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
 
         gbc.anchor = GridBagConstraints.WEST;
 
