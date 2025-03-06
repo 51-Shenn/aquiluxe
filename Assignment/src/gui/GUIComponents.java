@@ -5,7 +5,10 @@ import javax.swing.*;
 
 public class GUIComponents extends JPanel {
 
+    JFrame frame;
+
     public GUIComponents(JFrame frame) {
+        this.frame = frame;
         setBackground(Color.WHITE);
         setPreferredSize(new Dimension(frame.getWidth(), 80));
         setLayout(new BorderLayout());
@@ -69,6 +72,12 @@ public class GUIComponents extends JPanel {
         menu.setBorderPainted(false); // no border
         menu.setFocusPainted(false); // no highlight
         menu.setContentAreaFilled(false); // no fill
+        menu.addActionListener(e -> {
+                frame.getContentPane().removeAll();
+                frame.add(new SignUpPage(this.frame));
+                frame.validate();
+            }
+        );
 
         return menu;
     }

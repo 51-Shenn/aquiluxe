@@ -1,5 +1,6 @@
 package gui;
 
+import com.sun.tools.javac.Main;
 import controllers.UserController;
 
 import javax.swing.*;
@@ -246,7 +247,7 @@ public class SignUpPage extends LoginPage {
 
         container.add(createLinkButton(), gbc);
         gbc.insets = new Insets(50, 0, 0, 0);
-        container.add(createNextButton(panel), gbc);
+        container.add(createNextButton(panel, this.frame), gbc);
         return container;
     }
 
@@ -269,7 +270,7 @@ public class SignUpPage extends LoginPage {
         return linkButton;
     }
 
-    private JButton createNextButton(JPanel panel) {
+    private JButton createNextButton(JPanel panel, JFrame frame) {
         JButton nextButton = new JButton("Next");
         nextButton.setBackground(Color.BLUE);
         nextButton.setForeground(Color.WHITE);
@@ -282,17 +283,25 @@ public class SignUpPage extends LoginPage {
             boolean isValidUserDetails;
             if (currentPage.equals("USER")) {
                 isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput, emailInput.getText(), phoneInput.getText());
+                if(isValidUserDetails) {
+                    currentPage = "PASSWORD";
+                    panel.removeAll();
+                    panel.revalidate();
+                    panel.repaint();
+                    panel.add(createPasswordInputContainer());
+                }
             }
             else {
                 isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput, emailInput.getText(), phoneInput.getText(), passwordInput.getPassword(), confirmPasswordInput.getPassword());
+                if(isValidUserDetails) {
+                    currentPage = "USER";
+                    frame.getContentPane().removeAll();
+                    frame.repaint();
+                    frame.add(new GUIComponents(this.frame), BorderLayout.NORTH);
+                    frame.validate();
+                }
             }
-            if(isValidUserDetails) {
-                currentPage = "PASSWORD";
-                panel.removeAll();
-                panel.revalidate();
-                panel.repaint();
-                panel.add(createPasswordInputContainer());
-            }
+
         });
 
         return nextButton;
