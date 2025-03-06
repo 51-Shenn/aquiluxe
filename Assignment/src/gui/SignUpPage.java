@@ -17,6 +17,7 @@ public class SignUpPage extends LoginPage {
     private JTextField phoneInput;
     private JPasswordField passwordInput = new JPasswordField();
     private JPasswordField confirmPasswordInput = new JPasswordField();
+    private String currentPage = "USER";
 
     SignUpPage(JFrame frame) {
         this.frame = frame;
@@ -278,8 +279,15 @@ public class SignUpPage extends LoginPage {
         nextButton.setPreferredSize(new Dimension(150, 70));
         nextButton.setMinimumSize(new Dimension(150, HEIGHT));
         nextButton.addActionListener(e -> {
-            boolean isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput, emailInput.getText(), phoneInput.getText(), passwordInput.getPassword(), confirmPasswordInput.getPassword());
+            boolean isValidUserDetails;
+            if (currentPage.equals("USER")) {
+                isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput, emailInput.getText(), phoneInput.getText());
+            }
+            else {
+                isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput, emailInput.getText(), phoneInput.getText(), passwordInput.getPassword(), confirmPasswordInput.getPassword());
+            }
             if(isValidUserDetails) {
+                currentPage = "PASSWORD";
                 panel.removeAll();
                 panel.revalidate();
                 panel.repaint();

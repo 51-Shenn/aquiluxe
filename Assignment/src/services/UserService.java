@@ -5,6 +5,23 @@ import java.util.regex.Pattern;
 
 public class UserService {
 
+    public static boolean validateNewUserDetails(String fullName, String gender, String email, String phone) {
+
+        // full name validation
+        boolean isValidFullName = fullNameValidator(fullName);
+
+        // gender validation
+        boolean isValidGender = genderValidator(gender);
+
+        // email validation
+        boolean isValidEmailAddress = emailAddressValidator(email);        // make sure it is not used by other users
+
+        // phone number validation
+        boolean isValidPhoneNumber = phoneNumberValidator(phone);
+
+        return isValidFullName && isValidGender && isValidEmailAddress && isValidPhoneNumber;
+    }
+
     public static boolean validateNewUserDetails(String fullName, String gender, String email, String phone, char[] password, char[] confirmPassword) {
 
         // full name validation
@@ -22,7 +39,7 @@ public class UserService {
         // password validation
         boolean isValidPassword = passwordValidation(password, confirmPassword);
 
-        return isValidFullName && isValidGender && isValidEmailAddress && isValidPhoneNumber;
+        return isValidFullName && isValidGender && isValidEmailAddress && isValidPhoneNumber && isValidPassword;
     }
 
     public static String capitalizeFullName(String fullName) {
@@ -86,11 +103,23 @@ public class UserService {
     }
 
     public static boolean passwordValidation(char[] password, char[] confirmPassword) {
-        String password1 = new String(password);
-        String password2 = new String(confirmPassword);
+        String password1 = new String(password).trim();
+        String password2 = new String(confirmPassword).trim();
 
         if(password1.isEmpty()) {
             System.out.println("Please enter your password");
+            return false;
+        }
+        else if(password1.contains(" ")) {
+            System.out.println("Password cannot contain spaces");
+            return false;
+        }
+        else if(password1.length() <= 8) {
+            System.out.println("Password must contain at least 8 characters.");
+            return false;
+        }
+        else if(!password1.equals(password2)) {
+            System.out.println("Password not match!");
             return false;
         }
         return true;
