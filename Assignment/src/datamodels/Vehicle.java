@@ -18,8 +18,6 @@ public class Vehicle {
     private String transmission;
     private String fuelType;
     private int seatingCapacity;
-    private String condition;
-    private String status;
     private boolean availability;
     private List<String> features;
 
@@ -30,8 +28,7 @@ public class Vehicle {
     // Parameterized Constructor
     public Vehicle(int vehicleId, String imagePath, String brand, String model, int year, int capacity,
             int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
-            double rentalPriceDay, String transmission, String fuelType, int seatingCapacity,
-            String condition, String status, boolean availability, List<String> features) {
+            double rentalPriceDay, String transmission, String fuelType, int seatingCapacity, boolean availability, List<String> features) {
         this.vehicleId = vehicleId;
         this.imagePath = imagePath;
         this.brand = brand;
@@ -47,8 +44,6 @@ public class Vehicle {
         this.transmission = transmission;
         this.fuelType = fuelType;
         this.seatingCapacity = seatingCapacity;
-        this.condition = condition;
-        this.status = status;
         this.availability = availability;
         this.features = features;
     }
@@ -172,22 +167,6 @@ public class Vehicle {
 
     public void setSeatingCapacity(int seatingCapacity) {
         this.seatingCapacity = seatingCapacity;
-    }
-
-    public String getCondition() {
-        return condition;
-    }
-
-    public void setCondition(String condition) {
-        this.condition = condition;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public boolean isAvailability() {
