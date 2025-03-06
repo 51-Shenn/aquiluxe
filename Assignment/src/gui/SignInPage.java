@@ -55,7 +55,7 @@ public class SignInPage extends LoginPage {
             JOptionPane.showMessageDialog(null, "Failed to load image:\n" + closeImage + "\n");
         } else {
             ImageIcon closeIcon = new ImageIcon(closeImage.toString());
-            closeButton.setPreferredSize(new Dimension(100, 100));
+            closeButton.setPreferredSize(new Dimension(50, 50));
             closeButton.setBackground(Color.WHITE);
             closeButton.setIcon(closeIcon);
             closeButton.setBorderPainted(false);
