@@ -63,10 +63,10 @@ public class SignInPage extends LoginPage {
             closeButton.setFocusPainted(false);
             closeButton.addActionListener(e -> {
                 JPanel newContentPane = new JPanel(new BorderLayout());
-                frame.setContentPane(newContentPane);
-                frame.add(new GUIComponents(frame), BorderLayout.NORTH);
-                frame.revalidate();
-                frame.repaint();
+                this.frame.setContentPane(newContentPane);
+                this.frame.add(new GUIComponents(this.frame), BorderLayout.NORTH);
+                this.frame.revalidate();
+                this.frame.repaint();
             });
         }
 
@@ -187,9 +187,9 @@ public class SignInPage extends LoginPage {
         linkButton.setContentAreaFilled(false);
         linkButton.setBorder(new EmptyBorder(0, 0, 0, 0));
         linkButton.addActionListener(e -> {
-            frame.setContentPane(new SignUpPage(frame));
-            frame.revalidate();
-            frame.repaint();
+            this.frame.setContentPane(new SignUpPage(this.frame));
+            this.frame.revalidate();
+            this.frame.repaint();
         });
 
         return linkButton;

@@ -72,10 +72,10 @@ public class SignUpPage extends LoginPage {
             closeButton.setFocusPainted(false);
             closeButton.addActionListener(e -> {
                 JPanel newContentPane = new JPanel(new BorderLayout());
-                frame.setContentPane(newContentPane);
-                frame.add(new GUIComponents(frame), BorderLayout.NORTH);
-                frame.revalidate();
-                frame.repaint();
+                this.frame.setContentPane(newContentPane);
+                this.frame.add(new GUIComponents(this.frame), BorderLayout.NORTH);
+                this.frame.revalidate();
+                this.frame.repaint();
             });
         }
 
@@ -272,7 +272,7 @@ public class SignUpPage extends LoginPage {
 
         container.add(createLinkButton(), gbc);
         gbc.insets = new Insets(50, 0, 0, 0);
-        container.add(createNextButton(panel, this.frame), gbc);
+        container.add(createNextButton(panel), gbc);
         return container;
     }
 
@@ -287,15 +287,15 @@ public class SignUpPage extends LoginPage {
         linkButton.setBorder(new EmptyBorder(0, 0, 0, 0));
         linkButton.setHorizontalAlignment(SwingConstants.LEFT);
         linkButton.addActionListener(e -> {
-            frame.setContentPane(new SignInPage(frame));
-            frame.revalidate();
-            frame.repaint();
+            this.frame.setContentPane(new SignInPage(this.frame));
+            this.frame.revalidate();
+            this.frame.repaint();
         });
 
         return linkButton;
     }
 
-    private JButton createNextButton(JPanel panel, JFrame frame) {
+    private JButton createNextButton(JPanel panel) {
         JButton nextButton = new JButton("Next");
         nextButton.setBackground(Color.BLUE);
         nextButton.setForeground(Color.WHITE);
@@ -320,10 +320,10 @@ public class SignUpPage extends LoginPage {
                 isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput, emailInput.getText(), phoneInput.getText(), passwordInput.getPassword(), confirmPasswordInput.getPassword());
                 if(isValidUserDetails) {
                     currentPage = "USER";
-                    frame.getContentPane().removeAll();
-                    frame.repaint();
-                    frame.add(new GUIComponents(this.frame), BorderLayout.NORTH);
-                    frame.validate();
+                    this.frame.getContentPane().removeAll();
+                    this.frame.repaint();
+                    this.frame.add(new GUIComponents(this.frame), BorderLayout.NORTH);
+                    this.frame.validate();
                 }
             }
 
