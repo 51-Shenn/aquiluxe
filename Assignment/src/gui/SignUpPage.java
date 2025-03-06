@@ -15,6 +15,8 @@ public class SignUpPage extends LoginPage {
     private JTextField fullNameInput;
     private String genderInput;
     private JTextField phoneInput;
+    private JPasswordField passwordInput = new JPasswordField();
+    private JPasswordField confirmPasswordInput = new JPasswordField();
 
     SignUpPage(JFrame frame) {
         this.frame = frame;
@@ -276,7 +278,7 @@ public class SignUpPage extends LoginPage {
         nextButton.setPreferredSize(new Dimension(150, 70));
         nextButton.setMinimumSize(new Dimension(150, HEIGHT));
         nextButton.addActionListener(e -> {
-            boolean isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput, emailInput.getText(), phoneInput.getText());
+            boolean isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput, emailInput.getText(), phoneInput.getText(), passwordInput.getPassword(), confirmPasswordInput.getPassword());
             if(isValidUserDetails) {
                 panel.removeAll();
                 panel.revalidate();
@@ -356,7 +358,7 @@ public class SignUpPage extends LoginPage {
         passwordLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
         passwordLabel.setForeground(Color.BLACK);
 
-        JPasswordField passwordInput = new JPasswordField();
+        passwordInput = new JPasswordField();
         passwordInput.setFont(INPUT_FONT.deriveFont(NORMAL_TEXT_SIZE));
         passwordInput.setPreferredSize(new Dimension(600, HEIGHT));
         passwordInput.setMinimumSize(new Dimension(600, HEIGHT));
@@ -384,7 +386,7 @@ public class SignUpPage extends LoginPage {
         confirmPasswordLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
         confirmPasswordLabel.setForeground(Color.BLACK);
 
-        JPasswordField confirmPasswordInput = new JPasswordField();
+        confirmPasswordInput = new JPasswordField();
         confirmPasswordInput.setFont(INPUT_FONT.deriveFont(NORMAL_TEXT_SIZE));
         confirmPasswordInput.setPreferredSize(new Dimension(600, HEIGHT));
         confirmPasswordInput.setMinimumSize(new Dimension(600, HEIGHT));
