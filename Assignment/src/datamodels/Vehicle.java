@@ -15,7 +15,6 @@ public class Vehicle {
     private String vinNumber;
     private String registrationNumber;
     private double rentalPriceDay;
-    private String drivetrain;
     private String transmission;
     private String fuelType;
     private int seatingCapacity;
@@ -31,7 +30,7 @@ public class Vehicle {
     // Parameterized Constructor
     public Vehicle(int vehicleId, String imagePath, String brand, String model, int year, int capacity,
             int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
-            double rentalPriceDay, String drivetrain, String transmission, String fuelType, int seatingCapacity,
+            double rentalPriceDay, String transmission, String fuelType, int seatingCapacity,
             String condition, String status, boolean availability, List<String> features) {
         this.vehicleId = vehicleId;
         this.imagePath = imagePath;
@@ -45,7 +44,6 @@ public class Vehicle {
         this.vinNumber = vinNumber;
         this.registrationNumber = registrationNumber;
         this.rentalPriceDay = rentalPriceDay;
-        this.drivetrain = drivetrain;
         this.transmission = transmission;
         this.fuelType = fuelType;
         this.seatingCapacity = seatingCapacity;
@@ -134,14 +132,6 @@ public class Vehicle {
 
     public void setHorsepower(int horsepower) {
         this.horsepower = horsepower;
-    }
-
-    public String getDrivetrain() {
-        return drivetrain;
-    }
-
-    public void setDrivetrain(String drivetrain) {
-        this.drivetrain = drivetrain;
     }
 
     public String getTransmission() {
