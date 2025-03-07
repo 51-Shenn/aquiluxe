@@ -11,4 +11,8 @@ public class UserController {
     public static boolean passNewUserDetails(String fullName, String gender, String email, String phone, char[] password, char[] confirmPassword) {
         return UserService.validateNewUserDetails(fullName, gender, email, phone, password, confirmPassword);
     }
+
+    public static boolean passSignInDetails(String email, char[] password) {
+        return UserService.validateSignInDetails(email, password);
+    }
 }

@@ -33,7 +33,7 @@ public class UserService {
         boolean isValidGender = genderValidator(gender);
 
         // email validation
-        boolean isValidEmailAddress = emailAddressValidator(email);        // make sure it is not used by other users
+        boolean isValidEmailAddress = emailAddressValidator(email);
 
         // phone number validation
         boolean isValidPhoneNumber = phoneNumberValidator(phone);
@@ -41,15 +41,45 @@ public class UserService {
         // password validation
         boolean isValidPassword = passwordValidation(password, confirmPassword);
 
-        if(isValidFullName && isValidGender && isValidEmailAddress && isValidPhoneNumber && isValidPassword)
+        if(isValidFullName && isValidGender && isValidEmailAddress && isValidPhoneNumber && isValidPassword) {
+            fullName = capitalizeFullName(fullName);
             createNewUserAccount(fullName, gender, email, phone, password);
+        }
 
         return isValidFullName && isValidGender && isValidEmailAddress && isValidPhoneNumber && isValidPassword;
     }
 
-    public static String capitalizeFullName(String fullName) {
+    public static boolean validateSignInDetails(String email, char[] password) {
+        String userPassword = new String(password);
+
+        if(email.isEmpty()) {
+            System.out.println("Email address cannot be blank");
+            return false;
+        }
+        else if(userPassword.isEmpty()) {
+            System.out.println("Please enter your password.");
+            return false;
+        }
+        else {
+            for(User user : User.users.values()) {
+                if(user.getUserEmail().equals(email) && user.getPassword().equals(userPassword)) {
+                    System.out.println("Login successful!");
+                    return true;
+                }
+                else {
+                    System.out.println("Wrong email address or password.");
+                    return false;
+                }
+            }
+        }
+
+        System.out.println("Email address not found.");
+        return false;
+    }
+
+    private static String capitalizeFullName(String fullName) {
         StringBuilder capitalizedName = new StringBuilder();
-        String[] name = fullName.split(" ");
+        String[] name = fullName.trim().split("\\s+");
 
         for(String word : name) {
             char firstLetter = word.toUpperCase().charAt(0);
@@ -61,20 +91,17 @@ public class UserService {
         return capitalizedName.toString().trim();
     }
 
-    public static boolean fullNameValidator(String fullName) {
+    private static boolean fullNameValidator(String fullName) {
         fullName = fullName.trim();
         if (fullName.isEmpty()) {
             System.out.println("Please enter your full name");
             return false;
         }
-        else {
-            fullName = capitalizeFullName(fullName);
-            System.out.println(fullName);
+        else
             return true;
-        }
     }
 
-    public static boolean genderValidator(String gender) {
+    private static boolean genderValidator(String gender) {
         if(gender == null) {
             System.out.println("Please select a gender");
             return false;
@@ -82,7 +109,7 @@ public class UserService {
         return true;
     }
 
-    public static boolean emailAddressValidator(String email) {
+    private static boolean emailAddressValidator(String email) {
         if(email.isEmpty())
             System.out.println("Please enter your email address");
 
@@ -90,10 +117,20 @@ public class UserService {
         Pattern pattern = Pattern.compile(EMAIL_REGEX);
         Matcher matcher = pattern.matcher(email);
 
-        return matcher.matches();
+        if(matcher.matches()) {
+            for(User user : User.users.values()) {
+                if(user.getUserEmail().equals(email)) {
+                    System.out.println("This email address has been taken!");
+                    return false;
+                }
+            }
+            return true;
+        }
+        else
+            return false;
     }
 
-    public static boolean phoneNumberValidator(String phone) {
+    private static boolean phoneNumberValidator(String phone) {
         if(phone.isEmpty())
             System.out.println("Please enter your phone number");
 
@@ -102,12 +139,21 @@ public class UserService {
         final String PHONE_REGEX = "^[1-9][0-9]{8,9}$";
         Pattern pattern = Pattern.compile(PHONE_REGEX);
         Matcher matcher = pattern.matcher(phone);
-        System.out.println(phone);
 
-        return matcher.matches();
+        if(matcher.matches()) {
+            for(User user : User.users.values()) {
+                if(user.getPhoneNumber().equals(phone)) {
+                    System.out.println("This phone number has been taken!");
+                    return false;
+                }
+            }
+            return true;
+        }
+        else
+            return false;
     }
 
-    public static boolean passwordValidation(char[] password, char[] confirmPassword) {
+    private static boolean passwordValidation(char[] password, char[] confirmPassword) {
         String password1 = new String(password).trim();
         String password2 = new String(confirmPassword).trim();
 
@@ -119,7 +165,7 @@ public class UserService {
             System.out.println("Password cannot contain spaces");
             return false;
         }
-        else if(password1.length() <= 8) {
+        else if(password1.length() < 8) {
             System.out.println("Password must contain at least 8 characters.");
             return false;
         }
@@ -130,8 +176,10 @@ public class UserService {
         return true;
     }
 
-    public static void createNewUserAccount(String fullName, String gender, String email, String phone, char[] password) {
+    private static void createNewUserAccount(String fullName, String gender, String email, String phone, char[] password) {
         String userPassword = new String(password);
-        User newUser = new User(1, fullName, gender, "X", email, phone, "username", userPassword);
+        new User(fullName, gender, null, email, phone, userPassword);
+
+        User.displayUsers();
     }
 }

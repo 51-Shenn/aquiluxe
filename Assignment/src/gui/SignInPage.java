@@ -1,5 +1,9 @@
 package gui;
 
+import controllers.UserController;
+import datamodels.User;
+import services.UserService;
+
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -9,6 +13,7 @@ import java.io.File;
 public class SignInPage extends LoginPage {
 
     private final JFrame frame;
+    private JPasswordField passwordInput;
 
     SignInPage(JFrame frame) {
         this.frame = frame;
@@ -73,7 +78,7 @@ public class SignInPage extends LoginPage {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 250, 0, 0);
         titleContainer.add(titleLabel, gbc);
-        gbc.insets = new Insets(0, 150, 0, 0);
+        gbc.insets = new Insets(0, 200, 0, 0);
         titleContainer.add(closeButton, gbc);
 
         return titleContainer;
@@ -139,7 +144,7 @@ public class SignInPage extends LoginPage {
         passwordLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
         passwordLabel.setForeground(Color.BLACK);
 
-        JPasswordField passwordInput = new JPasswordField();
+        passwordInput = new JPasswordField();
         passwordInput.setFont(INPUT_FONT.deriveFont(NORMAL_TEXT_SIZE));
         passwordInput.setPreferredSize(new Dimension(600, HEIGHT));
         passwordInput.setMinimumSize(new Dimension(600, HEIGHT));
@@ -204,6 +209,16 @@ public class SignInPage extends LoginPage {
         nextButton.setFocusPainted(false);
         nextButton.setPreferredSize(new Dimension(150, 70));
         nextButton.setMinimumSize(new Dimension(150, HEIGHT));
+        nextButton.addActionListener(e -> {
+            boolean isValidSignInDetails = UserController.passSignInDetails(emailInput.getText(), passwordInput.getPassword());
+            if(isValidSignInDetails) {
+                JPanel newContentPane = new JPanel(new BorderLayout());
+                this.frame.setContentPane(newContentPane);
+                this.frame.add(new GUIComponents(this.frame), BorderLayout.NORTH);
+                this.frame.revalidate();
+                this.frame.repaint();
+            }
+        });
 
         return nextButton;
     }

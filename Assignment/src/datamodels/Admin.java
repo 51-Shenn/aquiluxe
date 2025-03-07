@@ -9,9 +9,8 @@ public class Admin extends User {
     }
 
     // Parameterized Constructor
-    public Admin(int userId, String fullName, String gender, String license, String phoneNumber, String userEmail,
-            String username, String password, String role) {
-        super(userId, fullName, gender, license, phoneNumber, userEmail, username, password);
+    public Admin(String fullName, String gender, String license, String phoneNumber, String userEmail, String password, String role) {
+        super(fullName, gender, license, phoneNumber, userEmail, password);
         this.role = role;
     }
 

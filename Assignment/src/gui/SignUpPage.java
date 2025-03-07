@@ -15,8 +15,8 @@ public class SignUpPage extends LoginPage {
     private JTextField fullNameInput;
     private String genderInput;
     private JTextField phoneInput;
-    private JPasswordField passwordInput = new JPasswordField();
-    private JPasswordField confirmPasswordInput = new JPasswordField();
+    private JPasswordField passwordInput;
+    private JPasswordField confirmPasswordInput;
     private String currentPage = "USER";
 
     SignUpPage(JFrame frame) {
@@ -82,7 +82,7 @@ public class SignUpPage extends LoginPage {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 250, 0, 0);
         titleContainer.add(titleLabel, gbc);
-        gbc.insets = new Insets(0, 150, 0, 0);
+        gbc.insets = new Insets(0, 200, 0, 0);
         titleContainer.add(closeButton, gbc);
 
         return titleContainer;
@@ -320,8 +320,8 @@ public class SignUpPage extends LoginPage {
                 isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput, emailInput.getText(), phoneInput.getText(), passwordInput.getPassword(), confirmPasswordInput.getPassword());
                 if(isValidUserDetails) {
                     currentPage = "USER";
-                    this.frame.getContentPane().removeAll();
-                    this.frame.repaint();
+                    JPanel newContentPane = new JPanel(new BorderLayout());
+                    this.frame.setContentPane(newContentPane);
                     this.frame.add(new GUIComponents(this.frame), BorderLayout.NORTH);
                     this.frame.validate();
                 }

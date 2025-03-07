@@ -14,9 +14,9 @@ public class Customer extends User {
     }
 
     // Parameter Constructor
-    public Customer(int userId, String fullName, String gender, String license, String phoneNumber, String userEmail,
-            String address, String username, String password, List<Rental> rentalHistory) {
-        super(userId, fullName, gender, license, phoneNumber, userEmail, username, password);
+    public Customer(String fullName, String gender, String license, String phoneNumber, String userEmail,
+            String address, String password, List<Rental> rentalHistory) {
+        super(fullName, gender, license, phoneNumber, userEmail, password);
         this.address = address;
         this.rentalHistory = rentalHistory; // No need pass to User class
     }

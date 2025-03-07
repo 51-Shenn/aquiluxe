@@ -1,6 +1,9 @@
 package datamodels;
 
+import java.util.HashMap;
+
 public class User {
+    private static int userIdCounter = 0;
     private int userId;
     private String fullName;
     private String gender;
@@ -10,30 +13,33 @@ public class User {
     private String username;
     private String password;
 
+    public static HashMap<Integer, User> users = new HashMap<>();
+
     // Default Constructor : for subclassing
     public User() {
     }
 
     // Parameterized Constructor
-    public User(int userId, String fullName, String gender, String license, String phoneNumber, String userEmail,
-            String username, String password) {
-        this.userId = userId;
+    public User(String fullName, String gender, String license, String userEmail, String phoneNumber, String password) {
+        this.userId = userIdCounter++;
         this.fullName = fullName;
+        this.username = generateUsername(fullName, this.userId);
         this.gender = gender;
         this.license = license;
         this.phoneNumber = phoneNumber;
         this.userEmail = userEmail;
-        this.username = username;
         this.password = password;
+
+        users.put(userId, this);
+    }
+
+    private static String generateUsername(String fullName, int userId) {
+        return fullName.toLowerCase().replaceAll("\\s+", "") + userId;
     }
 
     // Getters and Setters
     public int getUserId() {
         return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getFullName() {
@@ -116,5 +122,18 @@ public class User {
         this.userEmail = userEmail;
         this.username = username;
         this.password = password;
+    }
+
+    public static void displayUsers() {
+        for (User user : users.values()) {
+            System.out.println(
+                    "UserID: " + user.getUserId() +
+                    ", Name: " + user.getFullName() +
+                    ", Username: " + user.getUsername() +
+                    ", Gender: " + user.getGender() +
+                    ", Email: " + user.getUserEmail() +
+                    ", Phone Number: " + user.getPhoneNumber()
+            );
+        }
     }
 }
