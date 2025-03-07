@@ -149,6 +149,17 @@ public class SignInPage extends LoginPage {
         passwordInput.setForeground(Color.BLACK);
         passwordInput.setBorder(new CompoundBorder(BORDER, PADDING));
 
+        passwordPanel.add(passwordLabel, gbc);
+        passwordPanel.add(passwordInput);
+        gbc.insets = new Insets(0, 0, 0, 0);
+        passwordPanel.add(createEyeButton(passwordInput), gbc);
+        gbc.insets = new Insets(10, 0, 0, 0);
+        passwordPanel.add(createForgotPasswordLink(), gbc);
+
+        return passwordPanel;
+    }
+
+    private JButton createForgotPasswordLink() {
         JButton forgotPasswordLink = new JButton("Forgot Password?");
         forgotPasswordLink.setForeground(Color.BLUE);
         forgotPasswordLink.setFont(TITLE_FONT.deriveFont(17f));
@@ -161,15 +172,7 @@ public class SignInPage extends LoginPage {
             this.frame.revalidate();
             this.frame.repaint();
         });
-
-        passwordPanel.add(passwordLabel, gbc);
-        passwordPanel.add(passwordInput);
-        gbc.insets = new Insets(0, 0, 0, 0);
-        passwordPanel.add(createEyeButton(passwordInput), gbc);
-        gbc.insets = new Insets(10, 0, 0, 0);
-        passwordPanel.add(forgotPasswordLink, gbc);
-
-        return passwordPanel;
+        return forgotPasswordLink;
     }
 
     private JPanel createProceedContainer() {
