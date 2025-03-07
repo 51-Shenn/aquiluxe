@@ -46,7 +46,7 @@ public class ForgotPasswordPage extends LoginPage {
 
     @Override
     protected JPanel createTitle() {
-        // title container to indicate sign in
+        // title container to indicate forgot password
         JPanel titleContainer = new JPanel(new GridBagLayout());
         titleContainer.setBackground(Color.WHITE);
 
@@ -82,7 +82,7 @@ public class ForgotPasswordPage extends LoginPage {
 
     @Override
     protected JPanel createInputContainer() {
-        // create container that contains relevant input for sign in
+        // create container that contains relevant input for forgot password
         JPanel InputContainer = new JPanel(new BorderLayout());
 
         JPanel container = new JPanel(new GridBagLayout());
@@ -104,7 +104,6 @@ public class ForgotPasswordPage extends LoginPage {
     }
 
     private JPanel createPasswordInputContainer() {
-        // create container that contains relevant info for sign in or sign up
         JPanel InputContainer = new JPanel(new GridBagLayout());
 
         JPanel container = new JPanel(new GridBagLayout());
@@ -183,7 +182,6 @@ public class ForgotPasswordPage extends LoginPage {
     }
 
     private JPanel createProceedContainer(JPanel panel) {
-        // 2 buttons that let user change to sign up page or continue
         JPanel container = new JPanel(new GridBagLayout());
         container.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
