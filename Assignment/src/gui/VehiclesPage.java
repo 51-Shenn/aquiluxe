@@ -14,14 +14,14 @@ public class VehiclesPage extends JPanel implements ActionListener{
         this.setBackground(Color.BLACK);
         this.setLayout(new BorderLayout());
 
-        this.add(carCardsContainer(), BorderLayout.CENTER);
+        this.add(createCarCardsContainer(), BorderLayout.CENTER);
         //this.add(carLeftPanel(), BorderLayout.WEST);
         //this.add(carRightPanel(), BorderLayout.EAST);
-        this.add(carTopBar(),BorderLayout.NORTH);
+        this.add(createCarTopBar(),BorderLayout.NORTH);
 
     }
 
-    private JPanel carCards(){
+    private JPanel createCarCards(){
         //images
         ImageIcon image = new ImageIcon("C:\\Users\\User\\VSCode Projects\\Git\\Car Rental\\images\\Supra.jpg");
         Image rImage = image.getImage().getScaledInstance(400,400,java.awt.Image.SCALE_SMOOTH);
@@ -107,7 +107,12 @@ public class VehiclesPage extends JPanel implements ActionListener{
         JLabel caravailability = new JLabel(availability);
         caravailability.setOpaque(true);
         caravailability.setFont(CustomFonts.OPEN_SANS_EXTRA_BOLD.deriveFont(15f));
-        caravailability.setBackground(Color.BLUE);
+        if(availability == "AVAILABLE"){
+            caravailability.setBackground(Color.BLUE);
+        }
+        else{
+            caravailability.setBackground(Color.RED);
+        }
         caravailability.setForeground(Color.WHITE);
         caravailability.setPreferredSize(new Dimension(150,20));
 
@@ -179,15 +184,15 @@ public class VehiclesPage extends JPanel implements ActionListener{
         return carCard;
     }
 
-    private JScrollPane carCardsContainer() {
+    private JScrollPane createCarCardsContainer() {
 
         //JPanel carCards = new JPanel(new GridLayout(0,3,20,15));
 
         JPanel carCardsPanel = new JPanel(new BorderLayout());
-        carCardsPanel.add(carCards(),BorderLayout.CENTER);
-        carCardsPanel.add(carRightPanel(),BorderLayout.EAST);
-        carCardsPanel.add(bottomBar(),BorderLayout.SOUTH);
-        carCardsPanel.add(carLeftPanel(),BorderLayout.WEST);
+        carCardsPanel.add(createCarCards(),BorderLayout.CENTER);
+        carCardsPanel.add(createCarRightPanel(),BorderLayout.EAST);
+        carCardsPanel.add(createBottomBar(),BorderLayout.SOUTH);
+        carCardsPanel.add(createCarLeftPanel(),BorderLayout.WEST);
 
         JScrollPane container = new JScrollPane(carCardsPanel); 
         container.getVerticalScrollBar().setUnitIncrement(30);
@@ -197,7 +202,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         return container;
     }
 
-    private JPanel carTopBar(){
+    private JPanel createCarTopBar(){
         JPanel topBar = new JPanel();
         topBar.setLayout(null);
         topBar.setPreferredSize(new Dimension(1600,50));
@@ -266,7 +271,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
     private JTextField minPriceField;
     private JTextField maxPriceField;
 
-    private JPanel carLeftPanel() {
+    private JPanel createCarLeftPanel() {
         //sample data
         String[] brands = {"ALL","NISSAN","LAMBORGHINI","FERRARI","PORSCHE"};
         String[] models = {"ALL","GTR R35","M5 E90","CLA45S"};
@@ -442,14 +447,14 @@ public class VehiclesPage extends JPanel implements ActionListener{
         }
     }
 
-    private JPanel carRightPanel() {
+    private JPanel createCarRightPanel() {
         JPanel rightPanel = new JPanel();
         rightPanel.setPreferredSize(new Dimension(250,900));
 
         return rightPanel;
     }
 
-    private JPanel bottomBar(){
+    private JPanel createBottomBar(){
         JPanel bottomBar = new JPanel();
         bottomBar.setBackground(Color.BLACK);
         bottomBar.setPreferredSize(new Dimension(800,500));
