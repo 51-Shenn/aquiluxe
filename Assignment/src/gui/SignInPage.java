@@ -91,14 +91,14 @@ public class SignInPage extends LoginPage {
         container.setBackground(Color.WHITE);
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(30, 30, 20, 30);
+        gbc.insets = new Insets(20, 30, 20, 30);
         gbc.gridwidth = GridBagConstraints.REMAINDER;
 
         gbc.anchor = GridBagConstraints.WEST;
 
         container.add(createEmailContainer("Username / Email Address: "), gbc);
         container.add(createPasswordContainer(), gbc);
-        gbc.insets = new Insets(30, 20, 0, 0);
+        gbc.insets = new Insets(50, 20, 0, 0);
         container.add(createProceedContainer(), gbc);
 
         InputContainer.add(container);

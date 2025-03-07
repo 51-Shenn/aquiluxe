@@ -104,7 +104,7 @@ public class SignUpPage extends LoginPage {
         fullNameAndGenderPanel.add(createFullNameContainer(), gbc);
         fullNameAndGenderPanel.add(createGenderContainer());
 
-        gbc.insets = new Insets(0, 30, 30, 30);
+        gbc.insets = new Insets(0, 30, 20, 30);
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         container.add(fullNameAndGenderPanel, gbc);
 
@@ -112,6 +112,7 @@ public class SignUpPage extends LoginPage {
 
         container.add(createEmailContainer("Email Address: "), gbc);
         container.add(createPhoneContainer(), gbc);
+        gbc.insets = new Insets(40, 30, 0, 30);
         container.add(createProceedContainer(container), gbc);
 
         InputContainer.add(container);

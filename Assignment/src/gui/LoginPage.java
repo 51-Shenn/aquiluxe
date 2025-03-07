@@ -59,13 +59,13 @@ public abstract class LoginPage extends JPanel {
         gbc.weightx = 1;
         gbc.gridy = 0;
         gbc.gridwidth = contentPanel.getWidth();
-        gbc.insets = new Insets(0, 0, 0, 0);
+        gbc.insets = new Insets(100, 0, 0, 0);
         gbc.anchor = GridBagConstraints.NORTH;
 
         contentPanel.add(createTitle(), gbc);
-        gbc.insets = new Insets(100, 0, 200, 0);
+        gbc.insets = new Insets(50, 0, 250, 0);
         gbc.gridy = 1;
-        gbc.weighty = 0;
+        gbc.weighty = 1;
         contentPanel.add(createInputContainer(), gbc);
         return contentPanel;
     }
