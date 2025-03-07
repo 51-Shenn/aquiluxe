@@ -23,7 +23,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
     private JPanel createCarCards(){
         //images
-        ImageIcon image = new ImageIcon("C:\\Users\\User\\VSCode Projects\\Git\\Car Rental\\images\\Supra.jpg");
+        ImageIcon image = new ImageIcon("images/Supra.jpg");
         Image rImage = image.getImage().getScaledInstance(400,400,java.awt.Image.SCALE_SMOOTH);
         image = new ImageIcon(rImage);
 
@@ -53,9 +53,9 @@ public class VehiclesPage extends JPanel implements ActionListener{
     private JPanel createCarCard(ImageIcon image, String brand, String model, String transmission, String fuelType,
                                  String carType, int seats, String price, String availability) {
 
-        ImageIcon transmissionIcon = new ImageIcon("C:\\Users\\User\\VSCode Projects\\Git\\Car Rental\\images\\manual-transmission.png");
-        ImageIcon fuelIcon = new ImageIcon("C:\\Users\\User\\VSCode Projects\\Git\\Car Rental\\images\\gas-station.png");
-        ImageIcon seatsIcon = new ImageIcon("C:\\Users\\User\\VSCode Projects\\Git\\Car Rental\\images\\car-seat.png");
+        ImageIcon transmissionIcon = new ImageIcon("images/manual-transmission.png");
+        ImageIcon fuelIcon = new ImageIcon("images/gas-station.png");
+        ImageIcon seatsIcon = new ImageIcon("images/car-seat.png");
         
         JPanel carCard = new JPanel();
         carCard.setLayout(new BorderLayout());
