@@ -60,7 +60,7 @@ public class UserService {
         }
         else {
             for(User user : User.users.values()) {
-                if(user.getUserEmail().equals(email) && user.getPhoneNumber().equals(phone))
+                if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPhoneNumber().equals(phone))
                     return true;
                 else {
                     System.out.println("Wrong email address or phone number.");
@@ -98,7 +98,7 @@ public class UserService {
         }
         else {
             for(User user : User.users.values()) {
-                if(user.getUserEmail().equals(email) && user.getPassword().equals(userPassword)) {
+                if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPassword().equals(userPassword)) {
                     System.out.println("Login successful!");
                     return true;
                 }

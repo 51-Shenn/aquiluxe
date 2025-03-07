@@ -83,28 +83,6 @@ public class SignInPage extends LoginPage {
     }
 
     @Override
-    protected JPanel createContentPanel() {
-        // content panel that contains title and the required input for sign in
-        JPanel contentPanel = new JPanel(new GridBagLayout());
-        contentPanel.setBackground(Color.WHITE);
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1;
-        gbc.gridy = 0;
-        gbc.gridwidth = contentPanel.getWidth();
-        gbc.insets = new Insets(80, 0, 0, 0);
-        gbc.anchor = GridBagConstraints.NORTH;
-
-        contentPanel.add(createTitle(), gbc);
-        gbc.insets = new Insets(0, 0, 300, 0);
-        gbc.gridy = 1;
-        gbc.weighty = 1;
-        contentPanel.add(createInputContainer(), gbc);
-        return contentPanel;
-    }
-
-    @Override
     protected JPanel createInputContainer() {
         // create container that contains relevant input for sign in
         JPanel InputContainer = new JPanel(new BorderLayout());
@@ -118,7 +96,7 @@ public class SignInPage extends LoginPage {
 
         gbc.anchor = GridBagConstraints.WEST;
 
-        container.add(createEmailContainer(), gbc);
+        container.add(createEmailContainer("Username / Email Address: "), gbc);
         container.add(createPasswordContainer(), gbc);
         gbc.insets = new Insets(30, 20, 0, 0);
         container.add(createProceedContainer(), gbc);

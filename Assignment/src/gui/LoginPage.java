@@ -47,11 +47,30 @@ public abstract class LoginPage extends JPanel {
     }
 
     abstract JPanel createTitle();
-    abstract JPanel createContentPanel();
     abstract JLabel createWallpaperLabel();
     abstract JPanel createInputContainer();
 
-    protected JPanel createEmailContainer() {
+    protected JPanel createContentPanel() {
+        JPanel contentPanel = new JPanel(new GridBagLayout());
+        contentPanel.setBackground(Color.WHITE);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1;
+        gbc.gridy = 0;
+        gbc.gridwidth = contentPanel.getWidth();
+        gbc.insets = new Insets(0, 0, 0, 0);
+        gbc.anchor = GridBagConstraints.NORTH;
+
+        contentPanel.add(createTitle(), gbc);
+        gbc.insets = new Insets(100, 0, 200, 0);
+        gbc.gridy = 1;
+        gbc.weighty = 0;
+        contentPanel.add(createInputContainer(), gbc);
+        return contentPanel;
+    }
+
+    protected JPanel createEmailContainer(String emailInputTitle) {
         // email address
         JPanel emailPanel = new JPanel(new GridBagLayout());
         emailPanel.setBackground(Color.WHITE);
@@ -61,7 +80,7 @@ public abstract class LoginPage extends JPanel {
         gbc.gridwidth = emailPanel.getWidth();
         gbc.insets = new Insets(10, 0, 0, 0);
 
-        JLabel emailLabel = new JLabel("Email Address: ");
+        JLabel emailLabel = new JLabel(emailInputTitle);
         emailLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
         emailLabel.setForeground(Color.BLACK);
 
