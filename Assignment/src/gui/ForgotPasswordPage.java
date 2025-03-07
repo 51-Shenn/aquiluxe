@@ -257,7 +257,7 @@ public class ForgotPasswordPage extends LoginPage {
                 }
             }
             else {
-                isValidForgotPasswordDetails = UserController.passForgotPasswordDetails(emailInput.getText(), phoneInput.getText(), passwordInput.getPassword(), confirmPasswordInput.getPassword());
+                isValidForgotPasswordDetails = UserController.passForgotPasswordDetails(passwordInput.getPassword(), confirmPasswordInput.getPassword());
                 if(isValidForgotPasswordDetails) {
                     currentPage = "USER";
                     JPanel newContentPane = new JPanel(new BorderLayout());

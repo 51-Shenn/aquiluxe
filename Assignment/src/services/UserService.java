@@ -72,7 +72,7 @@ public class UserService {
         return false;
     }
 
-    public static boolean validateForgotPasswordDetails(String email, String phone, char[] password, char[] confirmPassword) {
+    public static boolean validateForgotPasswordDetails(char[] password, char[] confirmPassword) {
         boolean isValidPassword = passwordValidation(password, confirmPassword);
         String userPassword = new String(password);
         if(isValidPassword) {
