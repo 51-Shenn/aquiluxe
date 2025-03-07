@@ -61,6 +61,12 @@ public class GUIComponents extends JPanel {
             topBarButtons[i].setContentAreaFilled(false); // no fill
         }
 
+        topBarButtons[1].addActionListener(e -> {
+            this.frame.add(new VehiclesPage(this.frame), BorderLayout.CENTER);
+            this.frame.revalidate();
+            this.frame.repaint();
+        });
+
         return topBarButtons;
     }
 
