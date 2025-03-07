@@ -8,12 +8,14 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.File;
 
-public class SignInPage extends LoginPage {
+public class ForgotPasswordPage extends LoginPage {
 
     private final JFrame frame;
     private JPasswordField passwordInput;
+    private JPasswordField confirmPasswordInput;
+    private String currentPage = "USER";
 
-    SignInPage(JFrame frame) {
+    ForgotPasswordPage(JFrame frame) {
         this.frame = frame;
     }
 
@@ -21,7 +23,7 @@ public class SignInPage extends LoginPage {
     protected JLabel createWallpaperLabel() {
         JLabel wallpaperLabel = new JLabel();
         wallpaperLabel.setOpaque(false);
-        File imageFile = new File("images/icons/carBackground3.png");
+        File imageFile = new File("images/icons/carBackground1.png");
         if (!imageFile.exists()) {
             JOptionPane.showMessageDialog(null, "Failed to load image: " + imageFile);
         } else {
@@ -48,8 +50,8 @@ public class SignInPage extends LoginPage {
         JPanel titleContainer = new JPanel(new GridBagLayout());
         titleContainer.setBackground(Color.WHITE);
 
-        JLabel titleLabel = new JLabel("Sign In");
-        titleLabel.setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(60f));
+        JLabel titleLabel = new JLabel("Forgot Password");
+        titleLabel.setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(55f));
         titleLabel.setForeground(Color.BLACK);
 
         JButton closeButton = new JButton();
@@ -73,11 +75,7 @@ public class SignInPage extends LoginPage {
             });
         }
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(0, 250, 0, 0);
-        titleContainer.add(titleLabel, gbc);
-        gbc.insets = new Insets(0, 200, 0, 0);
-        titleContainer.add(closeButton, gbc);
+        titleContainer.add(titleLabel);
 
         return titleContainer;
     }
@@ -115,13 +113,35 @@ public class SignInPage extends LoginPage {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(30, 30, 20, 30);
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-
         gbc.anchor = GridBagConstraints.WEST;
 
         container.add(createEmailContainer(), gbc);
+        container.add(createPhoneContainer(), gbc);
+        gbc.insets = new Insets(20, 20, 0, 0);
+        container.add(createProceedContainer(container), gbc);
+
+        InputContainer.add(container);
+
+        return InputContainer;
+    }
+
+    private JPanel createPasswordInputContainer() {
+        // create container that contains relevant info for sign in or sign up
+        JPanel InputContainer = new JPanel(new GridBagLayout());
+
+        JPanel container = new JPanel(new GridBagLayout());
+        container.setBackground(Color.WHITE);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(30, 30, 20, 30);
+        gbc.gridwidth = container.getWidth();
+
+        gbc.anchor = GridBagConstraints.WEST;
+
         container.add(createPasswordContainer(), gbc);
-        gbc.insets = new Insets(30, 20, 0, 0);
-        container.add(createProceedContainer(), gbc);
+        container.add(createConfirmPasswordContainer(), gbc);
+        gbc.insets = new Insets(20, 20, 0, 0);
+        container.add(createProceedContainer(container), gbc);
 
         InputContainer.add(container);
 
@@ -138,7 +158,7 @@ public class SignInPage extends LoginPage {
         gbc.gridwidth = passwordPanel.getWidth();
         gbc.insets = new Insets(10, 0, 0, 0);
 
-        JLabel passwordLabel = new JLabel("Password: ");
+        JLabel passwordLabel = new JLabel("New Password: ");
         passwordLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
         passwordLabel.setForeground(Color.BLACK);
 
@@ -149,53 +169,65 @@ public class SignInPage extends LoginPage {
         passwordInput.setForeground(Color.BLACK);
         passwordInput.setBorder(new CompoundBorder(BORDER, PADDING));
 
-        JButton forgotPasswordLink = new JButton("Forgot Password?");
-        forgotPasswordLink.setForeground(Color.BLUE);
-        forgotPasswordLink.setFont(TITLE_FONT.deriveFont(17f));
-        forgotPasswordLink.setBorderPainted(false);
-        forgotPasswordLink.setFocusPainted(false);
-        forgotPasswordLink.setContentAreaFilled(false);
-        forgotPasswordLink.setBorder(new EmptyBorder(0, 0, 0, 0));
-        forgotPasswordLink.addActionListener(e -> {
-            this.frame.setContentPane(new ForgotPasswordPage(this.frame));
-            this.frame.revalidate();
-            this.frame.repaint();
-        });
-
         passwordPanel.add(passwordLabel, gbc);
         passwordPanel.add(passwordInput);
-        gbc.insets = new Insets(0, 0, 0, 0);
-        passwordPanel.add(createEyeButton(passwordInput), gbc);
-        gbc.insets = new Insets(10, 0, 0, 0);
-        passwordPanel.add(forgotPasswordLink, gbc);
+        passwordPanel.add(createEyeButton(passwordInput));
 
         return passwordPanel;
     }
 
-    private JPanel createProceedContainer() {
+    private JPanel createConfirmPasswordContainer() {
+        // password
+        JPanel confirmPasswordPanel = new JPanel(new GridBagLayout());
+        confirmPasswordPanel.setBackground(Color.WHITE);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.gridwidth = confirmPasswordPanel.getWidth();
+        gbc.insets = new Insets(10, 0, 0, 0);
+
+        JLabel confirmPasswordLabel = new JLabel("Confirm Password: ");
+        confirmPasswordLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
+        confirmPasswordLabel.setForeground(Color.BLACK);
+
+        confirmPasswordInput = new JPasswordField();
+        confirmPasswordInput.setFont(INPUT_FONT.deriveFont(NORMAL_TEXT_SIZE));
+        confirmPasswordInput.setPreferredSize(new Dimension(600, HEIGHT));
+        confirmPasswordInput.setMinimumSize(new Dimension(600, HEIGHT));
+        confirmPasswordInput.setForeground(Color.BLACK);
+        confirmPasswordInput.setBorder(new CompoundBorder(BORDER, PADDING));
+
+        confirmPasswordPanel.add(confirmPasswordLabel, gbc);
+        confirmPasswordPanel.add(confirmPasswordInput);
+        confirmPasswordPanel.add(createEyeButton(confirmPasswordInput));
+
+        return confirmPasswordPanel;
+    }
+
+    private JPanel createProceedContainer(JPanel panel) {
         // 2 buttons that let user change to sign up page or continue
         JPanel container = new JPanel(new GridBagLayout());
         container.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(50, 10, 0, 350);
+        gbc.insets = new Insets(50, 15, 0, 500);
 
         container.add(createLinkButton(), gbc);
         gbc.insets = new Insets(50, 0, 0, 0);
-        container.add(createNextButton(), gbc);
+        container.add(createNextButton(panel), gbc);
         return container;
     }
 
     private JButton createLinkButton() {
-        JButton linkButton = new JButton("Don't have an account yet?");
+        JButton linkButton = new JButton("Back");
         linkButton.setBackground(Color.WHITE);
         linkButton.setForeground(Color.BLUE);
-        linkButton.setFont(TITLE_FONT.deriveFont(17f));
+        linkButton.setFont(TITLE_FONT.deriveFont(20f));
         linkButton.setBorderPainted(false);
         linkButton.setFocusPainted(false);
         linkButton.setContentAreaFilled(false);
         linkButton.setBorder(new EmptyBorder(0, 0, 0, 0));
         linkButton.addActionListener(e -> {
-            this.frame.setContentPane(new SignUpPage(this.frame));
+            this.frame.setContentPane(new SignInPage(this.frame));
             this.frame.revalidate();
             this.frame.repaint();
         });
@@ -203,7 +235,7 @@ public class SignInPage extends LoginPage {
         return linkButton;
     }
 
-    private JButton createNextButton() {
+    private JButton createNextButton(JPanel panel) {
         JButton nextButton = new JButton("Next");
         nextButton.setBackground(Color.BLUE);
         nextButton.setForeground(Color.WHITE);
@@ -213,13 +245,26 @@ public class SignInPage extends LoginPage {
         nextButton.setPreferredSize(new Dimension(150, 70));
         nextButton.setMinimumSize(new Dimension(150, HEIGHT));
         nextButton.addActionListener(e -> {
-            boolean isValidSignInDetails = UserController.passSignInDetails(emailInput.getText(), passwordInput.getPassword());
-            if(isValidSignInDetails) {
-                JPanel newContentPane = new JPanel(new BorderLayout());
-                this.frame.setContentPane(newContentPane);
-                this.frame.add(new GUIComponents(this.frame), BorderLayout.NORTH);
-                this.frame.revalidate();
-                this.frame.repaint();
+            boolean isValidForgotPasswordDetails;
+            if (currentPage.equals("USER")) {
+                isValidForgotPasswordDetails = UserController.passForgotPasswordDetails(emailInput.getText(), phoneInput.getText());
+                if(isValidForgotPasswordDetails) {
+                    currentPage = "PASSWORD";
+                    panel.removeAll();
+                    panel.revalidate();
+                    panel.repaint();
+                    panel.add(createPasswordInputContainer());
+                }
+            }
+            else {
+                isValidForgotPasswordDetails = UserController.passForgotPasswordDetails(emailInput.getText(), phoneInput.getText(), passwordInput.getPassword(), confirmPasswordInput.getPassword());
+                if(isValidForgotPasswordDetails) {
+                    currentPage = "USER";
+                    JPanel newContentPane = new JPanel(new BorderLayout());
+                    this.frame.setContentPane(newContentPane);
+                    this.frame.add(new GUIComponents(this.frame), BorderLayout.NORTH);
+                    this.frame.validate();
+                }
             }
         });
 
@@ -240,11 +285,11 @@ public class SignInPage extends LoginPage {
         logo.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(30f));
         logo.setForeground(Color.DARK_GRAY);
 
-        String[] texts = {"Your Journey,", "Our Wheels."};
+        String[] texts = {"Drive in Style,", "Rent with Ease."};
         for (String text : texts) {
             JLabel lines = new JLabel(text);
             if (text.equals(texts[0]))
-                lines.setForeground(Color.WHITE);
+                lines.setForeground(Color.BLACK);
             else
                 lines.setForeground(Color.BLUE);
             lines.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(70f));

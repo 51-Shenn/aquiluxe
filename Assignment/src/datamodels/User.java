@@ -132,7 +132,8 @@ public class User {
                     ", Username: " + user.getUsername() +
                     ", Gender: " + user.getGender() +
                     ", Email: " + user.getUserEmail() +
-                    ", Phone Number: " + user.getPhoneNumber()
+                    ", Phone Number: " + user.getPhoneNumber() +
+                    ", Password: " + user.getPassword()
             );
         }
     }

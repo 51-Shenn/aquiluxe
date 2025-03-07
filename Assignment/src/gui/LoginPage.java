@@ -17,6 +17,7 @@ public abstract class LoginPage extends JPanel {
     protected final Font INPUT_FONT = CustomFonts.OPEN_SANS_REGULAR;
 
     protected JTextField emailInput;
+    protected JTextField phoneInput;
 
     public LoginPage() {
         setLayout(new GridBagLayout());
@@ -75,6 +76,46 @@ public abstract class LoginPage extends JPanel {
         emailPanel.add(emailInput);
 
         return emailPanel;
+    }
+    protected JPanel createPhoneContainer() {
+        // phone number
+        JPanel phonePanel = new JPanel(new GridBagLayout());
+        phonePanel.setBackground(Color.WHITE);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.gridwidth = phonePanel.getWidth();
+        gbc.insets = new Insets(10, 0, 0, 0);
+
+        JLabel phoneLabel = new JLabel("Phone Number: ");
+        phoneLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
+        phoneLabel.setForeground(Color.BLACK);
+
+        JPanel phoneInputPanel = new JPanel(new GridBagLayout());
+        JButton countryCode = new JButton();
+        countryCode.setText("+60");
+        countryCode.setFont(TITLE_FONT.deriveFont(BUTTON_TEXT_SIZE));
+        countryCode.setPreferredSize(new Dimension(100, HEIGHT));
+        countryCode.setMinimumSize(new Dimension(100, HEIGHT));
+        countryCode.setFocusPainted(false);
+        countryCode.setBackground(Color.BLACK);
+        countryCode.setForeground(Color.WHITE);
+        countryCode.setBorder(BORDER);
+
+        phoneInput = new JTextField();
+        phoneInput.setFont(INPUT_FONT.deriveFont(NORMAL_TEXT_SIZE));
+        phoneInput.setPreferredSize(new Dimension(600, HEIGHT));
+        phoneInput.setMinimumSize(new Dimension(600, HEIGHT));
+        phoneInput.setForeground(Color.BLACK);
+        phoneInput.setBorder(new CompoundBorder(BORDER, PADDING));
+
+        phoneInputPanel.add(countryCode);
+        phoneInputPanel.add(phoneInput);
+
+        phonePanel.add(phoneLabel, gbc);
+        phonePanel.add(phoneInputPanel);
+
+        return phonePanel;
     }
     protected JButton createEyeButton(JPasswordField passwordField) {
         JButton eyeButton = new JButton();

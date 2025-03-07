@@ -49,6 +49,42 @@ public class UserService {
         return isValidFullName && isValidGender && isValidEmailAddress && isValidPhoneNumber && isValidPassword;
     }
 
+    public static boolean validateForgotPasswordDetails(String email, String phone) {
+        if(email.isEmpty()) {
+            System.out.println("Email address cannot be blank");
+            return false;
+        }
+        else if(phone.isEmpty()) {
+            System.out.println("Please enter your phone number.");
+            return false;
+        }
+        else {
+            for(User user : User.users.values()) {
+                if(user.getUserEmail().equals(email) && user.getPhoneNumber().equals(phone))
+                    return true;
+                else {
+                    System.out.println("Wrong email address or phone number.");
+                    return false;
+                }
+            }
+        }
+        System.out.println("Email address not found.");
+        return false;
+    }
+
+    public static boolean validateForgotPasswordDetails(String email, String phone, char[] password, char[] confirmPassword) {
+        boolean isValidPassword = passwordValidation(password, confirmPassword);
+        String userPassword = new String(password);
+        if(isValidPassword) {
+            for(User user : User.users.values()) {
+                user.setPassword(userPassword);
+                User.displayUsers();
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean validateSignInDetails(String email, char[] password) {
         String userPassword = new String(password);
 
