@@ -121,7 +121,7 @@ public class UserService {
             }
         }
 
-        emailValidationLabel.setText("Email address not found.");
+        emailValidationLabel.setText("Username / Email Address not found.");
         return false;
     }
 
