@@ -18,6 +18,8 @@ public abstract class LoginPage extends JPanel {
 
     protected JTextField emailInput;
     protected JTextField phoneInput;
+    protected JLabel emailValidationLabel;
+    protected JLabel phoneValidationLabel;
 
     public LoginPage() {
         setLayout(new GridBagLayout());
@@ -78,7 +80,7 @@ public abstract class LoginPage extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.WEST;
         gbc.gridwidth = emailPanel.getWidth();
-        gbc.insets = new Insets(10, 0, 0, 0);
+        gbc.insets = new Insets(5, 0, 0, 0);
 
         JLabel emailLabel = new JLabel(emailInputTitle);
         emailLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
@@ -90,9 +92,17 @@ public abstract class LoginPage extends JPanel {
         emailInput.setMinimumSize(new Dimension(700, HEIGHT));
         emailInput.setForeground(Color.BLACK);
         emailInput.setBorder(new CompoundBorder(BORDER, PADDING));
+        // emailInput.addKeyListener(e -> {
+
+        // });
+
+        emailValidationLabel = new JLabel();
+        emailValidationLabel.setForeground(Color.RED);
+        emailValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
 
         emailPanel.add(emailLabel, gbc);
-        emailPanel.add(emailInput);
+        emailPanel.add(emailInput, gbc);
+        emailPanel.add(emailValidationLabel, gbc);
 
         return emailPanel;
     }
@@ -104,7 +114,7 @@ public abstract class LoginPage extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.WEST;
         gbc.gridwidth = phonePanel.getWidth();
-        gbc.insets = new Insets(10, 0, 0, 0);
+        gbc.insets = new Insets(5, 0, 0, 0);
 
         JLabel phoneLabel = new JLabel("Phone Number: ");
         phoneLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
@@ -131,8 +141,13 @@ public abstract class LoginPage extends JPanel {
         phoneInputPanel.add(countryCode);
         phoneInputPanel.add(phoneInput);
 
+        phoneValidationLabel = new JLabel();
+        phoneValidationLabel.setForeground(Color.RED);
+        phoneValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
+
         phonePanel.add(phoneLabel, gbc);
-        phonePanel.add(phoneInputPanel);
+        phonePanel.add(phoneInputPanel, gbc);
+        phonePanel.add(phoneValidationLabel, gbc);
 
         return phonePanel;
     }

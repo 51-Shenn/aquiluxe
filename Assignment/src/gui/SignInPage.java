@@ -12,6 +12,7 @@ public class SignInPage extends LoginPage {
 
     private final JFrame frame;
     private JPasswordField passwordInput;
+    private JLabel passwordValidationLabel;
 
     SignInPage(JFrame frame) {
         this.frame = frame;
@@ -114,7 +115,7 @@ public class SignInPage extends LoginPage {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.WEST;
         gbc.gridwidth = passwordPanel.getWidth();
-        gbc.insets = new Insets(10, 0, 0, 0);
+        gbc.insets = new Insets(5, 0, 0, 0);
 
         JLabel passwordLabel = new JLabel("Password: ");
         passwordLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
@@ -127,10 +128,15 @@ public class SignInPage extends LoginPage {
         passwordInput.setForeground(Color.BLACK);
         passwordInput.setBorder(new CompoundBorder(BORDER, PADDING));
 
+        passwordValidationLabel = new JLabel();
+        passwordValidationLabel.setForeground(Color.RED);
+        passwordValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
+
         passwordPanel.add(passwordLabel, gbc);
         passwordPanel.add(passwordInput);
-        gbc.insets = new Insets(0, 0, 0, 0);
         passwordPanel.add(createEyeButton(passwordInput), gbc);
+        gbc.insets = new Insets(5, 0, 0, 0);
+        passwordPanel.add(passwordValidationLabel, gbc);
         gbc.insets = new Insets(10, 0, 0, 0);
         passwordPanel.add(createForgotPasswordLink(), gbc);
 
@@ -194,7 +200,7 @@ public class SignInPage extends LoginPage {
         nextButton.setPreferredSize(new Dimension(150, 70));
         nextButton.setMinimumSize(new Dimension(150, HEIGHT));
         nextButton.addActionListener(e -> {
-            boolean isValidSignInDetails = UserController.passSignInDetails(emailInput.getText(), passwordInput.getPassword());
+            boolean isValidSignInDetails = UserController.passSignInDetails(emailInput.getText(), passwordInput.getPassword(), emailValidationLabel, passwordValidationLabel);
             if(isValidSignInDetails) {
                 JPanel newContentPane = new JPanel(new BorderLayout());
                 this.frame.setContentPane(newContentPane);

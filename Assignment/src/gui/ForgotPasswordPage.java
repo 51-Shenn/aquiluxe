@@ -15,6 +15,9 @@ public class ForgotPasswordPage extends LoginPage {
     private JPasswordField confirmPasswordInput;
     private String currentPage = "USER";
 
+    private JLabel passwordValidationLabel;
+    private JLabel confirmPasswordValidationLabel;
+
     ForgotPasswordPage(JFrame frame) {
         this.frame = frame;
     }
@@ -109,15 +112,27 @@ public class ForgotPasswordPage extends LoginPage {
         JPanel container = new JPanel(new GridBagLayout());
         container.setBackground(Color.WHITE);
 
+        passwordValidationLabel = new JLabel();
+        passwordValidationLabel.setForeground(Color.RED);
+        passwordValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
+
+        confirmPasswordValidationLabel = new JLabel();
+        confirmPasswordValidationLabel.setForeground(Color.RED);
+        confirmPasswordValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
+
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(30, 30, 20, 30);
         gbc.gridwidth = container.getWidth();
-
         gbc.anchor = GridBagConstraints.WEST;
-
+        
         container.add(createPasswordContainer(), gbc);
+        gbc.insets = new Insets(5, 0, 50, 0);
+        container.add(passwordValidationLabel, gbc);
+        
+        gbc.insets = new Insets(0, 0, 0, 0);
         container.add(createConfirmPasswordContainer(), gbc);
-        gbc.insets = new Insets(20, 20, 0, 0);
+        gbc.insets = new Insets(5, 0, 50, 0);
+        container.add(confirmPasswordValidationLabel, gbc);
+        gbc.insets = new Insets(30, 0, 0, 0);
         container.add(createProceedContainer(container), gbc);
 
         InputContainer.add(container);
@@ -223,7 +238,7 @@ public class ForgotPasswordPage extends LoginPage {
         nextButton.addActionListener(e -> {
             boolean isValidForgotPasswordDetails;
             if (currentPage.equals("USER")) {
-                isValidForgotPasswordDetails = UserController.passForgotPasswordDetails(emailInput.getText(), phoneInput.getText());
+                isValidForgotPasswordDetails = UserController.passForgotPasswordDetails(emailInput.getText(), phoneInput.getText(), emailValidationLabel, phoneValidationLabel);
                 if(isValidForgotPasswordDetails) {
                     currentPage = "PASSWORD";
                     panel.removeAll();
@@ -233,7 +248,7 @@ public class ForgotPasswordPage extends LoginPage {
                 }
             }
             else {
-                isValidForgotPasswordDetails = UserController.passForgotPasswordDetails(passwordInput.getPassword(), confirmPasswordInput.getPassword());
+                isValidForgotPasswordDetails = UserController.passForgotPasswordDetails(passwordInput.getPassword(), confirmPasswordInput.getPassword(), passwordValidationLabel, confirmPasswordValidationLabel);
                 if(isValidForgotPasswordDetails) {
                     currentPage = "USER";
                     JPanel newContentPane = new JPanel(new BorderLayout());

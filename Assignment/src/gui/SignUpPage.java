@@ -18,6 +18,11 @@ public class SignUpPage extends LoginPage {
     private JPasswordField confirmPasswordInput;
     private String currentPage = "USER";
 
+    private JLabel fullNameValidationLabel;
+    private JLabel genderValidationLabel;
+    private JLabel passwordValidationLabel;
+    private JLabel confirmPasswordValidationLabel;
+
     SignUpPage(JFrame frame) {
         this.frame = frame;
     }
@@ -122,7 +127,7 @@ public class SignUpPage extends LoginPage {
 
     private JPanel createFullNameContainer() {
         // full name
-        JPanel fullNamePanel = new JPanel(new BorderLayout());
+        JPanel fullNamePanel = new JPanel(new GridBagLayout());
         fullNamePanel.setBackground(Color.WHITE);
 
         JLabel fullNameLabel = new JLabel("Full Name: ");
@@ -136,15 +141,25 @@ public class SignUpPage extends LoginPage {
         fullNameInput.setForeground(Color.BLACK);
         fullNameInput.setBorder(new CompoundBorder(BORDER, PADDING));
 
-        fullNamePanel.add(fullNameLabel, BorderLayout.NORTH);
-        fullNamePanel.add(fullNameInput, BorderLayout.CENTER);
+        fullNameValidationLabel = new JLabel();
+        fullNameValidationLabel.setForeground(Color.RED);
+        fullNameValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(5, 0, 0, 0);
+    
+        fullNamePanel.add(fullNameLabel, gbc);
+        fullNamePanel.add(fullNameInput, gbc);
+        fullNamePanel.add(fullNameValidationLabel, gbc);
 
         return fullNamePanel;
     }
 
     private JPanel createGenderContainer() {
         // gender
-        JPanel genderPanel = new JPanel(new BorderLayout());
+        JPanel genderPanel = new JPanel(new GridBagLayout());
         genderPanel.setBackground(Color.WHITE);
 
         JLabel genderLabel = new JLabel("Gender: ");
@@ -192,10 +207,18 @@ public class SignUpPage extends LoginPage {
                 genderButtonsPanel.add(genderButton, BorderLayout.EAST);
         }
 
-
+        genderValidationLabel = new JLabel();
+        genderValidationLabel.setForeground(Color.RED);
+        genderValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(5, 0, 0, 0);
         // add both components inside gender panel
-        genderPanel.add(genderLabel, BorderLayout.NORTH);
-        genderPanel.add(genderButtonsPanel, BorderLayout.CENTER);
+        genderPanel.add(genderLabel, gbc);
+        genderPanel.add(genderButtonsPanel, gbc);
+        genderPanel.add(genderValidationLabel, gbc);
 
         return genderPanel;
     }
@@ -244,7 +267,7 @@ public class SignUpPage extends LoginPage {
         nextButton.addActionListener(e -> {
             boolean isValidUserDetails;
             if (currentPage.equals("USER")) {
-                isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput, emailInput.getText(), phoneInput.getText());
+                isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput, emailInput.getText(), phoneInput.getText(), fullNameValidationLabel, genderValidationLabel, emailValidationLabel, phoneValidationLabel);
                 if(isValidUserDetails) {
                     currentPage = "PASSWORD";
                     panel.removeAll();
@@ -254,7 +277,7 @@ public class SignUpPage extends LoginPage {
                 }
             }
             else {
-                isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput, emailInput.getText(), phoneInput.getText(), passwordInput.getPassword(), confirmPasswordInput.getPassword());
+                isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput, emailInput.getText(), phoneInput.getText(), passwordInput.getPassword(), confirmPasswordInput.getPassword(), fullNameValidationLabel, genderValidationLabel, emailValidationLabel, phoneValidationLabel, passwordValidationLabel, confirmPasswordValidationLabel);
                 if(isValidUserDetails) {
                     currentPage = "USER";
                     JPanel newContentPane = new JPanel(new BorderLayout());
@@ -306,14 +329,26 @@ public class SignUpPage extends LoginPage {
         JPanel container = new JPanel(new GridBagLayout());
         container.setBackground(Color.WHITE);
 
+        passwordValidationLabel = new JLabel();
+        passwordValidationLabel.setForeground(Color.RED);
+        passwordValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
+
+        confirmPasswordValidationLabel = new JLabel();
+        confirmPasswordValidationLabel.setForeground(Color.RED);
+        confirmPasswordValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
+
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(0, 0, 50, 0);
         gbc.gridwidth = container.getWidth();
-
         gbc.anchor = GridBagConstraints.WEST;
-
+        
         container.add(createPasswordContainer(), gbc);
+        gbc.insets = new Insets(5, 0, 50, 0);
+        container.add(passwordValidationLabel, gbc);
+        
+        gbc.insets = new Insets(0, 0, 0, 0);
         container.add(createConfirmPasswordContainer(), gbc);
+        gbc.insets = new Insets(5, 0, 50, 0);
+        container.add(confirmPasswordValidationLabel, gbc);
         gbc.insets = new Insets(30, 0, 0, 0);
         container.add(createProceedContainer(container), gbc);
 
@@ -330,7 +365,7 @@ public class SignUpPage extends LoginPage {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.WEST;
         gbc.gridwidth = passwordPanel.getWidth();
-        gbc.insets = new Insets(10, 0, 0, 0);
+        gbc.insets = new Insets(5, 0, 0, 0);
 
         JLabel passwordLabel = new JLabel("Password: ");
         passwordLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
@@ -358,7 +393,7 @@ public class SignUpPage extends LoginPage {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.WEST;
         gbc.gridwidth = confirmPasswordPanel.getWidth();
-        gbc.insets = new Insets(10, 0, 0, 0);
+        gbc.insets = new Insets(5, 0, 0, 0);
 
         JLabel confirmPasswordLabel = new JLabel("Confirm Password: ");
         confirmPasswordLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));

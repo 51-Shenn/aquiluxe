@@ -5,41 +5,45 @@ import datamodels.User;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.JLabel;
+
 public class UserService {
 
-    public static boolean validateNewUserDetails(String fullName, String gender, String email, String phone) {
+    public static boolean validateNewUserDetails(String fullName, String gender, String email, String phone,
+        JLabel fullNameValidationLabel, JLabel genderValidationLabel, JLabel emailValidationLabel, JLabel phoneValidationLabel) {
 
         // full name validation
-        boolean isValidFullName = fullNameValidator(fullName);
+        boolean isValidFullName = fullNameValidator(fullName, fullNameValidationLabel);
 
         // gender validation
-        boolean isValidGender = genderValidator(gender);
+        boolean isValidGender = genderValidator(gender, genderValidationLabel);
 
         // email validation
-        boolean isValidEmailAddress = emailAddressValidator(email);        // make sure it is not used by other users
+        boolean isValidEmailAddress = emailAddressValidator(email, emailValidationLabel);
 
         // phone number validation
-        boolean isValidPhoneNumber = phoneNumberValidator(phone);
+        boolean isValidPhoneNumber = phoneNumberValidator(phone, phoneValidationLabel);
 
         return isValidFullName && isValidGender && isValidEmailAddress && isValidPhoneNumber;
     }
 
-    public static boolean validateNewUserDetails(String fullName, String gender, String email, String phone, char[] password, char[] confirmPassword) {
+    public static boolean validateNewUserDetails(String fullName, String gender, String email, String phone, char[] password, char[] confirmPassword,
+        JLabel fullNameValidationLabel, JLabel genderValidationLabel, JLabel emailValidationLabel, JLabel phoneValidationLabel, JLabel passwordValidationLabel, JLabel confirmPasswordValidationLabel) {
 
         // full name validation
-        boolean isValidFullName = fullNameValidator(fullName);
+        boolean isValidFullName = fullNameValidator(fullName, fullNameValidationLabel);
 
         // gender validation
-        boolean isValidGender = genderValidator(gender);
+        boolean isValidGender = genderValidator(gender, genderValidationLabel);
 
         // email validation
-        boolean isValidEmailAddress = emailAddressValidator(email);
+        boolean isValidEmailAddress = emailAddressValidator(email, emailValidationLabel);
 
         // phone number validation
-        boolean isValidPhoneNumber = phoneNumberValidator(phone);
+        boolean isValidPhoneNumber = phoneNumberValidator(phone, phoneValidationLabel);
 
         // password validation
-        boolean isValidPassword = passwordValidation(password, confirmPassword);
+        boolean isValidPassword = passwordValidation(password, confirmPassword, passwordValidationLabel, confirmPasswordValidationLabel);
 
         if(isValidFullName && isValidGender && isValidEmailAddress && isValidPhoneNumber && isValidPassword) {
             fullName = capitalizeFullName(fullName);
@@ -49,13 +53,13 @@ public class UserService {
         return isValidFullName && isValidGender && isValidEmailAddress && isValidPhoneNumber && isValidPassword;
     }
 
-    public static boolean validateForgotPasswordDetails(String email, String phone) {
+    public static boolean validateForgotPasswordDetails(String email, String phone, JLabel emailValidationLabel, JLabel phoneValidationLabel) {
         if(email.isEmpty()) {
-            System.out.println("Email address cannot be blank");
+            emailValidationLabel.setText("Username / Email Address cannot be blank");
             return false;
         }
         else if(phone.isEmpty()) {
-            System.out.println("Please enter your phone number.");
+            phoneValidationLabel.setText("Please enter your phone number.");
             return false;
         }
         else {
@@ -63,17 +67,18 @@ public class UserService {
                 if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPhoneNumber().equals(phone))
                     return true;
                 else {
-                    System.out.println("Wrong email address or phone number.");
+                    emailValidationLabel.setText("Wrong email address or phone number.");
+                    phoneValidationLabel.setText("Wrong email address or phone number.");
                     return false;
                 }
             }
         }
-        System.out.println("Email address not found.");
+        emailValidationLabel.setText("Username / Email Address not found.");
         return false;
     }
 
-    public static boolean validateForgotPasswordDetails(char[] password, char[] confirmPassword) {
-        boolean isValidPassword = passwordValidation(password, confirmPassword);
+    public static boolean validateForgotPasswordDetails(char[] password, char[] confirmPassword, JLabel passwordValidationLabel, JLabel confirmPasswordValidationLabel) {
+        boolean isValidPassword = passwordValidation(password, confirmPassword, passwordValidationLabel, confirmPasswordValidationLabel);
         String userPassword = new String(password);
         if(isValidPassword) {
             for(User user : User.users.values()) {
@@ -85,31 +90,38 @@ public class UserService {
         return false;
     }
 
-    public static boolean validateSignInDetails(String email, char[] password) {
+    public static boolean validateSignInDetails(String email, char[] password, JLabel emailValidationLabel, JLabel passwordValidationLabel) {
         String userPassword = new String(password);
 
         if(email.isEmpty()) {
-            System.out.println("Email address cannot be blank");
-            return false;
-        }
-        else if(userPassword.isEmpty()) {
-            System.out.println("Please enter your password.");
+            emailValidationLabel.setText("Username / Email Address cannot be blank");
             return false;
         }
         else {
-            for(User user : User.users.values()) {
-                if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPassword().equals(userPassword)) {
-                    System.out.println("Login successful!");
-                    return true;
-                }
-                else {
-                    System.out.println("Wrong email address or password.");
-                    return false;
-                }
+            emailValidationLabel.setText("");
+        }
+
+        if(userPassword.isEmpty()) {
+            passwordValidationLabel.setText("Please enter your password.");
+            return false;
+        }
+        else {
+            passwordValidationLabel.setText("");
+        }
+
+        for(User user : User.users.values()) {
+            if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPassword().equals(userPassword)) {
+                System.out.println("Login successful!");
+                return true;
+            }
+            else {
+                emailValidationLabel.setText("Wrong email address or password.");
+                passwordValidationLabel.setText("Wrong email address or password.");
+                return false;
             }
         }
 
-        System.out.println("Email address not found.");
+        emailValidationLabel.setText("Email address not found.");
         return false;
     }
 
@@ -127,27 +139,34 @@ public class UserService {
         return capitalizedName.toString().trim();
     }
 
-    private static boolean fullNameValidator(String fullName) {
+    private static boolean fullNameValidator(String fullName, JLabel label) {
         fullName = fullName.trim();
         if (fullName.isEmpty()) {
-            System.out.println("Please enter your full name");
+            label.setText("Please enter your full name");
             return false;
         }
-        else
+        else {
+            label.setText("");
             return true;
+        }
     }
 
-    private static boolean genderValidator(String gender) {
+    private static boolean genderValidator(String gender, JLabel label) {
         if(gender == null) {
-            System.out.println("Please select a gender");
+            label.setText("Please select a gender");
             return false;
         }
-        return true;
+        else {
+            label.setText("");
+            return true;
+        }
     }
 
-    private static boolean emailAddressValidator(String email) {
-        if(email.isEmpty())
-            System.out.println("Please enter your email address");
+    private static boolean emailAddressValidator(String email, JLabel label) {
+        if(email.isEmpty()) {
+            label.setText("Please enter your email address");
+            return false;
+        }
 
         final String EMAIL_REGEX = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
         Pattern pattern = Pattern.compile(EMAIL_REGEX);
@@ -156,19 +175,24 @@ public class UserService {
         if(matcher.matches()) {
             for(User user : User.users.values()) {
                 if(user.getUserEmail().equals(email)) {
-                    System.out.println("This email address has been taken!");
+                    label.setText("This email address has been taken!");
                     return false;
                 }
             }
+            label.setText("");
             return true;
         }
-        else
+        else {
+            label.setText("Invalid email format");
             return false;
+        }
     }
 
-    private static boolean phoneNumberValidator(String phone) {
-        if(phone.isEmpty())
-            System.out.println("Please enter your phone number");
+    private static boolean phoneNumberValidator(String phone, JLabel label) {
+        if(phone.isEmpty()) {
+            label.setText("Please enter your phone number");
+            return false;
+        }
 
         phone = phone.replaceAll("[\\s-]", "");
 
@@ -179,37 +203,44 @@ public class UserService {
         if(matcher.matches()) {
             for(User user : User.users.values()) {
                 if(user.getPhoneNumber().equals(phone)) {
-                    System.out.println("This phone number has been taken!");
+                    label.setText("This phone number has been taken!");
                     return false;
                 }
             }
+            label.setText("");
             return true;
         }
-        else
+        else {
+            label.setText("Invalid phone number");
             return false;
+        }
     }
 
-    private static boolean passwordValidation(char[] password, char[] confirmPassword) {
+    private static boolean passwordValidation(char[] password, char[] confirmPassword, JLabel label1, JLabel label2) {
         String password1 = new String(password).trim();
         String password2 = new String(confirmPassword).trim();
 
         if(password1.isEmpty()) {
-            System.out.println("Please enter your password");
+            label1.setText("Please enter your password");
             return false;
         }
         else if(password1.contains(" ")) {
-            System.out.println("Password cannot contain spaces");
+            label1.setText("Password cannot contain spaces");
             return false;
         }
         else if(password1.length() < 8) {
-            System.out.println("Password must contain at least 8 characters.");
+            label1.setText("Password must contain at least 8 characters.");
             return false;
         }
         else if(!password1.equals(password2)) {
-            System.out.println("Password not match!");
+            label2.setText("Password not match!");
             return false;
         }
-        return true;
+        else {
+            label1.setText("");
+            label2.setText("");
+            return true;
+        }
     }
 
     private static void createNewUserAccount(String fullName, String gender, String email, String phone, char[] password) {
