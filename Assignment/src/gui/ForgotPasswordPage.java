@@ -8,7 +8,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.File;
 
-public class ForgotPasswordPage extends LoginPage {
+public class ForgotPasswordPage extends AuthenticationPage {
 
     private final JFrame frame;
     private JPasswordField passwordInput;
@@ -112,11 +112,11 @@ public class ForgotPasswordPage extends LoginPage {
         JPanel container = new JPanel(new GridBagLayout());
         container.setBackground(Color.WHITE);
 
-        passwordValidationLabel = new JLabel();
+        passwordValidationLabel = new JLabel("");
         passwordValidationLabel.setForeground(Color.RED);
         passwordValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
 
-        confirmPasswordValidationLabel = new JLabel();
+        confirmPasswordValidationLabel = new JLabel("");
         confirmPasswordValidationLabel.setForeground(Color.RED);
         confirmPasswordValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
 

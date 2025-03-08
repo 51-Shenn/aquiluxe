@@ -54,11 +54,11 @@ public class GUIComponents extends JPanel {
         for (int i = 0; i < topBarButtonsLabels.length; i++) {
             topBarButtons[i] = new JButton(topBarButtonsLabels[i]);
             topBarButtons[i].setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
+            topBarButtons[i].setBackground(Color.WHITE);
             topBarButtons[i].setForeground(Color.BLACK);
             topBarButtons[i].setPreferredSize(new Dimension(150, 50));
             topBarButtons[i].setBorderPainted(false); // no border
             topBarButtons[i].setFocusPainted(false); // no highlight
-            topBarButtons[i].setContentAreaFilled(false); // no fill
         }
 
         topBarButtons[1].addActionListener(e -> {

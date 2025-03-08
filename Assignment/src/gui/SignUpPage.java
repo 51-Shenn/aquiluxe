@@ -9,7 +9,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.io.File;
 
-public class SignUpPage extends LoginPage {
+public class SignUpPage extends AuthenticationPage {
 
     private final JFrame frame;
     private JTextField fullNameInput;
@@ -141,7 +141,7 @@ public class SignUpPage extends LoginPage {
         fullNameInput.setForeground(Color.BLACK);
         fullNameInput.setBorder(new CompoundBorder(BORDER, PADDING));
 
-        fullNameValidationLabel = new JLabel();
+        fullNameValidationLabel = new JLabel("");
         fullNameValidationLabel.setForeground(Color.RED);
         fullNameValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
 
@@ -207,7 +207,7 @@ public class SignUpPage extends LoginPage {
                 genderButtonsPanel.add(genderButton, BorderLayout.EAST);
         }
 
-        genderValidationLabel = new JLabel();
+        genderValidationLabel = new JLabel("");
         genderValidationLabel.setForeground(Color.RED);
         genderValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
         
@@ -329,11 +329,11 @@ public class SignUpPage extends LoginPage {
         JPanel container = new JPanel(new GridBagLayout());
         container.setBackground(Color.WHITE);
 
-        passwordValidationLabel = new JLabel();
+        passwordValidationLabel = new JLabel("");
         passwordValidationLabel.setForeground(Color.RED);
         passwordValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
 
-        confirmPasswordValidationLabel = new JLabel();
+        confirmPasswordValidationLabel = new JLabel("");
         confirmPasswordValidationLabel.setForeground(Color.RED);
         confirmPasswordValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
 

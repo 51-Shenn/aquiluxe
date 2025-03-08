@@ -145,11 +145,14 @@ public class UserService {
             label.setText("Please enter your full name");
             return false;
         }
-        else {
-            label.setText("");
-            return true;
+        if (!fullName.matches("[a-zA-Z ]+")) {
+            label.setText("Name must contain only letters and spaces");
+            return false;
         }
+        label.setText("");
+        return true;
     }
+
 
     private static boolean genderValidator(String gender, JLabel label) {
         if(gender == null) {
