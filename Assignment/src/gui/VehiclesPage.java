@@ -86,7 +86,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         buttonPanel.add(carRent, BorderLayout.NORTH);
         buttonPanel.add(carDetails, BorderLayout.SOUTH);
 
-        //car name model and carte on the left and price on the right
+        //car name model and cartype on the left and price on the right
         JLabel carName = new JLabel(brand);
         carName.setHorizontalTextPosition(JLabel.LEFT);
         carName.setFont(CustomFonts.OPEN_SANS_EXTRA_BOLD.deriveFont(20f));
