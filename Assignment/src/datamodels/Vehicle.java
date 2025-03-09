@@ -48,6 +48,29 @@ public class Vehicle {
     }
 
     // Getters and Setters
+    public void setVehicle(int vehicleId, String imagePath, String brand, String model, int year, int capacity,
+            int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
+            double rentalPriceDay, String transmission, String fuelType, int seatingCapacity, boolean availability,
+            String features) {
+        this.vehicleId = vehicleId;
+        this.imagePath = imagePath;
+        this.brand = brand;
+        this.model = model;
+        this.year = year;
+        this.capacity = capacity;
+        this.horsepower = horsepower;
+        this.color = color;
+        this.mpg = mpg;
+        this.vinNumber = vinNumber;
+        this.registrationNumber = registrationNumber;
+        this.rentalPriceDay = rentalPriceDay;
+        this.transmission = transmission;
+        this.fuelType = fuelType;
+        this.seatingCapacity = seatingCapacity;
+        this.availability = availability;
+        this.features = features;
+    }
+
     public int getVehicleId() {
         return vehicleId;
     }

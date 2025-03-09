@@ -13,7 +13,7 @@ public class UserDAO {
     // add user by parameter
     public int addUser(String fullName, String gender, String phoneNumber, String userEmail, String username,
             String password) {
-        String sql = "INSERT INTO Users (full_name, gender, phone_number, user_email, username, password) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users (full_name, gender, phone_number, user_email, username, password) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -40,9 +40,57 @@ public class UserDAO {
         }
     }
 
+    // add customer details
+    public void addCustomerDetails(int userId, String address, String license) {
+        String sql = "INSERT INTO customers (customer_id, address, license) VALUES (?, ?, ?)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+            stmt.setString(2, address);
+            stmt.setString(3, license);
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO ADD CUSTOMER DETAILS\n");
+        }
+    }
+
+    // add admin position
+    public void addAdminPosition(int userId, String position) {
+        String sql = "INSERT INTO admins (admin_id, position) VALUES (?, ?)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+            stmt.setString(2, position);
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO ADD ADMIN POSITION\n");
+        }
+    }
+
+    // Mapping Result of SQL to user object : reduce redundant code
+    private User mapResultUser(ResultSet rs) throws SQLException {
+        return new User(rs.getInt("user_id"),
+                rs.getString("full_name"),
+                rs.getString("gender"),
+                rs.getString("phone_number"),
+                rs.getString("user_email"),
+                rs.getString("username"),
+                rs.getString("password"));
+    }
+
     // get all users
     public List<User> getAllUsers() {
-        String sql = "SELECT * FROM Users";
+        String sql = "SELECT * FROM users";
         List<User> users = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -50,15 +98,7 @@ public class UserDAO {
                 ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                User user = new User();
-                user.setUser(
-                        rs.getInt("user_id"),
-                        rs.getString("full_name"),
-                        rs.getString("gender"),
-                        rs.getString("phone_number"),
-                        rs.getString("user_email"),
-                        rs.getString("username"),
-                        rs.getString("password"));
+                User user = mapResultUser(rs);
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -70,7 +110,7 @@ public class UserDAO {
 
     // get user by specific id
     public User getUserById(int userId) {
-        String sql = "SELECT * FROM Users WHERE user_id = ?";
+        String sql = "SELECT * FROM users WHERE user_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -79,15 +119,7 @@ public class UserDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    User user = new User();
-                    user.setUser(
-                            rs.getInt("user_id"),
-                            rs.getString("full_name"),
-                            rs.getString("gender"),
-                            rs.getString("phone_number"),
-                            rs.getString("user_email"),
-                            rs.getString("username"),
-                            rs.getString("password"));
+                    User user = mapResultUser(rs);
                     return user;
                 }
             }
@@ -100,7 +132,7 @@ public class UserDAO {
 
     // filter users with value of column
     public List<User> filterUsersByColumn(String column, String value) {
-        String sql = "SELECT * FROM Users WHERE " + column + " = ?";
+        String sql = "SELECT * FROM users WHERE " + column + " = ?";
         List<User> users = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -110,15 +142,7 @@ public class UserDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    User user = new User();
-                    user.setUser(
-                            rs.getInt("user_id"),
-                            rs.getString("full_name"),
-                            rs.getString("gender"),
-                            rs.getString("phone_number"),
-                            rs.getString("user_email"),
-                            rs.getString("username"),
-                            rs.getString("password"));
+                    User user = mapResultUser(rs);
                     users.add(user);
                 }
             }
@@ -130,26 +154,18 @@ public class UserDAO {
     }
 
     // search user by keywords
-    public List<User> searchUsersByKeyword(String column, String pattern) {
-        String sql = "SELECT * FROM Users WHERE " + column + " LIKE ?";
+    public List<User> searchUsersByKeyword(String column, String keyword) {
+        String sql = "SELECT * FROM users WHERE " + column + " LIKE ?";
         List<User> users = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, "%" + pattern + "%");
+            stmt.setString(1, "%" + keyword + "%");
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    User user = new User();
-                    user.setUser(
-                            rs.getInt("user_id"),
-                            rs.getString("full_name"),
-                            rs.getString("gender"),
-                            rs.getString("phone_number"),
-                            rs.getString("user_email"),
-                            rs.getString("username"),
-                            rs.getString("password"));
+                    User user = mapResultUser(rs);
                     users.add(user);
                 }
             }
@@ -162,7 +178,7 @@ public class UserDAO {
 
     // update user profile values
     public boolean updateUserColumnValue(int userId, String column, String value) {
-        String sql = "UPDATE Users SET " + column + " = ? WHERE user_id = ?";
+        String sql = "UPDATE users SET " + column + " = ? WHERE user_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -180,7 +196,7 @@ public class UserDAO {
 
     // delete user
     public boolean deleteUser(int userId) {
-        String sql = "DELETE FROM Users WHERE user_id = ?";
+        String sql = "DELETE FROM users WHERE user_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -197,7 +213,7 @@ public class UserDAO {
 
     // get user by username and password
     public User authenticateUser(String username, String password) {
-        String sql = "SELECT * FROM Users WHERE username = ? AND password = ?";
+        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -207,15 +223,7 @@ public class UserDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    User user = new User();
-                    user.setUser(
-                            rs.getInt("user_id"),
-                            rs.getString("full_name"),
-                            rs.getString("gender"),
-                            rs.getString("phone_number"),
-                            rs.getString("user_email"),
-                            rs.getString("username"),
-                            rs.getString("password"));
+                    User user = mapResultUser(rs);
                     return user;
                 }
             }
@@ -228,7 +236,7 @@ public class UserDAO {
 
     // check if username exist : return boolean value
     public boolean usernameExists(String username) {
-        String sql = "SELECT COUNT(*) FROM Users WHERE username = ?";
+        String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -249,7 +257,7 @@ public class UserDAO {
 
     // check if email exist : return boolean value
     public boolean emailExists(String email) {
-        String sql = "SELECT COUNT(*) FROM Users WHERE user_email = ?";
+        String sql = "SELECT COUNT(*) FROM users WHERE user_email = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {

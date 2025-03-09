@@ -19,15 +19,25 @@ public class User {
     }
 
     // Parameterized Constructor
-    public User(String fullName, String gender, String userEmail, String phoneNumber, String password) {
+    public User(int userId, String fullName, String gender, String userEmail, String phoneNumber, String username,
+            String password) {
+        this.userId = userId;
         this.fullName = fullName;
-        this.username = generateUsername(fullName);
         this.gender = gender;
         this.phoneNumber = phoneNumber;
+        this.username = generateUsername(fullName); // create new username for every instance created?
         this.userEmail = userEmail;
         this.password = password;
 
         users.put(userId, this);
+    }
+
+    public User(String fullName, String gender, String userEmail, String phoneNumber, String password) {
+        this.fullName = fullName;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.userEmail = userEmail;
+        this.password = password;
     }
 
     private static String generateUsername(String fullName) {
@@ -53,6 +63,17 @@ public class User {
     }
 
     // Getters and Setters
+    public void setUser(int userId, String fullName, String gender, String phoneNumber,
+            String userEmail, String username, String password) {
+        this.userId = userId;
+        this.fullName = fullName;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.userEmail = userEmail;
+        this.username = username;
+        this.password = password;
+    }
+
     public int getUserId() {
         return userId;
     }
@@ -116,17 +137,6 @@ public class User {
                 ", userEmail = '" + userEmail + '\'' +
                 ", username = '" + username + '\'' +
                 " }";
-    }
-
-    public void setUser(int userId, String fullName, String gender, String phoneNumber,
-            String userEmail, String username, String password) {
-        this.userId = userId;
-        this.fullName = fullName;
-        this.gender = gender;
-        this.phoneNumber = phoneNumber;
-        this.userEmail = userEmail;
-        this.username = username;
-        this.password = password;
     }
 
     public static void displayUsers() {

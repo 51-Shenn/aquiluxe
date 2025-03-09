@@ -1,7 +1,7 @@
 package datamodels;
 
 public class Admin extends User {
-    private String role;
+    private String position;
 
     // Default Constructor
     public Admin() {
@@ -9,17 +9,18 @@ public class Admin extends User {
     }
 
     // Parameterized Constructor
-    public Admin(String fullName, String gender, String phoneNumber, String userEmail, String password, String role) {
-        super(fullName, gender, phoneNumber, userEmail, password);
-        this.role = role;
+    public Admin(int userId, String fullName, String gender, String phoneNumber, String userEmail, String username,
+            String password, String position) {
+        super(userId, fullName, gender, phoneNumber, userEmail, username, password);
+        this.position = position;
     }
 
     // Getters & Setters...
     public String getAdminRole() {
-        return role;
+        return position;
     }
 
-    public void setAdminRole(String role) {
-        this.role = role;
+    public void setAdminRole(String position) {
+        this.position = position;
     }
 }
