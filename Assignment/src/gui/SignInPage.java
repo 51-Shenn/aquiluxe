@@ -8,7 +8,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.io.File;
 
-public class SignInPage extends LoginPage {
+public class SignInPage extends AuthenticationPage {
 
     private final JFrame frame;
     private JPasswordField passwordInput;
@@ -128,7 +128,7 @@ public class SignInPage extends LoginPage {
         passwordInput.setForeground(Color.BLACK);
         passwordInput.setBorder(new CompoundBorder(BORDER, PADDING));
 
-        passwordValidationLabel = new JLabel();
+        passwordValidationLabel = new JLabel("");
         passwordValidationLabel.setForeground(Color.RED);
         passwordValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
 

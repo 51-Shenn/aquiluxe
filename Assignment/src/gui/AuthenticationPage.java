@@ -5,7 +5,7 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.io.File;
 
-public abstract class LoginPage extends JPanel {
+public abstract class AuthenticationPage extends JPanel {
 
     protected final float TITLE_TEXT_SIZE = 20f;
     protected final float NORMAL_TEXT_SIZE = 28f;
@@ -21,7 +21,7 @@ public abstract class LoginPage extends JPanel {
     protected JLabel emailValidationLabel;
     protected JLabel phoneValidationLabel;
 
-    public LoginPage() {
+    public AuthenticationPage() {
         setLayout(new GridBagLayout());
         setBackground(Color.BLACK);
         add((createLoginPage()));
@@ -96,7 +96,7 @@ public abstract class LoginPage extends JPanel {
 
         // });
 
-        emailValidationLabel = new JLabel();
+        emailValidationLabel = new JLabel("");
         emailValidationLabel.setForeground(Color.RED);
         emailValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
 
@@ -141,7 +141,7 @@ public abstract class LoginPage extends JPanel {
         phoneInputPanel.add(countryCode);
         phoneInputPanel.add(phoneInput);
 
-        phoneValidationLabel = new JLabel();
+        phoneValidationLabel = new JLabel("");
         phoneValidationLabel.setForeground(Color.RED);
         phoneValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
 
