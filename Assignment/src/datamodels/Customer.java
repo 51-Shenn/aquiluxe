@@ -15,8 +15,8 @@ public class Customer extends User {
     }
 
     // Parameter Constructor
-    public Customer(int userId, String fullName, String gender, String license, String phoneNumber, String userEmail,
-            String username, String password, String address, List<Rental> rentalHistory) {
+    public Customer(int userId, String fullName, String gender, String phoneNumber, String userEmail,
+            String username, String password, String address, String license, List<Rental> rentalHistory) {
         super(userId, fullName, gender, phoneNumber, userEmail, username, password);
         this.address = address;
         this.license = license;

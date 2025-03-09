@@ -22,7 +22,7 @@ public class MainApp {
         new MainWindow();
         DatabaseConnection.getConnection();
         UserDAO userdao = new UserDAO();
-        userdao.addUser("qwerty", "MALE", "01234567", "qwerty@gmail.com", "qwerty123", "password123");
+        userdao.addUser("test1", "MALE", "0123456789", "test1@gmail.com", "test1", "password");
     }
 
     public static class MainWindow extends JFrame {
