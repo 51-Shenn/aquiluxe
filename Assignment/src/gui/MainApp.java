@@ -3,6 +3,7 @@ package gui;
 import javax.swing.*;
 
 import database.DatabaseConnection;
+import database.UserDAO;
 
 import java.awt.*;
 
@@ -20,6 +21,8 @@ public class MainApp {
 
         new MainWindow();
         DatabaseConnection.getConnection();
+        UserDAO userdao = new UserDAO();
+        userdao.addUser("qwerty", "MALE", "01234567", "qwerty@gmail.com", "qwerty123", "password123");
     }
 
     public static class MainWindow extends JFrame {

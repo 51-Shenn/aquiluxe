@@ -43,7 +43,7 @@ public class UserDAO {
 
     // add customer details
     public void addCustomerDetails(int userId, String address, String license) {
-        String sql = "INSERT INTO customers (customer_id, address, license) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO customers (user_id, address, license) VALUES (?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -62,7 +62,7 @@ public class UserDAO {
 
     // add admin position
     public void addAdminPosition(int userId, String position) {
-        String sql = "INSERT INTO admins (admin_id, position) VALUES (?, ?)";
+        String sql = "INSERT INTO admins (user_id, position) VALUES (?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
