@@ -31,7 +31,7 @@ public class SignUpPage extends AuthenticationPage {
     protected JLabel createWallpaperLabel() {
         JLabel wallpaperLabel = new JLabel();
         wallpaperLabel.setOpaque(false);
-        File imageFile = new File("images/icons/carBackground2.png");
+        File imageFile = new File("images/wallpapers/car-wallpaper-2.png");
         if (!imageFile.exists()) {
             JOptionPane.showMessageDialog(null, "Failed to load image");
         } else {
