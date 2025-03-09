@@ -4,11 +4,9 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class User {
-    private static int userIdCounter = 0;
     private int userId;
     private String fullName;
     private String gender;
-    private String license;
     private String phoneNumber;
     private String userEmail;
     private String username;
@@ -21,12 +19,10 @@ public class User {
     }
 
     // Parameterized Constructor
-    public User(String fullName, String gender, String license, String userEmail, String phoneNumber, String password) {
-        this.userId = userIdCounter++;
+    public User(String fullName, String gender, String userEmail, String phoneNumber, String password) {
         this.fullName = fullName;
         this.username = generateUsername(fullName);
         this.gender = gender;
-        this.license = license;
         this.phoneNumber = phoneNumber;
         this.userEmail = userEmail;
         this.password = password;
@@ -77,14 +73,6 @@ public class User {
         this.gender = gender;
     }
 
-    public String getLicense() {
-        return license;
-    }
-
-    public void setLicense(String license) {
-        this.license = license;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -124,19 +112,17 @@ public class User {
                 "userId = " + userId +
                 ", fullName = '" + fullName + '\'' +
                 ", gender = '" + gender + '\'' +
-                ", license = '" + license + '\'' +
                 ", phoneNumber = '" + phoneNumber + '\'' +
                 ", userEmail = '" + userEmail + '\'' +
                 ", username = '" + username + '\'' +
                 " }";
     }
 
-    public void setUser(int userId, String fullName, String gender, String license, String phoneNumber,
+    public void setUser(int userId, String fullName, String gender, String phoneNumber,
             String userEmail, String username, String password) {
         this.userId = userId;
         this.fullName = fullName;
         this.gender = gender;
-        this.license = license;
         this.phoneNumber = phoneNumber;
         this.userEmail = userEmail;
         this.username = username;
@@ -147,13 +133,12 @@ public class User {
         for (User user : users.values()) {
             System.out.println(
                     "UserID: " + user.getUserId() +
-                    ", Name: " + user.getFullName() +
-                    ", Username: " + user.getUsername() +
-                    ", Gender: " + user.getGender() +
-                    ", Email: " + user.getUserEmail() +
-                    ", Phone Number: " + user.getPhoneNumber() +
-                    ", Password: " + user.getPassword()
-            );
+                            ", Name: " + user.getFullName() +
+                            ", Username: " + user.getUsername() +
+                            ", Gender: " + user.getGender() +
+                            ", Email: " + user.getUserEmail() +
+                            ", Phone Number: " + user.getPhoneNumber() +
+                            ", Password: " + user.getPassword());
         }
     }
 }

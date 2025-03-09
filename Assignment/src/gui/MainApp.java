@@ -1,6 +1,8 @@
 package gui;
 
 import javax.swing.*;
+import database.DatabaseConnection;
+
 import java.awt.*;
 
 public class MainApp {
@@ -16,6 +18,7 @@ public class MainApp {
         // }
 
         new MainWindow();
+        DatabaseConnection.getConnection();
     }
 
     public static class MainWindow extends JFrame {

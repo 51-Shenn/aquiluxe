@@ -1,7 +1,5 @@
 package datamodels;
 
-import java.util.List;
-
 public class Vehicle {
     private int vehicleId;
     private String imagePath;
@@ -19,7 +17,7 @@ public class Vehicle {
     private String fuelType;
     private int seatingCapacity;
     private boolean availability;
-    private List<String> features;
+    private String features;
 
     // Default Constructor
     public Vehicle() {
@@ -28,7 +26,8 @@ public class Vehicle {
     // Parameterized Constructor
     public Vehicle(int vehicleId, String imagePath, String brand, String model, int year, int capacity,
             int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
-            double rentalPriceDay, String transmission, String fuelType, int seatingCapacity, boolean availability, List<String> features) {
+            double rentalPriceDay, String transmission, String fuelType, int seatingCapacity, boolean availability,
+            String features) {
         this.vehicleId = vehicleId;
         this.imagePath = imagePath;
         this.brand = brand;
@@ -177,11 +176,11 @@ public class Vehicle {
         this.availability = availability;
     }
 
-    public List<String> getFeatures() {
+    public String getFeatures() {
         return features;
     }
 
-    public void setFeatures(List<String> features) {
+    public void setFeatures(String features) {
         this.features = features;
     }
 }

@@ -149,7 +149,7 @@ public class SignUpPage extends AuthenticationPage {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(5, 0, 0, 0);
-    
+
         fullNamePanel.add(fullNameLabel, gbc);
         fullNamePanel.add(fullNameInput, gbc);
         fullNamePanel.add(fullNameValidationLabel, gbc);
@@ -169,7 +169,7 @@ public class SignUpPage extends AuthenticationPage {
         JPanel genderButtonsPanel = new JPanel(new BorderLayout());
         genderButtonsPanel.setBorder(new LineBorder(Color.BLACK, 1));
 
-        String[] genderButtonsText = {"M", "F"};
+        String[] genderButtonsText = { "M", "F" };
         JButton[] genderJButtons = new JButton[2];
         for (int i = 0; i < genderButtonsText.length; i++) {
             JButton genderButton = new JButton();
@@ -187,20 +187,19 @@ public class SignUpPage extends AuthenticationPage {
                     button.setBackground(Color.WHITE);
                     button.setForeground(Color.BLACK);
                 }
-                
+
                 genderButton.setBackground(Color.BLUE);
                 genderButton.setForeground(Color.WHITE);
 
                 if (genderButton.getText().equals("M")) {
                     genderLabel.setText("Gender: (Male)");
-                    genderInput = "Male";
-                }
-                else {
+                    genderInput = "MALE";
+                } else {
                     genderLabel.setText("Gender: (Female)");
-                    genderInput = "Female";
+                    genderInput = "FEMALE";
                 }
             });
-            
+
             if (genderButtonsText[i].equals("M"))
                 genderButtonsPanel.add(genderButton, BorderLayout.WEST);
             else
@@ -210,7 +209,7 @@ public class SignUpPage extends AuthenticationPage {
         genderValidationLabel = new JLabel("");
         genderValidationLabel.setForeground(Color.RED);
         genderValidationLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
-        
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.anchor = GridBagConstraints.WEST;
@@ -267,18 +266,23 @@ public class SignUpPage extends AuthenticationPage {
         nextButton.addActionListener(e -> {
             boolean isValidUserDetails;
             if (currentPage.equals("USER")) {
-                isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput, emailInput.getText(), phoneInput.getText(), fullNameValidationLabel, genderValidationLabel, emailValidationLabel, phoneValidationLabel);
-                if(isValidUserDetails) {
+                isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput,
+                        emailInput.getText(), phoneInput.getText(), fullNameValidationLabel, genderValidationLabel,
+                        emailValidationLabel, phoneValidationLabel);
+                if (isValidUserDetails) {
                     currentPage = "PASSWORD";
                     panel.removeAll();
                     panel.revalidate();
                     panel.repaint();
                     panel.add(createPasswordInputContainer());
                 }
-            }
-            else {
-                isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput, emailInput.getText(), phoneInput.getText(), passwordInput.getPassword(), confirmPasswordInput.getPassword(), fullNameValidationLabel, genderValidationLabel, emailValidationLabel, phoneValidationLabel, passwordValidationLabel, confirmPasswordValidationLabel);
-                if(isValidUserDetails) {
+            } else {
+                isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput,
+                        emailInput.getText(), phoneInput.getText(), passwordInput.getPassword(),
+                        confirmPasswordInput.getPassword(), fullNameValidationLabel, genderValidationLabel,
+                        emailValidationLabel, phoneValidationLabel, passwordValidationLabel,
+                        confirmPasswordValidationLabel);
+                if (isValidUserDetails) {
                     currentPage = "USER";
                     JPanel newContentPane = new JPanel(new BorderLayout());
                     this.frame.setContentPane(newContentPane);
@@ -305,7 +309,7 @@ public class SignUpPage extends AuthenticationPage {
         logo.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(30f));
         logo.setForeground(Color.DARK_GRAY);
 
-        String[] texts = {"Rent a Car,", "Drive with Ease!"};
+        String[] texts = { "Rent a Car,", "Drive with Ease!" };
         for (String text : texts) {
             JLabel lines = new JLabel(text);
             if (text.equals(texts[0]))
@@ -321,7 +325,8 @@ public class SignUpPage extends AuthenticationPage {
         return taglineContainer;
     }
 
-    // these methods will be called after validate the first phase of the sign up page
+    // these methods will be called after validate the first phase of the sign up
+    // page
     private JPanel createPasswordInputContainer() {
         // create container that contains relevant info for sign in or sign up
         JPanel InputContainer = new JPanel(new GridBagLayout());
@@ -340,11 +345,11 @@ public class SignUpPage extends AuthenticationPage {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = container.getWidth();
         gbc.anchor = GridBagConstraints.WEST;
-        
+
         container.add(createPasswordContainer(), gbc);
         gbc.insets = new Insets(5, 0, 50, 0);
         container.add(passwordValidationLabel, gbc);
-        
+
         gbc.insets = new Insets(0, 0, 0, 0);
         container.add(createConfirmPasswordContainer(), gbc);
         gbc.insets = new Insets(5, 0, 50, 0);
