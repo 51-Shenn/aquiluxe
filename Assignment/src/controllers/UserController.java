@@ -20,8 +20,8 @@ public class UserController {
     public static boolean passForgotPasswordDetails(String email, String phone, JLabel emailValidationLabel, JLabel phoneValidationLabel) {
         return UserService.validateForgotPasswordDetails(email, phone, emailValidationLabel, phoneValidationLabel);
     }
-    public static boolean passForgotPasswordDetails(char[] password, char[] confirmPassword, JLabel passwordValidationLabel, JLabel confirmPasswordValidationLabel) {
-        return UserService.validateForgotPasswordDetails(password, confirmPassword, passwordValidationLabel, confirmPasswordValidationLabel);
+    public static boolean passForgotPasswordDetails(String email, String phone, char[] password, char[] confirmPassword, JLabel passwordValidationLabel, JLabel confirmPasswordValidationLabel) {
+        return UserService.validateForgotPasswordDetails(email, phone, password, confirmPassword, passwordValidationLabel, confirmPasswordValidationLabel);
     }
 
     // method calling for SignInPage

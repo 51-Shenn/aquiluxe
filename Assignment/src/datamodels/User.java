@@ -23,6 +23,7 @@ public class User {
             String password) {
         this.userId = userId;
         this.fullName = fullName;
+        this.username = username;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
         this.username = generateUsername(fullName); // create new username for every instance created?

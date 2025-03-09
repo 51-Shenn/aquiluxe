@@ -2,6 +2,7 @@ package services;
 
 import datamodels.User;
 
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,27 +71,27 @@ public class UserService {
                 if ((user.getUserEmail().equals(email) || user.getUsername().equals(email))
                         && user.getPhoneNumber().equals(phone))
                     return true;
-                else {
-                    emailValidationLabel.setText("Wrong email address or phone number.");
-                    phoneValidationLabel.setText("Wrong email address or phone number.");
-                    return false;
-                }
             }
         }
-        emailValidationLabel.setText("Username / Email Address not found.");
+
+        emailValidationLabel.setText("Wrong email address or phone number.");
+        phoneValidationLabel.setText("Wrong email address or phone number.");
         return false;
     }
 
-    public static boolean validateForgotPasswordDetails(char[] password, char[] confirmPassword,
-            JLabel passwordValidationLabel, JLabel confirmPasswordValidationLabel) {
+    public static boolean validateForgotPasswordDetails(String email, String phone, char[] password,
+            char[] confirmPassword, JLabel passwordValidationLabel, JLabel confirmPasswordValidationLabel) {
         boolean isValidPassword = passwordValidation(password, confirmPassword, passwordValidationLabel,
                 confirmPasswordValidationLabel);
         String userPassword = new String(password);
         if (isValidPassword) {
             for (User user : User.users.values()) {
-                user.setPassword(userPassword);
-                User.displayUsers();
-                return true;
+                if ((user.getUserEmail().equals(email)
+                        || user.getUsername().equals(email) && user.getPhoneNumber().equals(phone))) {
+                    user.setPassword(userPassword);
+                    User.displayUsers();
+                    return true;
+                }
             }
         }
         return false;
@@ -119,14 +120,11 @@ public class UserService {
                     && user.getPassword().equals(userPassword)) {
                 System.out.println("Login successful!");
                 return true;
-            } else {
-                emailValidationLabel.setText("Wrong email address or password.");
-                passwordValidationLabel.setText("Wrong email address or password.");
-                return false;
             }
         }
 
-        emailValidationLabel.setText("Username / Email Address not found.");
+        emailValidationLabel.setText("Wrong email address or password.");
+        passwordValidationLabel.setText("Wrong email address or password.");
         return false;
     }
 
@@ -156,6 +154,28 @@ public class UserService {
         }
         label.setText("");
         return true;
+    }
+
+    private static String generateUsername(String fullName) {
+        Random random = new Random();
+        String baseUsername = fullName.toLowerCase().replaceAll("\\s+", "");
+        String newUsername;
+
+        do {
+            int randomNum = random.nextInt(9000) + 1000; // 1000 - 9999
+            newUsername = baseUsername + randomNum;
+        } while (isUsernameTaken(newUsername));
+
+        return newUsername;
+    }
+
+    private static boolean isUsernameTaken(String username) {
+        for (User user : User.users.values()) {
+            if (user.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean genderValidator(String gender, JLabel label) {
@@ -221,8 +241,8 @@ public class UserService {
     }
 
     private static boolean passwordValidation(char[] password, char[] confirmPassword, JLabel label1, JLabel label2) {
-        String password1 = new String(password).trim();
-        String password2 = new String(confirmPassword).trim();
+        String password1 = new String(password);
+        String password2 = new String(confirmPassword);
 
         if (password1.isEmpty()) {
             label1.setText("Please enter your password");
@@ -234,6 +254,7 @@ public class UserService {
             label1.setText("Password must contain at least 8 characters.");
             return false;
         } else if (!password1.equals(password2)) {
+            label1.setText("");
             label2.setText("Password not match!");
             return false;
         } else {
@@ -246,8 +267,9 @@ public class UserService {
     private static void createNewUserAccount(String fullName, String gender, String email, String phone,
             char[] password) {
         String userPassword = new String(password);
-        new User(fullName, gender, email, phone, userPassword);
+        new User(fullName, gender, generateUsername(fullName), email, phone, userPassword);
 
         User.displayUsers();
+        System.out.println(User.users);
     }
 }
