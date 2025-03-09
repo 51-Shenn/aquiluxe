@@ -29,7 +29,7 @@ public class MainApp {
             setExtendedState(JFrame.MAXIMIZED_BOTH);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            ImageIcon carLogoIcon = new ImageIcon("images/icons/carLogo.png");
+            ImageIcon carLogoIcon = new ImageIcon("images/icons/car-logo.png");
             setIconImage(carLogoIcon.getImage()); // Window Icon
 
             add(new GUIComponents(this), BorderLayout.NORTH);

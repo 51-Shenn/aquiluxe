@@ -153,8 +153,8 @@ public abstract class AuthenticationPage extends JPanel {
     }
     protected JButton createEyeButton(JPasswordField passwordField) {
         JButton eyeButton = new JButton();
-        File eyeOn = new File("images/icons/eyeOn.png");
-        File eyeOff = new File("images/icons/eyeOff.png");
+        File eyeOn = new File("images/icons/eye-on.png");
+        File eyeOff = new File("images/icons/eye-off.png");
 
         if (!eyeOn.exists() || !eyeOff.exists()) {
             JOptionPane.showMessageDialog(null, "Failed to load image:\n" + eyeOn + "\n" + eyeOff);
