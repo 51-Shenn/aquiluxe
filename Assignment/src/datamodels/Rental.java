@@ -7,7 +7,6 @@ public class Rental {
     private int rentalId;
     private Customer customer;
     private Vehicle vehicle;
-    private Payment payment;
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalTime pickupTime;
@@ -21,8 +20,7 @@ public class Rental {
     }
 
     // Parameterized Constructor
-    public Rental(int rentalId, Customer customer, Vehicle vehicle, Payment payment, LocalDate startDate,
-            LocalDate endDate,
+    public Rental(int rentalId, Customer customer, Vehicle vehicle, LocalDate startDate, LocalDate endDate,
             LocalTime pickupTime, LocalTime dropoffTime, double totalCost, RentalStatus rentalStatus,
             PaymentStatus paymentStatus) {
         this.rentalId = rentalId;
@@ -69,14 +67,6 @@ public class Rental {
 
     public void setRentVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
-    }
-
-    public Payment getRentPayment() {
-        return payment;
-    }
-
-    public void setRentPayment(Payment payment) {
-        this.payment = payment;
     }
 
     public LocalDate getRentStartDate() {

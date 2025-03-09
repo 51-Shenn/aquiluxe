@@ -39,6 +39,7 @@ public class VehicleDAO {
 
             stmt.executeUpdate();
 
+            // get auto increment id
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     return generatedKeys.getInt(1);
