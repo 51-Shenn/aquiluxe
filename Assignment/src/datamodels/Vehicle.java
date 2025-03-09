@@ -15,7 +15,6 @@ public class Vehicle {
     private double rentalPriceDay;
     private String transmission;
     private String fuelType;
-    private String carType;
     private int seatingCapacity;
     private boolean availability;
     private String features;
@@ -166,14 +165,6 @@ public class Vehicle {
 
     public void setFuelType(String fuelType) {
         this.fuelType = fuelType;
-    }
-
-    public String getCarType() {
-        return carType;
-    }
-
-    public void setCarType(String carType) {
-        this.carType = carType;
     }
 
     public String getColor() {
