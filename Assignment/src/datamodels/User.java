@@ -1,7 +1,6 @@
 package datamodels;
 
 import java.util.HashMap;
-import java.util.Random;
 
 public class User {
     private int userId;
@@ -23,44 +22,23 @@ public class User {
             String password) {
         this.userId = userId;
         this.fullName = fullName;
-        this.username = username;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
-        this.username = generateUsername(fullName); // create new username for every instance created?
+        this.username = username;
         this.userEmail = userEmail;
         this.password = password;
 
         users.put(userId, this);
     }
 
-    public User(String fullName, String gender, String userEmail, String phoneNumber, String password) {
+    public User(String fullName, String gender, String userEmail, String phoneNumber, String username,
+            String password) {
         this.fullName = fullName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
+        this.username = username;
         this.userEmail = userEmail;
         this.password = password;
-    }
-
-    private static String generateUsername(String fullName) {
-        Random random = new Random();
-        String baseUsername = fullName.toLowerCase().replaceAll("\\s+", "");
-        String newUsername;
-
-        do {
-            int randomNum = random.nextInt(9000) + 1000; // 1000 - 9999
-            newUsername = baseUsername + randomNum;
-        } while (isUsernameTaken(newUsername));
-
-        return newUsername;
-    }
-
-    private static boolean isUsernameTaken(String username) {
-        for (User user : users.values()) {
-            if (user.getUsername().equals(username)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     // Getters and Setters

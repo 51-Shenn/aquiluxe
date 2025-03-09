@@ -267,7 +267,7 @@ public class UserService {
     private static void createNewUserAccount(String fullName, String gender, String email, String phone,
             char[] password) {
         String userPassword = new String(password);
-        new User(fullName, gender, generateUsername(fullName), email, phone, userPassword);
+        new User(fullName, gender, email, phone, generateUsername(fullName), userPassword);
 
         User.displayUsers();
         System.out.println(User.users);
