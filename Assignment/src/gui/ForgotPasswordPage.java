@@ -26,7 +26,7 @@ public class ForgotPasswordPage extends AuthenticationPage {
     protected JLabel createWallpaperLabel() {
         JLabel wallpaperLabel = new JLabel();
         wallpaperLabel.setOpaque(false);
-        File imageFile = new File("images/icons/carBackground1.png");
+        File imageFile = new File("images/wallpapers/car-wallpaper-1.png");
         if (!imageFile.exists()) {
             JOptionPane.showMessageDialog(null, "Failed to load image: " + imageFile);
         } else {
