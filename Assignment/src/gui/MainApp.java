@@ -22,7 +22,7 @@ public class MainApp {
         new MainWindow();
         DatabaseConnection.getConnection();
         UserDAO userdao = new UserDAO();
-        userdao.addUser("test3", "MALE", "0123456789", "test3@gmail.com", "test3",
+        userdao.addUser("test5", "MALE", "0123456789", "test5@gmail.com", "test5",
                 "password");
     }
 
