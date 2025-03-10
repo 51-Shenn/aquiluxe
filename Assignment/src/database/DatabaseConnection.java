@@ -5,17 +5,24 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-    private static final String URL = "jdbc:mysql://127.0.0.1:3306/vehicle_rental";
-    private static final String USER = "other_user";
-    private static final String PASSWORD = ""; // [m
+    // Amazon RDS PostgreSQL database details
+    private static final String URL = "jdbc:postgresql://my-db-vehicle-rental.cp0ow2qeen52.ap-southeast-1.rds.amazonaws.com:5432/vehicle_rental";
+    private static final String USER = "briankam";
+    private static final String PASSWORD = "Kamaws4266!";
 
     public static Connection getConnection() {
+        Connection connection = null;
         try {
-            System.out.println("\nCONNECTION SUCCESS\n");
-            return DriverManager.getConnection(URL, USER, PASSWORD);
-        } catch (SQLException e) {
+            // Load PostgreSQL JDBC Driver (optional in newer versions)
+            Class.forName("org.postgresql.Driver");
+
+            // Establish connection
+            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            System.out.println("Connected to Amazon RDS PostgreSQL successfully!");
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("\nFAILED TO CONNECT\n");
+            System.out.println("Connected to Amazon RDS PostgreSQL failed!");
         }
+        return connection;
     }
 }

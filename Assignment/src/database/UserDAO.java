@@ -15,8 +15,12 @@ public class UserDAO {
             String password) {
         String sql = "INSERT INTO users (full_name, gender, phone_number, user_email, username, password) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = DatabaseConnection.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        Connection conn = DatabaseConnection.getConnection();
+        if (conn == null) {
+            System.out.println("Failed to connect to database.");
+        }
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, fullName);
             stmt.setString(2, gender);
