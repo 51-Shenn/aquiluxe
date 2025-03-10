@@ -6,6 +6,7 @@ import javax.swing.*;
 public class GUIComponents extends JPanel {
 
     JFrame frame;
+    private OverflowMenu overflowMenu;
 
     public GUIComponents(JFrame frame) {
         this.frame = frame;
@@ -76,12 +77,26 @@ public class GUIComponents extends JPanel {
         menu.setIcon(kebabMenuIcon);
         menu.setPreferredSize(new Dimension(100, 50));
         menu.setBorderPainted(false); // no border
-        menu.setFocusPainted(false); // no highlight
-        menu.setContentAreaFilled(false); // no fill
+        menu.setFocusPainted(false);
+        menu.setBackground(Color.WHITE);
         menu.addActionListener(e -> {
-            frame.getContentPane().removeAll();
-            frame.add(new SignInPage(this.frame));
-            frame.validate();
+//            frame.getContentPane().removeAll();
+//            frame.add(new SignInPage(this.frame));
+//            frame.validate();
+
+            if (overflowMenu == null) {
+                overflowMenu = new OverflowMenu(this.frame);
+                menu.setBackground(Color.LIGHT_GRAY);
+                frame.add(overflowMenu);
+            }
+            else {
+                menu.setBackground(Color.WHITE);
+                frame.remove(overflowMenu);
+                overflowMenu = null;
+            }
+
+            frame.revalidate();
+            frame.repaint();
         });
 
         return menu;
