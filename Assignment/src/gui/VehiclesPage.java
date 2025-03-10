@@ -65,7 +65,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         return carCards;
     }
 
-    private JPanel createCarCard(ImageIcon image, String brand, String model, String transmission, String fuelType,
+    public static JPanel createCarCard(ImageIcon image, String brand, String model, String transmission, String fuelType,
                                  String carType, int seats, String price, String availability) {
 
         ImageIcon transmissionIcon = null;

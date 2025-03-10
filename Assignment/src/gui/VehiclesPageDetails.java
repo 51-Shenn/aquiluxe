@@ -9,15 +9,15 @@ public class VehiclesPageDetails extends JPanel {
         this.setBackground(Color.BLACK);
         this.setLayout(new BorderLayout());
 
-        this.add(carMainContainer(), BorderLayout.CENTER);
+        this.add(MainContainer(), BorderLayout.CENTER);
     }
 
-    private JScrollPane carMainContainer() {
+    private JScrollPane MainContainer() {
         JPanel carMainPanel = new JPanel(new BorderLayout());
         carMainPanel.add(bottomBar(), BorderLayout.SOUTH);
         carMainPanel.add(moreCarsPanel(), BorderLayout.CENTER);
-        carMainPanel.add(carDetailsPanel(), BorderLayout.NORTH);
-
+        carMainPanel.add(carMainPanel(), BorderLayout.NORTH);
+        
         JScrollPane carMainContainer = new JScrollPane(carMainPanel);
         carMainContainer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         carMainContainer.getVerticalScrollBar().setUnitIncrement(30);
@@ -25,31 +25,14 @@ public class VehiclesPageDetails extends JPanel {
         return carMainContainer;
     }
 
-    // Helper method to add components to the grid
-    private void addToGrid(JPanel panel, Component component, GridBagConstraints gbc,
-                          int gridx, int gridy, int gridwidth, int gridheight,
-                          double weightx, double weighty, int insetsTop, int insetsLeft,
-                          int insetsBottom, int insetsRight, int fill, int anchor) {
-        gbc.gridx = gridx;
-        gbc.gridy = gridy;
-        gbc.gridwidth = gridwidth;
-        gbc.gridheight = gridheight;
-        gbc.weightx = weightx;
-        gbc.weighty = weighty;
-        gbc.insets = new Insets(insetsTop, insetsLeft, insetsBottom, insetsRight);
-        gbc.fill = fill;
-        gbc.anchor = anchor;
-        panel.add(component, gbc);
-    }
-
     // Top panel
-    private JPanel carDetailsPanel() {
-        // Sample data
+    private JPanel carMainPanel() {
+        /*  Sample data
         String brand = "Porsche";
         String model = "GT3 RS";
         int year = 2023, pricePerDay = 0;
 
-        // Images
+        /*  Images
         ImageIcon image = new ImageIcon("images/cars/Supra.jpg");
         JLabel carPicture = new JLabel(image);
         ImageIcon transmissionIcon = new ImageIcon("images/vehiclepageicons/manual-transmission.png");
@@ -105,34 +88,111 @@ public class VehiclesPageDetails extends JPanel {
 
         JPanel carDetailsPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10,10,10,10);
         carDetailsPanel.setPreferredSize(new Dimension(800, 1000));
         carDetailsPanel.setBackground(Color.BLUE);
+        */
+        JPanel carMainPanel = new JPanel(new BorderLayout());
 
-        // Add components to the grid using the helper method
-        // Text container on top of the picture (aligned with the top of the picture)
-        addToGrid(carDetailsPanel, textContainer, gbc,
-        0, 0, 5, 1, 0.5, 0, 10, 50, 10, 20, GridBagConstraints.HORIZONTAL, GridBagConstraints.NORTHWEST);
+        JPanel carMainContainer = new JPanel(new GridBagLayout());
+        carMainContainer.setBackground(Color.BLUE);
 
-        // Details label on top of the details panel
-        addToGrid(carDetailsPanel, detailsLabelPanel, gbc,
-        5, 0, 5, 1, 0.5, 0, 10, 20, 10, 50, GridBagConstraints.HORIZONTAL, GridBagConstraints.EAST);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10); // Padding
 
-        // Picture takes 5x5 grid (below the text container)
-        addToGrid(carDetailsPanel, carPictureContainer, gbc,
-        0, 1, 5, 5, 0.5, 1.0, 0, 50, 10, 20, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
+        // Add car details panel (Left Top)
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.weightx = 0.6;
+        gbc.fill = GridBagConstraints.BOTH;
+        carMainContainer.add(carDetailsPanel(), gbc);
 
-        addToGrid(carDetailsPanel, featuresPanel, gbc,
-        0, 6, 5, 5, 0.5, 1.0, 0, 50, 10, 20, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
+        // Add technical specification panel (Right Top)
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        gbc.weightx = 0.4;
+        gbc.fill = GridBagConstraints.BOTH;
+        carMainContainer.add(technicalSpecsPanel(), gbc);
 
-        // Details take 5x4 grid on the right (below the details label)
-        addToGrid(carDetailsPanel, detailsPanel, gbc,
-        5, 1, 4, 4, 0.5, 1.0, 0, 20, 10, 50, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
+        carMainPanel.add(carMainContainer, BorderLayout.CENTER);
+        carMainPanel.add(sidePanel(), BorderLayout.EAST);
+        carMainPanel.add(sidePanel(), BorderLayout.WEST);
 
-        // Rent button takes 5x1 grid below the details
-        addToGrid(carDetailsPanel, rentButton, gbc,
-        5, 5, 5, 1, 0.5, 0, 0, 20, 0, 50, GridBagConstraints.HORIZONTAL, GridBagConstraints.CENTER);
+        
+        return carMainPanel;
+    }
+
+    private JPanel carDetailsPanel() {
+        //sample
+        JPanel carDetailsPanel = new JPanel(new BorderLayout());
+        carDetailsPanel.setPreferredSize(new Dimension(600, 800));
+
+        ImageIcon image = new ImageIcon("images/cars/Supra.jpg");
+        JLabel carPicture = new JLabel(image);
+        carDetailsPanel.add(carPicture, BorderLayout.CENTER);
+
+        String brand = "Porsche";
+        String model = "GT3 RS";
+        int year = 2023, pricePerDay = 0;
+
+        JLabel brandModelYearLabel = new JLabel(brand + " " + model + " " + year);
+        brandModelYearLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
+
+        JLabel pricePerDayLabel = new JLabel("RM" + pricePerDay + " / day");
+        pricePerDayLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(25f));
+
+        JPanel brandModelYearPricePanel = new JPanel(new GridLayout(2, 1, 5, 5));
+        brandModelYearPricePanel.add(brandModelYearLabel);
+        brandModelYearPricePanel.add(pricePerDayLabel);
+
+        carDetailsPanel.add(brandModelYearPricePanel, BorderLayout.NORTH);
+
         return carDetailsPanel;
     }
+
+    private JPanel technicalSpecsPanel() {
+        //sample
+        JPanel technicalSpecsPanel = new JPanel(new GridBagLayout());
+        technicalSpecsPanel.setPreferredSize(new Dimension(600, 800));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.BOTH;
+
+        ImageIcon[] detailsIcons = new ImageIcon[6];
+        ImageIcon transmissionIcon = new ImageIcon("images/vehiclepageicons/manual-transmission.png");
+        ImageIcon fuelIcon = new ImageIcon("images/vehiclepageicons/gas-station.png");
+        ImageIcon seatsIcon = new ImageIcon("images/vehiclepageicons/car-seat.png");
+        ImageIcon carTypeIcon = new ImageIcon("images/vehiclepageicons/chassis.png");
+        ImageIcon topSpeedIcon = new ImageIcon("images/vehiclepageicons/speedometer.png");
+        ImageIcon capacityIcon = new ImageIcon("images/vehiclepageicons/engine.png");
+        detailsIcons[0] = transmissionIcon;
+        detailsIcons[1] = fuelIcon;
+        detailsIcons[2] = seatsIcon;
+        detailsIcons[3] = carTypeIcon;
+        detailsIcons[4] = topSpeedIcon;
+        detailsIcons[5] = capacityIcon;
+
+        for (int i = 0; i < 3; i++) {
+            gbc.gridx = 0;
+            gbc.gridy = i;
+            technicalSpecsPanel.add(new JLabel(detailsIcons[i]), gbc);
+
+            gbc.gridx = 1;
+            technicalSpecsPanel.add(new JLabel(detailsIcons[i + 3]), gbc);
+        }
+        
+        JButton rentButton = new JButton("RENT");
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        gbc.gridwidth = 2;
+        technicalSpecsPanel.add(rentButton, gbc);
+
+        return technicalSpecsPanel;
+    }
+
 
     // Center panel
     private JPanel moreCarsPanel() {
@@ -149,5 +209,14 @@ public class VehiclesPageDetails extends JPanel {
         bottomBar.setPreferredSize(new Dimension(800, 500));
 
         return bottomBar;
+    }
+
+    // side panel
+    private JPanel sidePanel() {
+        JPanel sidePanel = new JPanel();
+        sidePanel.setBackground(Color.BLACK);
+        sidePanel.setPreferredSize(new Dimension(200, 1000));
+
+        return sidePanel;
     }
 }
