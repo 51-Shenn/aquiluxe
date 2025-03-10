@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/*
+*  DO NOT TOUCH NO MATTER WHAT 
+*/
+
 public class DatabaseConnection {
     // Amazon RDS PostgreSQL database details
     private static final String URL = "jdbc:postgresql://my-db-vehicle-rental.cp0ow2qeen52.ap-southeast-1.rds.amazonaws.com:5432/vehicle_rental";
@@ -13,7 +17,7 @@ public class DatabaseConnection {
     public static Connection getConnection() {
         Connection connection = null;
         try {
-            // Load PostgreSQL JDBC Driver (optional in newer versions)
+            // Load PostgreSQL JDBC Driver
             Class.forName("org.postgresql.Driver");
 
             // Establish connection
