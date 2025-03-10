@@ -44,7 +44,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         JPanel carCards = new JPanel(new GridLayout(0,3,20,15));
         carCards.setBackground(Color.WHITE);
 
-        //sample details just to show ouput
+        //sample details just to show output
         String[] cars ={"PORSCHE","TOYOTA","NISSAN",
                         "HONDA","FERRARI","LAMBORGHINI",
                         "PERODUA","PROTON","LEXUS",
@@ -117,7 +117,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         buttonPanel.add(carRent, BorderLayout.NORTH);
         buttonPanel.add(carDetails, BorderLayout.SOUTH);
 
-        //car name model and cartype on the left and price on the right
+        //car name model and car type on the left and price on the right
         JLabel carName = new JLabel(brand);
         carName.setHorizontalTextPosition(JLabel.LEFT);
         carName.setFont(CustomFonts.OPEN_SANS_EXTRA_BOLD.deriveFont(20f));
@@ -139,7 +139,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carAvailability.setOpaque(true);
         carAvailability.setHorizontalAlignment(JLabel.CENTER);
         carAvailability.setFont(CustomFonts.OPEN_SANS_EXTRA_BOLD.deriveFont(15f));
-        if(availability == "AVAILABLE"){
+        if(availability.equals("AVAILABLE")){
             carAvailability.setBackground(Color.BLUE);
         }
         else{
@@ -159,16 +159,16 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carNamePanel.add(carModel,BorderLayout.CENTER);
         carNamePanel.add(carTypeLabel,BorderLayout.SOUTH);
         carNamePanel.setPreferredSize(new Dimension(50,150));
-        JPanel carRentPriceavailabilityPanel = new JPanel();
-        carRentPriceavailabilityPanel.add(carRentPrice,BorderLayout.NORTH);
-        carRentPriceavailabilityPanel.add(carAvailability,BorderLayout.SOUTH);
-        carRentPriceavailabilityPanel.setPreferredSize(new Dimension(50,150));
-        carRentPriceavailabilityPanel.setBackground(Color.CYAN);
+        JPanel carRentPriceAvailabilityPanel = new JPanel();
+        carRentPriceAvailabilityPanel.add(carRentPrice,BorderLayout.NORTH);
+        carRentPriceAvailabilityPanel.add(carAvailability,BorderLayout.SOUTH);
+        carRentPriceAvailabilityPanel.setPreferredSize(new Dimension(50,150));
+        carRentPriceAvailabilityPanel.setBackground(Color.CYAN);
 
         //container for both details at the center
         JPanel carInfoNameRentPanel = new JPanel(new GridLayout(1,2,5,5));
         carInfoNameRentPanel.add(carNamePanel);
-        carInfoNameRentPanel.add(carRentPriceavailabilityPanel);
+        carInfoNameRentPanel.add(carRentPriceAvailabilityPanel);
 
         //container for picture at the top
         JLabel carPicture = new JLabel(image);
@@ -206,7 +206,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carInfoPanel.add(fuelTypeLabel);
         carInfoPanel.add(seatsLabel);
 
-        // a container to put every details and infos
+        // a container to put every detail and infos
         JPanel carEverythingPanel = new JPanel(new BorderLayout(0,2));
         carEverythingPanel.add(carPicturePanel, BorderLayout.NORTH);
         carEverythingPanel.add(carInfoNameRentPanel, BorderLayout.CENTER);
@@ -374,7 +374,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         yearFilterPanel.add(yearLabel);
         yearFilterPanel.add(yearComboBox);
 
-        JLabel transLabel = new JLabel("Select Transimission");
+        JLabel transLabel = new JLabel("Select Transmission");
         transLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
 
         transTypeComboBox = new JComboBox<>(transType);

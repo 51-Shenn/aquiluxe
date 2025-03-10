@@ -21,10 +21,10 @@ public class User {
     }
 
     // Parameterized Constructor
-    public User(String fullName, String gender, String license, String userEmail, String phoneNumber, String password) {
+    public User(String fullName, String username, String gender, String license, String userEmail, String phoneNumber, String password) {
         this.userId = userIdCounter++;
         this.fullName = fullName;
-        this.username = generateUsername(fullName);
+        this.username = username;
         this.gender = gender;
         this.license = license;
         this.phoneNumber = phoneNumber;
@@ -32,28 +32,6 @@ public class User {
         this.password = password;
 
         users.put(userId, this);
-    }
-
-    private static String generateUsername(String fullName) {
-        Random random = new Random();
-        String baseUsername = fullName.toLowerCase().replaceAll("\\s+", "");
-        String newUsername;
-
-        do {
-            int randomNum = random.nextInt(9000) + 1000; // 1000 - 9999
-            newUsername = baseUsername + randomNum;
-        } while (isUsernameTaken(newUsername));
-
-        return newUsername;
-    }
-
-    private static boolean isUsernameTaken(String username) {
-        for (User user : users.values()) {
-            if (user.getUsername().equals(username)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     // Getters and Setters
@@ -135,11 +113,11 @@ public class User {
             String userEmail, String username, String password) {
         this.userId = userId;
         this.fullName = fullName;
+        this.username = username;
         this.gender = gender;
         this.license = license;
         this.phoneNumber = phoneNumber;
         this.userEmail = userEmail;
-        this.username = username;
         this.password = password;
     }
 
