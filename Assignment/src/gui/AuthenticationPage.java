@@ -156,9 +156,9 @@ public abstract class AuthenticationPage extends JPanel {
         File eyeOn = new File("images/icons/eye-on.png");
         File eyeOff = new File("images/icons/eye-off.png");
 
-        if (!eyeOn.exists() || !eyeOff.exists()) {
+        if (!eyeOn.exists() || !eyeOff.exists())
             JOptionPane.showMessageDialog(null, "Failed to load image:\n" + eyeOn + "\n" + eyeOff);
-        } else {
+        else {
             ImageIcon eyeOnIcon = new ImageIcon(eyeOn.toString());
             ImageIcon eyeOffIcon = new ImageIcon(eyeOff.toString());
 

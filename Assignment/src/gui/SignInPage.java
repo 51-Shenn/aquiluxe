@@ -68,7 +68,7 @@ public class SignInPage extends AuthenticationPage {
             closeButton.addActionListener(e -> {
                 JPanel newContentPane = new JPanel(new BorderLayout());
                 this.frame.setContentPane(newContentPane);
-                this.frame.add(new GUIComponents(this.frame), BorderLayout.NORTH);
+                this.frame.add(new GUIComponents(this.frame, null), BorderLayout.NORTH);
                 this.frame.revalidate();
                 this.frame.repaint();
             });
@@ -204,7 +204,7 @@ public class SignInPage extends AuthenticationPage {
             if(isValidSignInDetails) {
                 JPanel newContentPane = new JPanel(new BorderLayout());
                 this.frame.setContentPane(newContentPane);
-                this.frame.add(new GUIComponents(this.frame), BorderLayout.NORTH);
+                this.frame.add(new GUIComponents(this.frame, null), BorderLayout.NORTH);
                 this.frame.revalidate();
                 this.frame.repaint();
             }

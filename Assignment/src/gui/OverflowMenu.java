@@ -2,6 +2,7 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 public class OverflowMenu extends JLayeredPane {
 
@@ -20,32 +21,64 @@ public class OverflowMenu extends JLayeredPane {
         MENU_POSITION_Y = 0;
 
         setBounds(MENU_POSITION_X, MENU_POSITION_Y, MENU_WIDTH, MENU_HEIGHT);
-        add(createOverflowMenu(), 100);
+        add(createOverflowMenu(), JLayeredPane.POPUP_LAYER);
     }
 
     private JPanel createOverflowMenu() {
         JPanel container = new JPanel();
         container.setLayout(null);
         container.setBounds(MENU_POSITION_X, MENU_POSITION_Y, MENU_WIDTH, MENU_HEIGHT);
-        container.setBackground(Color.BLUE);
-        container.add(createCard());
-        container.add(new JButton("Another Button"));
+        container.add(createMainCard());
 
         return container;
     }
 
-    private JPanel createCard() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBounds(0, 0, MENU_WIDTH, 50);
-        panel.add(createButton());
-        panel.add(new JButton("jo"));
+    private JPanel createMainCard() {
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBounds(0, 0, MENU_WIDTH, MENU_HEIGHT);
+        panel.setBackground(Color.LIGHT_GRAY);
+//        panel.setBackground(new Color(0, 0, 0, 150)); // Semi-transparent background
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = 1;
+        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        File sunFilePath = new File("images/icons/sun.png");
+        File moonFilePath = new File("images/icons/moon.png");
+        File sunMoonFilePath = new File("images/icons/sun-moon.png");
+        File switchFilePath = new File("images/icons/switch.png");
+        File signOutFilePath = new File("images/icons/sign-out.png");
+        File roundCloseFilePath = new File("images/icons/round-close.png");
+
+        if(!sunMoonFilePath.exists() || !switchFilePath.exists() || !signOutFilePath.exists() || !roundCloseFilePath.exists())
+            JOptionPane.showMessageDialog(null, "Failed to load image:\n" + sunMoonFilePath + "\n" + switchFilePath + "\n" + signOutFilePath + "\n" + roundCloseFilePath);
+
+        panel.add(createMenuCard("Theme", sunMoonFilePath.toString()), gbc);
+        panel.add(createMenuCard("Switch Account", switchFilePath.toString()), gbc);
+        panel.add(createMenuCard("Sign Out", signOutFilePath.toString()), gbc);
+        panel.add(createMenuCard("Close / Exit", roundCloseFilePath.toString()), gbc);
+
         return panel;
     }
 
-    private JButton createButton() {
-        JButton button = new JButton("TEST");
-        button.setBackground(Color.RED);
-        button.setBounds(0, 0, MENU_WIDTH- 100, 50);
-        return button;
+    private JPanel createMenuCard(String text, String iconFilePath) {
+        JPanel card = new JPanel(new GridBagLayout());
+        card.setBackground(Color.WHITE);
+        ImageIcon icon = new ImageIcon(iconFilePath);
+
+        JButton button = new JButton(text);
+        button.setIcon(icon);
+        button.setIconTextGap(20);
+        button.setHorizontalAlignment(SwingConstants.LEFT);
+        button.setBackground(Color.WHITE);
+        button.setForeground(Color.BLACK);
+        button.setFont(CustomFonts.ROBOTO_BLACK.deriveFont(20f));
+        button.setPreferredSize(new Dimension(MENU_WIDTH, 70));
+        button.setFocusPainted(false);
+        card.add(button);
+
+        return card;
     }
 }
