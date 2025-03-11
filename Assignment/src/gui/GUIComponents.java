@@ -38,6 +38,9 @@ public class GUIComponents extends JPanel {
         topBarContainer.setBackground(Color.WHITE);
 
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
         gbc.insets = new Insets(0, 30, 0, 50);
 
         topBarContainer.add(logo(), gbc);
@@ -116,13 +119,11 @@ public class GUIComponents extends JPanel {
 //            frame.getContentPane().removeAll();
 //            frame.add(new SignInPage(this.frame));
 //            frame.validate();
-                int MENU_WIDTH = 350;
-                int MENU_HEIGHT = 500;
 
                 if (overflowMenu == null) {
                     overflowMenu = new OverflowMenu(this.frame);
                     this.frame.getLayeredPane().add(overflowMenu, JLayeredPane.POPUP_LAYER);
-                    overflowMenu.setBounds(this.frame.getWidth() - (MENU_WIDTH + 20), 85, MENU_WIDTH, MENU_HEIGHT);
+                    overflowMenu.setBounds(this.frame.getWidth() - (overflowMenu.MENU_WIDTH + 20), 85, overflowMenu.MENU_WIDTH, overflowMenu.MENU_HEIGHT);
                 } else {
                     this.frame.getLayeredPane().remove(overflowMenu);
                     overflowMenu = null;
