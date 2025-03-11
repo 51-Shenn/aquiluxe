@@ -116,19 +116,19 @@ public class GUIComponents extends JPanel {
 //            frame.getContentPane().removeAll();
 //            frame.add(new SignInPage(this.frame));
 //            frame.validate();
+                int MENU_WIDTH = 350;
+                int MENU_HEIGHT = 500;
 
                 if (overflowMenu == null) {
                     overflowMenu = new OverflowMenu(this.frame);
-                    menu.setBackground(Color.YELLOW);
-                    this.panel.add(overflowMenu);
+                    this.frame.getLayeredPane().add(overflowMenu, JLayeredPane.POPUP_LAYER);
+                    overflowMenu.setBounds(this.frame.getWidth() - (MENU_WIDTH + 20), 85, MENU_WIDTH, MENU_HEIGHT);
                 } else {
-                    menu.setBackground(Color.WHITE);
-                    overflowMenu.setVisible(false);
+                    this.frame.getLayeredPane().remove(overflowMenu);
                     overflowMenu = null;
                 }
-
-                this.panel.revalidate();
-                this.panel.repaint();
+                this.frame.revalidate();
+                this.frame.repaint();
             });
 
             return menu;

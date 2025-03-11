@@ -9,35 +9,30 @@ public class OverflowMenu extends JLayeredPane {
     private final JFrame frame;
     private final int MENU_WIDTH;
     private final int MENU_HEIGHT;
-    private final int MENU_POSITION_X;
-    private final int MENU_POSITION_Y;
 
     public OverflowMenu(JFrame frame) {
         this.frame = frame;
 
         MENU_WIDTH = 350;
         MENU_HEIGHT = 500;
-        MENU_POSITION_X = frame.getWidth() - (MENU_WIDTH + 20);
-        MENU_POSITION_Y = 0;
 
-        setBounds(MENU_POSITION_X, MENU_POSITION_Y, MENU_WIDTH, MENU_HEIGHT);
+        //setBounds(MENU_POSITION_X, MENU_POSITION_Y, MENU_WIDTH, MENU_HEIGHT);
         add(createOverflowMenu(), JLayeredPane.POPUP_LAYER);
     }
 
     private JPanel createOverflowMenu() {
         JPanel container = new JPanel();
         container.setLayout(null);
-        container.setBounds(MENU_POSITION_X, MENU_POSITION_Y, MENU_WIDTH, MENU_HEIGHT);
+        container.setBounds(0, 0, MENU_WIDTH, MENU_HEIGHT);
         container.add(createMainCard());
-
         return container;
     }
 
     private JPanel createMainCard() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBounds(0, 0, MENU_WIDTH, MENU_HEIGHT);
-        panel.setBackground(Color.LIGHT_GRAY);
-//        panel.setBackground(new Color(0, 0, 0, 150)); // Semi-transparent background
+//        panel.setBackground(Color.LIGHT_GRAY);
+        panel.setBackground(new Color(255, 255, 255, 50)); // Semi-transparent background
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx = 1;
         gbc.weighty = 0;
@@ -72,11 +67,13 @@ public class OverflowMenu extends JLayeredPane {
         button.setIcon(icon);
         button.setIconTextGap(20);
         button.setHorizontalAlignment(SwingConstants.LEFT);
-        button.setBackground(Color.WHITE);
+//        button.setBackground(Color.WHITE);
+        button.setBackground(new Color(255, 255, 255, 30));
         button.setForeground(Color.BLACK);
         button.setFont(CustomFonts.ROBOTO_BLACK.deriveFont(20f));
         button.setPreferredSize(new Dimension(MENU_WIDTH, 70));
         button.setFocusPainted(false);
+        button.setBorderPainted(false);
         card.add(button);
 
         return card;
