@@ -18,7 +18,7 @@ public class ForgotPasswordPage extends AuthenticationPage {
     private JLabel passwordValidationLabel;
     private JLabel confirmPasswordValidationLabel;
 
-    ForgotPasswordPage(JFrame frame) {
+    public ForgotPasswordPage(JFrame frame) {
         this.frame = frame;
     }
 
@@ -72,7 +72,7 @@ public class ForgotPasswordPage extends AuthenticationPage {
             closeButton.addActionListener(e -> {
                 JPanel newContentPane = new JPanel(new BorderLayout());
                 this.frame.setContentPane(newContentPane);
-                this.frame.add(new GUIComponents(this.frame), BorderLayout.NORTH);
+                this.frame.add(new GUIComponents(this.frame, null), BorderLayout.NORTH);
                 this.frame.revalidate();
                 this.frame.repaint();
             });
@@ -253,7 +253,7 @@ public class ForgotPasswordPage extends AuthenticationPage {
                     currentPage = "USER";
                     JPanel newContentPane = new JPanel(new BorderLayout());
                     this.frame.setContentPane(newContentPane);
-                    this.frame.add(new GUIComponents(this.frame), BorderLayout.NORTH);
+                    this.frame.add(new GUIComponents(this.frame, null), BorderLayout.NORTH);
                     this.frame.validate();
                 }
             }

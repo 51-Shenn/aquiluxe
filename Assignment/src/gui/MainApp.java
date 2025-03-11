@@ -1,7 +1,6 @@
 package gui;
 
 import javax.swing.*;
-
 import java.awt.*;
 
 public class MainApp {
@@ -34,7 +33,6 @@ public class MainApp {
             setIconImage(carLogoIcon.getImage()); // Window Icon
 
             add(new GUIComponents(this), BorderLayout.NORTH);
-            //add(new VehiclesPageDetails(this), BorderLayout.CENTER);
 
             setVisible(true);
         }
