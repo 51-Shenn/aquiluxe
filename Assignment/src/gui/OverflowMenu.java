@@ -31,8 +31,8 @@ public class OverflowMenu extends JLayeredPane {
     private JPanel createMainCard() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBounds(0, 0, MENU_WIDTH, MENU_HEIGHT);
-//        panel.setBackground(Color.LIGHT_GRAY);
-        panel.setBackground(new Color(255, 255, 255, 50)); // Semi-transparent background
+        panel.setBackground(Color.LIGHT_GRAY);
+//        panel.setBackground(new Color(255, 255, 255, 50)); // Semi-transparent background
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx = 1;
         gbc.weighty = 0;
@@ -67,8 +67,8 @@ public class OverflowMenu extends JLayeredPane {
         button.setIcon(icon);
         button.setIconTextGap(20);
         button.setHorizontalAlignment(SwingConstants.LEFT);
-//        button.setBackground(Color.WHITE);
-        button.setBackground(new Color(255, 255, 255, 30));
+        button.setBackground(Color.WHITE);
+//        button.setBackground(new Color(255, 255, 255, 30));
         button.setForeground(Color.BLACK);
         button.setFont(CustomFonts.ROBOTO_BLACK.deriveFont(20f));
         button.setPreferredSize(new Dimension(MENU_WIDTH, 70));
