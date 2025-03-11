@@ -23,7 +23,7 @@ public class SignUpPage extends AuthenticationPage {
     private JLabel passwordValidationLabel;
     private JLabel confirmPasswordValidationLabel;
 
-    SignUpPage(JFrame frame) {
+    public SignUpPage(JFrame frame) {
         this.frame = frame;
     }
 

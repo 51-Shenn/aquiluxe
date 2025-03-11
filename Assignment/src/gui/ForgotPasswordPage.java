@@ -18,7 +18,7 @@ public class ForgotPasswordPage extends AuthenticationPage {
     private JLabel passwordValidationLabel;
     private JLabel confirmPasswordValidationLabel;
 
-    ForgotPasswordPage(JFrame frame) {
+    public ForgotPasswordPage(JFrame frame) {
         this.frame = frame;
     }
 

@@ -14,7 +14,7 @@ public class SignInPage extends AuthenticationPage {
     private JPasswordField passwordInput;
     private JLabel passwordValidationLabel;
 
-    SignInPage(JFrame frame) {
+    public SignInPage(JFrame frame) {
         this.frame = frame;
     }
 
