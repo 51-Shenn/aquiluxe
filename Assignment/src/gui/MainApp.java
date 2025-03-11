@@ -32,7 +32,9 @@ public class MainApp {
             ImageIcon carLogoIcon = new ImageIcon("images/icons/car-logo.png");
             setIconImage(carLogoIcon.getImage()); // Window Icon
 
-            add(new GUIComponents(this), BorderLayout.NORTH);
+            JPanel contentPanel = new JPanel(new BorderLayout());
+            add(new GUIComponents(this, contentPanel), BorderLayout.NORTH);
+            add(contentPanel, BorderLayout.CENTER);
 
             setVisible(true);
         }
