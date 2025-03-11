@@ -35,7 +35,7 @@ public class MainApp {
             setIconImage(carLogoIcon.getImage()); // Window Icon
 
             add(new GUIComponents(this), BorderLayout.NORTH);
-            //add(new VehiclesPageDetails(this), BorderLayout.CENTER);
+            add(new VehiclesPageDetails(this), BorderLayout.CENTER);
 
             setVisible(true);
         }
