@@ -272,10 +272,11 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
         JPanel topBar = new JPanel();
         topBar.setLayout(null);
-        topBar.setPreferredSize(new Dimension(1600,75));
+        topBar.setBackground(Color.WHITE);
+        topBar.setPreferredSize(new Dimension(1600,100));
 
         JLabel filters = new JLabel("Filter");
-        filters.setBounds(50,15,200,50);
+        filters.setBounds(50,25,200,50);
         filters.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
 
         JTextField searchBar = new JTextField();
@@ -283,7 +284,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         searchBar.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(20f));
         searchBar.setForeground(Color.GRAY);
         searchBar.setBorder(new CompoundBorder(new LineBorder(Color.BLACK,1), new EmptyBorder(10,15,10,5)));
-        searchBar.setBounds(275,15,900,50);
+        searchBar.setBounds(300,25,900,50);
         searchBar.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -304,20 +305,20 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
         JButton searchButton = new JButton();
         searchButton.setIcon(searchIcon);
-        searchButton.setBounds(1175,15,85,50);
+        searchButton.setBounds(1200,25,85,50);
         searchButton.setFocusable(false);
         searchButton.setBackground(Color.WHITE);
         searchButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(12.5f));
         searchButton.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 
         JLabel sortByLabel = new JLabel("Sort By:");
-        sortByLabel.setBounds(1275,15,75,50);
+        sortByLabel.setBounds(1350,25,75,50);
         sortByLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(17.5f));
         sortByLabel.setHorizontalAlignment(JLabel.RIGHT);
 
         String[] sortOptions = {" Best Match ", " Lowest Price ", " Highest Price ", " Newest ", " Oldest "};
         JComboBox<String> sortComboBox = new JComboBox<>(sortOptions);
-        sortComboBox.setBounds(1375,15,150,50);
+        sortComboBox.setBounds(1450,25,150,50);
         sortComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
 
         topBar.add(searchBar);
@@ -530,7 +531,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         priceFilterPanel.add(pricePanel);
 
         JPanel leftPanel = new JPanel();
-        leftPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 25));
+        leftPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 15));
         leftPanel.setPreferredSize(new Dimension(300,1600));
         leftPanel.setBackground(Color.WHITE);
         leftPanel.add(brandFilterPanel);
