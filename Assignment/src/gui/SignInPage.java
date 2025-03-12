@@ -11,11 +11,13 @@ import java.io.File;
 public class SignInPage extends AuthenticationPage {
 
     private final JFrame frame;
+    private final JPanel panel;
     private JPasswordField passwordInput;
     private JLabel passwordValidationLabel;
 
-    public SignInPage(JFrame frame) {
+    public SignInPage(JFrame frame, JPanel panel) {
         this.frame = frame;
+        this.panel = panel;
     }
 
     @Override
@@ -66,9 +68,11 @@ public class SignInPage extends AuthenticationPage {
             closeButton.setContentAreaFilled(false);
             closeButton.setFocusPainted(false);
             closeButton.addActionListener(e -> {
-                JPanel newContentPane = new JPanel(new BorderLayout());
-                this.frame.setContentPane(newContentPane);
-                this.frame.add(new GUIComponents(this.frame, null), BorderLayout.NORTH);
+                this.frame.getContentPane().removeAll();
+                this.frame.add(new GUIComponents(this.frame, this.panel), BorderLayout.NORTH);
+                this.frame.add(this.panel, BorderLayout.CENTER);
+                this.panel.removeAll();
+                this.panel.add(new VehiclesPage(this.frame), BorderLayout.CENTER);
                 this.frame.revalidate();
                 this.frame.repaint();
             });
@@ -152,7 +156,7 @@ public class SignInPage extends AuthenticationPage {
         forgotPasswordLink.setContentAreaFilled(false);
         forgotPasswordLink.setBorder(new EmptyBorder(0, 0, 0, 0));
         forgotPasswordLink.addActionListener(e -> {
-            this.frame.setContentPane(new ForgotPasswordPage(this.frame));
+            this.frame.setContentPane(new ForgotPasswordPage(this.frame, this.panel));
             this.frame.revalidate();
             this.frame.repaint();
         });
@@ -182,7 +186,7 @@ public class SignInPage extends AuthenticationPage {
         linkButton.setContentAreaFilled(false);
         linkButton.setBorder(new EmptyBorder(0, 0, 0, 0));
         linkButton.addActionListener(e -> {
-            this.frame.setContentPane(new SignUpPage(this.frame));
+            this.frame.setContentPane(new SignUpPage(this.frame, this.panel));
             this.frame.revalidate();
             this.frame.repaint();
         });
@@ -204,7 +208,7 @@ public class SignInPage extends AuthenticationPage {
             if(isValidSignInDetails) {
                 JPanel newContentPane = new JPanel(new BorderLayout());
                 this.frame.setContentPane(newContentPane);
-                this.frame.add(new GUIComponents(this.frame, null), BorderLayout.NORTH);
+                this.frame.add(new GUIComponents(this.frame, this.panel), BorderLayout.NORTH);
                 this.frame.revalidate();
                 this.frame.repaint();
             }

@@ -33,6 +33,7 @@ public class MainApp {
             setIconImage(carLogoIcon.getImage()); // Window Icon
 
             JPanel contentPanel = new JPanel(new BorderLayout());
+
             add(new GUIComponents(this, contentPanel), BorderLayout.NORTH);
             add(contentPanel, BorderLayout.CENTER);
 

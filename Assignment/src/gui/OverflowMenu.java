@@ -8,11 +8,13 @@ import java.io.File;
 public class OverflowMenu extends JLayeredPane {
 
     private final JFrame frame;
+    private final JPanel panel;
     public final int MENU_WIDTH;
     public final int MENU_HEIGHT;
 
-    public OverflowMenu(JFrame frame) {
+    public OverflowMenu(JFrame frame, JPanel panel) {
         this.frame = frame;
+        this.panel = panel;
         MENU_WIDTH = 400;
         MENU_HEIGHT = 600;
         add(createOverflowMenu(), JLayeredPane.POPUP_LAYER);
@@ -36,9 +38,10 @@ public class OverflowMenu extends JLayeredPane {
         File moonFilePath = new File("images/icons/moon.png");
         File sunMoonFilePath = new File("images/icons/sun-moon.png");
         File switchFilePath = new File("images/icons/switch.png");
+        File signInFilePath = new File("images/icons/sign-in.png");
         File signOutFilePath = new File("images/icons/sign-out.png");
         File roundCloseFilePath = new File("images/icons/round-close.png");
-        if(!sunMoonFilePath.exists() || !switchFilePath.exists() || !signOutFilePath.exists() || !roundCloseFilePath.exists())
+        if(!sunMoonFilePath.exists() || !switchFilePath.exists() || !signInFilePath.exists() || !signOutFilePath.exists() || !roundCloseFilePath.exists())
             JOptionPane.showMessageDialog(null, "Failed to load image:\n" + sunMoonFilePath + "\n" + switchFilePath + "\n" + signOutFilePath + "\n" + roundCloseFilePath);
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -51,6 +54,7 @@ public class OverflowMenu extends JLayeredPane {
         panel.add(createProfileCard(), gbc);
         panel.add(createMenuCard("Theme", sunMoonFilePath), gbc);
         panel.add(createMenuCard("Switch Account", switchFilePath), gbc);
+        panel.add(createMenuCard("Sign In", signInFilePath), gbc);
         panel.add(createMenuCard("Sign Out", signOutFilePath), gbc);
         panel.add(createMenuCard("Close / Exit", roundCloseFilePath), gbc);
 
@@ -142,6 +146,15 @@ public class OverflowMenu extends JLayeredPane {
         button.setPreferredSize(new Dimension(MENU_WIDTH, 70));
         button.setFocusPainted(false);
         button.setBorderPainted(false);
+
+        if(text.equals("Sign In")) {
+            button.addActionListener(e -> {
+                frame.getLayeredPane().remove(this);
+                frame.getContentPane().removeAll();
+                frame.add(new SignInPage(this.frame, this.panel));
+                frame.validate();
+            });
+        }
 
         return button;
     }

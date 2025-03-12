@@ -11,6 +11,7 @@ import java.io.File;
 public class ForgotPasswordPage extends AuthenticationPage {
 
     private final JFrame frame;
+    private final JPanel panel;
     private JPasswordField passwordInput;
     private JPasswordField confirmPasswordInput;
     private String currentPage = "USER";
@@ -18,8 +19,9 @@ public class ForgotPasswordPage extends AuthenticationPage {
     private JLabel passwordValidationLabel;
     private JLabel confirmPasswordValidationLabel;
 
-    public ForgotPasswordPage(JFrame frame) {
+    public ForgotPasswordPage(JFrame frame, JPanel panel) {
         this.frame = frame;
+        this.panel = panel;
     }
 
     @Override
@@ -70,9 +72,11 @@ public class ForgotPasswordPage extends AuthenticationPage {
             closeButton.setContentAreaFilled(false);
             closeButton.setFocusPainted(false);
             closeButton.addActionListener(e -> {
-                JPanel newContentPane = new JPanel(new BorderLayout());
-                this.frame.setContentPane(newContentPane);
-                this.frame.add(new GUIComponents(this.frame, null), BorderLayout.NORTH);
+                this.frame.getContentPane().removeAll();
+                this.frame.add(new GUIComponents(this.frame, this.panel), BorderLayout.NORTH);
+                this.frame.add(this.panel, BorderLayout.CENTER);
+                this.panel.removeAll();
+                this.panel.add(new VehiclesPage(this.frame), BorderLayout.CENTER);
                 this.frame.revalidate();
                 this.frame.repaint();
             });
@@ -218,7 +222,7 @@ public class ForgotPasswordPage extends AuthenticationPage {
         linkButton.setContentAreaFilled(false);
         linkButton.setBorder(new EmptyBorder(0, 0, 0, 0));
         linkButton.addActionListener(e -> {
-            this.frame.setContentPane(new SignInPage(this.frame));
+            this.frame.setContentPane(new SignInPage(this.frame, this.panel));
             this.frame.revalidate();
             this.frame.repaint();
         });
