@@ -38,10 +38,10 @@ public class VehiclesPage extends JPanel implements ActionListener{
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error loading images: " + e.getMessage());
         }
-        Image rImage = image.getImage().getScaledInstance(500,500,java.awt.Image.SCALE_SMOOTH);
+        Image rImage = image.getImage().getScaledInstance(400,400,java.awt.Image.SCALE_SMOOTH);
         image = new ImageIcon(rImage);
 
-        JPanel carCards = new JPanel(new GridLayout(0,3,20,15));
+        JPanel carCards = new JPanel(new GridLayout(0,3,50,30));
         carCards.setBackground(Color.WHITE);
 
         //sample details just to show output
@@ -60,6 +60,14 @@ public class VehiclesPage extends JPanel implements ActionListener{
         for (String car : cars){
             carCards.add(createCarCard(image, car, model, transmissions, fuelType, carType,
             seats, price, availability));
+        }
+
+        if (cars.length < 12) {
+            for (int i = cars.length; i < 12; i++) {
+                JPanel emptyPanel = new JPanel();
+                emptyPanel.setPreferredSize(new Dimension(350, 400));
+                carCards.add(emptyPanel);
+            }
         }
 
         return carCards;
@@ -91,31 +99,31 @@ public class VehiclesPage extends JPanel implements ActionListener{
         JPanel carCard = new JPanel();
         carCard.setLayout(new BorderLayout());
         carCard.setBackground(Color.WHITE);
-        carCard.setPreferredSize(new Dimension(100, 500));
-        carCard.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
+        carCard.setPreferredSize(new Dimension(100, 400));
+        carCard.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
         //create buttons on the bottom
         JButton carDetails = new JButton();
-        carDetails.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(10f));
+        carDetails.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
         carDetails.setText("DETAILS");
         carDetails.setFocusable(false);
         carDetails.setBorderPainted(false);
         carDetails.setBackground(Color.BLUE);
         carDetails.setForeground(Color.WHITE);
-        carDetails.setPreferredSize(new Dimension(100, 25));
 
         JButton carRent = new JButton();
-        carRent.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(10f));
+        carRent.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
         carRent.setText("RENT");
         carRent.setFocusable(false);
         carRent.setBorderPainted(false);
         carRent.setBackground(Color.BLUE);
         carRent.setForeground(Color.WHITE);
-        carRent.setPreferredSize(new Dimension(100, 25));
 
-        JPanel buttonPanel = new JPanel(new BorderLayout(1,2));
-        buttonPanel.add(carRent, BorderLayout.NORTH);
-        buttonPanel.add(carDetails, BorderLayout.SOUTH);
+        JPanel buttonPanel = new JPanel(new GridLayout(1,2,10,5));
+        buttonPanel.setPreferredSize(new Dimension(350,50));
+        buttonPanel.setBackground(Color.WHITE);
+        buttonPanel.add(carRent);
+        buttonPanel.add(carDetails);
 
         //car name model and car type on the left and price on the right
         JLabel carName = new JLabel(brand);
@@ -126,7 +134,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
         JLabel carModel = new JLabel(model);
         carModel.setHorizontalTextPosition(JLabel.LEFT);
-        carModel.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(17.5f));
+        carModel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(17.5f));
         carModel.setPreferredSize(new Dimension(50,10));
         carModel.setForeground(Color.BLACK);
 
@@ -150,29 +158,31 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
         JLabel carTypeLabel = new JLabel(carType);
         carTypeLabel.setHorizontalTextPosition(JLabel.LEFT);
-        carTypeLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(12.5f));
+        carTypeLabel.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(12.5f));
         carTypeLabel.setPreferredSize(new Dimension(50,10));
-        carTypeLabel.setForeground(Color.BLACK);
+        carTypeLabel.setForeground(Color.GRAY);
 
-        JPanel carNamePanel = new JPanel(new BorderLayout());
-        carNamePanel.add(carName,BorderLayout.NORTH);
-        carNamePanel.add(carModel,BorderLayout.CENTER);
-        carNamePanel.add(carTypeLabel,BorderLayout.SOUTH);
+        JPanel carNamePanel = new JPanel(new GridLayout(3,1,0,0));
+        carNamePanel.add(carName);
+        carNamePanel.add(carModel);
+        carNamePanel.add(carTypeLabel);
         carNamePanel.setPreferredSize(new Dimension(50,150));
+        carNamePanel.setBackground(Color.WHITE);
         JPanel carRentPriceAvailabilityPanel = new JPanel();
         carRentPriceAvailabilityPanel.add(carRentPrice,BorderLayout.NORTH);
         carRentPriceAvailabilityPanel.add(carAvailability,BorderLayout.SOUTH);
         carRentPriceAvailabilityPanel.setPreferredSize(new Dimension(50,150));
-        carRentPriceAvailabilityPanel.setBackground(Color.CYAN);
+        carRentPriceAvailabilityPanel.setBackground(Color.WHITE);
 
         //container for both details at the center
         JPanel carInfoNameRentPanel = new JPanel(new GridLayout(1,2,5,5));
+        carInfoNameRentPanel.setBackground(Color.WHITE);
         carInfoNameRentPanel.add(carNamePanel);
         carInfoNameRentPanel.add(carRentPriceAvailabilityPanel);
 
         //container for picture at the top
         JLabel carPicture = new JLabel(image);
-        carPicture.setPreferredSize(new Dimension(225,325));
+        carPicture.setPreferredSize(new Dimension(225,225));
         JPanel carPicturePanel = new JPanel(new BorderLayout());
         carPicturePanel.add(carPicture);
 
@@ -182,7 +192,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         seatsLabel.setHorizontalTextPosition(JLabel.RIGHT);
         seatsLabel.setOpaque(true);
         seatsLabel.setBackground(Color.WHITE);
-        seatsLabel.setPreferredSize(new Dimension(95,35));
+        // seatsLabel.setPreferredSize(new Dimension(0,35));
         seatsLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(12.5f));
         seatsLabel.setHorizontalAlignment(JLabel.CENTER);
         JLabel fuelTypeLabel = new JLabel(fuelType);
@@ -190,7 +200,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         fuelTypeLabel.setHorizontalTextPosition(JLabel.RIGHT);
         fuelTypeLabel.setBackground(Color.WHITE);
         fuelTypeLabel.setOpaque(true);
-        fuelTypeLabel.setPreferredSize(new Dimension(95,35));
+        // fuelTypeLabel.setPreferredSize(new Dimension(0,35));
         fuelTypeLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(12.5f));
         fuelTypeLabel.setHorizontalAlignment(JLabel.CENTER);
         JLabel transLabel = new JLabel(transmission);
@@ -198,19 +208,30 @@ public class VehiclesPage extends JPanel implements ActionListener{
         transLabel.setHorizontalTextPosition(JLabel.RIGHT);
         transLabel.setBackground(Color.WHITE);
         transLabel.setOpaque(true);
-        transLabel.setPreferredSize(new Dimension(95,35));
+        //transLabel.setPreferredSize(new Dimension(0,35));
         transLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(12.5f));
         transLabel.setHorizontalAlignment(JLabel.CENTER);
-        JPanel carInfoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,5,2));
-        carInfoPanel.add(transLabel);
-        carInfoPanel.add(fuelTypeLabel);
-        carInfoPanel.add(seatsLabel);
+        JPanel carInfoPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(15, 10, 15, 10);
+        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        carInfoPanel.setBackground(Color.WHITE);
+        carInfoPanel.add(transLabel,gbc);
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        carInfoPanel.add(fuelTypeLabel,gbc);
+        gbc.gridx = 2;
+        gbc.anchor = GridBagConstraints.EAST;
+        carInfoPanel.add(seatsLabel,gbc);
 
         // a container to put every detail and infos
         JPanel carEverythingPanel = new JPanel(new BorderLayout(0,2));
         carEverythingPanel.add(carPicturePanel, BorderLayout.NORTH);
         carEverythingPanel.add(carInfoNameRentPanel, BorderLayout.CENTER);
         carEverythingPanel.add(carInfoPanel,BorderLayout.SOUTH);
+        carEverythingPanel.setBackground(Color.WHITE);
 
         //add the bottom buttons panel and the container for all specific car infos into the main card container
         carCard.add(buttonPanel, BorderLayout.SOUTH);
@@ -285,8 +306,9 @@ public class VehiclesPage extends JPanel implements ActionListener{
         searchButton.setIcon(searchIcon);
         searchButton.setBounds(1175,15,85,50);
         searchButton.setFocusable(false);
-        searchButton.setBackground(Color.CYAN);
+        searchButton.setBackground(Color.WHITE);
         searchButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(12.5f));
+        searchButton.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 
         JLabel sortByLabel = new JLabel("Sort By:");
         sortByLabel.setBounds(1275,15,75,50);
@@ -333,11 +355,11 @@ public class VehiclesPage extends JPanel implements ActionListener{
         }
 
         JLabel brandLabel = new JLabel("Select Brand");
-        brandLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
+        brandLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
 
         brandComboBox = new JComboBox<>(brands);
         brandComboBox.addActionListener(this);
-        brandComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
+        brandComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
         brandComboBox.setPreferredSize(new Dimension(200,30));
 
         JPanel brandFilterPanel = new JPanel(new GridLayout(2,1,0,0));
@@ -346,11 +368,11 @@ public class VehiclesPage extends JPanel implements ActionListener{
         brandFilterPanel.add(brandComboBox);
 
         JLabel modelLabel = new JLabel("Select Model");
-        modelLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
+        modelLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
 
         modelComboBox = new JComboBox<>(models);
         modelComboBox.addActionListener(this);
-        modelComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
+        modelComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
         modelComboBox.setPreferredSize(new Dimension(200,30));
         modelComboBox.setEnabled(false);
 
@@ -360,12 +382,12 @@ public class VehiclesPage extends JPanel implements ActionListener{
         modelFilterPanel.add(modelComboBox);
 
         JLabel yearLabel = new JLabel("Select Year");
-        yearLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
+        yearLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
 
         yearComboBox = new JComboBox<>(year);
         yearComboBox.insertItemAt("ALL", 0);
         yearComboBox.addActionListener(this);
-        yearComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
+        yearComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
         yearComboBox.setPreferredSize(new Dimension(200,30));
         yearComboBox.setSelectedIndex(0);
 
@@ -375,11 +397,11 @@ public class VehiclesPage extends JPanel implements ActionListener{
         yearFilterPanel.add(yearComboBox);
 
         JLabel transLabel = new JLabel("Select Transmission");
-        transLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
+        transLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
 
         transTypeComboBox = new JComboBox<>(transType);
         transTypeComboBox.addActionListener(this);
-        transTypeComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
+        transTypeComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
         transTypeComboBox.setPreferredSize(new Dimension(200,30));
 
         JPanel transFilterPanel = new JPanel(new GridLayout(2,1,0,0));
@@ -388,11 +410,11 @@ public class VehiclesPage extends JPanel implements ActionListener{
         transFilterPanel.add(transTypeComboBox);
 
         JLabel fuelLabel = new JLabel("Select Fuel Type");
-        fuelLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
+        fuelLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
 
         fuelTypeComboBox = new JComboBox<>(fuelType);
         fuelTypeComboBox.addActionListener(this);
-        fuelTypeComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
+        fuelTypeComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
         fuelTypeComboBox.setPreferredSize(new Dimension(200,30));
 
         JPanel fuelFilterPanel = new JPanel(new GridLayout(2,1,0,0));
@@ -401,11 +423,11 @@ public class VehiclesPage extends JPanel implements ActionListener{
         fuelFilterPanel.add(fuelTypeComboBox);
 
         JLabel availabilityLabel = new JLabel("Select Availability");
-        availabilityLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
+        availabilityLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
 
         availabilityComboBox = new JComboBox<>(availability);
         availabilityComboBox.addActionListener(this);
-        availabilityComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
+        availabilityComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
         availabilityComboBox.setPreferredSize(new Dimension(200,30));
 
         JPanel availabilityFilterPanel = new JPanel(new GridLayout(2,1,0,0));
@@ -414,11 +436,11 @@ public class VehiclesPage extends JPanel implements ActionListener{
         availabilityFilterPanel.add(availabilityComboBox);
 
         JLabel carTypeLabel = new JLabel("Select Car Type");
-        carTypeLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
+        carTypeLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
 
         carTypeComboBox = new JComboBox<>(carType);
         carTypeComboBox.addActionListener(this);
-        carTypeComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
+        carTypeComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
         carTypeComboBox.setPreferredSize(new Dimension(200,30));
 
         JPanel carTypeFilterPanel = new JPanel(new GridLayout(2,1,0,0));
@@ -427,14 +449,14 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carTypeFilterPanel.add(carTypeComboBox);
 
         JLabel seatLabel = new JLabel("Seats: ALL");
-        seatLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
+        seatLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
 
         JSlider seatSlider = new JSlider(0,7,0);
         seatSlider.setBackground(Color.WHITE);
         seatSlider.setMajorTickSpacing(1);
         seatSlider.setPaintTicks(true);
         seatSlider.setPaintLabels(true);
-        seatSlider.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
+        seatSlider.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
 
         seatSlider.addChangeListener(e -> {
             int value = seatSlider.getValue();
@@ -451,13 +473,17 @@ public class VehiclesPage extends JPanel implements ActionListener{
         seatFilterPanel.add(seatSlider);
 
         JLabel priceLabel = new JLabel("Price (RM):");
-        priceLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
+        priceLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
 
-        minPriceField = new JTextField("Min", 7);
-        maxPriceField = new JTextField("Max", 7);
+        minPriceField = new JTextField("Min", 4);
+        minPriceField.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(20f));
+        minPriceField.setForeground(Color.GRAY);
+        maxPriceField = new JTextField("Max", 4);
+        maxPriceField.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(20f));
+        maxPriceField.setForeground(Color.GRAY);
 
         // Set the preferred size to control height
-        minPriceField.setPreferredSize(new Dimension(80, 40));
+        minPriceField.setPreferredSize(new Dimension(50, 40));
         minPriceField.addFocusListener(new FocusListener() {
         @Override
             public void focusGained(FocusEvent e) {
@@ -474,7 +500,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
             }
         });
 
-        maxPriceField.setPreferredSize(new Dimension(80, 40));
+        maxPriceField.setPreferredSize(new Dimension(50, 40));
         maxPriceField.addFocusListener(new FocusListener() {
             @Override
                 public void focusGained(FocusEvent e) {
@@ -504,7 +530,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         priceFilterPanel.add(pricePanel);
 
         JPanel leftPanel = new JPanel();
-        leftPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 50));
+        leftPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 25));
         leftPanel.setPreferredSize(new Dimension(300,1600));
         leftPanel.setBackground(Color.WHITE);
         leftPanel.add(brandFilterPanel);
