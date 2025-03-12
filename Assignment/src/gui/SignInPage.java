@@ -73,7 +73,7 @@ public class SignInPage extends AuthenticationPage {
                 this.frame.add(new GUIComponents(this.frame, this.panel), BorderLayout.NORTH);
                 this.frame.add(this.panel, BorderLayout.CENTER);
                 this.panel.removeAll();
-                this.panel.add(new VehiclesPage(this.frame), BorderLayout.CENTER);
+                this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
                 this.frame.revalidate();
                 this.frame.repaint();
             });

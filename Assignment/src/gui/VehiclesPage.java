@@ -112,10 +112,11 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carDetails.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
         carDetails.setText("DETAILS");
         carDetails.setFocusable(false);
-        //carDetails.setBorderPainted(false);
+        carDetails.setBorderPainted(false);
         carDetails.setBorder(BorderFactory.createLineBorder(Color.WHITE,5));
         carDetails.setBackground(Color.BLUE);
         carDetails.setForeground(Color.WHITE);
+        carDetails.setOpaque(true);
         carDetails.addActionListener(e -> {
             if (e.getActionCommand() == "DETAILS"){
                 panel.removeAll();
@@ -129,10 +130,11 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carRent.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
         carRent.setText("RENT");
         carRent.setFocusable(false);
-        //carRent.setBorderPainted(false);
+        carRent.setBorderPainted(false);
         carRent.setBorder(BorderFactory.createLineBorder(Color.WHITE,5));
         carRent.setBackground(Color.BLUE);
         carRent.setForeground(Color.WHITE);
+        carRent.setOpaque(true);
 
         JPanel buttonPanel = new JPanel(new GridLayout(1,2,0,5));
         buttonPanel.setPreferredSize(new Dimension(350,50));
