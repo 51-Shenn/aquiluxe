@@ -78,7 +78,7 @@ public class GUIComponents extends JPanel {
 
         topBarButtons[1].addActionListener(e -> {
             this.panel.removeAll();
-            this.panel.add(new VehiclesPage(this.frame), BorderLayout.CENTER);
+            this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
             this.panel.revalidate();
             this.panel.repaint();
         });

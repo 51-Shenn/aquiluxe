@@ -13,7 +13,12 @@ import java.awt.event.FocusListener;
 
 public class VehiclesPage extends JPanel implements ActionListener{
 
-    public VehiclesPage(JFrame frame) {
+    private final JFrame frame;
+    private final JPanel panel;
+
+    public VehiclesPage(JFrame frame, JPanel panel) {
+        this.frame = frame;
+        this.panel = panel;
         this.setBackground(Color.BLACK);
         this.setLayout(new BorderLayout());
 
@@ -59,7 +64,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
         for (String car : cars){
             carCards.add(createCarCard(image, car, model, transmissions, fuelType, carType,
-            seats, price, availability));
+            seats, price, availability, frame, panel));
         }
 
         if (cars.length < 12) {
@@ -74,7 +79,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
     }
 
     public static JPanel createCarCard(ImageIcon image, String brand, String model, String transmission, String fuelType,
-                                 String carType, int seats, String price, String availability) {
+                                 String carType, int seats, String price, String availability, JFrame frame, JPanel panel) {
 
         ImageIcon transmissionIcon = null;
         ImageIcon fuelIcon = null;
@@ -107,19 +112,29 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carDetails.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
         carDetails.setText("DETAILS");
         carDetails.setFocusable(false);
-        carDetails.setBorderPainted(false);
+        //carDetails.setBorderPainted(false);
+        carDetails.setBorder(BorderFactory.createLineBorder(Color.WHITE,5));
         carDetails.setBackground(Color.BLUE);
         carDetails.setForeground(Color.WHITE);
+        carDetails.addActionListener(e -> {
+            if (e.getActionCommand() == "DETAILS"){
+                panel.removeAll();
+                panel.add(new VehiclesPageDetails(frame, panel), BorderLayout.CENTER);
+                panel.revalidate();
+                panel.repaint();
+            }
+        });
 
         JButton carRent = new JButton();
         carRent.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
         carRent.setText("RENT");
         carRent.setFocusable(false);
-        carRent.setBorderPainted(false);
+        //carRent.setBorderPainted(false);
+        carRent.setBorder(BorderFactory.createLineBorder(Color.WHITE,5));
         carRent.setBackground(Color.BLUE);
         carRent.setForeground(Color.WHITE);
 
-        JPanel buttonPanel = new JPanel(new GridLayout(1,2,10,5));
+        JPanel buttonPanel = new JPanel(new GridLayout(1,2,0,5));
         buttonPanel.setPreferredSize(new Dimension(350,50));
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.add(carRent);

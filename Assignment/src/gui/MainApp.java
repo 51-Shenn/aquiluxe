@@ -18,7 +18,6 @@ public class MainApp extends JFrame {
         setIconImage(carLogoIcon.getImage()); // Window Icon
 
         JPanel contentPanel = new JPanel(new BorderLayout());
-        contentPanel.add(new VehiclesPageDetails(this));
 
         add(new GUIComponents(this, contentPanel), BorderLayout.NORTH);
         add(contentPanel, BorderLayout.CENTER);
