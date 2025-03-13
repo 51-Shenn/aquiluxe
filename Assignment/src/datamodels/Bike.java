@@ -3,6 +3,7 @@ package datamodels;
 public class Bike extends Vehicle {
 
     private String bikeType;
+
     // Default Constructor
     public Bike() {
         super();
@@ -19,11 +20,11 @@ public class Bike extends Vehicle {
     }
 
     // Getter and Setters
-    public String getCarType() {
+    public String getBikeType() {
         return bikeType;
     }
 
-    public void setCarType(String bikeType) {
+    public void setBikeType(String bikeType) {
         this.bikeType = bikeType;
     }
 }
