@@ -1,5 +1,7 @@
 package gui;
 
+import datamodels.User;
+
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
@@ -103,6 +105,7 @@ public class GUIComponents extends JPanel {
     }
 
     private JButton menuButton() {
+        User guest = new User();
         File kebabMenu = new File("images/icons/kebab-menu.png");
 
         if (!kebabMenu.exists())
@@ -121,7 +124,7 @@ public class GUIComponents extends JPanel {
 //            frame.validate();
 
                 if (overflowMenu == null) {
-                    overflowMenu = new OverflowMenu(this.frame, this.panel);
+                    overflowMenu = new OverflowMenu(this.frame, this.panel, guest);
                     this.frame.getLayeredPane().add(overflowMenu, JLayeredPane.POPUP_LAYER);
                     overflowMenu.setBounds(this.frame.getWidth() - (overflowMenu.MENU_WIDTH + 20), 85, overflowMenu.MENU_WIDTH, overflowMenu.MENU_HEIGHT);
                 } else {

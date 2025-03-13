@@ -1,5 +1,7 @@
 package gui;
 
+import datamodels.User;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -9,12 +11,14 @@ public class OverflowMenu extends JLayeredPane {
 
     private final JFrame frame;
     private final JPanel panel;
+    private User user;
     public final int MENU_WIDTH;
     public final int MENU_HEIGHT;
 
-    public OverflowMenu(JFrame frame, JPanel panel) {
+    public OverflowMenu(JFrame frame, JPanel panel, User user) {
         this.frame = frame;
         this.panel = panel;
+        this.user = user;
         MENU_WIDTH = 400;
         MENU_HEIGHT = 600;
         add(createOverflowMenu(), JLayeredPane.POPUP_LAYER);
@@ -54,8 +58,14 @@ public class OverflowMenu extends JLayeredPane {
         panel.add(createProfileCard(), gbc);
         panel.add(createMenuCard("Theme", sunMoonFilePath), gbc);
         panel.add(createMenuCard("Switch Account", switchFilePath), gbc);
-        panel.add(createMenuCard("Sign In", signInFilePath), gbc);
-        panel.add(createMenuCard("Sign Out", signOutFilePath), gbc);
+
+        if (this.user.getFullName().equals("Guest") && this.user.getUsername().equals("guest")) {
+            panel.add(createMenuCard("Sign In", signInFilePath), gbc);
+        }
+        else {
+            panel.add(createMenuCard("Sign Out", signOutFilePath), gbc);
+        }
+
         panel.add(createMenuCard("Close / Exit", roundCloseFilePath), gbc);
 
         return panel;
@@ -81,11 +91,11 @@ public class OverflowMenu extends JLayeredPane {
         JLabel profileIcon = new JLabel();
         profileIcon.setIcon(genderIcon);
 
-        JLabel nameLabel = new JLabel("John Smith");
+        JLabel nameLabel = new JLabel(this.user.getFullName());
         nameLabel.setFont(CustomFonts.OPEN_SANS_EXTRA_BOLD.deriveFont(30f));
         nameLabel.setForeground(Color.BLACK);
 
-        JLabel usernameLabel = new JLabel("@johnsmith5464");
+        JLabel usernameLabel = new JLabel("@" + this.user.getUsername());
         usernameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
         usernameLabel.setForeground(Color.GRAY);
 
@@ -140,7 +150,6 @@ public class OverflowMenu extends JLayeredPane {
         button.setHorizontalAlignment(SwingConstants.LEFT);
         button.setBackground(Color.WHITE);
         button.setBorder(new EmptyBorder(0, 50, 0, 0));
-//        button.setBackground(new Color(255, 255, 255, 30));
         button.setForeground(Color.BLACK);
         button.setFont(CustomFonts.ROBOTO_BLACK.deriveFont(20f));
         button.setPreferredSize(new Dimension(MENU_WIDTH, 70));
@@ -153,6 +162,11 @@ public class OverflowMenu extends JLayeredPane {
                 frame.getContentPane().removeAll();
                 frame.add(new SignInPage(this.frame, this.panel));
                 frame.validate();
+            });
+        }
+        if(text.equals("Close / Exit")) {
+            button.addActionListener(e -> {
+                frame.dispose();
             });
         }
 

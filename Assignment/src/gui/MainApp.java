@@ -1,5 +1,7 @@
 package gui;
 
+import datamodels.User;
+
 import javax.swing.*;
 import java.awt.*;
 

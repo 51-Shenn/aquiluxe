@@ -18,6 +18,8 @@ public class User {
 
     // Default Constructor : for subclassing
     public User() {
+        this.fullName = "Guest";
+        this.username = "guest";
     }
 
     // Parameterized Constructor
