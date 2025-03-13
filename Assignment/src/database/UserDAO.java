@@ -4,8 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import datamodels.User;
 
 public class UserDAO {
@@ -94,9 +93,9 @@ public class UserDAO {
     }
 
     // get all users
-    public List<User> getAllUsers() {
+    public HashMap<Integer, User> getAllUsers() {
         String sql = "SELECT * FROM users";
-        List<User> users = new ArrayList<>();
+        HashMap<Integer, User> users = new HashMap<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql);
@@ -104,7 +103,7 @@ public class UserDAO {
 
             while (rs.next()) {
                 User user = mapResultUser(rs);
-                users.add(user);
+                users.put(user.getUserId(), user);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -136,9 +135,9 @@ public class UserDAO {
     }
 
     // filter users with value of column
-    public List<User> filterUsersByColumn(String column, String value) {
+    public HashMap<Integer, User> filterUsersByColumn(String column, String value) {
         String sql = "SELECT * FROM users WHERE " + column + " = ?";
-        List<User> users = new ArrayList<>();
+        HashMap<Integer, User> users = new HashMap<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -148,7 +147,7 @@ public class UserDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     User user = mapResultUser(rs);
-                    users.add(user);
+                    users.put(user.getUserId(), user);
                 }
             }
         } catch (SQLException e) {
@@ -159,9 +158,9 @@ public class UserDAO {
     }
 
     // search user by keywords
-    public List<User> searchUsersByKeyword(String column, String keyword) {
+    public HashMap<Integer, User> searchUsersByKeyword(String column, String keyword) {
         String sql = "SELECT * FROM users WHERE " + column + " LIKE ?";
-        List<User> users = new ArrayList<>();
+        HashMap<Integer, User> users = new HashMap<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -171,7 +170,7 @@ public class UserDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     User user = mapResultUser(rs);
-                    users.add(user);
+                    users.put(user.getUserId(), user);
                 }
             }
         } catch (SQLException e) {
