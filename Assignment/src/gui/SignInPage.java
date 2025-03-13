@@ -69,10 +69,11 @@ public class SignInPage extends AuthenticationPage {
             closeButton.setFocusPainted(false);
             closeButton.addActionListener(e -> {
                 this.frame.getContentPane().removeAll();
+                this.frame.setLayout(new BorderLayout());
                 this.frame.add(new GUIComponents(this.frame, this.panel), BorderLayout.NORTH);
                 this.frame.add(this.panel, BorderLayout.CENTER);
                 this.panel.removeAll();
-                this.panel.add(new VehiclesPage(this.frame), BorderLayout.CENTER);
+                this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
                 this.frame.revalidate();
                 this.frame.repaint();
             });
