@@ -2,6 +2,7 @@ package services;
 
 import datamodels.User;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -80,7 +81,7 @@ public class UserService {
         String userPassword = new String(password);
         if(isValidPassword) {
             for(User user : User.users.values()) {
-                if((user.getUserEmail().equals(email) || user.getUsername().equals(email) && user.getPhoneNumber().equals(phone))) {
+                if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPhoneNumber().equals(phone)) {
                     user.setPassword(userPassword);
                     User.displayUsers();
                     return true;
@@ -119,6 +120,19 @@ public class UserService {
         emailValidationLabel.setText("Wrong email address or password.");
         passwordValidationLabel.setText("Wrong email address or password.");
         return false;
+    }
+
+    public static User signInUser(String email, char[] password, JLabel emailValidationLabel, JLabel passwordValidationLabel) {
+        String userPassword = new String(password);
+        boolean isValidSignIn = validateSignInDetails(email, password, emailValidationLabel, passwordValidationLabel);
+
+        if(isValidSignIn) {
+            for(User user : User.users.values()) {
+                if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPassword().equals(userPassword))
+                    return user;
+            }
+        }
+        return new User();
     }
 
     private static String capitalizeFullName(String fullName) {

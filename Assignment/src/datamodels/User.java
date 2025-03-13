@@ -20,6 +20,7 @@ public class User {
     public User() {
         this.fullName = "Guest";
         this.username = "guest";
+        this.gender = "Male";
     }
 
     // Parameterized Constructor

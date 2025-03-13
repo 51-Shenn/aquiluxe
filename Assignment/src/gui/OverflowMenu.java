@@ -57,13 +57,13 @@ public class OverflowMenu extends JLayeredPane {
 
         panel.add(createProfileCard(), gbc);
         panel.add(createMenuCard("Theme", sunMoonFilePath), gbc);
-        panel.add(createMenuCard("Switch Account", switchFilePath), gbc);
 
         if (this.user.getFullName().equals("Guest") && this.user.getUsername().equals("guest")) {
-            panel.add(createMenuCard("Sign In", signInFilePath), gbc);
+            panel.add(createMenuCard("Sign Up / Sign In", signInFilePath), gbc);
         }
         else {
             panel.add(createMenuCard("Sign Out", signOutFilePath), gbc);
+            panel.add(createMenuCard("Switch Account", switchFilePath), gbc);
         }
 
         panel.add(createMenuCard("Close / Exit", roundCloseFilePath), gbc);
@@ -87,7 +87,12 @@ public class OverflowMenu extends JLayeredPane {
         if(!maleFilePath.exists() || !femaleFilePath.exists() || !editFilePath.exists())
             JOptionPane.showMessageDialog(null, "Failed to load image:\n" + maleFilePath + "\n" + femaleFilePath + "\n" + editFilePath);
 
-        ImageIcon genderIcon = new ImageIcon(maleFilePath.toString());
+        ImageIcon genderIcon;
+        if(this.user.getGender().equals("Male"))
+            genderIcon = new ImageIcon(maleFilePath.toString());
+        else
+            genderIcon = new ImageIcon(femaleFilePath.toString());
+
         JLabel profileIcon = new JLabel();
         profileIcon.setIcon(genderIcon);
 
@@ -156,12 +161,21 @@ public class OverflowMenu extends JLayeredPane {
         button.setFocusPainted(false);
         button.setBorderPainted(false);
 
-        if(text.equals("Sign In")) {
+        if(text.equals("Sign Up / Sign In")) {
             button.addActionListener(e -> {
                 frame.getLayeredPane().remove(this);
                 frame.getContentPane().removeAll();
-                frame.add(new SignInPage(this.frame, this.panel));
+                frame.add(new SignUpPage(this.frame, this.panel, this.user));
                 frame.validate();
+            });
+        }
+        if(text.equals("Sign Out")) {
+            button.addActionListener(e -> {
+                frame.getLayeredPane().remove(this);
+                GUIComponents.overflowMenu = null;
+                this.user = new User();
+                frame.revalidate();
+                frame.repaint();
             });
         }
         if(text.equals("Close / Exit")) {

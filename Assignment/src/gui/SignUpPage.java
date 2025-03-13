@@ -1,6 +1,7 @@
 package gui;
 
 import controllers.UserController;
+import datamodels.User;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -13,6 +14,7 @@ public class SignUpPage extends AuthenticationPage {
 
     private final JFrame frame;
     private final JPanel panel;
+    private User user;
     private JTextField fullNameInput;
     private String genderInput;
     private JPasswordField passwordInput;
@@ -24,9 +26,10 @@ public class SignUpPage extends AuthenticationPage {
     private JLabel passwordValidationLabel;
     private JLabel confirmPasswordValidationLabel;
 
-    public SignUpPage(JFrame frame, JPanel panel) {
+    public SignUpPage(JFrame frame, JPanel panel, User user) {
         this.frame = frame;
         this.panel = panel;
+        this.user = user;
     }
 
     @Override
@@ -79,7 +82,7 @@ public class SignUpPage extends AuthenticationPage {
             closeButton.addActionListener(e -> {
                 this.frame.getContentPane().removeAll();
                 this.frame.setLayout(new BorderLayout());
-                this.frame.add(new GUIComponents(this.frame, this.panel), BorderLayout.NORTH);
+                this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
                 this.frame.add(this.panel, BorderLayout.CENTER);
                 this.panel.removeAll();
                 this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
@@ -252,7 +255,7 @@ public class SignUpPage extends AuthenticationPage {
         linkButton.setBorder(new EmptyBorder(0, 0, 0, 0));
         linkButton.setHorizontalAlignment(SwingConstants.LEFT);
         linkButton.addActionListener(e -> {
-            this.frame.setContentPane(new SignInPage(this.frame, this.panel));
+            this.frame.setContentPane(new SignInPage(this.frame, this.panel, this.user));
             this.frame.revalidate();
             this.frame.repaint();
         });
@@ -287,7 +290,7 @@ public class SignUpPage extends AuthenticationPage {
                     currentPage = "USER";
                     JPanel newContentPane = new JPanel(new BorderLayout());
                     this.frame.setContentPane(newContentPane);
-                    this.frame.add(new GUIComponents(this.frame, this.panel), BorderLayout.NORTH);
+                    this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
                     this.frame.validate();
                 }
             }

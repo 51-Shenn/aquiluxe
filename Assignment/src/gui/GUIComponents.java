@@ -11,11 +11,13 @@ public class GUIComponents extends JPanel {
 
     private final JFrame frame;
     private final JPanel panel;
-    private OverflowMenu overflowMenu;
+    private User user;
+    public static OverflowMenu overflowMenu;
 
-    public GUIComponents(JFrame frame, JPanel panel) {
+    public GUIComponents(JFrame frame, JPanel panel, User user) {
         this.frame = frame;
         this.panel = panel;
+        this.user = user;
         setBackground(Color.WHITE);
         setPreferredSize(new Dimension(frame.getWidth(), 80));
         setLayout(new BorderLayout());
@@ -107,8 +109,9 @@ public class GUIComponents extends JPanel {
     }
 
     private JButton menuButton() {
-        User guest = new User();
         File kebabMenu = new File("images/icons/kebab-menu.png");
+
+        if(this.user == null) this.user = new User();
 
         if (!kebabMenu.exists())
             JOptionPane.showMessageDialog(null, "Failed to load image:\n" + kebabMenu);
@@ -121,12 +124,8 @@ public class GUIComponents extends JPanel {
             menu.setFocusPainted(false);
             menu.setBackground(Color.WHITE);
             menu.addActionListener(e -> {
-//            frame.getContentPane().removeAll();
-//            frame.add(new SignInPage(this.frame));
-//            frame.validate();
-
                 if (overflowMenu == null) {
-                    overflowMenu = new OverflowMenu(this.frame, this.panel, guest);
+                    overflowMenu = new OverflowMenu(this.frame, this.panel, this.user);
                     this.frame.getLayeredPane().add(overflowMenu, JLayeredPane.POPUP_LAYER);
                     overflowMenu.setBounds(this.frame.getWidth() - (overflowMenu.MENU_WIDTH + 20), 85, overflowMenu.MENU_WIDTH, overflowMenu.MENU_HEIGHT);
                 } else {
