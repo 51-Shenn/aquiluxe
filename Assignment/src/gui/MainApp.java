@@ -6,12 +6,12 @@ import java.awt.*;
 public class MainApp extends JFrame {
 
     public MainApp() {
-        // try {
-        //     // Set the Windows Look and Feel
-        //     UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
+         try {
+             // Set the Windows Look and Feel
+             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
         // Initialize frame
         setTitle("AQUILUXE");
         setLayout(new BorderLayout());

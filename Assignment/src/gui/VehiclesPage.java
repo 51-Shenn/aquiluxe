@@ -105,7 +105,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carCard.setLayout(new BorderLayout());
         carCard.setBackground(Color.WHITE);
         carCard.setPreferredSize(new Dimension(100, 400));
-        carCard.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        carCard.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0, 35), 3));
 
         //create buttons on the bottom
         JButton carDetails = new JButton();
@@ -118,7 +118,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carDetails.setForeground(Color.WHITE);
         carDetails.setOpaque(true);
         carDetails.addActionListener(e -> {
-            if (e.getActionCommand() == "DETAILS"){
+            if (e.getActionCommand().equals("DETAILS")){
                 panel.removeAll();
                 panel.add(new VehiclesPageDetails(frame, panel), BorderLayout.CENTER);
                 panel.revalidate();
