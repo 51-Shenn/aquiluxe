@@ -6,6 +6,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -114,7 +116,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carDetails.setText("DETAILS");
         carDetails.setFocusable(false);
         carDetails.setBorderPainted(false);
-        carDetails.setBorder(BorderFactory.createLineBorder(Color.WHITE,5));
+        carDetails.setContentAreaFilled(false);
         carDetails.setBackground(Color.BLUE);
         carDetails.setForeground(Color.WHITE);
         carDetails.setOpaque(true);
@@ -126,16 +128,51 @@ public class VehiclesPage extends JPanel implements ActionListener{
                 panel.repaint();
             }
         });
+        carDetails.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                carDetails.setBackground(Color.BLUE.darker());
+            }
+        
+            public void mouseExited(MouseEvent evt) {
+                carDetails.setBackground(Color.BLUE);
+            }
+        
+            public void mousePressed(MouseEvent evt) {
+                carDetails.setBackground(Color.CYAN);
+            }
+        
+            public void mouseReleased(MouseEvent evt) {
+                carDetails.setBackground(Color.BLUE);
+            }
+        });
 
         JButton carRent = new JButton();
         carRent.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
         carRent.setText("RENT");
         carRent.setFocusable(false);
         carRent.setBorderPainted(false);
-        carRent.setBorder(BorderFactory.createLineBorder(Color.WHITE,5));
+        carRent.setContentAreaFilled(false);
         carRent.setBackground(Color.BLUE);
         carRent.setForeground(Color.WHITE);
         carRent.setOpaque(true);
+
+        carRent.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                carRent.setBackground(Color.BLUE.darker());
+            }
+        
+            public void mouseExited(MouseEvent evt) {
+                carRent.setBackground(Color.BLUE);
+            }
+        
+            public void mousePressed(MouseEvent evt) {
+                carRent.setBackground(Color.CYAN);
+            }
+        
+            public void mouseReleased(MouseEvent evt) {
+                carRent.setBackground(Color.BLUE);
+            }
+        });
 
         JPanel buttonPanel = new JPanel(new GridLayout(1,2,0,5));
         buttonPanel.setPreferredSize(new Dimension(350,50));
@@ -339,14 +376,57 @@ public class VehiclesPage extends JPanel implements ActionListener{
         sortComboBox.setBounds(1450,25,150,50);
         sortComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
 
+        ImageIcon deleteIcon = new ImageIcon("images/vehiclepageicons/delete.png");
+        ImageIcon addIcon = new ImageIcon("images/vehiclepageicons/add.png");
+
         JPanel adminButtons = new JPanel(new GridLayout(1,2,0,0));
         adminButtons.setBounds(1660,25,200,50);
-        JButton deleteButton = new JButton();
+        JButton deleteButton = new JButton(deleteIcon);
         deleteButton.setBackground(Color.RED);
         deleteButton.setOpaque(true);
-        JButton addButton = new JButton();
+        deleteButton.setFocusable(false);
+        deleteButton.setContentAreaFilled(true);
+        deleteButton.setBorderPainted(false);
+        deleteButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                deleteButton.setBackground(Color.RED.darker());
+            }
+        
+            public void mouseExited(MouseEvent evt) {
+                deleteButton.setBackground(Color.RED);
+            }
+        
+            public void mousePressed(MouseEvent evt) {
+                deleteButton.setBackground(Color.ORANGE);
+            }
+        
+            public void mouseReleased(MouseEvent evt) {
+                deleteButton.setBackground(Color.RED);
+            }
+        });
+        JButton addButton = new JButton(addIcon);
         addButton.setBackground(Color.GREEN);
         addButton.setOpaque(true);
+        addButton.setFocusable(false);
+        addButton.setContentAreaFilled(true);
+        addButton.setBorderPainted(false);
+        addButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                addButton.setBackground(Color.GREEN.darker());
+            }
+        
+            public void mouseExited(MouseEvent evt) {
+                addButton.setBackground(Color.GREEN);
+            }
+        
+            public void mousePressed(MouseEvent evt) {
+                addButton.setBackground(Color.YELLOW);
+            }
+        
+            public void mouseReleased(MouseEvent evt) {
+                addButton.setBackground(Color.GREEN);
+            }
+        });
 
         adminButtons.add(deleteButton);
         adminButtons.add(addButton);
@@ -484,6 +564,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         seatLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
 
         JSlider seatSlider = new JSlider(0,7,0);
+        seatSlider.setFocusable(false);
         seatSlider.setBackground(Color.WHITE);
         seatSlider.setMajorTickSpacing(1);
         seatSlider.setPaintTicks(true);
