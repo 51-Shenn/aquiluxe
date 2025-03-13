@@ -289,10 +289,10 @@ public class SignUpPage extends AuthenticationPage {
                 isValidUserDetails = UserController.passNewUserDetails(fullNameInput.getText(), genderInput, emailInput.getText(), phoneInput.getText(), passwordInput.getPassword(), confirmPasswordInput.getPassword(), fullNameValidationLabel, genderValidationLabel, emailValidationLabel, phoneValidationLabel, passwordValidationLabel, confirmPasswordValidationLabel);
                 if(isValidUserDetails) {
                     currentPage = "USER";
-                    JPanel newContentPane = new JPanel(new BorderLayout());
-                    this.frame.setContentPane(newContentPane);
-                    GUIComponents.overflowMenu = null;
-                    this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+//                    JPanel newContentPane = new JPanel(new BorderLayout());
+                    this.frame.setContentPane(new SignInPage(this.frame, this.panel, this.user));
+//                    GUIComponents.overflowMenu = null;
+//                    this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
                     this.frame.validate();
                 }
             }
