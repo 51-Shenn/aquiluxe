@@ -6,7 +6,19 @@ import java.awt.*;
 public class MainApp extends JFrame {
 
     public MainApp() {
+         try {
+             // Set the Windows Look and Feel
+             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
         // Initialize frame
+        // try {
+        //     UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        //     SwingUtilities.updateComponentTreeUI(frame);
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
         setTitle("AQUILUXE");
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(1280, 720));
@@ -18,7 +30,6 @@ public class MainApp extends JFrame {
         setIconImage(carLogoIcon.getImage()); // Window Icon
 
         JPanel contentPanel = new JPanel(new BorderLayout());
-        contentPanel.add(new VehiclesPageDetails(this));
 
         add(new GUIComponents(this, contentPanel), BorderLayout.NORTH);
         add(contentPanel, BorderLayout.CENTER);

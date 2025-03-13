@@ -15,6 +15,7 @@ public class Car extends Vehicle {
             boolean availability, String features) {
         super(vehicleId, imagePath, brand, model, year, capacity, horsepower, color, mpg, vinNumber, registrationNumber,
                 rentalPriceDay, transmission, fuelType, seatingCapacity, availability, features);
+        this.carType = carType;
     }
 
     // Getter and Setters

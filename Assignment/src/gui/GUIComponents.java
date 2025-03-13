@@ -3,6 +3,7 @@ package gui;
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 public class GUIComponents extends JPanel {
 
@@ -16,6 +17,7 @@ public class GUIComponents extends JPanel {
         setBackground(Color.WHITE);
         setPreferredSize(new Dimension(frame.getWidth(), 80));
         setLayout(new BorderLayout());
+        setBorder(new LineBorder(new Color(0, 0, 0, 30), 1));
 
         add(createTopBar(), BorderLayout.WEST);
         add(menuButton(), BorderLayout.EAST);
@@ -76,7 +78,7 @@ public class GUIComponents extends JPanel {
 
         topBarButtons[1].addActionListener(e -> {
             this.panel.removeAll();
-            this.panel.add(new VehiclesPage(this.frame), BorderLayout.CENTER);
+            this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
             this.panel.revalidate();
             this.panel.repaint();
         });
@@ -103,6 +105,7 @@ public class GUIComponents extends JPanel {
     }
 
     private JButton menuButton() {
+
         File kebabMenu = new File("images/icons/kebab-menu.png");
 
         if (!kebabMenu.exists())
