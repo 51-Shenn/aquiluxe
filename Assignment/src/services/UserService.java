@@ -122,16 +122,14 @@ public class UserService {
         return false;
     }
 
-    public static User signInUser(String email, char[] password, JLabel emailValidationLabel, JLabel passwordValidationLabel) {
+    public static User signInUser(String email, char[] password) {
         String userPassword = new String(password);
-        boolean isValidSignIn = validateSignInDetails(email, password, emailValidationLabel, passwordValidationLabel);
 
-        if(isValidSignIn) {
-            for(User user : User.users.values()) {
-                if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPassword().equals(userPassword))
-                    return user;
-            }
+        for(User user : User.users.values()) {
+            if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPassword().equals(userPassword))
+                return user;
         }
+
         return new User();
     }
 

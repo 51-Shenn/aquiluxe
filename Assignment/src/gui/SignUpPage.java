@@ -82,10 +82,11 @@ public class SignUpPage extends AuthenticationPage {
             closeButton.addActionListener(e -> {
                 this.frame.getContentPane().removeAll();
                 this.frame.setLayout(new BorderLayout());
+                GUIComponents.overflowMenu = null;
                 this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
                 this.frame.add(this.panel, BorderLayout.CENTER);
                 this.panel.removeAll();
-                this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
+//                this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
                 this.frame.revalidate();
                 this.frame.repaint();
             });
@@ -290,6 +291,7 @@ public class SignUpPage extends AuthenticationPage {
                     currentPage = "USER";
                     JPanel newContentPane = new JPanel(new BorderLayout());
                     this.frame.setContentPane(newContentPane);
+                    GUIComponents.overflowMenu = null;
                     this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
                     this.frame.validate();
                 }

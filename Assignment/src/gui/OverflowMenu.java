@@ -4,6 +4,7 @@ import datamodels.User;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.io.File;
 
@@ -35,8 +36,8 @@ public class OverflowMenu extends JLayeredPane {
     private JPanel createMainCard() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBounds(0, 0, MENU_WIDTH, MENU_HEIGHT);
-        panel.setBackground(Color.LIGHT_GRAY);
-//        panel.setBackground(new Color(255, 255, 255, 50));
+        panel.setBackground(new Color(0, 0, 0, 40));
+        panel.setBorder(new LineBorder(new Color(0, 0, 0, 60), 1));
 
         File sunFilePath = new File("images/icons/sun.png");
         File moonFilePath = new File("images/icons/moon.png");
@@ -53,17 +54,18 @@ public class OverflowMenu extends JLayeredPane {
         gbc.weighty = 1;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.insets = new Insets(2, 0, 0, 0);
+        gbc.insets = new Insets(1, 0, 0, 0);
 
         panel.add(createProfileCard(), gbc);
-        panel.add(createMenuCard("Theme", sunMoonFilePath), gbc);
 
         if (this.user.getFullName().equals("Guest") && this.user.getUsername().equals("guest")) {
-            panel.add(createMenuCard("Sign Up / Sign In", signInFilePath), gbc);
+            panel.add(createMenuCard("Sign Up", signInFilePath), gbc);
+            panel.add(createMenuCard("Sign In", signInFilePath), gbc);
         }
         else {
-            panel.add(createMenuCard("Sign Out", signOutFilePath), gbc);
+            panel.add(createMenuCard("Theme", sunMoonFilePath), gbc);
             panel.add(createMenuCard("Switch Account", switchFilePath), gbc);
+            panel.add(createMenuCard("Sign Out", signOutFilePath), gbc);
         }
 
         panel.add(createMenuCard("Close / Exit", roundCloseFilePath), gbc);
@@ -161,7 +163,7 @@ public class OverflowMenu extends JLayeredPane {
         button.setFocusPainted(false);
         button.setBorderPainted(false);
 
-        if(text.equals("Sign Up / Sign In")) {
+        if(text.equals("Sign Up")) {
             button.addActionListener(e -> {
                 frame.getLayeredPane().remove(this);
                 frame.getContentPane().removeAll();
@@ -169,10 +171,17 @@ public class OverflowMenu extends JLayeredPane {
                 frame.validate();
             });
         }
+        if(text.equals("Sign In") || text.equals("Switch Account")) {
+            button.addActionListener(e -> {
+                frame.getLayeredPane().remove(this);
+                frame.getContentPane().removeAll();
+                frame.add(new SignInPage(this.frame, this.panel, this.user));
+                frame.validate();
+            });
+        }
         if(text.equals("Sign Out")) {
             button.addActionListener(e -> {
                 frame.getLayeredPane().remove(this);
-                GUIComponents.overflowMenu = null;
                 this.user = new User();
                 frame.revalidate();
                 frame.repaint();

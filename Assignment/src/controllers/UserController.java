@@ -25,12 +25,12 @@ public class UserController {
         return UserService.validateForgotPasswordDetails(email, phone, password, confirmPassword, passwordValidationLabel, confirmPasswordValidationLabel);
     }
 
-    // method calling for SignInPage
-//    public static boolean passSignInDetails(String email, char[] password, JLabel emailValidationLabel, JLabel passwordValidationLabel) {
-//        return UserService.validateSignInDetails(email, password, emailValidationLabel, passwordValidationLabel);
-//    }
-    public static User passSignInDetails(String email, char[] password, JLabel emailValidationLabel, JLabel passwordValidationLabel) {
-        return UserService.signInUser(email, password, emailValidationLabel, passwordValidationLabel);
+    // method overloading for SignInPage
+    public static boolean passSignInDetails(String email, char[] password, JLabel emailValidationLabel, JLabel passwordValidationLabel) {
+        return UserService.validateSignInDetails(email, password, emailValidationLabel, passwordValidationLabel);
+    }
+    public static User passSignInDetails(String email, char[] password) {
+        return UserService.signInUser(email, password);
     }
 
 }

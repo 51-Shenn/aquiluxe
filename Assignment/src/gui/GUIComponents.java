@@ -127,7 +127,7 @@ public class GUIComponents extends JPanel {
                 if (overflowMenu == null) {
                     overflowMenu = new OverflowMenu(this.frame, this.panel, this.user);
                     this.frame.getLayeredPane().add(overflowMenu, JLayeredPane.POPUP_LAYER);
-                    overflowMenu.setBounds(this.frame.getWidth() - (overflowMenu.MENU_WIDTH + 20), 85, overflowMenu.MENU_WIDTH, overflowMenu.MENU_HEIGHT);
+                    overflowMenu.setBounds(this.frame.getWidth() - (overflowMenu.MENU_WIDTH + 35), 90, overflowMenu.MENU_WIDTH, overflowMenu.MENU_HEIGHT);
                 } else {
                     this.frame.getLayeredPane().remove(overflowMenu);
                     overflowMenu = null;

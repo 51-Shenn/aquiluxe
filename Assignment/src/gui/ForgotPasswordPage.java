@@ -62,29 +62,6 @@ public class ForgotPasswordPage extends AuthenticationPage {
         titleLabel.setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(55f));
         titleLabel.setForeground(Color.BLACK);
 
-        JButton closeButton = new JButton();
-        File closeImage = new File("images/icons/close.png");
-        if (!closeImage.exists()) {
-            JOptionPane.showMessageDialog(null, "Failed to load image:\n" + closeImage + "\n");
-        } else {
-            ImageIcon closeIcon = new ImageIcon(closeImage.toString());
-            closeButton.setPreferredSize(new Dimension(50, 50));
-            closeButton.setBackground(Color.WHITE);
-            closeButton.setIcon(closeIcon);
-            closeButton.setBorderPainted(false);
-            closeButton.setContentAreaFilled(false);
-            closeButton.setFocusPainted(false);
-            closeButton.addActionListener(e -> {
-                this.frame.getContentPane().removeAll();
-                this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
-                this.frame.add(this.panel, BorderLayout.CENTER);
-                this.panel.removeAll();
-                this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
-                this.frame.revalidate();
-                this.frame.repaint();
-            });
-        }
-
         titleContainer.add(titleLabel);
 
         return titleContainer;
