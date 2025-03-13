@@ -300,6 +300,10 @@ public class VehiclesPageDetails extends JPanel {
         rentPanel.setPreferredSize(new Dimension(250,100));
         JButton rentButton = new JButton("RENT");
         rentButton.setBounds(0,0,250,75);
+        rentButton.setBackground(Color.BLUE);
+        rentButton.setForeground(Color.WHITE);
+        rentButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
+        rentButton.setFocusable(false);
         rentPanel.add(rentButton);
         buttonsPanel.add(rentPanel, BorderLayout.EAST);
 
@@ -308,6 +312,7 @@ public class VehiclesPageDetails extends JPanel {
         showMorePanel.setPreferredSize(new Dimension(200,100));
         JButton showMoreButton = new JButton("Show More");
         showMoreButton.setBounds(0,25,200,50);
+        showMoreButton.setBackground(Color.WHITE);
         showMoreButton.addActionListener(e -> {
             if (e.getActionCommand().equals("Show More") || e.getActionCommand().equals("Hide")) {
                 if (isFeaturesVisible) {
@@ -392,8 +397,17 @@ public class VehiclesPageDetails extends JPanel {
         JLabel otherCarsLabel = new JLabel("Other Cars");
         otherCarsLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(35f));
         JButton viewAllButton = new JButton("View All");
-        viewAllButton.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(20f));
+        viewAllButton.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(25f));
         viewAllButton.setPreferredSize(new Dimension(150,50));
+        viewAllButton.setBackground(Color.WHITE);
+        viewAllButton.addActionListener(e -> {
+            if (e.getActionCommand().equals("View All")){
+                panel.removeAll();
+                panel.add(new VehiclesPage(frame, panel), BorderLayout.CENTER);
+                panel.revalidate();
+                panel.repaint();
+            }
+        });
         otherCarsTitlePanel.add(otherCarsLabel,BorderLayout.WEST);
         otherCarsTitlePanel.add(viewAllButton,BorderLayout.EAST);
         

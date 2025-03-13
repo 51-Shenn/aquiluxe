@@ -105,6 +105,7 @@ public class GUIComponents extends JPanel {
     }
 
     private JButton menuButton() {
+
         File kebabMenu = new File("images/icons/kebab-menu.png");
 
         if (!kebabMenu.exists())

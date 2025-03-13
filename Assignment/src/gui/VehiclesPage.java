@@ -17,6 +17,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
     private final JPanel panel;
 
     public VehiclesPage(JFrame frame, JPanel panel) {
+        
         this.frame = frame;
         this.panel = panel;
         this.setBackground(Color.BLACK);
@@ -118,7 +119,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carDetails.setForeground(Color.WHITE);
         carDetails.setOpaque(true);
         carDetails.addActionListener(e -> {
-            if (e.getActionCommand() == "DETAILS"){
+            if (e.getActionCommand().equals("DETAILS")){
                 panel.removeAll();
                 panel.add(new VehiclesPageDetails(frame, panel), BorderLayout.CENTER);
                 panel.revalidate();
@@ -338,11 +339,24 @@ public class VehiclesPage extends JPanel implements ActionListener{
         sortComboBox.setBounds(1450,25,150,50);
         sortComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
 
+        JPanel adminButtons = new JPanel(new GridLayout(1,2,0,0));
+        adminButtons.setBounds(1660,25,200,50);
+        JButton deleteButton = new JButton();
+        deleteButton.setBackground(Color.RED);
+        deleteButton.setOpaque(true);
+        JButton addButton = new JButton();
+        addButton.setBackground(Color.GREEN);
+        addButton.setOpaque(true);
+
+        adminButtons.add(deleteButton);
+        adminButtons.add(addButton);
+
         topBar.add(searchBar);
         topBar.add(searchButton);
         topBar.add(filters);
         topBar.add(sortByLabel);
         topBar.add(sortComboBox);
+        topBar.add(adminButtons);
 
         return topBar;
     }
@@ -587,7 +601,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
     }
 
     private JPanel createCarRightPanel() {
-        JPanel rightPanel = new JPanel();
+        JPanel rightPanel = new JPanel(new BorderLayout());
         rightPanel.setPreferredSize(new Dimension(300,900));
         rightPanel.setBackground(Color.WHITE);
 
