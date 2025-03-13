@@ -27,8 +27,6 @@ public class User {
         this.username = username;
         this.userEmail = userEmail;
         this.password = password;
-
-        users.put(userId, this);
     }
 
     public User(String fullName, String gender, String userEmail, String phoneNumber, String username,
@@ -39,6 +37,8 @@ public class User {
         this.username = username;
         this.userEmail = userEmail;
         this.password = password;
+
+        users.put(userId, this);
     }
 
     // Getters and Setters
