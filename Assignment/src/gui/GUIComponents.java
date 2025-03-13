@@ -85,7 +85,7 @@ public class GUIComponents extends JPanel {
             this.panel.removeAll();
             JPanel panel = new JPanel();
 
-            //test
+            // test
             panel.setBackground(Color.BLACK);
             this.panel.add(panel);
 
@@ -116,14 +116,15 @@ public class GUIComponents extends JPanel {
             menu.setFocusPainted(false);
             menu.setBackground(Color.WHITE);
             menu.addActionListener(e -> {
-//            frame.getContentPane().removeAll();
-//            frame.add(new SignInPage(this.frame));
-//            frame.validate();
+                // frame.getContentPane().removeAll();
+                // frame.add(new SignInPage(this.frame));
+                // frame.validate();
 
                 if (overflowMenu == null) {
                     overflowMenu = new OverflowMenu(this.frame, this.panel);
                     this.frame.getLayeredPane().add(overflowMenu, JLayeredPane.POPUP_LAYER);
-                    overflowMenu.setBounds(this.frame.getWidth() - (overflowMenu.MENU_WIDTH + 20), 85, overflowMenu.MENU_WIDTH, overflowMenu.MENU_HEIGHT);
+                    overflowMenu.setBounds(this.frame.getWidth() - (overflowMenu.MENU_WIDTH + 20), 85,
+                            overflowMenu.MENU_WIDTH, overflowMenu.MENU_HEIGHT);
                 } else {
                     this.frame.getLayeredPane().remove(overflowMenu);
                     overflowMenu = null;
