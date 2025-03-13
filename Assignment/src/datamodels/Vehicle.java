@@ -1,7 +1,5 @@
 package datamodels;
 
-import java.util.List;
-
 public class Vehicle {
     private int vehicleId;
     private String imagePath;
@@ -17,10 +15,9 @@ public class Vehicle {
     private double rentalPriceDay;
     private String transmission;
     private String fuelType;
-    private String carType;
     private int seatingCapacity;
     private boolean availability;
-    private List<String> features;
+    private String features;
 
     // Default Constructor
     public Vehicle() {
@@ -29,7 +26,8 @@ public class Vehicle {
     // Parameterized Constructor
     public Vehicle(int vehicleId, String imagePath, String brand, String model, int year, int capacity,
             int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
-            double rentalPriceDay, String transmission, String fuelType, String carType, int seatingCapacity, boolean availability, List<String> features) {
+            double rentalPriceDay, String transmission, String fuelType, int seatingCapacity, boolean availability,
+            String features) {
         this.vehicleId = vehicleId;
         this.imagePath = imagePath;
         this.brand = brand;
@@ -44,13 +42,35 @@ public class Vehicle {
         this.rentalPriceDay = rentalPriceDay;
         this.transmission = transmission;
         this.fuelType = fuelType;
-        this.carType = carType;
         this.seatingCapacity = seatingCapacity;
         this.availability = availability;
         this.features = features;
     }
 
     // Getters and Setters
+    public void setVehicle(int vehicleId, String imagePath, String brand, String model, int year, int capacity,
+            int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
+            double rentalPriceDay, String transmission, String fuelType, int seatingCapacity, boolean availability,
+            String features) {
+        this.vehicleId = vehicleId;
+        this.imagePath = imagePath;
+        this.brand = brand;
+        this.model = model;
+        this.year = year;
+        this.capacity = capacity;
+        this.horsepower = horsepower;
+        this.color = color;
+        this.mpg = mpg;
+        this.vinNumber = vinNumber;
+        this.registrationNumber = registrationNumber;
+        this.rentalPriceDay = rentalPriceDay;
+        this.transmission = transmission;
+        this.fuelType = fuelType;
+        this.seatingCapacity = seatingCapacity;
+        this.availability = availability;
+        this.features = features;
+    }
+
     public int getVehicleId() {
         return vehicleId;
     }
@@ -147,14 +167,6 @@ public class Vehicle {
         this.fuelType = fuelType;
     }
 
-    public String getCarType() {
-        return carType;
-    }
-
-    public void setCarType(String carType) {
-        this.carType = carType;
-    }
-
     public String getColor() {
         return color;
     }
@@ -187,11 +199,11 @@ public class Vehicle {
         this.availability = availability;
     }
 
-    public List<String> getFeatures() {
+    public String getFeatures() {
         return features;
     }
 
-    public void setFeatures(List<String> features) {
+    public void setFeatures(String features) {
         this.features = features;
     }
 }

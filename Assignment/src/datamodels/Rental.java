@@ -5,9 +5,8 @@ import java.time.LocalDate;
 
 public class Rental {
     private int rentalId;
-    private User customer;
+    private Customer customer;
     private Vehicle vehicle;
-    private Payment payment;
     private LocalDate startDate;
     private LocalDate endDate;
     private LocalTime pickupTime;
@@ -21,7 +20,7 @@ public class Rental {
     }
 
     // Parameterized Constructor
-    public Rental(int rentalId, User customer, Vehicle vehicle, Payment payment, LocalDate startDate, LocalDate endDate,
+    public Rental(int rentalId, Customer customer, Vehicle vehicle, LocalDate startDate, LocalDate endDate,
             LocalTime pickupTime, LocalTime dropoffTime, double totalCost, RentalStatus rentalStatus,
             PaymentStatus paymentStatus) {
         this.rentalId = rentalId;
@@ -54,11 +53,11 @@ public class Rental {
         this.rentalId = rentalId;
     }
 
-    public User getRentCustomer() {
+    public Customer getRentCustomer() {
         return customer;
     }
 
-    public void setRentCustomer(User customer) {
+    public void setRentCustomer(Customer customer) {
         this.customer = customer;
     }
 
@@ -68,14 +67,6 @@ public class Rental {
 
     public void setRentVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
-    }
-
-    public Payment getRentPayment() {
-        return payment;
-    }
-
-    public void setRentPayment(Payment payment) {
-        this.payment = payment;
     }
 
     public LocalDate getRentStartDate() {
@@ -135,7 +126,7 @@ public class Rental {
     }
 
     // Debug
-    public void setRental(int rentalId, User customer, Vehicle vehicle, Payment payment, LocalDate startDate,
+    public void setRental(int rentalId, Customer customer, Vehicle vehicle, Payment payment, LocalDate startDate,
             LocalDate endDate,
             LocalTime pickupTime, LocalTime dropoffTime, double totalCost, RentalStatus rentalStatus,
             PaymentStatus paymentStatus) {

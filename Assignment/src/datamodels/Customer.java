@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Customer extends User {
     private String address;
+    private String license;
     private List<Rental> rentalHistory;
 
     // Default Constructor
@@ -14,10 +15,11 @@ public class Customer extends User {
     }
 
     // Parameter Constructor
-    public Customer(String fullName, String username, String gender, String license, String phoneNumber, String userEmail,
-            String address, String password, List<Rental> rentalHistory) {
-        super(fullName, username, gender, license, phoneNumber, userEmail, password);
+    public Customer(int userId, String fullName, String gender, String phoneNumber, String userEmail,
+            String username, String password, String address, String license, List<Rental> rentalHistory) {
+        super(userId, fullName, gender, phoneNumber, userEmail, username, password);
         this.address = address;
+        this.license = license;
         this.rentalHistory = rentalHistory; // No need pass to User class
     }
 
@@ -28,6 +30,14 @@ public class Customer extends User {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getLicense() {
+        return license;
+    }
+
+    public void setLicense(String license) {
+        this.license = license;
     }
 
     public List<Rental> getRentalHistory() {
