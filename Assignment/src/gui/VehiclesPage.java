@@ -109,8 +109,8 @@ public class VehiclesPage extends JPanel implements ActionListener{
         }
 
         ImageIcon transmissionIcon = icons[0];
-        ImageIcon fuelIcon = icons[0];
-        ImageIcon seatsIcon = icons[0];
+        ImageIcon fuelIcon = icons[1];
+        ImageIcon seatsIcon = icons[2];
 
         JPanel carCard = new JPanel();
         carCard.setLayout(new BorderLayout());
