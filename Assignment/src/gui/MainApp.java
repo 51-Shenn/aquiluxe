@@ -15,6 +15,12 @@ public class MainApp extends JFrame {
 //             e.printStackTrace();
 //         }
         // Initialize frame
+        // try {
+        //     UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        //     SwingUtilities.updateComponentTreeUI(frame);
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
         setTitle("AQUILUXE");
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(1280, 720));
