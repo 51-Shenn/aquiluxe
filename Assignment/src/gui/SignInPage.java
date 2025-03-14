@@ -216,6 +216,8 @@ public class SignInPage extends AuthenticationPage {
                 this.frame.setContentPane(newContentPane);
                 GUIComponents.overflowMenu = null;
                 this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                this.frame.add(this.panel, BorderLayout.CENTER);
+                this.panel.removeAll();
                 this.frame.revalidate();
                 this.frame.repaint();
             }

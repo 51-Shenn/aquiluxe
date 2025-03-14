@@ -297,6 +297,8 @@ public class SignUpPage extends AuthenticationPage {
                     this.frame.setContentPane(new SignInPage(this.frame, this.panel, this.user));
 //                    GUIComponents.overflowMenu = null;
 //                    this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+//                    this.frame.add(this.panel, BorderLayout.CENTER);
+//                    this.panel.removeAll();
                     this.frame.validate();
                 }
             }
