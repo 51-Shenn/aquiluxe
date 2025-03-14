@@ -32,8 +32,7 @@ public class User {
         this.password = password;
     }
 
-    public User(String fullName, String gender, String userEmail, String phoneNumber, String username,
-            String password) {
+    public User(String fullName, String gender, String userEmail, String phoneNumber, String username, String password) {
         this.fullName = fullName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
