@@ -13,15 +13,19 @@ public class OverflowMenu extends JLayeredPane {
     private final JFrame frame;
     private final JPanel panel;
     private User user;
-    public final int MENU_WIDTH;
-    public final int MENU_HEIGHT;
+    public int MENU_WIDTH;
+    public int MENU_HEIGHT;
+    private boolean isExpanded = false;
 
     public OverflowMenu(JFrame frame, JPanel panel, User user) {
         this.frame = frame;
         this.panel = panel;
         this.user = user;
         MENU_WIDTH = 400;
-        MENU_HEIGHT = 600;
+        if(this.user.getFullName() == "Guest" && this.user.getUsername() == "guest")
+            MENU_HEIGHT = 600;
+        else
+            MENU_HEIGHT = 700;
         add(createOverflowMenu(), JLayeredPane.POPUP_LAYER);
     }
 
@@ -63,13 +67,92 @@ public class OverflowMenu extends JLayeredPane {
         }
         else {
             panel.add(createMenuCard("Theme", sunMoonFilePath), gbc);
-            panel.add(createMenuCard("Switch Account", switchFilePath), gbc);
+            // panel.add(createMenuCard("Switch Account", switchFilePath), gbc);
+            panel.add(createSwitchAccountPanel(switchFilePath), gbc);
             panel.add(createMenuCard("Sign Out", signOutFilePath), gbc);
         }
 
         panel.add(createMenuCard("Close / Exit", roundCloseFilePath), gbc);
 
         return panel;
+    }
+
+    private JPanel createSwitchAccountPanel(File iconFilePath) {
+        JPanel switchAccountPanel = new JPanel(new BorderLayout());
+        switchAccountPanel.setBackground(Color.WHITE);
+
+
+        ImageIcon switchIcon = new ImageIcon(iconFilePath.toString());
+        JButton button = createMenuButton("Switch Account", switchIcon);
+        
+        button.addActionListener(e -> {
+            if(!isExpanded) {
+                isExpanded = true;
+                MENU_HEIGHT = 1000;
+                switchAccountPanel.removeAll();
+                switchAccountPanel.add(button, BorderLayout.NORTH);
+
+                JPanel accountsPanel = new JPanel(new GridBagLayout());
+                accountsPanel.setBackground(Color.WHITE);
+                
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.anchor = GridBagConstraints.WEST;
+                gbc.fill = GridBagConstraints.BOTH;
+                gbc.gridwidth = GridBagConstraints.REMAINDER;
+                gbc.weightx = 1;
+                gbc.weighty = 1;
+                gbc.insets = new Insets(5, 50, 5, 0);
+
+                JLabel accountLabel = new JLabel("Accounts");
+                accountLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
+                accountsPanel.add(accountLabel, gbc);
+                
+                for (User user : User.users.values()) {
+                    JButton accountButton = new JButton();
+                    accountButton.setBackground(Color.WHITE);
+                    accountButton.setFocusPainted(false);
+                    accountButton.setBorderPainted(false);
+                    accountButton.setLayout(new BorderLayout());
+        
+                    JPanel accountDetails = new JPanel();
+                    accountDetails.setBackground(Color.WHITE);
+                    accountDetails.setLayout(new BoxLayout(accountDetails, BoxLayout.Y_AXIS));
+        
+                    JLabel fullNameLabel = new JLabel(user.getFullName());
+                    fullNameLabel.setForeground(Color.BLACK);
+                    fullNameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
+                    JLabel usernameLabel = new JLabel("@" + user.getUsername());
+                    usernameLabel.setForeground(Color.GRAY);
+                    usernameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(10f));
+        
+                    accountDetails.add(fullNameLabel);
+                    accountDetails.add(usernameLabel);
+
+                    accountButton.add(accountDetails, BorderLayout.CENTER);
+                    accountsPanel.add(accountButton, gbc);
+                }
+                
+                switchAccountPanel.add(accountsPanel, BorderLayout.CENTER);
+            }
+            else {
+                isExpanded = false;
+            MENU_HEIGHT = 700; // Reset to the original height
+            switchAccountPanel.removeAll();
+            switchAccountPanel.add(button, BorderLayout.CENTER);
+            }
+
+            // Resize the frame and revalidate/repaint
+            this.setSize(MENU_WIDTH, MENU_HEIGHT);
+            this.revalidate();
+            this.repaint();
+
+            // Revalidate and repaint the switchAccountPanel
+            switchAccountPanel.revalidate();
+            switchAccountPanel.repaint();
+        });
+        
+        switchAccountPanel.add(button, BorderLayout.CENTER);
+        return switchAccountPanel;
     }
 
     private JPanel createProfileCard() {
@@ -140,7 +223,7 @@ public class OverflowMenu extends JLayeredPane {
         card.setBackground(Color.WHITE);
         ImageIcon icon = new ImageIcon(iconFilePath.toString());
 
-        JPanel button = createMenuButton(text, icon);
+        JButton button = createMenuButton(text, icon);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx = 1;
@@ -152,9 +235,9 @@ public class OverflowMenu extends JLayeredPane {
         return card;
     }
 
-    private JPanel createMenuButton(String text, ImageIcon icon) {
-        JPanel menuPanel = new JPanel(new GridBagLayout());
-        menuPanel.setBackground(Color.WHITE);
+    private JButton createMenuButton(String text, ImageIcon icon) {
+        // JPanel menuPanel = new JPanel(new GridBagLayout());
+        // menuPanel.setBackground(Color.WHITE);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridheight = 100;
@@ -205,7 +288,7 @@ public class OverflowMenu extends JLayeredPane {
                 frame.repaint();
             });
         }
-        if(text.equals("Sign In") || text.equals("Switch Account")) {
+        if(text.equals("Sign In")) {
             button.addActionListener(e -> {
                 frame.getLayeredPane().remove(this);
                 frame.getContentPane().removeAll();
@@ -234,7 +317,7 @@ public class OverflowMenu extends JLayeredPane {
             });
         }
 
-        menuPanel.add(button, gbc);
-        return menuPanel;
+        // menuPanel.add(button);
+        return button;
     }
 }
