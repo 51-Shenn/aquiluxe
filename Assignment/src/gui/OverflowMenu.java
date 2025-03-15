@@ -13,8 +13,8 @@ public class OverflowMenu extends JLayeredPane {
     private final JFrame frame;
     private final JPanel panel;
     private User user;
-    public int MENU_WIDTH;
-    public int MENU_HEIGHT;
+    public final int MENU_WIDTH;
+    public final int MENU_HEIGHT;
     private boolean isExpanded = false;
 
     public OverflowMenu(JFrame frame, JPanel panel, User user) {
@@ -81,14 +81,12 @@ public class OverflowMenu extends JLayeredPane {
         JPanel switchAccountPanel = new JPanel(new BorderLayout());
         switchAccountPanel.setBackground(Color.WHITE);
 
-
         ImageIcon switchIcon = new ImageIcon(iconFilePath.toString());
         JButton button = createMenuButton("Switch Account", switchIcon);
         
         button.addActionListener(e -> {
             if(!isExpanded) {
                 isExpanded = true;
-                MENU_HEIGHT = 1000;
                 switchAccountPanel.removeAll();
                 switchAccountPanel.add(button, BorderLayout.NORTH);
 
@@ -136,17 +134,13 @@ public class OverflowMenu extends JLayeredPane {
             }
             else {
                 isExpanded = false;
-            MENU_HEIGHT = 700; // Reset to the original height
-            switchAccountPanel.removeAll();
-            switchAccountPanel.add(button, BorderLayout.CENTER);
+                switchAccountPanel.removeAll();
+                switchAccountPanel.add(button, BorderLayout.CENTER);
             }
 
-            // Resize the frame and revalidate/repaint
-            this.setSize(MENU_WIDTH, MENU_HEIGHT);
             this.revalidate();
             this.repaint();
 
-            // Revalidate and repaint the switchAccountPanel
             switchAccountPanel.revalidate();
             switchAccountPanel.repaint();
         });
