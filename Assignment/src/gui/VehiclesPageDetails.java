@@ -3,6 +3,8 @@ package gui;
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class VehiclesPageDetails extends JPanel {
 
@@ -304,6 +306,26 @@ public class VehiclesPageDetails extends JPanel {
         rentButton.setForeground(Color.WHITE);
         rentButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
         rentButton.setFocusable(false);
+        rentButton.setContentAreaFilled(false);
+        rentButton.setBorderPainted(false);
+        rentButton.setOpaque(true);
+        rentButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                rentButton.setBackground(Color.BLUE.darker());
+            }
+        
+            public void mouseExited(MouseEvent evt) {
+                rentButton.setBackground(Color.BLUE);
+            }
+        
+            public void mousePressed(MouseEvent evt) {
+                rentButton.setBackground(Color.CYAN);
+            }
+        
+            public void mouseReleased(MouseEvent evt) {
+                rentButton.setBackground(Color.BLUE);
+            }
+        });
         rentPanel.add(rentButton);
         buttonsPanel.add(rentPanel, BorderLayout.EAST);
 

@@ -6,10 +6,18 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import java.awt.*;
+import java.awt.color.ColorSpace;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+
+import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ColorConvertOp;
+import java.awt.image.RescaleOp;
 
 public class VehiclesPage extends JPanel implements ActionListener {
 
@@ -83,25 +91,27 @@ public class VehiclesPage extends JPanel implements ActionListener {
             String fuelType,
             String carType, int seats, String price, String availability, JFrame frame, JPanel panel) {
 
-        ImageIcon transmissionIcon = null;
-        ImageIcon fuelIcon = null;
-        ImageIcon seatsIcon = null;
+        final ImageIcon[] icons = new ImageIcon[3];
 
         try {
-            transmissionIcon = new ImageIcon("images/vehiclepageicons/manual-transmission.png");
-            fuelIcon = new ImageIcon("images/vehiclepageicons/gas-station.png");
-            seatsIcon = new ImageIcon("images/vehiclepageicons/car-seat.png");
+            icons[0] = new ImageIcon("images/vehiclepageicons/manual-transmission.png");
+            icons[1] = new ImageIcon("images/vehiclepageicons/gas-station.png");
+            icons[2] = new ImageIcon("images/vehiclepageicons/car-seat.png");
 
             // Check if any image failed to load
-            if (transmissionIcon.getIconWidth() == -1 ||
-                    fuelIcon.getIconWidth() == -1 ||
-                    seatsIcon.getIconWidth() == -1) {
+            if (icons[0].getIconWidth() == -1 ||
+                    icons[1].getIconWidth() == -1 ||
+                    icons[2].getIconWidth() == -1) {
                 throw new Exception("One or more images failed to load.");
             }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error loading images: " + e.getMessage());
         }
+
+        ImageIcon transmissionIcon = icons[0];
+        ImageIcon fuelIcon = icons[1];
+        ImageIcon seatsIcon = icons[2];
 
         JPanel carCard = new JPanel();
         carCard.setLayout(new BorderLayout());
@@ -112,37 +122,45 @@ public class VehiclesPage extends JPanel implements ActionListener {
         // create buttons on the bottom
         JButton carDetails = new JButton();
         carDetails.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
-        carDetails.setText("DETAILS");
         carDetails.setFocusable(false);
+        carDetails.setBackground(Color.WHITE);
         carDetails.setBorderPainted(false);
-        carDetails.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
-        carDetails.setBackground(Color.BLUE);
-        carDetails.setForeground(Color.WHITE);
+        carDetails.setContentAreaFilled(false);
         carDetails.setOpaque(true);
-        carDetails.addActionListener(e -> {
-            if (e.getActionCommand().equals("DETAILS")) {
-                panel.removeAll();
-                panel.add(new VehiclesPageDetails(frame, panel), BorderLayout.CENTER);
-                panel.revalidate();
-                panel.repaint();
-            }
-        });
 
         JButton carRent = new JButton();
         carRent.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
         carRent.setText("RENT");
         carRent.setFocusable(false);
         carRent.setBorderPainted(false);
-        carRent.setBorder(BorderFactory.createLineBorder(Color.WHITE, 5));
+        carRent.setContentAreaFilled(false);
         carRent.setBackground(Color.BLUE);
         carRent.setForeground(Color.WHITE);
         carRent.setOpaque(true);
 
+        carRent.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                carRent.setBackground(Color.BLUE.darker());
+            }
+
+            public void mouseExited(MouseEvent evt) {
+                carRent.setBackground(Color.BLUE);
+            }
+
+            public void mousePressed(MouseEvent evt) {
+                carRent.setBackground(Color.CYAN);
+            }
+
+            public void mouseReleased(MouseEvent evt) {
+                carRent.setBackground(Color.BLUE);
+            }
+        });
+
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 0, 5));
         buttonPanel.setPreferredSize(new Dimension(350, 50));
         buttonPanel.setBackground(Color.WHITE);
-        buttonPanel.add(carRent);
         buttonPanel.add(carDetails);
+        buttonPanel.add(carRent);
 
         // car name model and car type on the left and price on the right
         JLabel carName = new JLabel(brand);
@@ -201,6 +219,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         // container for picture at the top
         JLabel carPicture = new JLabel(image);
         carPicture.setPreferredSize(new Dimension(225, 225));
+
         JPanel carPicturePanel = new JPanel(new BorderLayout());
         carPicturePanel.add(carPicture);
 
@@ -250,6 +269,95 @@ public class VehiclesPage extends JPanel implements ActionListener {
         carEverythingPanel.add(carInfoNameRentPanel, BorderLayout.CENTER);
         carEverythingPanel.add(carInfoPanel, BorderLayout.SOUTH);
         carEverythingPanel.setBackground(Color.WHITE);
+        carEverythingPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Check if the click is on the image
+                if (e.getSource() == carEverythingPanel) {
+                    panel.removeAll();
+                    panel.add(new VehiclesPageDetails(frame, panel), BorderLayout.CENTER);
+                    panel.revalidate();
+                    panel.repaint();
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                carPicture.setIcon(toGreyScale(image)); // Set greyscale image
+                carName.setForeground(Color.GRAY);
+                carModel.setForeground(Color.GRAY);
+                carTypeLabel.setForeground(Color.LIGHT_GRAY);
+                carRentPrice.setForeground(Color.CYAN);
+                carAvailability.setBackground(Color.CYAN);
+                transLabel.setForeground(Color.GRAY);
+                transLabel.setIcon(toGreyScale(transmissionIcon));
+                fuelTypeLabel.setForeground(Color.GRAY);
+                fuelTypeLabel.setIcon(toGreyScale(fuelIcon));
+                seatsLabel.setForeground(Color.GRAY);
+                seatsLabel.setIcon(toGreyScale(seatsIcon));
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                carPicture.setIcon(image); // Restore original image
+                carName.setForeground(Color.BLACK);
+                carModel.setForeground(Color.BLACK);
+                carTypeLabel.setForeground(Color.GRAY);
+                carRentPrice.setForeground(Color.BLUE);
+                carAvailability.setBackground(Color.BLUE);
+                transLabel.setForeground(Color.GRAY);
+                transLabel.setIcon(transmissionIcon);
+                fuelTypeLabel.setForeground(Color.BLACK);
+                fuelTypeLabel.setIcon(fuelIcon);
+                seatsLabel.setForeground(Color.GRAY);
+                seatsLabel.setIcon(seatsIcon);
+            }
+        });
+
+        carDetails.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Check if the click is on the image
+                if (e.getSource() == carEverythingPanel) {
+                    panel.removeAll();
+                    panel.add(new VehiclesPageDetails(frame, panel), BorderLayout.CENTER);
+                    panel.revalidate();
+                    panel.repaint();
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                carPicture.setIcon(toGreyScale(image)); // Set greyscale image
+                carName.setForeground(Color.GRAY);
+                carModel.setForeground(Color.GRAY);
+                carTypeLabel.setForeground(Color.LIGHT_GRAY);
+                carRentPrice.setForeground(Color.CYAN);
+                carAvailability.setBackground(Color.CYAN);
+                transLabel.setForeground(Color.GRAY);
+                transLabel.setIcon(toGreyScale(transmissionIcon));
+                fuelTypeLabel.setForeground(Color.GRAY);
+                fuelTypeLabel.setIcon(toGreyScale(fuelIcon));
+                seatsLabel.setForeground(Color.GRAY);
+                seatsLabel.setIcon(toGreyScale(seatsIcon));
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                carPicture.setIcon(image); // Restore original image
+                carName.setForeground(Color.BLACK);
+                carModel.setForeground(Color.BLACK);
+                carTypeLabel.setForeground(Color.GRAY);
+                carRentPrice.setForeground(Color.BLUE);
+                carAvailability.setBackground(Color.BLUE);
+                transLabel.setForeground(Color.GRAY);
+                transLabel.setIcon(transmissionIcon);
+                fuelTypeLabel.setForeground(Color.BLACK);
+                fuelTypeLabel.setIcon(fuelIcon);
+                seatsLabel.setForeground(Color.GRAY);
+                seatsLabel.setIcon(seatsIcon);
+            }
+        });
 
         // add the bottom buttons panel and the container for all specific car infos
         // into the main card container
@@ -340,14 +448,57 @@ public class VehiclesPage extends JPanel implements ActionListener {
         sortComboBox.setBounds(1450, 25, 150, 50);
         sortComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
 
+        ImageIcon deleteIcon = new ImageIcon("images/vehiclepageicons/delete.png");
+        ImageIcon addIcon = new ImageIcon("images/vehiclepageicons/add.png");
+
         JPanel adminButtons = new JPanel(new GridLayout(1, 2, 0, 0));
         adminButtons.setBounds(1660, 25, 200, 50);
-        JButton deleteButton = new JButton();
+        JButton deleteButton = new JButton(deleteIcon);
         deleteButton.setBackground(Color.RED);
         deleteButton.setOpaque(true);
-        JButton addButton = new JButton();
+        deleteButton.setFocusable(false);
+        deleteButton.setContentAreaFilled(true);
+        deleteButton.setBorderPainted(false);
+        deleteButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                deleteButton.setBackground(Color.RED.darker());
+            }
+
+            public void mouseExited(MouseEvent evt) {
+                deleteButton.setBackground(Color.RED);
+            }
+
+            public void mousePressed(MouseEvent evt) {
+                deleteButton.setBackground(Color.ORANGE);
+            }
+
+            public void mouseReleased(MouseEvent evt) {
+                deleteButton.setBackground(Color.RED);
+            }
+        });
+        JButton addButton = new JButton(addIcon);
         addButton.setBackground(Color.GREEN);
         addButton.setOpaque(true);
+        addButton.setFocusable(false);
+        addButton.setContentAreaFilled(true);
+        addButton.setBorderPainted(false);
+        addButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                addButton.setBackground(Color.GREEN.darker());
+            }
+
+            public void mouseExited(MouseEvent evt) {
+                addButton.setBackground(Color.GREEN);
+            }
+
+            public void mousePressed(MouseEvent evt) {
+                addButton.setBackground(Color.YELLOW);
+            }
+
+            public void mouseReleased(MouseEvent evt) {
+                addButton.setBackground(Color.GREEN);
+            }
+        });
 
         adminButtons.add(deleteButton);
         adminButtons.add(addButton);
@@ -486,6 +637,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         seatLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
 
         JSlider seatSlider = new JSlider(0, 7, 0);
+        seatSlider.setFocusable(false);
         seatSlider.setBackground(Color.WHITE);
         seatSlider.setMajorTickSpacing(1);
         seatSlider.setPaintTicks(true);
@@ -616,5 +768,32 @@ public class VehiclesPage extends JPanel implements ActionListener {
         bottomBar.setPreferredSize(new Dimension(800, 500));
 
         return bottomBar;
+    }
+
+    public static ImageIcon toGreyScale(ImageIcon icon) {
+        if (icon == null) {
+            throw new IllegalArgumentException("ImageIcon cannot be null");
+        }
+
+        // Get the image from the ImageIcon
+        Image image = icon.getImage();
+
+        // Convert the Image to a BufferedImage
+        BufferedImage bufferedImage = new BufferedImage(
+                icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = bufferedImage.createGraphics();
+        g2d.drawImage(image, 0, 0, null);
+        g2d.dispose();
+
+        // Convert the BufferedImage to greyscale
+        BufferedImageOp op = new ColorConvertOp(
+                ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+        BufferedImage greyImage = op.filter(bufferedImage, null);
+
+        RescaleOp rescaleOp = new RescaleOp(1.0f, 50, null); // Adjust brightness (offset = 50)
+        BufferedImage brighterGreyImage = rescaleOp.filter(greyImage, null);
+
+        // Return the greyscale image as an ImageIcon
+        return new ImageIcon(brighterGreyImage);
     }
 }
