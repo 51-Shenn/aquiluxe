@@ -3,6 +3,7 @@ package gui;
 import datamodels.User;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -16,16 +17,22 @@ public class OverflowMenu extends JLayeredPane {
     public final int MENU_WIDTH;
     public final int MENU_HEIGHT;
     private boolean isExpanded = false;
+    private JPanel themeButton;
+    private JPanel switchAccountButton;
+    private JPanel signOutButton;
+    private JPanel closeButton;
+    private JPanel editPanel;
+    private JButton editButton;
 
     public OverflowMenu(JFrame frame, JPanel panel, User user) {
         this.frame = frame;
         this.panel = panel;
         this.user = user;
         MENU_WIDTH = 400;
-        if(this.user.getFullName() == "Guest" && this.user.getUsername() == "guest")
-            MENU_HEIGHT = 600;
+        if(this.user.getFullName().equals("Guest") && this.user.getUsername().equals("guest"))
+            MENU_HEIGHT = 550;
         else
-            MENU_HEIGHT = 700;
+            MENU_HEIGHT = 775;
         add(createOverflowMenu(), JLayeredPane.POPUP_LAYER);
     }
 
@@ -53,26 +60,151 @@ public class OverflowMenu extends JLayeredPane {
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx = 1;
-        gbc.weighty = 1;
+        gbc.weighty = 0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.insets = new Insets(1, 0, 0, 0);
-
         panel.add(createProfileCard(), gbc);
+
+        gbc.weighty = 1;
 
         if (this.user.getFullName().equals("Guest") && this.user.getUsername().equals("guest")) {
             panel.add(createMenuCard("Sign Up", signInFilePath), gbc);
             panel.add(createMenuCard("Sign In", signInFilePath), gbc);
+        } else {
+            themeButton = createMenuCard("Theme", sunMoonFilePath);
+            panel.add(themeButton, gbc);
 
-        }
-        else {
-            panel.add(createMenuCard("Theme", sunMoonFilePath), gbc);
-            // panel.add(createMenuCard("Switch Account", switchFilePath), gbc);
-            panel.add(createSwitchAccountPanel(switchFilePath), gbc);
-            panel.add(createMenuCard("Sign Out", signOutFilePath), gbc);
+            switchAccountButton = createSwitchAccountPanel(switchFilePath);
+            panel.add(switchAccountButton, gbc);
+
+            signOutButton = createMenuCard("Sign Out", signOutFilePath);
+            panel.add(signOutButton, gbc);
         }
 
-        panel.add(createMenuCard("Close / Exit", roundCloseFilePath), gbc);
+        closeButton = createMenuCard("Close / Exit", roundCloseFilePath);
+        panel.add(closeButton, gbc);
+
+        editPanel = new JPanel(new GridBagLayout());
+        editPanel.setBackground(Color.WHITE);
+        GridBagConstraints gbc2 = new GridBagConstraints();
+        gbc2.gridwidth = GridBagConstraints.REMAINDER;
+        gbc2.weightx = 1;
+        gbc2.fill = GridBagConstraints.HORIZONTAL;
+
+        JTextField fullNameField = new JTextField();
+        JTextField usernameField = new JTextField();
+        JTextField emailField = new JTextField();
+        JTextField phoneNumberField = new JTextField();
+        JTextField drivingLicenseField = new JTextField();
+
+        JLabel fullNameValidationLabel = new JLabel("");
+        JLabel usernameValidationLabel = new JLabel("");
+        JLabel emailValidationLabel = new JLabel("");
+        JLabel phoneNumberValidationLabel = new JLabel("");
+        JLabel drivingLicenseValidationLabel = new JLabel("");
+
+        JPanel fullNamePanel = createEditProfileInputField("Full Name", fullNameField, fullNameValidationLabel);
+        JPanel usernamePanel = createEditProfileInputField("Username", usernameField, usernameValidationLabel);
+        JPanel emailPanel = createEditProfileInputField("Email Address", emailField, emailValidationLabel);
+        JPanel phoneNumberPanel = createEditProfileInputField("Phone Number", phoneNumberField, phoneNumberValidationLabel);
+        JPanel drivingLicensePanel = createEditProfileInputField("Driving License", drivingLicenseField, drivingLicenseValidationLabel);
+
+        // Add panels to the edit panel
+        editPanel.add(fullNamePanel, gbc2);
+        editPanel.add(usernamePanel, gbc2);
+        editPanel.add(emailPanel, gbc2);
+        editPanel.add(phoneNumberPanel, gbc2);
+        editPanel.add(drivingLicensePanel, gbc2);
+
+        JPanel editPageButtonPanel = new JPanel(new GridBagLayout());
+        editPageButtonPanel.setBackground(Color.WHITE);
+        GridBagConstraints gbc3 = new GridBagConstraints();
+        gbc3.anchor = GridBagConstraints.EAST;
+        gbc3.weightx = 1;
+        gbc3.insets = new Insets(5, 0, 5, 15);
+
+        JButton updateButton = new JButton("Update");
+        updateButton.setBackground(Color.GREEN);
+        updateButton.setForeground(Color.BLACK);
+        updateButton.setFont(CustomFonts.ROBOTO_BLACK.deriveFont(18f));
+        updateButton.setBorderPainted(false);
+        updateButton.setFocusPainted(false);
+        updateButton.setPreferredSize(new Dimension(100, 50));
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.setBackground(Color.RED);
+        cancelButton.setForeground(Color.WHITE);
+        cancelButton.setFont(CustomFonts.ROBOTO_BLACK.deriveFont(18f));
+        cancelButton.setBorderPainted(false);
+        cancelButton.setFocusPainted(false);
+        cancelButton.setPreferredSize(new Dimension(100, 50));
+        cancelButton.addActionListener(e -> {
+            editPanel.setVisible(false);
+            editButton.setVisible(true);
+            themeButton.setVisible(true);
+            switchAccountButton.setVisible(true);
+            signOutButton.setVisible(true);
+            closeButton.setVisible(true);
+
+            this.revalidate();
+            this.repaint();
+        });
+
+        editPageButtonPanel.add(cancelButton, gbc3);
+        editPageButtonPanel.add(updateButton, gbc3);
+
+        editPanel.add(editPageButtonPanel, gbc3);
+        editPanel.setVisible(false);
+
+        gbc2.weighty = 1;
+        gbc2.anchor = GridBagConstraints.NORTH;
+        gbc2.fill = GridBagConstraints.BOTH;
+        gbc2.insets = new Insets(1, 0, 0, 0);
+        panel.add(editPanel, gbc2);
+
+        return panel;
+    }
+
+    private JPanel createEditProfileInputField(String text, JTextField inputField, JLabel validationLabel) {
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        JLabel label = new JLabel(text + ":");
+        label.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
+
+        inputField.setPreferredSize(new Dimension(200, 40));
+        inputField.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(17f));
+        inputField.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 1), new EmptyBorder(5, 10, 5, 10)));
+
+        switch (text) {
+            case "Full Name" -> inputField.setText(this.user.getFullName());
+            case "Username" -> inputField.setText(this.user.getUsername());
+            case "Email Address" -> inputField.setText(this.user.getUserEmail());
+            case "Phone Number" -> inputField.setText("+60" + this.user.getPhoneNumber());
+            case "Driving License" -> inputField.setText("");
+        }
+
+        gbc.insets = new Insets(10, 30, 0, 30);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        panel.add(label, gbc);
+
+        validationLabel.setText("hello");
+        if(validationLabel.getText().isEmpty())
+            gbc.insets = new Insets(0, 30, 5, 30);
+        else
+            gbc.insets = new Insets(0, 30, 0, 30);
+
+        panel.add(inputField, gbc);
+
+        validationLabel.setForeground(Color.RED);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        panel.add(validationLabel, gbc);
 
         return panel;
     }
@@ -83,59 +215,134 @@ public class OverflowMenu extends JLayeredPane {
 
         ImageIcon switchIcon = new ImageIcon(iconFilePath.toString());
         JButton button = createMenuButton("Switch Account", switchIcon);
-        
+
         button.addActionListener(e -> {
-            if(!isExpanded) {
+            if (!isExpanded) {
                 isExpanded = true;
                 switchAccountPanel.removeAll();
-                switchAccountPanel.add(button, BorderLayout.NORTH);
+                button.setText("Back");
+                button.setForeground(Color.BLUE);
+                button.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(20f));
+                button.setIcon(null);
+                switchAccountPanel.add(button, BorderLayout.SOUTH);
 
                 JPanel accountsPanel = new JPanel(new GridBagLayout());
                 accountsPanel.setBackground(Color.WHITE);
-                
+
                 GridBagConstraints gbc = new GridBagConstraints();
-                gbc.anchor = GridBagConstraints.WEST;
-                gbc.fill = GridBagConstraints.BOTH;
+                gbc.anchor = GridBagConstraints.NORTHWEST;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
                 gbc.gridwidth = GridBagConstraints.REMAINDER;
                 gbc.weightx = 1;
-                gbc.weighty = 1;
-                gbc.insets = new Insets(5, 50, 5, 0);
+                gbc.insets = new Insets(20, 30, 5, 30);
 
                 JLabel accountLabel = new JLabel("Accounts");
-                accountLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
+                accountLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(20f));
+                accountLabel.setForeground(Color.BLACK);
+                gbc.weighty = 0;
                 accountsPanel.add(accountLabel, gbc);
-                
+
+                File plusFilePath = new File("images/icons/plus.png");
+                if (!plusFilePath.exists())
+                    JOptionPane.showMessageDialog(null, "Failed to load image:\n" + plusFilePath);
+
+                ImageIcon plusIcon = new ImageIcon(plusFilePath.toString());
+                JButton addAccountButton = new JButton("Add New Profile");
+                addAccountButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(18f));
+                addAccountButton.setIcon(plusIcon);
+                addAccountButton.setFocusPainted(false);
+                addAccountButton.setForeground(Color.BLACK);
+                addAccountButton.setBackground(Color.WHITE);
+                addAccountButton.setHorizontalAlignment(SwingConstants.LEFT);
+                addAccountButton.setIconTextGap(30);
+                addAccountButton.setBorder(new EmptyBorder(15, 25, 15, 25));
+                addAccountButton.setPreferredSize(new Dimension(MENU_WIDTH, 40));
+                addAccountButton.addActionListener(ee -> {
+                    frame.getLayeredPane().remove(this);
+                    frame.getContentPane().removeAll();
+                    frame.add(new SignInPage(this.frame, this.panel, this.user));
+                    frame.revalidate();
+                    frame.repaint();
+                });
+                accountsPanel.add(addAccountButton, gbc);
+
+                gbc.weighty = 1;
                 for (User user : User.users.values()) {
                     JButton accountButton = new JButton();
                     accountButton.setBackground(Color.WHITE);
+
+                    File smallMaleFilePath = new File("images/icons/small-male.png");
+                    File smallFemaleFilePath = new File("images/icons/small-female.png");
+                    if (!smallMaleFilePath.exists() || !smallFemaleFilePath.exists()) {
+                        JOptionPane.showMessageDialog(null, "Failed to load image:\n" + smallMaleFilePath + "\n" + smallFemaleFilePath);
+                    }
+
+                    ImageIcon genderIcon;
+                    if(user.getGender().equals("Male"))
+                        genderIcon = new ImageIcon(smallMaleFilePath.toString());
+                    else
+                        genderIcon = new ImageIcon(smallFemaleFilePath.toString());
+
                     accountButton.setFocusPainted(false);
                     accountButton.setBorderPainted(false);
-                    accountButton.setLayout(new BorderLayout());
-        
-                    JPanel accountDetails = new JPanel();
-                    accountDetails.setBackground(Color.WHITE);
-                    accountDetails.setLayout(new BoxLayout(accountDetails, BoxLayout.Y_AXIS));
-        
+
+                    accountButton.setLayout(new GridBagLayout());
+                    GridBagConstraints gbcButton = new GridBagConstraints();
+                    gbcButton.anchor = GridBagConstraints.WEST;
+                    gbcButton.fill = GridBagConstraints.HORIZONTAL;
+                    gbcButton.insets = new Insets(10, 0, 10, 25);
+
+                    gbcButton.gridx = 0;
+                    gbcButton.gridy = 0;
+                    gbcButton.weightx = 0;
+                    accountButton.add(new JLabel(genderIcon), gbcButton);
+
+                    JPanel accountDetails = new JPanel(new GridBagLayout());
+                    accountDetails.setBackground(new Color(255, 255, 255, 0));
+
                     JLabel fullNameLabel = new JLabel(user.getFullName());
                     fullNameLabel.setForeground(Color.BLACK);
-                    fullNameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
+                    fullNameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(18f));
                     JLabel usernameLabel = new JLabel("@" + user.getUsername());
                     usernameLabel.setForeground(Color.GRAY);
-                    usernameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(10f));
-        
-                    accountDetails.add(fullNameLabel);
-                    accountDetails.add(usernameLabel);
+                    usernameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(14f));
 
-                    accountButton.add(accountDetails, BorderLayout.CENTER);
+                    GridBagConstraints gbcDetails = new GridBagConstraints();
+                    gbcDetails.anchor = GridBagConstraints.WEST;
+                    gbcDetails.fill = GridBagConstraints.HORIZONTAL;
+                    gbcDetails.gridwidth = GridBagConstraints.REMAINDER;
+                    gbcDetails.weightx = 1;
+                    gbcDetails.insets = new Insets(0, 0, 0, 0);
+
+                    accountDetails.add(fullNameLabel, gbcDetails);
+                    accountDetails.add(usernameLabel, gbcDetails);
+
+                    gbcButton.gridx = 1;
+                    gbcButton.gridy = 0;
+                    gbcButton.weightx = 1;
+                    accountButton.add(accountDetails, gbcButton);
+
+                    gbc.insets = new Insets(5, 30, 5, 30);
                     accountsPanel.add(accountButton, gbc);
+
+                    themeButton.setVisible(false);
+                    signOutButton.setVisible(false);
+                    closeButton.setVisible(false);
                 }
-                
+
                 switchAccountPanel.add(accountsPanel, BorderLayout.CENTER);
-            }
-            else {
+            } else {
                 isExpanded = false;
                 switchAccountPanel.removeAll();
+                button.setText("Switch Account");
+                button.setForeground(Color.BLACK);
+                button.setFont(CustomFonts.ROBOTO_BLACK.deriveFont(20f));
+                button.setIcon(switchIcon);
                 switchAccountPanel.add(button, BorderLayout.CENTER);
+
+                themeButton.setVisible(true);
+                signOutButton.setVisible(true);
+                closeButton.setVisible(true);
             }
 
             this.revalidate();
@@ -144,12 +351,15 @@ public class OverflowMenu extends JLayeredPane {
             switchAccountPanel.revalidate();
             switchAccountPanel.repaint();
         });
-        
+
         switchAccountPanel.add(button, BorderLayout.CENTER);
         return switchAccountPanel;
     }
 
     private JPanel createProfileCard() {
+        JPanel profileMainPanel = new JPanel(new GridBagLayout());
+        profileMainPanel.setBackground(Color.WHITE);
+
         JPanel profileCard = new JPanel(new GridBagLayout());
         profileCard.setBackground(Color.WHITE);
         profileCard.setPreferredSize(new Dimension(MENU_WIDTH, MENU_HEIGHT));
@@ -184,22 +394,30 @@ public class OverflowMenu extends JLayeredPane {
 
         JButton editButton = createEditButton(editFilePath);
 
-        gbc.insets = new Insets(20, 0, 0, 0);
+        gbc.insets = new Insets(25, 0, 0, 0);
         profileCard.add(profileIcon, gbc);
-        gbc.insets = new Insets(5, 0, 0, 0);
+        gbc.insets = new Insets(15, 0, 0, 0);
         profileCard.add(nameLabel, gbc);
-        gbc.insets = new Insets(0, 0, 10, 0);
+        gbc.insets = new Insets(5, 0, 15, 0);
         profileCard.add(usernameLabel, gbc);
 
+        gbc.insets = new Insets(10, 0, 10, 0);
         if(!this.user.getFullName().equals("Guest") && !this.user.getUsername().equals("guest"))
             profileCard.add(editButton, gbc);
 
-        return profileCard;
+        gbc.weightx = 1;
+        gbc.weighty = 0;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        profileMainPanel.add(profileCard, gbc);
+        return profileMainPanel;
     }
 
     private JButton createEditButton(File editFilePath) {
         ImageIcon editIcon = new ImageIcon(editFilePath.toString());
-        JButton editButton = new JButton("Edit Profile");
+        editButton = new JButton("Edit Profile");
         editButton.setIcon(editIcon);
         editButton.setIconTextGap(15);
         editButton.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -208,6 +426,17 @@ public class OverflowMenu extends JLayeredPane {
         editButton.setForeground(Color.BLACK);
         editButton.setFocusPainted(false);
         editButton.setBorderPainted(false);
+        editButton.addActionListener(e -> {
+            editButton.setVisible(false);
+            themeButton.setVisible(false);
+            switchAccountButton.setVisible(false);
+            signOutButton.setVisible(false);
+            closeButton.setVisible(false);
+            editPanel.setVisible(true);
+
+            this.revalidate();
+            this.repaint();
+        });
 
         return editButton;
     }
@@ -230,14 +459,6 @@ public class OverflowMenu extends JLayeredPane {
     }
 
     private JButton createMenuButton(String text, ImageIcon icon) {
-        // JPanel menuPanel = new JPanel(new GridBagLayout());
-        // menuPanel.setBackground(Color.WHITE);
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridheight = 100;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1;
-        gbc.weighty = 1;
 
         JButton button = new JButton(text);
         button.setIcon(icon);
@@ -306,12 +527,10 @@ public class OverflowMenu extends JLayeredPane {
             });
         }
         if(text.equals("Close / Exit")) {
-            button.addActionListener(e -> {
-                frame.dispose();
-            });
+            if(isExpanded) button.setVisible(false);
+            button.addActionListener(e -> frame.dispose());
         }
 
-        // menuPanel.add(button);
         return button;
     }
 }

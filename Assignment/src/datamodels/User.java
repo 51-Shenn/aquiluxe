@@ -124,12 +124,12 @@ public class User {
         for (User user : users.values()) {
             System.out.println(
                     "UserID: " + user.getUserId() +
-                            ", Name: " + user.getFullName() +
-                            ", Username: " + user.getUsername() +
-                            ", Gender: " + user.getGender() +
-                            ", Email: " + user.getUserEmail() +
-                            ", Phone Number: " + user.getPhoneNumber() +
-                            ", Password: " + user.getPassword());
+                    ", Name: " + user.getFullName() +
+                    ", Username: " + user.getUsername() +
+                    ", Gender: " + user.getGender() +
+                    ", Email: " + user.getUserEmail() +
+                    ", Phone Number: " + user.getPhoneNumber() +
+                    ", Password: " + user.getPassword());
         }
     }
 }
