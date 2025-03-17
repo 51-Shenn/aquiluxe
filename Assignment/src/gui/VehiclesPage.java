@@ -5,6 +5,9 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import controllers.VehicleController;
+import datamodels.Car;
+
 import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.awt.event.MouseAdapter;
@@ -153,6 +156,13 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
             public void mouseReleased(MouseEvent evt) {
                 carRent.setBackground(Color.BLUE);
+                // sample car object
+                Car carSample = new Car(1001, "images/cars/Supra.jpg", "Toyota", "Supra", 2023, 3000, 800, "Red", 13.2,
+                        "12345678901234567", "REGISID123456", 999.99, "Automatic", "Hybrid", "Coupe", 2, true,
+                        "Aerodynamic Body");
+
+                VehicleController vehicleController = new VehicleController(frame, panel);
+                vehicleController.gotoRentalPage(carSample);
             }
         });
 

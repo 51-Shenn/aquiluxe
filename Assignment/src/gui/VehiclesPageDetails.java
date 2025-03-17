@@ -2,6 +2,9 @@ package gui;
 
 import javax.swing.*;
 
+import controllers.VehicleController;
+import datamodels.Car;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -28,7 +31,7 @@ public class VehiclesPageDetails extends JPanel {
         carMainPanel.add(bottomBar(), BorderLayout.SOUTH);
         carMainPanel.add(moreCarsPanel(), BorderLayout.CENTER);
         carMainPanel.add(carMainPanel(), BorderLayout.NORTH);
-        
+
         JScrollPane carMainContainer = new JScrollPane(carMainPanel);
         carMainContainer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         carMainContainer.getVerticalScrollBar().setUnitIncrement(30);
@@ -38,76 +41,81 @@ public class VehiclesPageDetails extends JPanel {
 
     // Top panel
     private JPanel carMainPanel() {
-        /*  Sample data
-        String brand = "Porsche";
-        String model = "GT3 RS";
-        int year = 2023, pricePerDay = 0;
-
-        /*  Images
-        ImageIcon image = new ImageIcon("images/cars/Supra.jpg");
-        JLabel carPicture = new JLabel(image);
-        ImageIcon transmissionIcon = new ImageIcon("images/vehiclepageicons/manual-transmission.png");
-        ImageIcon fuelIcon = new ImageIcon("images/vehiclepageicons/gas-station.png");
-        ImageIcon seatsIcon = new ImageIcon("images/vehiclepageicons/car-seat.png");
-        ImageIcon carTypeIcon = new ImageIcon("images/vehiclepageicons/chassis.png");
-        ImageIcon topSpeedIcon = new ImageIcon("images/vehiclepageicons/speedometer.png");
-        ImageIcon capacityIcon = new ImageIcon("images/vehiclepageicons/engine.png");
-
-        JLabel brandModelYearLabel = new JLabel(brand + " " + model + " " + year);
-        brandModelYearLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
-
-        JLabel pricePerDayLabel = new JLabel("RM" + pricePerDay + " / day");
-        pricePerDayLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(25f));
-
-        JLabel featuresLabel = new JLabel("Features");
-        featuresLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(25f));
-
-        JLabel detailsLabel = new JLabel("Details");
-        detailsLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(25f));
-
-        JPanel brandModelYearPricePanel = new JPanel(new GridLayout(2, 1, 5, 5));
-        brandModelYearPricePanel.add(brandModelYearLabel);
-        brandModelYearPricePanel.add(pricePerDayLabel);
-
-        JPanel detailsLabelPanel = new JPanel(new GridLayout(2, 1, 5, 5));
-        detailsLabelPanel.add(detailsLabel);
-        detailsLabelPanel.setPreferredSize(new Dimension(600, 75));
-
-        JPanel picturePanel = new JPanel(new BorderLayout());
-        picturePanel.add(carPicture, BorderLayout.CENTER);
-
-        JPanel featuresPanel = new JPanel(new BorderLayout());
-        featuresPanel.add(featuresLabel,BorderLayout.CENTER);
-
-        JPanel textContainer = new JPanel(new BorderLayout());
-        textContainer.setPreferredSize(new Dimension(600, 75));
-        textContainer.add(brandModelYearPricePanel, BorderLayout.CENTER);
-
-        JPanel carPictureContainer = new JPanel(new BorderLayout());
-        carPictureContainer.setPreferredSize(new Dimension(600, 600)); // Same size as car image
-        carPictureContainer.add(carPicture, BorderLayout.CENTER);
-
-        JPanel detailsPanel = new JPanel(new GridLayout(3, 3, 2, 2));
-        detailsPanel.add(new JLabel(transmissionIcon));
-        detailsPanel.add(new JLabel(fuelIcon));
-        detailsPanel.add(new JLabel(seatsIcon));
-        detailsPanel.add(new JLabel(carTypeIcon));
-        detailsPanel.add(new JLabel(topSpeedIcon));
-        detailsPanel.add(new JLabel(capacityIcon));
-
-        JButton rentButton = new JButton("RENT");
-
-        JPanel carDetailsPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10,10,10,10);
-        carDetailsPanel.setPreferredSize(new Dimension(800, 1000));
-        carDetailsPanel.setBackground(Color.BLUE);
-        */
+        /*
+         * Sample data
+         * String brand = "Porsche";
+         * String model = "GT3 RS";
+         * int year = 2023, pricePerDay = 0;
+         * 
+         * /* Images
+         * ImageIcon image = new ImageIcon("images/cars/Supra.jpg");
+         * JLabel carPicture = new JLabel(image);
+         * ImageIcon transmissionIcon = new
+         * ImageIcon("images/vehiclepageicons/manual-transmission.png");
+         * ImageIcon fuelIcon = new
+         * ImageIcon("images/vehiclepageicons/gas-station.png");
+         * ImageIcon seatsIcon = new ImageIcon("images/vehiclepageicons/car-seat.png");
+         * ImageIcon carTypeIcon = new ImageIcon("images/vehiclepageicons/chassis.png");
+         * ImageIcon topSpeedIcon = new
+         * ImageIcon("images/vehiclepageicons/speedometer.png");
+         * ImageIcon capacityIcon = new ImageIcon("images/vehiclepageicons/engine.png");
+         * 
+         * JLabel brandModelYearLabel = new JLabel(brand + " " + model + " " + year);
+         * brandModelYearLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
+         * 
+         * JLabel pricePerDayLabel = new JLabel("RM" + pricePerDay + " / day");
+         * pricePerDayLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(25f));
+         * 
+         * JLabel featuresLabel = new JLabel("Features");
+         * featuresLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(25f));
+         * 
+         * JLabel detailsLabel = new JLabel("Details");
+         * detailsLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(25f));
+         * 
+         * JPanel brandModelYearPricePanel = new JPanel(new GridLayout(2, 1, 5, 5));
+         * brandModelYearPricePanel.add(brandModelYearLabel);
+         * brandModelYearPricePanel.add(pricePerDayLabel);
+         * 
+         * JPanel detailsLabelPanel = new JPanel(new GridLayout(2, 1, 5, 5));
+         * detailsLabelPanel.add(detailsLabel);
+         * detailsLabelPanel.setPreferredSize(new Dimension(600, 75));
+         * 
+         * JPanel picturePanel = new JPanel(new BorderLayout());
+         * picturePanel.add(carPicture, BorderLayout.CENTER);
+         * 
+         * JPanel featuresPanel = new JPanel(new BorderLayout());
+         * featuresPanel.add(featuresLabel,BorderLayout.CENTER);
+         * 
+         * JPanel textContainer = new JPanel(new BorderLayout());
+         * textContainer.setPreferredSize(new Dimension(600, 75));
+         * textContainer.add(brandModelYearPricePanel, BorderLayout.CENTER);
+         * 
+         * JPanel carPictureContainer = new JPanel(new BorderLayout());
+         * carPictureContainer.setPreferredSize(new Dimension(600, 600)); // Same size
+         * as car image
+         * carPictureContainer.add(carPicture, BorderLayout.CENTER);
+         * 
+         * JPanel detailsPanel = new JPanel(new GridLayout(3, 3, 2, 2));
+         * detailsPanel.add(new JLabel(transmissionIcon));
+         * detailsPanel.add(new JLabel(fuelIcon));
+         * detailsPanel.add(new JLabel(seatsIcon));
+         * detailsPanel.add(new JLabel(carTypeIcon));
+         * detailsPanel.add(new JLabel(topSpeedIcon));
+         * detailsPanel.add(new JLabel(capacityIcon));
+         * 
+         * JButton rentButton = new JButton("RENT");
+         * 
+         * JPanel carDetailsPanel = new JPanel(new GridBagLayout());
+         * GridBagConstraints gbc = new GridBagConstraints();
+         * gbc.insets = new Insets(10,10,10,10);
+         * carDetailsPanel.setPreferredSize(new Dimension(800, 1000));
+         * carDetailsPanel.setBackground(Color.BLUE);
+         */
         carMainPanel = new JPanel(new BorderLayout());
-        carMainPanel.setPreferredSize(new Dimension(1600,450));
+        carMainPanel.setPreferredSize(new Dimension(1600, 450));
 
-        JPanel carMainContainer = new JPanel(new GridLayout(1,2,5,0));
-        carMainContainer.setBorder(BorderFactory.createLineBorder(new Color(238,238,238),5,true));
+        JPanel carMainContainer = new JPanel(new GridLayout(1, 2, 5, 0));
+        carMainContainer.setBorder(BorderFactory.createLineBorder(new Color(238, 238, 238), 5, true));
         carMainContainer.add(carDetailsPanel());
         carMainContainer.add(technicalSpecsPanel());
 
@@ -116,18 +124,18 @@ public class VehiclesPageDetails extends JPanel {
         carMainPanel.add(carMainContainer, BorderLayout.CENTER);
         carMainPanel.add(sidePanel(), BorderLayout.EAST);
         carMainPanel.add(sidePanel(), BorderLayout.WEST);
-        //carMainPanel.add(carFeaturesContainer,BorderLayout.SOUTH);
-        
+        // carMainPanel.add(carFeaturesContainer,BorderLayout.SOUTH);
+
         return carMainPanel;
     }
 
     private JPanel carDetailsPanel() {
-        JPanel carDetailsPanel = new JPanel(new BorderLayout(0,5));
+        JPanel carDetailsPanel = new JPanel(new BorderLayout(0, 5));
         carDetailsPanel.setPreferredSize(new Dimension(600, 800));
 
-        //sample
+        // sample
         ImageIcon image = new ImageIcon("images/cars/Supra.jpg");
-        Image rImage = image.getImage().getScaledInstance(700,700,java.awt.Image.SCALE_SMOOTH);
+        Image rImage = image.getImage().getScaledInstance(700, 700, java.awt.Image.SCALE_SMOOTH);
         image = new ImageIcon(rImage);
 
         String brand = "Porsche";
@@ -147,7 +155,7 @@ public class VehiclesPageDetails extends JPanel {
 
         JPanel brandModelYearPricePanel = new JPanel(new GridLayout(2, 1, 5, 5));
         brandModelYearPricePanel.setBackground(Color.WHITE);
-        brandModelYearPricePanel.setPreferredSize(new Dimension(500,75));
+        brandModelYearPricePanel.setPreferredSize(new Dimension(500, 75));
         brandModelYearPricePanel.add(brandModelYearLabel);
         brandModelYearPricePanel.add(pricePerDayLabel);
 
@@ -157,8 +165,8 @@ public class VehiclesPageDetails extends JPanel {
     }
 
     private JPanel technicalSpecsPanel() {
-        //sample
-        JPanel technicalSpecsPanel = new JPanel(new BorderLayout(5,5));
+        // sample
+        JPanel technicalSpecsPanel = new JPanel(new BorderLayout(5, 5));
         technicalSpecsPanel.setPreferredSize(new Dimension(600, 800));
 
         // just a "Details" label
@@ -171,9 +179,9 @@ public class VehiclesPageDetails extends JPanel {
         detailsLabelPanel.add(detailsLabel);
         detailsLabelPanel.add(carCodesPanel());
 
-        technicalSpecsPanel.add(detailsLabelPanel,BorderLayout.NORTH);
+        technicalSpecsPanel.add(detailsLabelPanel, BorderLayout.NORTH);
 
-        //sample
+        // sample
         String transmission = "AUTO";
         String fuelType = "HYBRID";
         int seats = 2;
@@ -184,7 +192,7 @@ public class VehiclesPageDetails extends JPanel {
         int horsepower = 800;
         String color = "BLACK";
 
-        // loop through every details of the car and show 
+        // loop through every details of the car and show
         ImageIcon[] detailsIcons = new ImageIcon[9];
         ImageIcon transmissionIcon = new ImageIcon("images/vehiclepageicons/manual-transmission.png");
         ImageIcon fuelIcon = new ImageIcon("images/vehiclepageicons/gas-station.png");
@@ -274,14 +282,15 @@ public class VehiclesPageDetails extends JPanel {
         colorIconPanel.setBackground(Color.BLACK);
         colorIconPanel.add(colorIconLabel, BorderLayout.CENTER);
         JLabel colorLabel = new JLabel(color);
-        colorLabel.setPreferredSize(new Dimension(0,25));
+        colorLabel.setPreferredSize(new Dimension(0, 25));
         colorLabel.setHorizontalAlignment(JLabel.CENTER);
         colorLabel.setVerticalAlignment(JLabel.NORTH);
         colorPanel.add(colorIconPanel, BorderLayout.CENTER);
         colorPanel.add(colorLabel, BorderLayout.SOUTH);
         colorPanel.setBackground(Color.WHITE);
 
-        JPanel[] detailsBox = {transmissionPanel,fuelPanel,seatsPanel,carTypePanel,topSpeedPanel,capacityPanel,mpgPanel,horsepowerPanel,colorPanel};
+        JPanel[] detailsBox = { transmissionPanel, fuelPanel, seatsPanel, carTypePanel, topSpeedPanel, capacityPanel,
+                mpgPanel, horsepowerPanel, colorPanel };
 
         JPanel specsContainer = new JPanel(new GridLayout(3, 3, 5, 5));
 
@@ -290,18 +299,18 @@ public class VehiclesPageDetails extends JPanel {
         }
         specsContainer.add(colorPanel);
 
-        technicalSpecsPanel.add(specsContainer,BorderLayout.CENTER);
-        
-        //bottom panel that holds all the button
-        JPanel buttonsPanel = new JPanel(new BorderLayout());
-        buttonsPanel.setPreferredSize(new Dimension(1600,75));
-        //buttonsPanel.setBackground(Color.BLACK);
+        technicalSpecsPanel.add(specsContainer, BorderLayout.CENTER);
 
-        //rent button on the right 
+        // bottom panel that holds all the button
+        JPanel buttonsPanel = new JPanel(new BorderLayout());
+        buttonsPanel.setPreferredSize(new Dimension(1600, 75));
+        // buttonsPanel.setBackground(Color.BLACK);
+
+        // rent button on the right
         JPanel rentPanel = new JPanel(null);
-        rentPanel.setPreferredSize(new Dimension(250,100));
+        rentPanel.setPreferredSize(new Dimension(250, 100));
         JButton rentButton = new JButton("RENT");
-        rentButton.setBounds(0,0,250,75);
+        rentButton.setBounds(0, 0, 250, 75);
         rentButton.setBackground(Color.BLUE);
         rentButton.setForeground(Color.WHITE);
         rentButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
@@ -313,17 +322,23 @@ public class VehiclesPageDetails extends JPanel {
             public void mouseEntered(MouseEvent evt) {
                 rentButton.setBackground(Color.BLUE.darker());
             }
-        
+
             public void mouseExited(MouseEvent evt) {
                 rentButton.setBackground(Color.BLUE);
             }
-        
+
             public void mousePressed(MouseEvent evt) {
                 rentButton.setBackground(Color.CYAN);
             }
-        
+
             public void mouseReleased(MouseEvent evt) {
                 rentButton.setBackground(Color.BLUE);
+                Car carSample = new Car(1001, "images/cars/Supra.jpg", "Toyota", "Supra", 2023, 3000, 800, "Red", 13.2,
+                        "12345678901234567", "REGISID123456", 999.99, "Automatic", "Hybrid", "Coupe", 2, true,
+                        "Aerodynamic Body");
+
+                VehicleController vehicleController = new VehicleController(frame, panel);
+                vehicleController.gotoRentalPage(carSample);
             }
         });
         rentPanel.add(rentButton);
@@ -331,20 +346,20 @@ public class VehiclesPageDetails extends JPanel {
 
         // show more on the left
         JPanel showMorePanel = new JPanel(null);
-        showMorePanel.setPreferredSize(new Dimension(200,100));
+        showMorePanel.setPreferredSize(new Dimension(200, 100));
         JButton showMoreButton = new JButton("Show More");
-        showMoreButton.setBounds(0,25,200,50);
+        showMoreButton.setBounds(0, 25, 200, 50);
         showMoreButton.setBackground(Color.WHITE);
         showMoreButton.addActionListener(e -> {
             if (e.getActionCommand().equals("Show More") || e.getActionCommand().equals("Hide")) {
                 if (isFeaturesVisible) {
                     carMainPanel.remove(carFeaturesContainer);
-                    carMainPanel.setPreferredSize(new Dimension(1600,450));
+                    carMainPanel.setPreferredSize(new Dimension(1600, 450));
                     showMoreButton.setText("Show More");
                     isFeaturesVisible = false;
                 } else {
                     carMainPanel.add(carFeaturesContainer, BorderLayout.SOUTH);
-                    carMainPanel.setPreferredSize(new Dimension(1600,900));
+                    carMainPanel.setPreferredSize(new Dimension(1600, 900));
                     showMoreButton.setText("Hide");
                     isFeaturesVisible = true;
                 }
@@ -355,13 +370,14 @@ public class VehiclesPageDetails extends JPanel {
         showMorePanel.add(showMoreButton);
         buttonsPanel.add(showMorePanel, BorderLayout.WEST);
 
-        technicalSpecsPanel.add(buttonsPanel,BorderLayout.SOUTH);
+        technicalSpecsPanel.add(buttonsPanel, BorderLayout.SOUTH);
 
         return technicalSpecsPanel;
     }
 
     private JPanel carCodesPanel() {
-        // additional not so important details for users like codes: ID,Numbers at the bottom bar
+        // additional not so important details for users like codes: ID,Numbers at the
+        // bottom bar
         int vehicleId = 1111;
         String vinNumber = "4Y1SL65848Z411439";
         String registrationNumber = "GOLD 1";
@@ -375,9 +391,9 @@ public class VehiclesPageDetails extends JPanel {
         JLabel registrationNumberLabel = new JLabel("Registration Number : " + registrationNumber);
         registrationNumberLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(12.5f));
 
-        JPanel carCodesPanel = new JPanel(new GridLayout(3,1,5,5));
+        JPanel carCodesPanel = new JPanel(new GridLayout(3, 1, 5, 5));
         carCodesPanel.setBackground(Color.WHITE);
-        carCodesPanel.setPreferredSize(new Dimension(500,75));
+        carCodesPanel.setPreferredSize(new Dimension(500, 75));
         carCodesPanel.add(vehilceIdLabel);
         carCodesPanel.add(vinNumberLabel);
         carCodesPanel.add(registrationNumberLabel);
@@ -385,10 +401,9 @@ public class VehiclesPageDetails extends JPanel {
         return carCodesPanel;
     }
 
-
     // Center panel
     private JPanel moreCarsPanel() {
-        //sample
+        // sample
         ImageIcon image = null;
         try {
             image = new ImageIcon("images/cars/Supra.jpg");
@@ -401,9 +416,9 @@ public class VehiclesPageDetails extends JPanel {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error loading images: " + e.getMessage());
         }
-        Image rImage = image.getImage().getScaledInstance(400,400,java.awt.Image.SCALE_SMOOTH);
+        Image rImage = image.getImage().getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH);
         image = new ImageIcon(rImage);
-        String[] cars ={"PORSCHE","TOYOTA","NISSAN"};
+        String[] cars = { "PORSCHE", "TOYOTA", "NISSAN" };
         String model = "GT3 RS WEISSACH";
         String transmissions = "AUTO";
         String fuelType = "HYBRID";
@@ -420,32 +435,32 @@ public class VehiclesPageDetails extends JPanel {
         otherCarsLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(35f));
         JButton viewAllButton = new JButton("View All");
         viewAllButton.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(25f));
-        viewAllButton.setPreferredSize(new Dimension(150,50));
+        viewAllButton.setPreferredSize(new Dimension(150, 50));
         viewAllButton.setBackground(Color.WHITE);
         viewAllButton.addActionListener(e -> {
-            if (e.getActionCommand().equals("View All")){
+            if (e.getActionCommand().equals("View All")) {
                 panel.removeAll();
                 panel.add(new VehiclesPage(frame, panel), BorderLayout.CENTER);
                 panel.revalidate();
                 panel.repaint();
             }
         });
-        otherCarsTitlePanel.add(otherCarsLabel,BorderLayout.WEST);
-        otherCarsTitlePanel.add(viewAllButton,BorderLayout.EAST);
-        
+        otherCarsTitlePanel.add(otherCarsLabel, BorderLayout.WEST);
+        otherCarsTitlePanel.add(viewAllButton, BorderLayout.EAST);
+
         // contain cars
-        JPanel carsContainer = new JPanel(new GridLayout(0,3,50,30));
+        JPanel carsContainer = new JPanel(new GridLayout(0, 3, 50, 30));
         carsContainer.setBackground(Color.WHITE);
-        for (String car : cars){
+        for (String car : cars) {
             carsContainer.add(VehiclesPage.createCarCard(image, car, model, transmissions, fuelType, carType,
-            seats, price, availability, frame, panel));
+                    seats, price, availability, frame, panel));
         }
 
         // container include cars and the labels and buttons
         JPanel emptyBottomPanel = new JPanel();
         emptyBottomPanel.setPreferredSize(new Dimension(800, 75));
         emptyBottomPanel.setBackground(Color.WHITE);
-        
+
         JPanel moreCarsContainer = new JPanel(new BorderLayout());
         moreCarsContainer.setPreferredSize(new Dimension(800, 400));
         moreCarsContainer.add(carsContainer, BorderLayout.CENTER);
@@ -461,31 +476,31 @@ public class VehiclesPageDetails extends JPanel {
         emptyRightPanel.setPreferredSize(new Dimension(300, 1000));
 
         JPanel moreCarsPanel = new JPanel(new BorderLayout());
-        moreCarsPanel.add(moreCarsContainer,BorderLayout.CENTER);
-        moreCarsPanel.add(emptyRightPanel,BorderLayout.EAST);
-        moreCarsPanel.add(emptyLeftPanel,BorderLayout.WEST);
-        moreCarsPanel.setPreferredSize(new Dimension(1600,550));
+        moreCarsPanel.add(moreCarsContainer, BorderLayout.CENTER);
+        moreCarsPanel.add(emptyRightPanel, BorderLayout.EAST);
+        moreCarsPanel.add(emptyLeftPanel, BorderLayout.WEST);
+        moreCarsPanel.setPreferredSize(new Dimension(1600, 550));
 
         return moreCarsPanel;
     }
 
     // create features when press show more then remove when unshow
-    private JPanel createCarFeaturesContainer(){
+    private JPanel createCarFeaturesContainer() {
         JPanel carMainFeaturesContainer = new JPanel(new BorderLayout());
-        carMainFeaturesContainer.setPreferredSize(new Dimension(1600,450));
+        carMainFeaturesContainer.setPreferredSize(new Dimension(1600, 450));
 
         JPanel featuresContainer = new JPanel(new BorderLayout());
-        featuresContainer.setPreferredSize(new Dimension(1600,300));
+        featuresContainer.setPreferredSize(new Dimension(1600, 300));
 
         JLabel featuresLabel = new JLabel("Features");
         featuresLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
 
-        featuresContainer.add(featuresLabel,BorderLayout.NORTH);
+        featuresContainer.add(featuresLabel, BorderLayout.NORTH);
 
-        carMainFeaturesContainer.add(featuresContainer,BorderLayout.CENTER);
+        carMainFeaturesContainer.add(featuresContainer, BorderLayout.CENTER);
 
-        carMainFeaturesContainer.add(sidePanel(),BorderLayout.EAST);
-        carMainFeaturesContainer.add(sidePanel(),BorderLayout.WEST);
+        carMainFeaturesContainer.add(sidePanel(), BorderLayout.EAST);
+        carMainFeaturesContainer.add(sidePanel(), BorderLayout.WEST);
 
         return carMainFeaturesContainer;
     }

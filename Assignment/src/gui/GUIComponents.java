@@ -71,12 +71,14 @@ public class GUIComponents extends JPanel {
         }
 
         topBarButtons[0].addActionListener(e -> {
+            checkActivePage(topBarButtons, topBarButtons[0]);
             this.panel.removeAll();
             this.panel.revalidate();
             this.panel.repaint();
         });
 
         topBarButtons[1].addActionListener(e -> {
+            checkActivePage(topBarButtons, topBarButtons[1]);
             this.panel.removeAll();
             this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
             this.panel.revalidate();
@@ -84,6 +86,7 @@ public class GUIComponents extends JPanel {
         });
 
         topBarButtons[2].addActionListener(e -> {
+            checkActivePage(topBarButtons, topBarButtons[2]);
             this.panel.removeAll();
             JPanel panel = new JPanel();
 
@@ -96,6 +99,7 @@ public class GUIComponents extends JPanel {
         });
 
         topBarButtons[3].addActionListener(e -> {
+            checkActivePage(topBarButtons, topBarButtons[3]);
             this.panel.removeAll();
             this.panel.revalidate();
             this.panel.repaint();
@@ -139,5 +143,16 @@ public class GUIComponents extends JPanel {
             return menu;
         }
         return new JButton("ERROR");
+    }
+
+    // change button color when clicked
+    private void checkActivePage(JButton[] topBarButtons, JButton activeButton) {
+        for (JButton button : topBarButtons) {
+            if (button == activeButton) {
+                button.setForeground(Colors.LIGHT_BLUE);
+            } else {
+                button.setForeground(Color.BLACK);
+            }
+        }
     }
 }
