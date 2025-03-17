@@ -328,7 +328,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Check if the click is on the image
-                if (e.getSource() == carEverythingPanel) {
+                if (e.getSource() == carDetails) {
                     panel.removeAll();
                     panel.add(new VehiclesPageDetails(frame, panel), BorderLayout.CENTER);
                     panel.revalidate();

@@ -165,6 +165,8 @@ public class VehiclesPageDetails extends JPanel {
     }
 
     private JPanel technicalSpecsPanel() {
+        ImageIcon downIcon = new ImageIcon("images/vehiclepageicons/down.png");
+        ImageIcon upIcon = new ImageIcon("images/vehiclepageicons/up.png");
         // sample
         JPanel technicalSpecsPanel = new JPanel(new BorderLayout(5, 5));
         technicalSpecsPanel.setPreferredSize(new Dimension(600, 800));
@@ -217,6 +219,7 @@ public class VehiclesPageDetails extends JPanel {
         transmissionLabel.setVerticalTextPosition(JLabel.BOTTOM);
         transmissionLabel.setHorizontalTextPosition(JLabel.CENTER);
         transmissionLabel.setText(transmission);
+        transmissionLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
         transmissionPanel.add(transmissionLabel, BorderLayout.CENTER);
         transmissionPanel.setBackground(Color.WHITE);
 
@@ -225,6 +228,7 @@ public class VehiclesPageDetails extends JPanel {
         fuelLabel.setVerticalTextPosition(JLabel.BOTTOM);
         fuelLabel.setHorizontalTextPosition(JLabel.CENTER);
         fuelLabel.setText(fuelType);
+        fuelLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
         fuelPanel.add(fuelLabel, BorderLayout.CENTER);
         fuelPanel.setBackground(Color.WHITE);
 
@@ -233,6 +237,7 @@ public class VehiclesPageDetails extends JPanel {
         seatsLabel.setVerticalTextPosition(JLabel.BOTTOM);
         seatsLabel.setHorizontalTextPosition(JLabel.CENTER);
         seatsLabel.setText(Integer.toString(seats));
+        seatsLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
         seatsPanel.add(seatsLabel, BorderLayout.CENTER);
         seatsPanel.setBackground(Color.WHITE);
 
@@ -241,6 +246,7 @@ public class VehiclesPageDetails extends JPanel {
         carTypeLabel.setVerticalTextPosition(JLabel.BOTTOM);
         carTypeLabel.setHorizontalTextPosition(JLabel.CENTER);
         carTypeLabel.setText(carType);
+        carTypeLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
         carTypePanel.add(carTypeLabel, BorderLayout.CENTER);
         carTypePanel.setBackground(Color.WHITE);
 
@@ -249,6 +255,7 @@ public class VehiclesPageDetails extends JPanel {
         topSpeedLabel.setVerticalTextPosition(JLabel.BOTTOM);
         topSpeedLabel.setHorizontalTextPosition(JLabel.CENTER);
         topSpeedLabel.setText(Double.toString(topSpeed) + " km/h");
+        topSpeedLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
         topSpeedPanel.add(topSpeedLabel, BorderLayout.CENTER);
         topSpeedPanel.setBackground(Color.WHITE);
 
@@ -257,6 +264,7 @@ public class VehiclesPageDetails extends JPanel {
         capacityLabel.setVerticalTextPosition(JLabel.BOTTOM);
         capacityLabel.setHorizontalTextPosition(JLabel.CENTER);
         capacityLabel.setText(Integer.toString(capacity) + " cc");
+        capacityLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
         capacityPanel.add(capacityLabel, BorderLayout.CENTER);
         capacityPanel.setBackground(Color.WHITE);
 
@@ -265,6 +273,7 @@ public class VehiclesPageDetails extends JPanel {
         mpgLabel.setVerticalTextPosition(JLabel.BOTTOM);
         mpgLabel.setHorizontalTextPosition(JLabel.CENTER);
         mpgLabel.setText(Double.toString(mpg) + " mpg");
+        mpgLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
         mpgPanel.add(mpgLabel, BorderLayout.CENTER);
         mpgPanel.setBackground(Color.WHITE);
 
@@ -273,6 +282,7 @@ public class VehiclesPageDetails extends JPanel {
         horsepowerLabel.setVerticalTextPosition(JLabel.BOTTOM);
         horsepowerLabel.setHorizontalTextPosition(JLabel.CENTER);
         horsepowerLabel.setText(Integer.toString(horsepower) + " hp");
+        horsepowerLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
         horsepowerPanel.add(horsepowerLabel, BorderLayout.CENTER);
         horsepowerPanel.setBackground(Color.WHITE);
 
@@ -285,6 +295,7 @@ public class VehiclesPageDetails extends JPanel {
         colorLabel.setPreferredSize(new Dimension(0, 25));
         colorLabel.setHorizontalAlignment(JLabel.CENTER);
         colorLabel.setVerticalAlignment(JLabel.NORTH);
+        colorLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
         colorPanel.add(colorIconPanel, BorderLayout.CENTER);
         colorPanel.add(colorLabel, BorderLayout.SOUTH);
         colorPanel.setBackground(Color.WHITE);
@@ -348,19 +359,24 @@ public class VehiclesPageDetails extends JPanel {
         JPanel showMorePanel = new JPanel(null);
         showMorePanel.setPreferredSize(new Dimension(200, 100));
         JButton showMoreButton = new JButton("Show More");
-        showMoreButton.setBounds(0, 25, 200, 50);
+        showMoreButton.setBounds(0, 35, 175, 40);
         showMoreButton.setBackground(Color.WHITE);
+        showMoreButton.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(20f));
+        showMoreButton.setIcon(downIcon);
+        showMoreButton.setHorizontalAlignment(JButton.LEFT);
         showMoreButton.addActionListener(e -> {
             if (e.getActionCommand().equals("Show More") || e.getActionCommand().equals("Hide")) {
                 if (isFeaturesVisible) {
                     carMainPanel.remove(carFeaturesContainer);
                     carMainPanel.setPreferredSize(new Dimension(1600, 450));
                     showMoreButton.setText("Show More");
+                    showMoreButton.setIcon(downIcon);
                     isFeaturesVisible = false;
                 } else {
                     carMainPanel.add(carFeaturesContainer, BorderLayout.SOUTH);
                     carMainPanel.setPreferredSize(new Dimension(1600, 900));
                     showMoreButton.setText("Hide");
+                    showMoreButton.setIcon(upIcon);
                     isFeaturesVisible = true;
                 }
                 carMainPanel.revalidate();
@@ -418,6 +434,7 @@ public class VehiclesPageDetails extends JPanel {
         }
         Image rImage = image.getImage().getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH);
         image = new ImageIcon(rImage);
+        ImageIcon rightArrowIcon = new ImageIcon("images/vehiclepageicons/right-arrow.png");
         String[] cars = { "PORSCHE", "TOYOTA", "NISSAN" };
         String model = "GT3 RS WEISSACH";
         String transmissions = "AUTO";
@@ -435,8 +452,11 @@ public class VehiclesPageDetails extends JPanel {
         otherCarsLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(35f));
         JButton viewAllButton = new JButton("View All");
         viewAllButton.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(25f));
-        viewAllButton.setPreferredSize(new Dimension(150, 50));
+        viewAllButton.setPreferredSize(new Dimension(165, 40));
         viewAllButton.setBackground(Color.WHITE);
+        viewAllButton.setIcon(rightArrowIcon);
+        viewAllButton.setHorizontalTextPosition(JButton.LEFT);
+        viewAllButton.setVerticalAlignment(JButton.BOTTOM);
         viewAllButton.addActionListener(e -> {
             if (e.getActionCommand().equals("View All")) {
                 panel.removeAll();
@@ -445,8 +465,12 @@ public class VehiclesPageDetails extends JPanel {
                 panel.repaint();
             }
         });
+
+        JPanel viewAllButtonPanel = new JPanel(new BorderLayout());
+        viewAllButtonPanel.setBackground(Color.WHITE);
+        viewAllButtonPanel.add(viewAllButton, BorderLayout.SOUTH);
         otherCarsTitlePanel.add(otherCarsLabel, BorderLayout.WEST);
-        otherCarsTitlePanel.add(viewAllButton, BorderLayout.EAST);
+        otherCarsTitlePanel.add(viewAllButtonPanel, BorderLayout.EAST);
 
         // contain cars
         JPanel carsContainer = new JPanel(new GridLayout(0, 3, 50, 30));
@@ -491,6 +515,7 @@ public class VehiclesPageDetails extends JPanel {
 
         JPanel featuresContainer = new JPanel(new BorderLayout());
         featuresContainer.setPreferredSize(new Dimension(1600, 300));
+        featuresContainer.setBackground(Color.WHITE);
 
         JLabel featuresLabel = new JLabel("Features");
         featuresLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
