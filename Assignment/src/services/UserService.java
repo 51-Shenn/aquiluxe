@@ -1,12 +1,11 @@
 package services;
 
+import database.UserDAO;
 import datamodels.User;
 
-import java.util.Arrays;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.swing.JLabel;
 
 public class UserService {
@@ -278,7 +277,12 @@ public class UserService {
 
     private static void createNewUserAccount(String fullName, String gender, String email, String phone, char[] password) {
         String userPassword = new String(password);
-        new User(fullName, gender, email, phone, generateUsername(fullName), userPassword);
+        String username = generateUsername(fullName);
+
+        new User(fullName, gender, email, phone, username, userPassword);
+
+        UserDAO userDAO = new UserDAO();
+        userDAO.addUser(fullName, gender, phone, email, username, userPassword);
 
         User.displayUsers();
         System.out.println(User.users);
