@@ -25,6 +25,7 @@ public class GUIComponents extends JPanel {
 
         add(createTopBar(), BorderLayout.WEST);
         add(menuButton(), BorderLayout.EAST);
+        this.panel.add(new HomePage(this.frame, this.panel), BorderLayout.CENTER);
     }
 
     private JButton logo() {
@@ -76,6 +77,7 @@ public class GUIComponents extends JPanel {
 
         topBarButtons[0].addActionListener(e -> {
             this.panel.removeAll();
+            this.panel.add(new HomePage(this.frame, this.panel), BorderLayout.CENTER);
             this.panel.revalidate();
             this.panel.repaint();
         });

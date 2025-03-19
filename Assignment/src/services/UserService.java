@@ -281,8 +281,8 @@ public class UserService {
 
         new User(fullName, gender, email, phone, username, userPassword);
 
-        UserDAO userDAO = new UserDAO();
-        userDAO.addUser(fullName, gender, phone, email, username, userPassword);
+//        UserDAO userDAO = new UserDAO();
+//        userDAO.addUser(fullName, gender, phone, email, username, userPassword);
 
         User.displayUsers();
         System.out.println(User.users);
