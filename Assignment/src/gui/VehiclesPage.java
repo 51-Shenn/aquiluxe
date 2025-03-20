@@ -127,7 +127,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carDetails.setContentAreaFilled(false);
         carDetails.setOpaque(true);
 
-        JButton carRent = new JButton();
+        RoundedButton carRent = new RoundedButton(10,Color.BLUE);
         carRent.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
         carRent.setText("RENT");
         carRent.setFocusable(false);
@@ -449,8 +449,10 @@ public class VehiclesPage extends JPanel implements ActionListener{
         ImageIcon addIcon = new ImageIcon("images/vehiclepageicons/add.png");
 
         JPanel adminButtons = new JPanel(new GridLayout(1,2,0,0));
+        adminButtons.setBackground(Color.WHITE);
         adminButtons.setBounds(1660,25,200,50);
-        JButton deleteButton = new JButton(deleteIcon);
+        RoundedButton deleteButton = new RoundedButton(10,Color.WHITE);
+        deleteButton.setIcon(deleteIcon);
         deleteButton.setBackground(Color.RED);
         deleteButton.setOpaque(true);
         deleteButton.setFocusable(false);
@@ -473,7 +475,8 @@ public class VehiclesPage extends JPanel implements ActionListener{
                 deleteButton.setBackground(Color.RED);
             }
         });
-        JButton addButton = new JButton(addIcon);
+        RoundedButton addButton = new RoundedButton(10,Color.WHITE);
+        addButton.setIcon(addIcon);
         addButton.setBackground(Color.GREEN);
         addButton.setOpaque(true);
         addButton.setFocusable(false);
@@ -791,5 +794,60 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
         // Return the greyscale image as an ImageIcon
         return new ImageIcon(brighterGreyImage);
+    }
+
+    private static class RoundedButton extends JButton {
+        private Color backgroundColor;
+        private int cornerRadius;
+
+        public RoundedButton(int radius, Color bgColor) {
+            this.cornerRadius = radius;
+            this.backgroundColor = bgColor;
+            setOpaque(false);
+        }
+
+        @Override
+        public void setBackground(Color bgColor) {
+            this.backgroundColor = bgColor;
+            repaint();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g.create();
+
+            // Enable anti-aliasing for smooth rendering
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            int width = getWidth();
+            int height = getHeight();
+            int arcSize = cornerRadius * 2;
+
+            // Make panel transparent
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+            g2d.setColor(backgroundColor != null ? backgroundColor : getBackground());
+            g2d.fillRoundRect(0, 0, width - 1, height - 1, arcSize, arcSize);
+
+            // Draw the icon (if set)
+            Icon icon = getIcon();
+            if (icon != null) {
+                int iconWidth = icon.getIconWidth();
+                int iconHeight = icon.getIconHeight();
+                int iconX = (width - iconWidth - getText().length() * 5) / 2; // Adjust spacing
+                int iconY = (height - iconHeight) / 2;
+                icon.paintIcon(this, g2d, iconX, iconY);
+            }
+
+            FontMetrics fm = g2d.getFontMetrics();
+            int textX = (width - fm.stringWidth(getText())) / 2;
+            int textY = (height + fm.getAscent()) / 2 - 2;
+
+            // Fill rounded rectangle
+            g2d.setColor(getForeground());
+            g2d.drawString(getText(), textX, textY);
+
+            g2d.dispose();
+        }
     }
 }
