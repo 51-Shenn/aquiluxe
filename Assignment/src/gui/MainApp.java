@@ -40,7 +40,6 @@ public class MainApp extends JFrame {
     }
 
     public static void main(String[] args) {
-        new User("Tan Yit Shen", "Male", "user@gmail.com", "123456789", "asd", "asd");
         System.out.println(User.users);
 
         new MainApp();
