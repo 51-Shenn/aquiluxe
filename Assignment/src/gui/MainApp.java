@@ -1,17 +1,19 @@
 package gui;
 
+import datamodels.User;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class MainApp extends JFrame {
 
     public MainApp() {
-         try {
-             // Set the Windows Look and Feel
-             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-         } catch (Exception e) {
-             e.printStackTrace();
-         }
+//         try {
+//             // Set the Windows Look and Feel
+//             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+//         } catch (Exception e) {
+//             e.printStackTrace();
+//         }
         // Initialize frame
         // try {
         //     UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -31,13 +33,15 @@ public class MainApp extends JFrame {
 
         JPanel contentPanel = new JPanel(new BorderLayout());
 
-        add(new GUIComponents(this, contentPanel), BorderLayout.NORTH);
+        add(new GUIComponents(this, contentPanel, null), BorderLayout.NORTH);
         add(contentPanel, BorderLayout.CENTER);
 
         setVisible(true);
     }
 
     public static void main(String[] args) {
+        System.out.println(User.users);
+
         new MainApp();
     }
 

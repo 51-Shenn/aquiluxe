@@ -1,6 +1,7 @@
 package gui;
 
 import controllers.UserController;
+import datamodels.User;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -12,12 +13,14 @@ public class SignInPage extends AuthenticationPage {
 
     private final JFrame frame;
     private final JPanel panel;
+    private User user;
     private JPasswordField passwordInput;
     private JLabel passwordValidationLabel;
 
-    public SignInPage(JFrame frame, JPanel panel) {
+    public SignInPage(JFrame frame, JPanel panel, User user) {
         this.frame = frame;
         this.panel = panel;
+        this.user = user;
     }
 
     @Override
@@ -70,10 +73,11 @@ public class SignInPage extends AuthenticationPage {
             closeButton.addActionListener(e -> {
                 this.frame.getContentPane().removeAll();
                 this.frame.setLayout(new BorderLayout());
-                this.frame.add(new GUIComponents(this.frame, this.panel), BorderLayout.NORTH);
+                GUIComponents.overflowMenu = null;
+                this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
                 this.frame.add(this.panel, BorderLayout.CENTER);
                 this.panel.removeAll();
-                this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
+//                this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
                 this.frame.revalidate();
                 this.frame.repaint();
             });
@@ -157,7 +161,7 @@ public class SignInPage extends AuthenticationPage {
         forgotPasswordLink.setContentAreaFilled(false);
         forgotPasswordLink.setBorder(new EmptyBorder(0, 0, 0, 0));
         forgotPasswordLink.addActionListener(e -> {
-            this.frame.setContentPane(new ForgotPasswordPage(this.frame, this.panel));
+            this.frame.setContentPane(new ForgotPasswordPage(this.frame, this.panel, this.user));
             this.frame.revalidate();
             this.frame.repaint();
         });
@@ -187,7 +191,7 @@ public class SignInPage extends AuthenticationPage {
         linkButton.setContentAreaFilled(false);
         linkButton.setBorder(new EmptyBorder(0, 0, 0, 0));
         linkButton.addActionListener(e -> {
-            this.frame.setContentPane(new SignUpPage(this.frame, this.panel));
+            this.frame.setContentPane(new SignUpPage(this.frame, this.panel, this.user));
             this.frame.revalidate();
             this.frame.repaint();
         });
@@ -207,9 +211,13 @@ public class SignInPage extends AuthenticationPage {
         nextButton.addActionListener(e -> {
             boolean isValidSignInDetails = UserController.passSignInDetails(emailInput.getText(), passwordInput.getPassword(), emailValidationLabel, passwordValidationLabel);
             if(isValidSignInDetails) {
+                this.user = UserController.passSignInDetails(emailInput.getText(), passwordInput.getPassword());
                 JPanel newContentPane = new JPanel(new BorderLayout());
                 this.frame.setContentPane(newContentPane);
-                this.frame.add(new GUIComponents(this.frame, this.panel), BorderLayout.NORTH);
+                GUIComponents.overflowMenu = null;
+                this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                this.frame.add(this.panel, BorderLayout.CENTER);
+                this.panel.removeAll();
                 this.frame.revalidate();
                 this.frame.repaint();
             }

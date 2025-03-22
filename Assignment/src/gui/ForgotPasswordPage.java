@@ -1,6 +1,7 @@
 package gui;
 
 import controllers.UserController;
+import datamodels.User;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -12,6 +13,7 @@ public class ForgotPasswordPage extends AuthenticationPage {
 
     private final JFrame frame;
     private final JPanel panel;
+    private User user;
     private JPasswordField passwordInput;
     private JPasswordField confirmPasswordInput;
     private String currentPage = "USER";
@@ -19,9 +21,10 @@ public class ForgotPasswordPage extends AuthenticationPage {
     private JLabel passwordValidationLabel;
     private JLabel confirmPasswordValidationLabel;
 
-    public ForgotPasswordPage(JFrame frame, JPanel panel) {
+    public ForgotPasswordPage(JFrame frame, JPanel panel, User user) {
         this.frame = frame;
         this.panel = panel;
+        this.user = user;
     }
 
     @Override
@@ -58,29 +61,6 @@ public class ForgotPasswordPage extends AuthenticationPage {
         JLabel titleLabel = new JLabel("Forgot Password");
         titleLabel.setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(55f));
         titleLabel.setForeground(Color.BLACK);
-
-        JButton closeButton = new JButton();
-        File closeImage = new File("images/icons/close.png");
-        if (!closeImage.exists()) {
-            JOptionPane.showMessageDialog(null, "Failed to load image:\n" + closeImage + "\n");
-        } else {
-            ImageIcon closeIcon = new ImageIcon(closeImage.toString());
-            closeButton.setPreferredSize(new Dimension(50, 50));
-            closeButton.setBackground(Color.WHITE);
-            closeButton.setIcon(closeIcon);
-            closeButton.setBorderPainted(false);
-            closeButton.setContentAreaFilled(false);
-            closeButton.setFocusPainted(false);
-            closeButton.addActionListener(e -> {
-                this.frame.getContentPane().removeAll();
-                this.frame.add(new GUIComponents(this.frame, this.panel), BorderLayout.NORTH);
-                this.frame.add(this.panel, BorderLayout.CENTER);
-                this.panel.removeAll();
-                this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
-                this.frame.revalidate();
-                this.frame.repaint();
-            });
-        }
 
         titleContainer.add(titleLabel);
 
@@ -222,7 +202,7 @@ public class ForgotPasswordPage extends AuthenticationPage {
         linkButton.setContentAreaFilled(false);
         linkButton.setBorder(new EmptyBorder(0, 0, 0, 0));
         linkButton.addActionListener(e -> {
-            this.frame.setContentPane(new SignInPage(this.frame, this.panel));
+            this.frame.setContentPane(new SignInPage(this.frame, this.panel, this.user));
             this.frame.revalidate();
             this.frame.repaint();
         });
@@ -255,9 +235,10 @@ public class ForgotPasswordPage extends AuthenticationPage {
                 isValidForgotPasswordDetails = UserController.passForgotPasswordDetails(emailInput.getText(), phoneInput.getText(), passwordInput.getPassword(), confirmPasswordInput.getPassword(), passwordValidationLabel, confirmPasswordValidationLabel);
                 if(isValidForgotPasswordDetails) {
                     currentPage = "USER";
-                    JPanel newContentPane = new JPanel(new BorderLayout());
-                    this.frame.setContentPane(newContentPane);
-                    this.frame.add(new GUIComponents(this.frame, null), BorderLayout.NORTH);
+//                    JPanel newContentPane = new JPanel(new BorderLayout());
+                    this.frame.setContentPane(new SignInPage(this.frame, this.panel, this.user));
+//                    GUIComponents.overflowMenu = null;
+//                    this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
                     this.frame.validate();
                 }
             }
