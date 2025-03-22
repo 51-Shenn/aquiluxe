@@ -2,6 +2,7 @@ package controllers;
 
 import javax.swing.JLabel;
 
+import datamodels.User;
 import services.UserService;
 
 public class UserController {
@@ -24,9 +25,12 @@ public class UserController {
         return UserService.validateForgotPasswordDetails(email, phone, password, confirmPassword, passwordValidationLabel, confirmPasswordValidationLabel);
     }
 
-    // method calling for SignInPage
+    // method overloading for SignInPage
     public static boolean passSignInDetails(String email, char[] password, JLabel emailValidationLabel, JLabel passwordValidationLabel) {
         return UserService.validateSignInDetails(email, password, emailValidationLabel, passwordValidationLabel);
+    }
+    public static User passSignInDetails(String email, char[] password) {
+        return UserService.signInUser(email, password);
     }
 
 }

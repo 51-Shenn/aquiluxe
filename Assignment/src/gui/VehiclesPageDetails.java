@@ -320,7 +320,8 @@ public class VehiclesPageDetails extends JPanel {
         // rent button on the right
         JPanel rentPanel = new JPanel(null);
         rentPanel.setPreferredSize(new Dimension(250, 100));
-        JButton rentButton = new JButton("RENT");
+        RoundedButton rentButton = new RoundedButton(10, Color.BLUE);
+        rentButton.setText("RENT");
         rentButton.setBounds(0, 0, 250, 75);
         rentButton.setBackground(Color.BLUE);
         rentButton.setForeground(Color.WHITE);
@@ -546,6 +547,50 @@ public class VehiclesPageDetails extends JPanel {
         sidePanel.setPreferredSize(new Dimension(250, 1000));
 
         return sidePanel;
+    }
+
+    private class RoundedButton extends JButton {
+        private Color backgroundColor;
+        private int cornerRadius;
+
+        public RoundedButton(int radius, Color bgColor) {
+            this.cornerRadius = radius;
+            this.backgroundColor = bgColor;
+            setOpaque(false);
+        }
+
+        public void setBackground(Color bgColor) {
+            this.backgroundColor = bgColor;
+            repaint();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g.create();
+
+            // Enable anti-aliasing for smooth rendering
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            int width = getWidth();
+            int height = getHeight();
+            int arcSize = cornerRadius * 2;
+
+            // Make panel transparent
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+            g2d.setColor(backgroundColor != null ? backgroundColor : getBackground());
+
+            FontMetrics fm = g2d.getFontMetrics();
+            int textX = (width - fm.stringWidth(getText())) / 2;
+            int textY = (height + fm.getAscent()) / 2 - 2;
+
+            // Fill rounded rectangle
+            g2d.fillRoundRect(0, 0, width - 1, height - 1, arcSize, arcSize);
+            g2d.setColor(getForeground());
+            g2d.drawString(getText(), textX, textY);
+
+            g2d.dispose();
+        }
     }
 
 }
