@@ -20,6 +20,7 @@ public class OverflowMenu extends JLayeredPane {
     private JPanel themeButton;
     private JPanel switchAccountButton;
     private JPanel signOutButton;
+    private JPanel deleteAccountButton;
     private JPanel closeButton;
     private JPanel editPanel;
     private JButton editButton;
@@ -80,6 +81,9 @@ public class OverflowMenu extends JLayeredPane {
 
             signOutButton = createMenuCard("Sign Out", signOutFilePath);
             panel.add(signOutButton, gbc);
+
+            deleteAccountButton = createMenuCard("Delete Account", sunMoonFilePath);
+            panel.add(deleteAccountButton, gbc);
         }
 
         closeButton = createMenuCard("Close / Exit", roundCloseFilePath);
@@ -145,6 +149,7 @@ public class OverflowMenu extends JLayeredPane {
             themeButton.setVisible(true);
             switchAccountButton.setVisible(true);
             signOutButton.setVisible(true);
+            deleteAccountButton.setVisible(true);
             closeButton.setVisible(true);
 
             this.revalidate();
@@ -327,6 +332,7 @@ public class OverflowMenu extends JLayeredPane {
 
                     themeButton.setVisible(false);
                     signOutButton.setVisible(false);
+                    deleteAccountButton.setVisible(false);
                     closeButton.setVisible(false);
                 }
 
@@ -431,6 +437,7 @@ public class OverflowMenu extends JLayeredPane {
             themeButton.setVisible(false);
             switchAccountButton.setVisible(false);
             signOutButton.setVisible(false);
+            deleteAccountButton.setVisible(false);
             closeButton.setVisible(false);
             editPanel.setVisible(true);
 
