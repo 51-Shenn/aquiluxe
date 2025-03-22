@@ -202,10 +202,10 @@ public class SignUpPage extends AuthenticationPage {
 
                 if (genderButton.getText().equals("M")) {
                     genderLabel.setText("Gender: (Male)");
-                    genderInput = "MALE";
+                    genderInput = "Male";
                 } else {
                     genderLabel.setText("Gender: (Female)");
-                    genderInput = "FEMALE";
+                    genderInput = "Female";
                 }
             });
 
