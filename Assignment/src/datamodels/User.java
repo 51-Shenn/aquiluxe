@@ -15,6 +15,9 @@ public class User {
 
     // Default Constructor : for subclassing
     public User() {
+        this.fullName = "Guest";
+        this.username = "guest";
+        this.gender = "Male";
     }
 
     // Parameterized Constructor
@@ -29,8 +32,7 @@ public class User {
         this.password = password;
     }
 
-    public User(String fullName, String gender, String userEmail, String phoneNumber, String username,
-            String password) {
+    public User(String fullName, String gender, String userEmail, String phoneNumber, String username, String password) {
         this.fullName = fullName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
@@ -122,12 +124,12 @@ public class User {
         for (User user : users.values()) {
             System.out.println(
                     "UserID: " + user.getUserId() +
-                            ", Name: " + user.getFullName() +
-                            ", Username: " + user.getUsername() +
-                            ", Gender: " + user.getGender() +
-                            ", Email: " + user.getUserEmail() +
-                            ", Phone Number: " + user.getPhoneNumber() +
-                            ", Password: " + user.getPassword());
+                    ", Name: " + user.getFullName() +
+                    ", Username: " + user.getUsername() +
+                    ", Gender: " + user.getGender() +
+                    ", Email: " + user.getUserEmail() +
+                    ", Phone Number: " + user.getPhoneNumber() +
+                    ", Password: " + user.getPassword());
         }
     }
 }
