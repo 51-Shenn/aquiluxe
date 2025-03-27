@@ -1,13 +1,12 @@
 package gui;
 
 import datamodels.User;
-
+import java.awt.*;
+import java.io.File;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import java.awt.*;
-import java.io.File;
 
 public class OverflowMenu extends JLayeredPane {
 
@@ -272,7 +271,7 @@ public class OverflowMenu extends JLayeredPane {
                 accountsPanel.add(addAccountButton, gbc);
 
                 gbc.weighty = 1;
-                for (User user : User.users.values()) {
+                for (User user : User.getUsers().values()) {
                     JButton accountButton = new JButton();
                     accountButton.setBackground(Color.WHITE);
 
