@@ -21,7 +21,7 @@ public class User {
     }
 
     // Parameterized Constructor
-    public User(int userId, String fullName, String gender, String userEmail, String phoneNumber, String username,
+    public User(int userId, String fullName, String gender, String phoneNumber, String userEmail, String username,
             String password) {
         this.userId = userId;
         this.fullName = fullName;
@@ -32,7 +32,7 @@ public class User {
         this.password = password;
     }
 
-    public User(String fullName, String gender, String userEmail, String phoneNumber, String username, String password) {
+    public User(String fullName, String gender, String phoneNumber, String userEmail, String username, String password) {
         this.fullName = fullName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;

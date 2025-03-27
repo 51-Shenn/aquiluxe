@@ -2,11 +2,13 @@ package gui;
 
 import datamodels.User;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.io.File;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import org.w3c.dom.events.MouseEvent;
 
 public class OverflowMenu extends JLayeredPane {
 
@@ -32,13 +34,14 @@ public class OverflowMenu extends JLayeredPane {
         if(this.user.getFullName().equals("Guest") && this.user.getUsername().equals("guest"))
             MENU_HEIGHT = 550;
         else
-            MENU_HEIGHT = 775;
+            MENU_HEIGHT = 800;
         add(createOverflowMenu(), JLayeredPane.POPUP_LAYER);
     }
 
     private JPanel createOverflowMenu() {
         JPanel container = new JPanel();
         container.setLayout(null);
+        container.setBackground(Color.BLACK);
         container.setBounds(0, 0, MENU_WIDTH, MENU_HEIGHT);
         container.add(createMainCard());
         return container;
@@ -443,6 +446,23 @@ public class OverflowMenu extends JLayeredPane {
             this.revalidate();
             this.repaint();
         });
+        editButton.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                editButton.setBackground(Color.BLUE.darker());
+            }
+        
+            public void mouseExited(MouseEvent evt) {
+                editButton.setBackground(Color.BLUE);
+            }
+        
+            public void mousePressed(MouseEvent evt) {
+                editButton.setBackground(Color.CYAN);
+            }
+        
+            public void mouseReleased(MouseEvent evt) {
+                editButton.setBackground(Color.BLUE);
+            }
+        });
 
         return editButton;
     }
@@ -504,6 +524,18 @@ public class OverflowMenu extends JLayeredPane {
             button.addActionListener(e -> {
                 frame.getLayeredPane().remove(this);
                 frame.getContentPane().removeAll();
+
+                UIManager.getDefaults().clear();  // Clear all cached UI properties
+                try {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
+                    for (Window window : Window.getWindows()) {
+                        SwingUtilities.updateComponentTreeUI(window);
+                        window.repaint();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
                 frame.add(new SignUpPage(this.frame, this.panel, this.user));
                 frame.revalidate();
                 frame.repaint();
@@ -513,6 +545,18 @@ public class OverflowMenu extends JLayeredPane {
             button.addActionListener(e -> {
                 frame.getLayeredPane().remove(this);
                 frame.getContentPane().removeAll();
+
+                UIManager.getDefaults().clear();  // Clear all cached UI properties
+                try {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
+                    for (Window window : Window.getWindows()) {
+                        SwingUtilities.updateComponentTreeUI(window);
+                        window.repaint();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
                 frame.add(new SignInPage(this.frame, this.panel, this.user));
                 frame.revalidate();
                 frame.repaint();

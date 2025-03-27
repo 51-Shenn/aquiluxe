@@ -278,10 +278,9 @@ public class UserService {
         String userPassword = new String(password);
         String username = generateUsername(fullName);
 
-        new User(fullName, gender, email, phone, username, userPassword);
-
        UserDAO userDAO = new UserDAO();
        userDAO.addUser(fullName, gender, phone, email, username, userPassword);
+       User.setUsers(userDAO.getAllUsers());
 
         User.displayUsers();
         System.out.println(User.getUsers());
