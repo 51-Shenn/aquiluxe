@@ -2,13 +2,12 @@ package gui;
 
 import controllers.UserController;
 import datamodels.User;
-
+import java.awt.*;
+import java.io.File;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import java.awt.*;
-import java.io.File;
 
 public class SignUpPage extends AuthenticationPage {
 
@@ -30,6 +29,17 @@ public class SignUpPage extends AuthenticationPage {
         this.frame = frame;
         this.panel = panel;
         this.user = user;
+
+        UIManager.getDefaults().clear();  // Clear all cached UI properties
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
+            for (Window window : Window.getWindows()) {
+                SwingUtilities.updateComponentTreeUI(window);
+                window.repaint();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -79,7 +89,7 @@ public class SignUpPage extends AuthenticationPage {
             closeButton.setBorderPainted(false);
             closeButton.setContentAreaFilled(false);
             closeButton.setFocusPainted(false);
-            closeButton.addActionListener(e -> {
+            closeButton.addActionListener(e -> {                
                 this.frame.getContentPane().removeAll();
                 this.frame.setLayout(new BorderLayout());
                 GUIComponents.overflowMenu = null;
@@ -293,12 +303,7 @@ public class SignUpPage extends AuthenticationPage {
                         confirmPasswordValidationLabel);
                 if (isValidUserDetails) {
                     currentPage = "USER";
-//                    JPanel newContentPane = new JPanel(new BorderLayout());
                     this.frame.setContentPane(new SignInPage(this.frame, this.panel, this.user));
-//                    GUIComponents.overflowMenu = null;
-//                    this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
-//                    this.frame.add(this.panel, BorderLayout.CENTER);
-//                    this.panel.removeAll();
                     this.frame.validate();
                 }
             }

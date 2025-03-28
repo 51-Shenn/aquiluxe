@@ -2,7 +2,6 @@ package services;
 
 import database.UserDAO;
 import datamodels.User;
-
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,7 +63,7 @@ public class UserService {
             return false;
         }
         else {
-            for(User user : User.users.values()) {
+            for(User user : User.getUsers().values()) {
                 if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPhoneNumber().equals(phone))
                     return true;
             }
@@ -79,7 +78,7 @@ public class UserService {
         boolean isValidPassword = passwordValidation(password, confirmPassword, passwordValidationLabel, confirmPasswordValidationLabel);
         String userPassword = new String(password);
         if(isValidPassword) {
-            for(User user : User.users.values()) {
+            for(User user : User.getUsers().values()) {
                 if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPhoneNumber().equals(phone)) {
                     user.setPassword(userPassword);
                     User.displayUsers();
@@ -109,7 +108,7 @@ public class UserService {
             passwordValidationLabel.setText("");
         }
 
-        for(User user : User.users.values()) {
+        for(User user : User.getUsers().values()) {
             if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPassword().equals(userPassword)) {
                 System.out.println("Login successful!");
                 return true;
@@ -124,7 +123,7 @@ public class UserService {
     public static User signInUser(String email, char[] password) {
         String userPassword = new String(password);
 
-        for(User user : User.users.values()) {
+        for(User user : User.getUsers().values()) {
             if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPassword().equals(userPassword))
                 return user;
         }
@@ -174,7 +173,7 @@ public class UserService {
     }
 
     private static boolean isUsernameTaken(String username) {
-        for (User user : User.users.values()) {
+        for (User user : User.getUsers().values()) {
             if (user.getUsername().equals(username)) {
                 return true;
             }
@@ -204,7 +203,7 @@ public class UserService {
         Matcher matcher = pattern.matcher(email);
 
         if(matcher.matches()) {
-            for(User user : User.users.values()) {
+            for(User user : User.getUsers().values()) {
                 if(user.getUserEmail().equals(email)) {
                     label.setText("This email address has been taken!");
                     return false;
@@ -232,7 +231,7 @@ public class UserService {
         Matcher matcher = pattern.matcher(phone);
 
         if(matcher.matches()) {
-            for(User user : User.users.values()) {
+            for(User user : User.getUsers().values()) {
                 if(user.getPhoneNumber().equals(phone)) {
                     label.setText("This phone number has been taken!");
                     return false;
@@ -279,12 +278,11 @@ public class UserService {
         String userPassword = new String(password);
         String username = generateUsername(fullName);
 
-        new User(fullName, gender, email, phone, username, userPassword);
-
-//        UserDAO userDAO = new UserDAO();
-//        userDAO.addUser(fullName, gender, phone, email, username, userPassword);
+       UserDAO userDAO = new UserDAO();
+       userDAO.addUser(fullName, gender, phone, email, username, userPassword);
+       User.setUsers(userDAO.getAllUsers());
 
         User.displayUsers();
-        System.out.println(User.users);
+        System.out.println(User.getUsers());
     }
 }

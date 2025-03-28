@@ -2,12 +2,11 @@ package gui;
 
 import controllers.UserController;
 import datamodels.User;
-
+import java.awt.*;
+import java.io.File;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.io.File;
 
 public class SignInPage extends AuthenticationPage {
 
@@ -21,6 +20,17 @@ public class SignInPage extends AuthenticationPage {
         this.frame = frame;
         this.panel = panel;
         this.user = user;
+
+        UIManager.getDefaults().clear();  // Clear all cached UI properties
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
+            for (Window window : Window.getWindows()) {
+                SwingUtilities.updateComponentTreeUI(window);
+                window.repaint();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -1,7 +1,6 @@
 package gui;
 
 import datamodels.User;
-
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
@@ -15,6 +14,13 @@ public class GUIComponents extends JPanel {
     public static OverflowMenu overflowMenu;
 
     public GUIComponents(JFrame frame, JPanel panel, User user) {
+        try {
+            // Set the Windows Look and Feel
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         this.frame = frame;
         this.panel = panel;
         this.user = user;

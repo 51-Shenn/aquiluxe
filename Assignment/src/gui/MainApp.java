@@ -1,17 +1,20 @@
 package gui;
 
-import javax.swing.*;
+import database.UserDAO;
+import datamodels.User;
 import java.awt.*;
+import javax.swing.*;
 
 public class MainApp extends JFrame {
 
     public MainApp() {
-        // try {
-        // // Set the Windows Look and Feel
-        // UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // }
+        try {
+            // Set the Windows Look and Feel
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // Initialize frame
         // try {
         // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -38,6 +41,10 @@ public class MainApp extends JFrame {
     }
 
     public static void main(String[] args) {
+        UserDAO userDAO = new UserDAO();
+        User.setUsers(userDAO.getAllUsers());
+        System.out.println(User.getUsers());
+
         new MainApp();
     }
 

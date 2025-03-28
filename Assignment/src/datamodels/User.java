@@ -11,7 +11,7 @@ public class User {
     private String username;
     private String password;
 
-    public static HashMap<Integer, User> users = new HashMap<>();
+    private static HashMap<Integer, User> users = new HashMap<>();
 
     // Default Constructor : for subclassing
     public User() {
@@ -19,7 +19,7 @@ public class User {
     }
 
     // Parameterized Constructor
-    public User(int userId, String fullName, String gender, String userEmail, String phoneNumber, String username,
+    public User(int userId, String fullName, String gender, String phoneNumber, String userEmail, String username,
             String password) {
         this.userId = userId;
         this.fullName = fullName;
@@ -30,7 +30,7 @@ public class User {
         this.password = password;
     }
 
-    public User(String fullName, String gender, String userEmail, String phoneNumber, String username,
+    public User(String fullName, String gender, String phoneNumber, String userEmail, String username,
             String password) {
         this.fullName = fullName;
         this.gender = gender;
@@ -104,6 +104,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public static HashMap<Integer, User> getUsers() {
+        return users;
+    }
+
+    public static void setUsers(HashMap<Integer, User> setUser) {
+        users = setUser;
     }
 
     // Debug
