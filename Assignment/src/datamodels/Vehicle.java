@@ -21,6 +21,7 @@ public class Vehicle {
 
     // Default Constructor
     public Vehicle() {
+        this(0, "", "", "", 0, 0, 0, "", 0.0, "", "", 0.0, "", "", 0, false, ""); // Default values
     }
 
     // Parameterized Constructor

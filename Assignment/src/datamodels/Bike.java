@@ -7,6 +7,7 @@ public class Bike extends Vehicle {
     // Default Constructor
     public Bike() {
         super();
+        this.bikeType = "";
     }
 
     // Parameterized Constructor

@@ -17,6 +17,8 @@ public class Rental {
 
     // Default Constructor
     public Rental() {
+        this(0, new Customer(), new Vehicle(), LocalDate.now(), LocalDate.now(), LocalTime.now(), LocalTime.now(), 0.0,
+                RentalStatus.PENDING, PaymentStatus.FAILED); // Default values
     }
 
     // Parameterized Constructor

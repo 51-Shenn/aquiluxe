@@ -1,25 +1,23 @@
 package gui;
 
-import datamodels.User;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class MainApp extends JFrame {
 
     public MainApp() {
-//         try {
-//             // Set the Windows Look and Feel
-//             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-//         } catch (Exception e) {
-//             e.printStackTrace();
-//         }
+        // try {
+        // // Set the Windows Look and Feel
+        // UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
         // Initialize frame
         // try {
-        //     UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        //     SwingUtilities.updateComponentTreeUI(frame);
+        // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        // SwingUtilities.updateComponentTreeUI(frame);
         // } catch (Exception e) {
-        //     e.printStackTrace();
+        // e.printStackTrace();
         // }
         setTitle("AQUILUXE");
         setLayout(new BorderLayout());
@@ -40,8 +38,6 @@ public class MainApp extends JFrame {
     }
 
     public static void main(String[] args) {
-        System.out.println(User.users);
-
         new MainApp();
     }
 
