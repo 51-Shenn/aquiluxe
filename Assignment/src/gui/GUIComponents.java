@@ -12,6 +12,8 @@ public class GUIComponents extends JPanel {
     private final JPanel panel;
     private User user;
     public static OverflowMenu overflowMenu;
+    private JButton[] topBarButtons = new JButton[4];
+    private String[] topBarButtonsLabels = { "Home", "Vehicles", "About", "Contact" };
 
     public GUIComponents(JFrame frame, JPanel panel, User user) {
         try {
@@ -41,6 +43,18 @@ public class GUIComponents extends JPanel {
         logo.setBorderPainted(false); // no border
         logo.setFocusPainted(false); // no highlight
         logo.setContentAreaFilled(false); // no fill
+        logo.addActionListener(e -> {
+            for(JButton button : topBarButtons) {
+                button.setForeground(Color.BLACK);
+                button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
+            }
+            topBarButtons[0].setForeground(Color.BLUE);
+            topBarButtons[0].setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
+            this.panel.removeAll();
+            this.panel.add(new HomePage(this.frame, this.panel), BorderLayout.CENTER);
+            this.panel.revalidate();
+            this.panel.repaint();
+        });
 
         return logo;
     }
@@ -68,8 +82,6 @@ public class GUIComponents extends JPanel {
     }
 
     private JButton[] createButtons() {
-        JButton[] topBarButtons = new JButton[4];
-        String[] topBarButtonsLabels = { "Home", "Vehicles", "About", "Contact" };
 
         for (int i = 0; i < topBarButtonsLabels.length; i++) {
             topBarButtons[i] = new JButton(topBarButtonsLabels[i]);
@@ -82,6 +94,12 @@ public class GUIComponents extends JPanel {
         }
 
         topBarButtons[0].addActionListener(e -> {
+            for(JButton button : topBarButtons) {
+                button.setForeground(Color.BLACK);
+                button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
+            }
+            topBarButtons[0].setForeground(Color.BLUE);
+            topBarButtons[0].setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
             this.panel.removeAll();
             this.panel.add(new HomePage(this.frame, this.panel), BorderLayout.CENTER);
             this.panel.revalidate();
@@ -89,6 +107,12 @@ public class GUIComponents extends JPanel {
         });
 
         topBarButtons[1].addActionListener(e -> {
+            for(JButton button : topBarButtons) {
+                button.setForeground(Color.BLACK);
+                button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
+            }
+            topBarButtons[1].setForeground(Color.BLUE);
+            topBarButtons[1].setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
             this.panel.removeAll();
             this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
             this.panel.revalidate();
@@ -96,6 +120,12 @@ public class GUIComponents extends JPanel {
         });
 
         topBarButtons[2].addActionListener(e -> {
+            for(JButton button : topBarButtons) {
+                button.setForeground(Color.BLACK);
+                button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
+            }
+            topBarButtons[2].setForeground(Color.BLUE);
+            topBarButtons[2].setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
             this.panel.removeAll();
             JPanel panel = new JPanel();
 
@@ -108,6 +138,12 @@ public class GUIComponents extends JPanel {
         });
 
         topBarButtons[3].addActionListener(e -> {
+            for(JButton button : topBarButtons) {
+                button.setForeground(Color.BLACK);
+                button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
+            }
+            topBarButtons[3].setForeground(Color.BLUE);
+            topBarButtons[3].setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
             this.panel.removeAll();
             this.panel.revalidate();
             this.panel.repaint();
