@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import javax.swing.*; // ✅ Java Swing/AWT event
+import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -35,6 +35,7 @@ public class OverflowMenu extends JLayeredPane {
             MENU_HEIGHT = 550;
         else
             MENU_HEIGHT = 800;
+        setBackground(Color.BLACK);
         add(createOverflowMenu(), JLayeredPane.POPUP_LAYER);
     }
 
@@ -278,7 +279,7 @@ public class OverflowMenu extends JLayeredPane {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                    
+
                     frame.add(new SignInPage(this.frame, this.panel, this.user));
                     frame.revalidate();
                     frame.repaint();
