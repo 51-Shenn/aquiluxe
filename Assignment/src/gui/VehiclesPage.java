@@ -470,7 +470,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
             public void mouseExited(MouseEvent evt) {
                 deleteButton.setBackground(Color.RED);
             }
-
+            
             @Override
             public void mousePressed(MouseEvent evt) {
                 deleteButton.setBackground(Color.ORANGE);
@@ -808,7 +808,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
     private static class RoundedButton extends JButton {
         private Color backgroundColor;
-        private int cornerRadius;
+        private final int cornerRadius;
 
         public RoundedButton(int radius, Color bgColor) {
             this.cornerRadius = radius;
