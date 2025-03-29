@@ -80,7 +80,10 @@ public class UserService {
         if(isValidPassword) {
             for(User user : User.getUsers().values()) {
                 if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPhoneNumber().equals(phone)) {
-                    user.setPassword(userPassword);
+                    UserDAO userDAO = new UserDAO();
+                    userDAO.updateUserColumnValue(user.getUserId(), "password", userPassword);
+                    User.setUsers(userDAO.getAllUsers());
+
                     User.displayUsers();
                     return true;
                 }
@@ -226,7 +229,7 @@ public class UserService {
 
         phone = phone.replaceAll("[\\s-]", "");
 
-        final String PHONE_REGEX = "^[1-9][0-9]{8,9}$";
+        final String PHONE_REGEX = "^(1[0-9]|[3-9])[0-9]{7,8}$";
         Pattern pattern = Pattern.compile(PHONE_REGEX);
         Matcher matcher = pattern.matcher(phone);
 
