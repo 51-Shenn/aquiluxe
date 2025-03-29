@@ -470,7 +470,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
             public void mouseExited(MouseEvent evt) {
                 deleteButton.setBackground(Color.RED);
             }
-            
+
             @Override
             public void mousePressed(MouseEvent evt) {
                 deleteButton.setBackground(Color.ORANGE);
