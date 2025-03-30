@@ -45,7 +45,7 @@ public class User {
         users.put(userId, this);
     }
 
-    public User(String fullName, String gender, String phoneNumber, String userEmail, String username,
+    public User(int userId, String fullName, String gender, String phoneNumber, String userEmail, String username,
             String password, String userType) {
         this.fullName = fullName;
         this.gender = gender;
@@ -142,13 +142,14 @@ public class User {
     // Debug
     @Override
     public String toString() {
-        return "User { " +
+        return " User { " +
                 "userId = " + userId +
                 ", fullName = '" + fullName + '\'' +
                 ", gender = '" + gender + '\'' +
                 ", phoneNumber = '" + phoneNumber + '\'' +
                 ", userEmail = '" + userEmail + '\'' +
                 ", username = '" + username + '\'' +
+                ", usertype = '" + userType + '\'' +
                 " }";
     }
 
