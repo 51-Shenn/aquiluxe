@@ -34,19 +34,21 @@ public class User {
     }
 
     public User(String fullName, String gender, String phoneNumber, String userEmail, String username,
-            String password) {
+            String password, String usertype) {
         this.fullName = fullName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
         this.username = username;
         this.userEmail = userEmail;
         this.password = password;
+        this.userType = usertype;
 
         users.put(userId, this);
     }
 
     public User(int userId, String fullName, String gender, String phoneNumber, String userEmail, String username,
             String password, String userType) {
+        this.userId = userId;
         this.fullName = fullName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
@@ -54,8 +56,6 @@ public class User {
         this.userEmail = userEmail;
         this.password = password;
         this.userType = userType;
-
-        users.put(userId, this);
     }
 
     // Getters and Setters
