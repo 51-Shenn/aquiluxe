@@ -10,6 +10,7 @@ public class User {
     private String userEmail;
     private String username;
     private String password;
+    private String userType;
 
     private static HashMap<Integer, User> users = new HashMap<>();
 
@@ -32,7 +33,8 @@ public class User {
         this.password = password;
     }
 
-    public User(String fullName, String gender, String phoneNumber, String userEmail, String username, String password) {
+    public User(String fullName, String gender, String phoneNumber, String userEmail, String username,
+            String password) {
         this.fullName = fullName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
@@ -43,9 +45,22 @@ public class User {
         users.put(userId, this);
     }
 
+    public User(String fullName, String gender, String phoneNumber, String userEmail, String username,
+            String password, String userType) {
+        this.fullName = fullName;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.username = username;
+        this.userEmail = userEmail;
+        this.password = password;
+        this.userType = userType;
+
+        users.put(userId, this);
+    }
+
     // Getters and Setters
     public void setUser(int userId, String fullName, String gender, String phoneNumber,
-            String userEmail, String username, String password) {
+            String userEmail, String username, String password, String userType) {
         this.userId = userId;
         this.fullName = fullName;
         this.gender = gender;
@@ -53,6 +68,7 @@ public class User {
         this.userEmail = userEmail;
         this.username = username;
         this.password = password;
+        this.userType = userType;
     }
 
     public int getUserId() {
@@ -107,6 +123,14 @@ public class User {
         this.password = password;
     }
 
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
     public static HashMap<Integer, User> getUsers() {
         return users;
     }
@@ -132,12 +156,12 @@ public class User {
         for (User user : users.values()) {
             System.out.println(
                     "UserID: " + user.getUserId() +
-                    ", Name: " + user.getFullName() +
-                    ", Username: " + user.getUsername() +
-                    ", Gender: " + user.getGender() +
-                    ", Email: " + user.getUserEmail() +
-                    ", Phone Number: " + user.getPhoneNumber() +
-                    ", Password: " + user.getPassword());
+                            ", Name: " + user.getFullName() +
+                            ", Username: " + user.getUsername() +
+                            ", Gender: " + user.getGender() +
+                            ", Email: " + user.getUserEmail() +
+                            ", Phone Number: " + user.getPhoneNumber() +
+                            ", Password: " + user.getPassword());
         }
     }
 }

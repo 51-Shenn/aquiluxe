@@ -11,8 +11,8 @@ public class UserDAO {
 
     // add user by parameter
     public int addUser(String fullName, String gender, String phoneNumber, String userEmail, String username,
-            String password) {
-        String sql = "INSERT INTO users (full_name, gender, phone_number, user_email, username, password) VALUES (?, ?, ?, ?, ?, ?)";
+            String password, String userType) {
+        String sql = "INSERT INTO users (full_name, gender, phone_number, user_email, username, password, usertype) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         Connection conn = DatabaseConnection.getConnection();
         if (conn == null) {
@@ -27,6 +27,7 @@ public class UserDAO {
             stmt.setString(4, userEmail);
             stmt.setString(5, username);
             stmt.setString(6, password);
+            stmt.setString(7, userType);
 
             stmt.executeUpdate();
 
