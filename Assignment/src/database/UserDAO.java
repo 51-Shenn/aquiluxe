@@ -90,7 +90,8 @@ public class UserDAO {
                 rs.getString("phone_number"),
                 rs.getString("user_email"),
                 rs.getString("username"),
-                rs.getString("password"));
+                rs.getString("password"),
+                rs.getString("usertype"));
     }
 
     // get all users

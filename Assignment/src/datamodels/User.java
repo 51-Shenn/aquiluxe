@@ -45,7 +45,7 @@ public class User {
         users.put(userId, this);
     }
 
-    public User(String fullName, String gender, String phoneNumber, String userEmail, String username,
+    public User(int userId, String fullName, String gender, String phoneNumber, String userEmail, String username,
             String password, String userType) {
         this.fullName = fullName;
         this.gender = gender;
