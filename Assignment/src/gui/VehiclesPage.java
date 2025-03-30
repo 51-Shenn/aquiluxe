@@ -1,5 +1,8 @@
 package gui;
 
+import datamodels.Car;
+import controllers.VehicleController;
+
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -7,115 +10,111 @@ import javax.swing.border.LineBorder;
 
 import java.awt.*;
 import java.awt.color.ColorSpace;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.*;
+import java.awt.image.*;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.ColorConvertOp;
-import java.awt.image.RescaleOp;
+import java.util.ArrayList;
 
 public class VehiclesPage extends JPanel implements ActionListener{
 
+    private ArrayList<Car> cars = new ArrayList<Car>();
+    public static final ImageIcon TRANSMISSION;
+    public static final ImageIcon FUEL;
+    public static final ImageIcon SEATS;
+    
+    static {
+        TRANSMISSION = new ImageIcon("images/vehiclepageicons/manual-transmission.png");
+        FUEL = new ImageIcon("images/vehiclepageicons/gas-station.png");
+        SEATS = new ImageIcon("images/vehiclepageicons/car-seat.png");
+    }
+
     private final JFrame frame;
     private final JPanel panel;
+    private JPanel carCards;
 
     public VehiclesPage(JFrame frame, JPanel panel) {
+
+        //sample details just to show output
+        this.cars.add(new Car(1,"images/cars/PorscheGT3.jpg","PORSCHE","GT3 RS WEISSACH",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"weissach package :)"));
+        this.cars.add(new Car(1,"images/cars/Supra.jpg","TOYOTA","SUPRA MK5",2024,2998,382,"red",16.0,"WP0ZZZ99ZTS392124","VMK 5",499,"AUTO","GAS","COUPE",2,true,"it's that a supra?"));
+        this.cars.add(new Car(1,"images/cars/F8.jpg","FERRARI","F8",2023,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"car"));
+        this.cars.add(new Car(1,"images/cars/SVJ.jpg","LAMBORGHINI","AVENTADOR SVJ",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"v12"));
+        this.cars.add(new Car(1,"images/cars/RRGhost.jpg","ROLLS-ROYCE","GHOST",2021,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"quiet"));
+        this.cars.add(new Car(1,"images/cars/PorscheGT3.jpg","PORSCHE","GT3 RS WEISSACH",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"weissach package :)"));
+        this.cars.add(new Car(1,"images/cars/PorscheGT3.jpg","PORSCHE","GT3 RS WEISSACH",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"weissach package :)"));
+        this.cars.add(new Car(1,"images/cars/PorscheGT3.jpg","PORSCHE","GT3 RS WEISSACH",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"weissach package :)"));
+        this.cars.add(new Car(1,"images/cars/PorscheGT3.jpg","PORSCHE","GT3 RS WEISSACH",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"weissach package :)"));
+        this.cars.add(new Car(1,"images/cars/PorscheGT3.jpg","PORSCHE","GT3 RS WEISSACH",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"weissach package :)"));
+        this.cars.add(new Car(1,"images/cars/PorscheGT3.jpg","PORSCHE","GT3 RS WEISSACH",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"weissach package :)"));
+        this.cars.add(new Car(1,"images/cars/PorscheGT3.jpg","PORSCHE","GT3 RS WEISSACH",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"weissach package :)"));
         
         this.frame = frame;
         this.panel = panel;
         this.setBackground(Color.BLACK);
         this.setLayout(new BorderLayout());
 
-        this.add(createCarCardsContainer(), BorderLayout.CENTER);
+        this.add(createCarCardsContainer(this.cars), BorderLayout.CENTER);
         //this.add(carLeftPanel(), BorderLayout.WEST);
         //this.add(carRightPanel(), BorderLayout.EAST);
         this.add(createCarTopBar(),BorderLayout.NORTH);
 
     }
 
-    private JPanel createCarCards(){
+    private JPanel createCarCards(ArrayList<Car> car){
         //images in the future will change this to loop to check all car images
-        ImageIcon image = null;
-        try {
-            image = new ImageIcon("images/cars/Supra.jpg");
 
-            // Check if any image failed to load
-            if (image.getIconWidth() == -1) {
-                throw new Exception("One or more images failed to load.");
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error loading images: " + e.getMessage());
-        }
-        Image rImage = image.getImage().getScaledInstance(400,400,java.awt.Image.SCALE_SMOOTH);
-        image = new ImageIcon(rImage);
-
-        JPanel carCards = new JPanel(new GridLayout(0,3,50,30));
+        carCards = new JPanel(new GridLayout(0,3,50,30));
         carCards.setBackground(Color.WHITE);
 
         //sample details just to show output
-        String[] cars ={"PORSCHE","TOYOTA","NISSAN",
-                        "HONDA","FERRARI","LAMBORGHINI",
-                        "PERODUA","PROTON","LEXUS",
-                    "BMW","MERCEDES BENZ","AUDI"};
-        String model = "GT3 RS WEISSACH";
-        String transmissions = "AUTO";
-        String fuelType = "HYBRID";
-        String carType = "CONVERTIBLE";
-        int seats = 2;
-        String price = "RM699 per day";
-        String availability = "AVAILABLE";
+        ArrayList<Car> carss = car;
+        
+                for (Car c : carss){
+                    ImageIcon image = null;
+                    try {
+                        image = new ImageIcon(c.getImagePath());
 
-        for (String car : cars){
-            carCards.add(createCarCard(image, car, model, transmissions, fuelType, carType,
-            seats, price, availability, frame, panel));
-        }
+                        // Check if any image failed to load
+                        if (image.getIconWidth() == -1) {
+                            throw new Exception("One or more images failed to load.");
+                        }
 
-        if (cars.length < 12) {
-            for (int i = cars.length; i < 12; i++) {
-                JPanel emptyPanel = new JPanel();
-                emptyPanel.setPreferredSize(new Dimension(350, 400));
-                carCards.add(emptyPanel);
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "Error loading images: " + e.getMessage());
+                    }
+                    Image rImage = image.getImage().getScaledInstance(400,400,Image.SCALE_SMOOTH);
+                    image = new ImageIcon(rImage);
+
+                    String availability = c.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
+                    String rentPrice = "RM" + c.getRentalPriceDay() + "/per day";
+
+                    carCards.add(createCarCard(c, image, c.getBrand(), c.getModel(), c.getTransmission(), c.getFuelType(), c.getCarType(),
+                    c.getSeatingCapacity(), rentPrice, availability, frame, panel));
+                }
+        
+                if (carss.size() < 12) {
+                    for (int i = carss.size(); i < 12; i++) {
+                        JPanel emptyPanel = new JPanel();
+                        emptyPanel.setPreferredSize(new Dimension(350, 400));
+                        carCards.add(emptyPanel);
+                    }
+                }
+        
+                return carCards;
             }
-        }
-
-        return carCards;
-    }
-
-    public static JPanel createCarCard(ImageIcon image, String brand, String model, String transmission, String fuelType,
+        
+    public static JPanel createCarCard(Car car, ImageIcon image, String brand, String model, String transmission, String fuelType,
                                  String carType, int seats, String price, String availability, JFrame frame, JPanel panel) {
         
-        final ImageIcon[] icons = new ImageIcon[3];
 
-        try {
-            icons[0] = new ImageIcon("images/vehiclepageicons/manual-transmission.png");
-            icons[1] = new ImageIcon("images/vehiclepageicons/gas-station.png");
-            icons[2] = new ImageIcon("images/vehiclepageicons/car-seat.png");
-
-            // Check if any image failed to load
-            if (icons[0].getIconWidth() == -1 || 
-                icons[1].getIconWidth() == -1 || 
-                icons[2].getIconWidth() == -1) {
-                throw new Exception("One or more images failed to load.");
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error loading images: " + e.getMessage());
-        }
-
-        ImageIcon transmissionIcon = icons[0];
-        ImageIcon fuelIcon = icons[1];
-        ImageIcon seatsIcon = icons[2];
+        ImageIcon transmissionIcon = TRANSMISSION;
+        ImageIcon fuelIcon = FUEL;
+        ImageIcon seatsIcon = SEATS;
 
         JPanel carCard = new JPanel();
         carCard.setLayout(new BorderLayout());
         carCard.setBackground(Color.WHITE);
-        carCard.setPreferredSize(new Dimension(100, 400));
+        carCard.setPreferredSize(new Dimension(350, 400));
         carCard.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0, 35), 3));
 
         //create buttons on the bottom
@@ -273,43 +272,47 @@ public class VehiclesPage extends JPanel implements ActionListener{
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Check if the click is on the image
-                if (e.getSource() == carEverythingPanel) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
                     panel.removeAll();
-                    panel.add(new VehiclesPageDetails(frame, panel), BorderLayout.CENTER);
+                    panel.add(new VehiclesPageDetails(frame, panel, car), BorderLayout.CENTER);
                     panel.revalidate();
                     panel.repaint();
                 }
             }
             @Override
             public void mousePressed(MouseEvent evt) {
-                carPicture.setIcon(toGreyScale(image)); // Set greyscale image
-                carName.setForeground(Color.GRAY);
-                carModel.setForeground(Color.GRAY);
-                carTypeLabel.setForeground(Color.LIGHT_GRAY);
-                carRentPrice.setForeground(Color.CYAN);
-                carAvailability.setBackground(Color.CYAN);
-                transLabel.setForeground(Color.GRAY);
-                transLabel.setIcon(toGreyScale(transmissionIcon));
-                fuelTypeLabel.setForeground(Color.GRAY);
-                fuelTypeLabel.setIcon(toGreyScale(fuelIcon));
-                seatsLabel.setForeground(Color.GRAY);
-                seatsLabel.setIcon(toGreyScale(seatsIcon));
+                if (SwingUtilities.isLeftMouseButton(evt)) {
+                    carPicture.setIcon(toGreyScale(image)); // Set greyscale image
+                    carName.setForeground(Color.GRAY);
+                    carModel.setForeground(Color.GRAY);
+                    carTypeLabel.setForeground(Color.LIGHT_GRAY);
+                    carRentPrice.setForeground(Color.CYAN);
+                    carAvailability.setBackground(Color.CYAN);
+                    transLabel.setForeground(Color.GRAY);
+                    transLabel.setIcon(toGreyScale(transmissionIcon));
+                    fuelTypeLabel.setForeground(Color.GRAY);
+                    fuelTypeLabel.setIcon(toGreyScale(fuelIcon));
+                    seatsLabel.setForeground(Color.GRAY);
+                    seatsLabel.setIcon(toGreyScale(seatsIcon));
+                }
             }
 
             @Override
             public void mouseReleased(MouseEvent evt) {
-                carPicture.setIcon(image); // Restore original image
-                carName.setForeground(Color.BLACK);
-                carModel.setForeground(Color.BLACK);
-                carTypeLabel.setForeground(Color.GRAY);
-                carRentPrice.setForeground(Color.BLUE);
-                carAvailability.setBackground(Color.BLUE);
-                transLabel.setForeground(Color.GRAY);
-                transLabel.setIcon(transmissionIcon);
-                fuelTypeLabel.setForeground(Color.BLACK);
-                fuelTypeLabel.setIcon(fuelIcon);
-                seatsLabel.setForeground(Color.GRAY);
-                seatsLabel.setIcon(seatsIcon);
+                if (SwingUtilities.isLeftMouseButton(evt)) {
+                    carPicture.setIcon(image); // Restore original image
+                    carName.setForeground(Color.BLACK);
+                    carModel.setForeground(Color.BLACK);
+                    carTypeLabel.setForeground(Color.GRAY);
+                    carRentPrice.setForeground(Color.BLUE);
+                    carAvailability.setBackground(Color.BLUE);
+                    transLabel.setForeground(Color.GRAY);
+                    transLabel.setIcon(transmissionIcon);
+                    fuelTypeLabel.setForeground(Color.BLACK);
+                    fuelTypeLabel.setIcon(fuelIcon);
+                    seatsLabel.setForeground(Color.GRAY);
+                    seatsLabel.setIcon(seatsIcon);
+                }
             }
         });
 
@@ -317,43 +320,47 @@ public class VehiclesPage extends JPanel implements ActionListener{
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Check if the click is on the image
-                if (e.getSource() == carDetails) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
                     panel.removeAll();
-                    panel.add(new VehiclesPageDetails(frame, panel), BorderLayout.CENTER);
+                    panel.add(new VehiclesPageDetails(frame, panel,car), BorderLayout.CENTER);
                     panel.revalidate();
                     panel.repaint();
                 }
             }
             @Override
             public void mousePressed(MouseEvent evt) {
-                carPicture.setIcon(toGreyScale(image)); // Set greyscale image
-                carName.setForeground(Color.GRAY);
-                carModel.setForeground(Color.GRAY);
-                carTypeLabel.setForeground(Color.LIGHT_GRAY);
-                carRentPrice.setForeground(Color.CYAN);
-                carAvailability.setBackground(Color.CYAN);
-                transLabel.setForeground(Color.GRAY);
-                transLabel.setIcon(toGreyScale(transmissionIcon));
-                fuelTypeLabel.setForeground(Color.GRAY);
-                fuelTypeLabel.setIcon(toGreyScale(fuelIcon));
-                seatsLabel.setForeground(Color.GRAY);
-                seatsLabel.setIcon(toGreyScale(seatsIcon));
+                if (SwingUtilities.isLeftMouseButton(evt)) {
+                    carPicture.setIcon(toGreyScale(image));
+                    carName.setForeground(Color.GRAY);
+                    carModel.setForeground(Color.GRAY);
+                    carTypeLabel.setForeground(Color.LIGHT_GRAY);
+                    carRentPrice.setForeground(Color.CYAN);
+                    carAvailability.setBackground(Color.CYAN);
+                    transLabel.setForeground(Color.GRAY);
+                    transLabel.setIcon(toGreyScale(transmissionIcon));
+                    fuelTypeLabel.setForeground(Color.GRAY);
+                    fuelTypeLabel.setIcon(toGreyScale(fuelIcon));
+                    seatsLabel.setForeground(Color.GRAY);
+                    seatsLabel.setIcon(toGreyScale(seatsIcon));
+                }
             }
-
+        
             @Override
             public void mouseReleased(MouseEvent evt) {
-                carPicture.setIcon(image); // Restore original image
-                carName.setForeground(Color.BLACK);
-                carModel.setForeground(Color.BLACK);
-                carTypeLabel.setForeground(Color.GRAY);
-                carRentPrice.setForeground(Color.BLUE);
-                carAvailability.setBackground(Color.BLUE);
-                transLabel.setForeground(Color.GRAY);
-                transLabel.setIcon(transmissionIcon);
-                fuelTypeLabel.setForeground(Color.BLACK);
-                fuelTypeLabel.setIcon(fuelIcon);
-                seatsLabel.setForeground(Color.GRAY);
-                seatsLabel.setIcon(seatsIcon);
+                if (SwingUtilities.isLeftMouseButton(evt)) {
+                    carPicture.setIcon(image);
+                    carName.setForeground(Color.BLACK);
+                    carModel.setForeground(Color.BLACK);
+                    carTypeLabel.setForeground(Color.GRAY);
+                    carRentPrice.setForeground(Color.BLUE);
+                    carAvailability.setBackground(Color.BLUE);
+                    transLabel.setForeground(Color.GRAY);
+                    transLabel.setIcon(transmissionIcon);
+                    fuelTypeLabel.setForeground(Color.BLACK);
+                    fuelTypeLabel.setIcon(fuelIcon);
+                    seatsLabel.setForeground(Color.GRAY);
+                    seatsLabel.setIcon(seatsIcon);
+                }
             }
         });
 
@@ -364,12 +371,12 @@ public class VehiclesPage extends JPanel implements ActionListener{
         return carCard;
     }
 
-    private JScrollPane createCarCardsContainer() {
+    private JScrollPane createCarCardsContainer(ArrayList<Car> car) {
 
         //JPanel carCards = new JPanel(new GridLayout(0,3,20,15));
 
         JPanel carCardsPanel = new JPanel(new BorderLayout());
-        carCardsPanel.add(createCarCards(),BorderLayout.CENTER);
+        carCardsPanel.add(createCarCards(car),BorderLayout.CENTER);
         carCardsPanel.add(createCarRightPanel(),BorderLayout.EAST);
         carCardsPanel.add(createBottomBar(),BorderLayout.SOUTH);
         carCardsPanel.add(createCarLeftPanel(),BorderLayout.WEST);
@@ -740,6 +747,12 @@ public class VehiclesPage extends JPanel implements ActionListener{
             //fuelTypeComboBox.getSelectedItem();
             //availabilityComboBox.getSelectedItem();
             //carTypeComboBox.getSelectedItem();
+            if (brandComboBox.getSelectedItem().equals("ALL")){
+                refreshCards(this.cars);
+            }
+            else{
+                refreshCards(VehicleController.passFilteredCarBrand(this.cars, (String) brandComboBox.getSelectedItem()));
+            }
             if (brandComboBox.getSelectedIndex() != 0){
                 modelComboBox.setEnabled(true);
                 if(e.getSource() == modelComboBox){
@@ -751,6 +764,44 @@ public class VehiclesPage extends JPanel implements ActionListener{
                 modelComboBox.setEnabled(false);
             }
         }
+    }
+
+    private void refreshCards(ArrayList<Car> filteredCars) {
+        // Clear existing cards but preserve layout
+        carCards.removeAll();
+        carCards.setLayout(new GridLayout(0, 3, 50, 30));
+        carCards.setBackground(Color.WHITE);
+    
+        // Add new cards
+        for (Car c : filteredCars) {
+            ImageIcon image = new ImageIcon(c.getImagePath());
+            Image rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
+            image = new ImageIcon(rImage);
+    
+            String availability = c.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
+            String rentPrice = "RM" + c.getRentalPriceDay() + "/per day";
+    
+            JPanel card = createCarCard(c, image, c.getBrand(), c.getModel(), 
+                c.getTransmission(), c.getFuelType(), c.getCarType(),
+                c.getSeatingCapacity(), rentPrice, availability, frame, panel);
+                
+            card.setPreferredSize(new Dimension(350, 400));
+            carCards.add(card);
+        }
+        
+        // Add empty panels if needed
+        if (filteredCars.size() < 12) {
+            for (int i = filteredCars.size(); i < 12; i++) {
+                JPanel empty = new JPanel();
+                empty.setPreferredSize(new Dimension(350, 400));
+                empty.setBackground(Color.WHITE);
+                carCards.add(empty);
+            }
+        }
+        
+        // Force layout update
+        carCards.revalidate();
+        carCards.repaint();
     }
 
     private JPanel createCarRightPanel() {
