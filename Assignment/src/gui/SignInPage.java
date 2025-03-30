@@ -2,12 +2,16 @@ package gui;
 
 import controllers.UserController;
 import datamodels.User;
-
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.io.File;
 
 public class SignInPage extends AuthenticationPage {
 
@@ -16,11 +20,23 @@ public class SignInPage extends AuthenticationPage {
     private User user;
     private JPasswordField passwordInput;
     private JLabel passwordValidationLabel;
+    private final File accountsFile = new File("files/settings/accounts.txt");
 
     public SignInPage(JFrame frame, JPanel panel, User user) {
         this.frame = frame;
         this.panel = panel;
         this.user = user;
+
+        UIManager.getDefaults().clear();  // Clear all cached UI properties
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
+            for (Window window : Window.getWindows()) {
+                SwingUtilities.updateComponentTreeUI(window);
+                window.repaint();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -77,7 +93,6 @@ public class SignInPage extends AuthenticationPage {
                 this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
                 this.frame.add(this.panel, BorderLayout.CENTER);
                 this.panel.removeAll();
-//                this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
                 this.frame.revalidate();
                 this.frame.repaint();
             });
@@ -220,6 +235,54 @@ public class SignInPage extends AuthenticationPage {
                 this.panel.removeAll();
                 this.frame.revalidate();
                 this.frame.repaint();
+                
+                // check if file exists
+                accountsFile.getParentFile().mkdirs();
+
+                // read existing accounts
+                ArrayList<Integer> accountIDs = new ArrayList<>();
+                if (accountsFile.exists()) {
+                    try (BufferedReader reader = new BufferedReader(new FileReader(accountsFile))) {
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            try {
+                                accountIDs.add(Integer.valueOf(line.trim()));
+                            } catch (NumberFormatException exception) {}
+                        }
+                    } catch (IOException exception) {
+                        JOptionPane.showMessageDialog(null, "Error reading file: " + accountsFile);
+                    }
+                }
+
+                int currentUserId = this.user.getUserId();
+
+                for (int i = 1; i < accountIDs.size(); i++) {
+                    if (accountIDs.get(i) == currentUserId) {
+                        accountIDs.remove(i);
+                        break;
+                    }
+                }
+                
+                if (!accountIDs.isEmpty() && accountIDs.get(0) != currentUserId) {
+                    accountIDs.removeIf(id -> id == currentUserId);
+                    accountIDs.add(0, currentUserId);
+                } else if (accountIDs.isEmpty()) {
+                    accountIDs.add(currentUserId);
+                }
+
+                // only 4 accounts
+                while (accountIDs.size() > 4) {
+                    accountIDs.remove(accountIDs.size() - 1);
+                }
+
+                // write back to file
+                try (FileWriter writer = new FileWriter(accountsFile)) {
+                    for (int i = 0; i < accountIDs.size(); i++) {
+                        writer.write(accountIDs.get(i) + "\n");
+                    }
+                } catch (IOException exception) {
+                    JOptionPane.showMessageDialog(null, "Error saving accounts file");
+                }
             }
         });
 

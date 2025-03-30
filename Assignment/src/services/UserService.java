@@ -2,7 +2,6 @@ package services;
 
 import database.UserDAO;
 import datamodels.User;
-
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,7 +63,7 @@ public class UserService {
             return false;
         }
         else {
-            for(User user : User.users.values()) {
+            for(User user : User.getUsers().values()) {
                 if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPhoneNumber().equals(phone))
                     return true;
             }
@@ -79,9 +78,12 @@ public class UserService {
         boolean isValidPassword = passwordValidation(password, confirmPassword, passwordValidationLabel, confirmPasswordValidationLabel);
         String userPassword = new String(password);
         if(isValidPassword) {
-            for(User user : User.users.values()) {
+            for(User user : User.getUsers().values()) {
                 if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPhoneNumber().equals(phone)) {
-                    user.setPassword(userPassword);
+                    UserDAO userDAO = new UserDAO();
+                    userDAO.updateUserColumnValue(user.getUserId(), "password", userPassword);
+                    User.setUsers(userDAO.getAllUsers());
+
                     User.displayUsers();
                     return true;
                 }
@@ -98,7 +100,7 @@ public class UserService {
             return false;
         }
         else {
-            emailValidationLabel.setText("");
+            emailValidationLabel.setText("‎");
         }
 
         if(userPassword.isEmpty()) {
@@ -106,10 +108,10 @@ public class UserService {
             return false;
         }
         else {
-            passwordValidationLabel.setText("");
+            passwordValidationLabel.setText("‎");
         }
 
-        for(User user : User.users.values()) {
+        for(User user : User.getUsers().values()) {
             if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPassword().equals(userPassword)) {
                 System.out.println("Login successful!");
                 return true;
@@ -121,10 +123,32 @@ public class UserService {
         return false;
     }
 
+    public static boolean validateUpdateProfileDetails(User user, String fullName, String username, String email, String phoneNumber, String drivingLicense, 
+        JLabel fullNameValidationLabel, JLabel usernameValidationLabel, JLabel emailValidationLabel, JLabel phoneNumberValidationLabel, JLabel drivingLicenseValidationLabel) {
+        
+        boolean isValidFullName = fullNameValidator(user, fullName, fullNameValidationLabel);
+        boolean isValidUsername = usernameValidator(user, username, usernameValidationLabel);
+        boolean isValidEmailAddress = emailAddressValidator(user, email, emailValidationLabel);
+        boolean isValidPhoneNumber = phoneNumberValidator(user, phoneNumber, phoneNumberValidationLabel);
+
+        if(isValidFullName && isValidUsername && isValidEmailAddress && isValidPhoneNumber) {
+            UserDAO userDAO = new UserDAO();
+            fullName = capitalizeFullName(fullName);
+            userDAO.updateUserColumnValue(user.getUserId(), "full_name", fullName);
+            userDAO.updateUserColumnValue(user.getUserId(), "username", username);
+            userDAO.updateUserColumnValue(user.getUserId(), "user_email", email);
+            userDAO.updateUserColumnValue(user.getUserId(), "phone_number", phoneNumber);
+
+            User.setUsers(userDAO.getAllUsers());
+            return true;
+        }
+        else return false;
+    }
+
     public static User signInUser(String email, char[] password) {
         String userPassword = new String(password);
 
-        for(User user : User.users.values()) {
+        for(User user : User.getUsers().values()) {
             if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPassword().equals(userPassword))
                 return user;
         }
@@ -156,7 +180,25 @@ public class UserService {
             label.setText("Name must contain only letters and spaces");
             return false;
         }
-        label.setText("");
+        label.setText("‎");
+        return true;
+    }
+    private static boolean fullNameValidator(User user, String fullName, JLabel label) {
+        fullName = fullName.trim();
+        if (fullName.isEmpty()) {
+            label.setText("Please enter your full name");
+            return false;
+        }
+
+        if(user.getFullName().equals(fullName) && fullName.matches("[a-zA-Z ]+")) {
+            label.setText("‎");
+            return true;
+        }
+        else if (!fullName.matches("[a-zA-Z ]+")) {
+            label.setText("Name must contain only letters and spaces");
+            return false;
+        }
+        label.setText("‎");
         return true;
     }
 
@@ -173,8 +215,33 @@ public class UserService {
         return newUsername;
     }
 
+    private static boolean usernameValidator(User user, String username, JLabel label) {        
+        if (user.getUsername().equals(username)) {
+            label.setText("‎");
+            return true;
+        }
+    
+        if (username.isEmpty()) {
+            label.setText("Please enter a username");
+            return false;
+        }
+    
+        if (!username.matches("^[a-z][a-z0-9_]{2,19}$")) {
+            label.setText("3-20 chars: letters, numbers, _");
+            return false;
+        }
+    
+        if (isUsernameTaken(username)) {
+            label.setText("Username is already taken");
+            return false;
+        }
+    
+        label.setText("‎");
+        return true;
+    }
+
     private static boolean isUsernameTaken(String username) {
-        for (User user : User.users.values()) {
+        for (User user : User.getUsers().values()) {
             if (user.getUsername().equals(username)) {
                 return true;
             }
@@ -188,7 +255,7 @@ public class UserService {
             return false;
         }
         else {
-            label.setText("");
+            label.setText("‎");
             return true;
         }
     }
@@ -204,13 +271,42 @@ public class UserService {
         Matcher matcher = pattern.matcher(email);
 
         if(matcher.matches()) {
-            for(User user : User.users.values()) {
+            for(User user : User.getUsers().values()) {
                 if(user.getUserEmail().equals(email)) {
                     label.setText("This email address has been taken!");
                     return false;
                 }
             }
-            label.setText("");
+            label.setText("‎");
+            return true;
+        }
+        else {
+            label.setText("Invalid email format");
+            return false;
+        }
+    }
+    private static boolean emailAddressValidator(User currentUser, String email, JLabel label) {
+        if(email.isEmpty()) {
+            label.setText("Please enter your email address");
+            return false;
+        }
+
+        final String EMAIL_REGEX = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        Pattern pattern = Pattern.compile(EMAIL_REGEX);
+        Matcher matcher = pattern.matcher(email);
+        
+        if(currentUser.getUserEmail().equals(email) && matcher.matches()) {
+            label.setText("‎");
+            return true;
+        }
+        else if(matcher.matches()) {
+            for(User user : User.getUsers().values()) {
+                if(user.getUserEmail().equals(email)) {
+                    label.setText("This email address has been taken!");
+                    return false;
+                }
+            }
+            label.setText("‎");
             return true;
         }
         else {
@@ -227,18 +323,47 @@ public class UserService {
 
         phone = phone.replaceAll("[\\s-]", "");
 
-        final String PHONE_REGEX = "^[1-9][0-9]{8,9}$";
+        final String PHONE_REGEX = "^(1[0-9]|[3-9])[0-9]{7,8}$";
         Pattern pattern = Pattern.compile(PHONE_REGEX);
         Matcher matcher = pattern.matcher(phone);
 
         if(matcher.matches()) {
-            for(User user : User.users.values()) {
+            for(User user : User.getUsers().values()) {
                 if(user.getPhoneNumber().equals(phone)) {
                     label.setText("This phone number has been taken!");
                     return false;
                 }
             }
-            label.setText("");
+            label.setText("‎");
+            return true;
+        }
+        else {
+            label.setText("Invalid phone number");
+            return false;
+        }
+    }
+    private static boolean phoneNumberValidator(User currentUser, String phone, JLabel label) {
+        if(phone.isEmpty()) {
+            label.setText("Please enter your phone number");
+            return false;
+        }
+
+        final String PHONE_REGEX = "^(1[0-9]|[3-9])[0-9]{7,8}$";
+        Pattern pattern = Pattern.compile(PHONE_REGEX);
+        Matcher matcher = pattern.matcher(phone);
+        
+        if(currentUser.getPhoneNumber().equals(phone) && matcher.matches()) {
+            label.setText("‎");
+            return true;
+        }
+        else if(matcher.matches()) {
+            for(User user : User.getUsers().values()) {
+                if(user.getPhoneNumber().equals(phone)) {
+                    label.setText("This phone number has been taken!");
+                    return false;
+                }
+            }
+            label.setText("‎");
             return true;
         }
         else {
@@ -264,13 +389,13 @@ public class UserService {
             return false;
         }
         else if(!password1.equals(password2)) {
-            label1.setText("");
+            label1.setText("‎");
             label2.setText("Password not match!");
             return false;
         }
         else {
-            label1.setText("");
-            label2.setText("");
+            label1.setText("‎");
+            label2.setText("‎");
             return true;
         }
     }
@@ -279,12 +404,11 @@ public class UserService {
         String userPassword = new String(password);
         String username = generateUsername(fullName);
 
-        new User(fullName, gender, email, phone, username, userPassword);
-
-//        UserDAO userDAO = new UserDAO();
-//        userDAO.addUser(fullName, gender, phone, email, username, userPassword);
+        UserDAO userDAO = new UserDAO();
+        userDAO.addUser(fullName, gender, phone, email, username, userPassword);
+        User.setUsers(userDAO.getAllUsers());
 
         User.displayUsers();
-        System.out.println(User.users);
+        System.out.println(User.getUsers());
     }
 }

@@ -137,18 +137,22 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carRent.setOpaque(true);
 
         carRent.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseEntered(MouseEvent evt) {
                 carRent.setBackground(Color.BLUE.darker());
             }
-        
+            
+            @Override
             public void mouseExited(MouseEvent evt) {
                 carRent.setBackground(Color.BLUE);
             }
-        
+            
+            @Override
             public void mousePressed(MouseEvent evt) {
                 carRent.setBackground(Color.CYAN);
             }
-        
+            
+            @Override
             public void mouseReleased(MouseEvent evt) {
                 carRent.setBackground(Color.BLUE);
             }
@@ -466,18 +470,22 @@ public class VehiclesPage extends JPanel implements ActionListener{
         deleteButton.setContentAreaFilled(true);
         deleteButton.setBorderPainted(false);
         deleteButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseEntered(MouseEvent evt) {
                 deleteButton.setBackground(Color.RED.darker());
             }
-        
+            
+            @Override
             public void mouseExited(MouseEvent evt) {
                 deleteButton.setBackground(Color.RED);
             }
-        
+            
+            @Override
             public void mousePressed(MouseEvent evt) {
                 deleteButton.setBackground(Color.ORANGE);
             }
-        
+            
+            @Override
             public void mouseReleased(MouseEvent evt) {
                 deleteButton.setBackground(Color.RED);
             }
@@ -490,18 +498,22 @@ public class VehiclesPage extends JPanel implements ActionListener{
         addButton.setContentAreaFilled(true);
         addButton.setBorderPainted(false);
         addButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseEntered(MouseEvent evt) {
                 addButton.setBackground(Color.GREEN.darker());
             }
-        
+            
+            @Override
             public void mouseExited(MouseEvent evt) {
                 addButton.setBackground(Color.GREEN);
             }
-        
+            
+            @Override
             public void mousePressed(MouseEvent evt) {
                 addButton.setBackground(Color.YELLOW);
             }
-        
+            
+            @Override
             public void mouseReleased(MouseEvent evt) {
                 addButton.setBackground(Color.GREEN);
             }
@@ -849,7 +861,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
     private static class RoundedButton extends JButton {
         private Color backgroundColor;
-        private int cornerRadius;
+        private final int cornerRadius;
 
         public RoundedButton(int radius, Color bgColor) {
             this.cornerRadius = radius;

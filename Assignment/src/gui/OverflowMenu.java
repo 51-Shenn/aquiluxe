@@ -1,13 +1,22 @@
 package gui;
 
+import controllers.UserController;
+import database.UserDAO;
 import datamodels.User;
-
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import java.awt.*;
-import java.io.File;
 
 public class OverflowMenu extends JLayeredPane {
 
@@ -20,9 +29,13 @@ public class OverflowMenu extends JLayeredPane {
     private JPanel themeButton;
     private JPanel switchAccountButton;
     private JPanel signOutButton;
+    private JPanel deleteAccountButton;
     private JPanel closeButton;
     private JPanel editPanel;
     private JButton editButton;
+    private final File themeFile = new File("files/settings/theme.txt");
+    private final File accountsFile = new File("files/settings/accounts.txt");
+    private int[] userAccountsID = new int[4];
 
     public OverflowMenu(JFrame frame, JPanel panel, User user) {
         this.frame = frame;
@@ -32,13 +45,15 @@ public class OverflowMenu extends JLayeredPane {
         if(this.user.getFullName().equals("Guest") && this.user.getUsername().equals("guest"))
             MENU_HEIGHT = 550;
         else
-            MENU_HEIGHT = 775;
+            MENU_HEIGHT = 800;
+        setBackground(Color.BLACK);
         add(createOverflowMenu(), JLayeredPane.POPUP_LAYER);
     }
 
     private JPanel createOverflowMenu() {
         JPanel container = new JPanel();
         container.setLayout(null);
+        container.setBackground(Color.BLACK);
         container.setBounds(0, 0, MENU_WIDTH, MENU_HEIGHT);
         container.add(createMainCard());
         return container;
@@ -51,12 +66,15 @@ public class OverflowMenu extends JLayeredPane {
         panel.setBorder(new LineBorder(new Color(0, 0, 0, 60), 1));
 
         File sunMoonFilePath = new File("images/icons/sun-moon.png");
+        File sunFilePath = new File("images/icons/sun.png");
+        File moonFilePath = new File("images/icons/moon.png");
         File switchFilePath = new File("images/icons/switch.png");
         File signInFilePath = new File("images/icons/sign-in.png");
         File signOutFilePath = new File("images/icons/sign-out.png");
+        File deleteFilePath = new File("images/icons/trash.png");
         File roundCloseFilePath = new File("images/icons/round-close.png");
-        if(!sunMoonFilePath.exists() || !switchFilePath.exists() || !signInFilePath.exists() || !signOutFilePath.exists() || !roundCloseFilePath.exists())
-            JOptionPane.showMessageDialog(null, "Failed to load image:\n" + sunMoonFilePath + "\n" + switchFilePath + "\n" + signOutFilePath + "\n" + roundCloseFilePath);
+        if(!sunMoonFilePath.exists() || !switchFilePath.exists() || !signInFilePath.exists() || !signOutFilePath.exists() || !roundCloseFilePath.exists() || !deleteFilePath.exists())
+            JOptionPane.showMessageDialog(null, "Failed to load image:\n" + sunMoonFilePath + "\n" + sunFilePath + "\n" + moonFilePath + "\n" + switchFilePath + "\n" + signOutFilePath + "\n" + roundCloseFilePath + "\n" + deleteFilePath);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx = 1;
@@ -72,7 +90,20 @@ public class OverflowMenu extends JLayeredPane {
             panel.add(createMenuCard("Sign Up", signInFilePath), gbc);
             panel.add(createMenuCard("Sign In", signInFilePath), gbc);
         } else {
-            themeButton = createMenuCard("Theme", sunMoonFilePath);
+            if(!themeFile.exists()) {
+                themeButton = createMenuCard("Theme", sunMoonFilePath);
+            }
+            else {
+                try(BufferedReader reader = new BufferedReader(new FileReader(themeFile))) {
+                    String line = reader.readLine();
+                    themeButton = line.equals("Dark") ? createMenuCard("Dark Theme", moonFilePath) : createMenuCard("Light Theme", sunFilePath);
+
+                } catch(FileNotFoundException exception) {
+                    JOptionPane.showMessageDialog(null, "Could not locate file location: " + themeFile);
+                } catch(IOException exception) {
+                    JOptionPane.showMessageDialog(null, "Could not write file: " + themeFile);
+                }
+            }
             panel.add(themeButton, gbc);
 
             switchAccountButton = createSwitchAccountPanel(switchFilePath);
@@ -80,6 +111,9 @@ public class OverflowMenu extends JLayeredPane {
 
             signOutButton = createMenuCard("Sign Out", signOutFilePath);
             panel.add(signOutButton, gbc);
+
+            deleteAccountButton = createMenuCard("Delete Account", deleteFilePath);
+            panel.add(deleteAccountButton, gbc);
         }
 
         closeButton = createMenuCard("Close / Exit", roundCloseFilePath);
@@ -107,7 +141,7 @@ public class OverflowMenu extends JLayeredPane {
         JPanel fullNamePanel = createEditProfileInputField("Full Name", fullNameField, fullNameValidationLabel);
         JPanel usernamePanel = createEditProfileInputField("Username", usernameField, usernameValidationLabel);
         JPanel emailPanel = createEditProfileInputField("Email Address", emailField, emailValidationLabel);
-        JPanel phoneNumberPanel = createEditProfileInputField("Phone Number", phoneNumberField, phoneNumberValidationLabel);
+        JPanel phoneNumberPanel = createEditProfileInputField("Phone Number (+60)", phoneNumberField, phoneNumberValidationLabel);
         JPanel drivingLicensePanel = createEditProfileInputField("Driving License", drivingLicenseField, drivingLicenseValidationLabel);
 
         // Add panels to the edit panel
@@ -122,17 +156,38 @@ public class OverflowMenu extends JLayeredPane {
         GridBagConstraints gbc3 = new GridBagConstraints();
         gbc3.anchor = GridBagConstraints.EAST;
         gbc3.weightx = 1;
-        gbc3.insets = new Insets(5, 0, 5, 15);
+        gbc3.insets = new Insets(10, 0, 5, 15);
 
-        JButton updateButton = new JButton("Update");
+        RoundedButton updateButton = new RoundedButton(8, Color.GREEN);
+        updateButton.setText("Update");
         updateButton.setBackground(Color.GREEN);
         updateButton.setForeground(Color.BLACK);
         updateButton.setFont(CustomFonts.ROBOTO_BLACK.deriveFont(18f));
         updateButton.setBorderPainted(false);
         updateButton.setFocusPainted(false);
         updateButton.setPreferredSize(new Dimension(100, 50));
+        updateButton.addActionListener(e -> {
+            boolean isValidUpdateDetails = UserController.passUpdateProfileDetails(this.user, fullNameField.getText(), usernameField.getText(), emailField.getText(), phoneNumberField.getText(), drivingLicenseField.getText(),
+                fullNameValidationLabel, usernameValidationLabel, emailValidationLabel, phoneNumberValidationLabel, drivingLicenseValidationLabel);
+            if(isValidUpdateDetails) {
+                frame.getLayeredPane().remove(this);
+                this.frame.getContentPane().removeAll();
+                this.frame.setLayout(new BorderLayout());
+                GUIComponents.overflowMenu = null;
+                
+                UserDAO userDAO = new UserDAO();
+                this.user = userDAO.getUserById(this.user.getUserId());
 
-        JButton cancelButton = new JButton("Cancel");
+                this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                this.frame.add(this.panel, BorderLayout.CENTER);
+                this.panel.removeAll();
+                this.frame.revalidate();
+                this.frame.repaint();
+            }
+        });
+
+        RoundedButton cancelButton = new RoundedButton(8, Color.RED);
+        cancelButton.setText("Cancel");
         cancelButton.setBackground(Color.RED);
         cancelButton.setForeground(Color.WHITE);
         cancelButton.setFont(CustomFonts.ROBOTO_BLACK.deriveFont(18f));
@@ -145,6 +200,7 @@ public class OverflowMenu extends JLayeredPane {
             themeButton.setVisible(true);
             switchAccountButton.setVisible(true);
             signOutButton.setVisible(true);
+            deleteAccountButton.setVisible(true);
             closeButton.setVisible(true);
 
             this.revalidate();
@@ -182,26 +238,24 @@ public class OverflowMenu extends JLayeredPane {
             case "Full Name" -> inputField.setText(this.user.getFullName());
             case "Username" -> inputField.setText(this.user.getUsername());
             case "Email Address" -> inputField.setText(this.user.getUserEmail());
-            case "Phone Number" -> inputField.setText("+60" + this.user.getPhoneNumber());
+            case "Phone Number (+60)" -> inputField.setText(this.user.getPhoneNumber());
             case "Driving License" -> inputField.setText("");
         }
 
-        gbc.insets = new Insets(10, 30, 0, 30);
+        gbc.insets = new Insets(5, 30, 0, 30);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.weightx = 1;
         gbc.weighty = 1;
         panel.add(label, gbc);
 
-        validationLabel.setText("hello");
-        if(validationLabel.getText().isEmpty())
-            gbc.insets = new Insets(0, 30, 5, 30);
-        else
-            gbc.insets = new Insets(0, 30, 0, 30);
+        validationLabel.setText("‎");
+        gbc.insets = new Insets(2, 30, 2, 30);
 
         panel.add(inputField, gbc);
 
         validationLabel.setForeground(Color.RED);
+        validationLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(12f));
         gbc.gridx = 1;
         gbc.gridy = 2;
         panel.add(validationLabel, gbc);
@@ -260,6 +314,18 @@ public class OverflowMenu extends JLayeredPane {
                 addAccountButton.addActionListener(ee -> {
                     frame.getLayeredPane().remove(this);
                     frame.getContentPane().removeAll();
+
+                    UIManager.getDefaults().clear();
+                    try {
+                        UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
+                        for (Window window : Window.getWindows()) {
+                            SwingUtilities.updateComponentTreeUI(window);
+                            window.repaint();
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+
                     frame.add(new SignInPage(this.frame, this.panel, this.user));
                     frame.revalidate();
                     frame.repaint();
@@ -267,66 +333,173 @@ public class OverflowMenu extends JLayeredPane {
                 accountsPanel.add(addAccountButton, gbc);
 
                 gbc.weighty = 1;
-                for (User user : User.users.values()) {
-                    JButton accountButton = new JButton();
-                    accountButton.setBackground(Color.WHITE);
 
-                    File smallMaleFilePath = new File("images/icons/small-male.png");
-                    File smallFemaleFilePath = new File("images/icons/small-female.png");
-                    if (!smallMaleFilePath.exists() || !smallFemaleFilePath.exists()) {
-                        JOptionPane.showMessageDialog(null, "Failed to load image:\n" + smallMaleFilePath + "\n" + smallFemaleFilePath);
+                if(accountsFile.exists()) {
+                    try (BufferedReader reader = new BufferedReader(new FileReader(accountsFile))) {
+                        String line;
+                        int index = 0;
+                        while ((line = reader.readLine()) != null && index < userAccountsID.length) {
+                            try {
+                                userAccountsID[index] = Integer.parseInt(line.trim());
+                                index++;
+                            } catch (NumberFormatException exception) {
+                                JOptionPane.showMessageDialog(null, "Invalid number format in file: " + line);
+                            }
+                        }
+                    } catch (FileNotFoundException exception) {
+                        JOptionPane.showMessageDialog(null, "Could not locate file: " + accountsFile);
+                    } catch (IOException exception) {
+                        JOptionPane.showMessageDialog(null, "Error reading file: " + accountsFile);
                     }
+                }
 
-                    ImageIcon genderIcon;
-                    if(user.getGender().equals("Male"))
-                        genderIcon = new ImageIcon(smallMaleFilePath.toString());
-                    else
-                        genderIcon = new ImageIcon(smallFemaleFilePath.toString());
+                for (int userID : userAccountsID) {
+                    if(userID != 0 && userID != this.user.getUserId()) {
+                        UserDAO userDAO = new UserDAO();
+                        User everyUser = userDAO.getUserById(userID);
 
-                    accountButton.setFocusPainted(false);
-                    accountButton.setBorderPainted(false);
+                        RoundedButton accountButton = new RoundedButton(20, Color.WHITE);
+                        accountButton.setBackground(Color.WHITE);
+                        accountButton.addMouseListener(new MouseAdapter() {
+                            @Override
+                            public void mouseEntered(MouseEvent evt) {
+                                accountButton.setBackground(new Color(223, 223, 223));
+                                accountButton.repaint();
+                            }
+                
+                            @Override
+                            public void mouseExited(MouseEvent evt) {
+                                accountButton.setBackground(Color.WHITE);
+                                accountButton.repaint();
+                            }
+                
+                            @Override
+                            public void mousePressed(MouseEvent evt) {
+                                accountButton.setBackground(new Color(223, 223, 223));
+                                accountButton.repaint();
+                            }
+                
+                            @Override
+                            public void mouseReleased(MouseEvent evt) {
+                                accountButton.setBackground(Color.WHITE);
+                                accountButton.repaint();
+                            }
+                        });
 
-                    accountButton.setLayout(new GridBagLayout());
-                    GridBagConstraints gbcButton = new GridBagConstraints();
-                    gbcButton.anchor = GridBagConstraints.WEST;
-                    gbcButton.fill = GridBagConstraints.HORIZONTAL;
-                    gbcButton.insets = new Insets(10, 0, 10, 25);
+                        File smallMaleFilePath = new File("images/icons/small-male.png");
+                        File smallFemaleFilePath = new File("images/icons/small-female.png");
+                        if (!smallMaleFilePath.exists() || !smallFemaleFilePath.exists()) {
+                            JOptionPane.showMessageDialog(null, "Failed to load image:\n" + smallMaleFilePath + "\n" + smallFemaleFilePath);
+                        }
 
-                    gbcButton.gridx = 0;
-                    gbcButton.gridy = 0;
-                    gbcButton.weightx = 0;
-                    accountButton.add(new JLabel(genderIcon), gbcButton);
+                        ImageIcon genderIcon;
+                        if(everyUser.getGender().equals("Male"))
+                            genderIcon = new ImageIcon(smallMaleFilePath.toString());
+                        else
+                            genderIcon = new ImageIcon(smallFemaleFilePath.toString());
 
-                    JPanel accountDetails = new JPanel(new GridBagLayout());
-                    accountDetails.setBackground(new Color(255, 255, 255, 0));
+                        accountButton.setFocusPainted(false);
+                        accountButton.setBorderPainted(false);
 
-                    JLabel fullNameLabel = new JLabel(user.getFullName());
-                    fullNameLabel.setForeground(Color.BLACK);
-                    fullNameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(18f));
-                    JLabel usernameLabel = new JLabel("@" + user.getUsername());
-                    usernameLabel.setForeground(Color.GRAY);
-                    usernameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(14f));
+                        accountButton.setLayout(new GridBagLayout());
+                        GridBagConstraints gbcButton = new GridBagConstraints();
+                        gbcButton.anchor = GridBagConstraints.NORTHWEST;
+                        gbcButton.fill = GridBagConstraints.HORIZONTAL;
+                        gbcButton.insets = new Insets(10, 0, 10, 25);
 
-                    GridBagConstraints gbcDetails = new GridBagConstraints();
-                    gbcDetails.anchor = GridBagConstraints.WEST;
-                    gbcDetails.fill = GridBagConstraints.HORIZONTAL;
-                    gbcDetails.gridwidth = GridBagConstraints.REMAINDER;
-                    gbcDetails.weightx = 1;
-                    gbcDetails.insets = new Insets(0, 0, 0, 0);
+                        gbcButton.gridx = 0;
+                        gbcButton.gridy = 0;
+                        gbcButton.weightx = 0;
+                        accountButton.add(new JLabel(genderIcon), gbcButton);
 
-                    accountDetails.add(fullNameLabel, gbcDetails);
-                    accountDetails.add(usernameLabel, gbcDetails);
+                        JPanel accountDetails = new JPanel(new GridBagLayout());
+                        accountDetails.setBackground(new Color(255, 255, 255, 0));
 
-                    gbcButton.gridx = 1;
-                    gbcButton.gridy = 0;
-                    gbcButton.weightx = 1;
-                    accountButton.add(accountDetails, gbcButton);
+                        JLabel fullNameLabel = new JLabel(everyUser.getFullName());
+                        fullNameLabel.setForeground(Color.BLACK);
+                        fullNameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(18f));
+                        JLabel usernameLabel = new JLabel("@" + everyUser.getUsername());
+                        usernameLabel.setForeground(Color.GRAY);
+                        usernameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(14f));
 
-                    gbc.insets = new Insets(5, 30, 5, 30);
-                    accountsPanel.add(accountButton, gbc);
+                        GridBagConstraints gbcDetails = new GridBagConstraints();
+                        gbcDetails.anchor = GridBagConstraints.WEST;
+                        gbcDetails.fill = GridBagConstraints.HORIZONTAL;
+                        gbcDetails.gridwidth = GridBagConstraints.REMAINDER;
+                        gbcDetails.weightx = 1;
+                        gbcDetails.insets = new Insets(0, 0, 0, 0);
 
+                        accountDetails.add(fullNameLabel, gbcDetails);
+                        accountDetails.add(usernameLabel, gbcDetails);
+
+                        gbcButton.gridx = 1;
+                        gbcButton.gridy = 0;
+                        gbcButton.weightx = 1;
+                        accountButton.add(accountDetails, gbcButton);
+                        accountButton.addActionListener(ex -> {
+                            frame.getLayeredPane().remove(this);
+                            this.frame.getContentPane().removeAll();
+                            this.frame.setLayout(new BorderLayout());
+                            GUIComponents.overflowMenu = null;
+                            this.user = everyUser;
+                            this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                            this.frame.add(this.panel, BorderLayout.CENTER);
+                            this.panel.removeAll();
+                            this.frame.revalidate();
+                            this.frame.repaint();
+
+                            ArrayList<Integer> accountIDs = new ArrayList<>();
+                            if (accountsFile.exists()) {
+                                try (BufferedReader reader = new BufferedReader(new FileReader(accountsFile))) {
+                                    String line;
+                                    while ((line = reader.readLine()) != null) {
+                                        try {
+                                            accountIDs.add(Integer.valueOf(line.trim()));
+                                        } catch (NumberFormatException exception) {}
+                                    }
+                                } catch (IOException exception) {
+                                    JOptionPane.showMessageDialog(null, "Error reading file: " + accountsFile);
+                                }
+                            }
+
+                            int currentUserId = this.user.getUserId();
+
+                            for (int i = 1; i < accountIDs.size(); i++) {
+                                if (accountIDs.get(i) == currentUserId) {
+                                    accountIDs.remove(i);
+                                    break;
+                                }
+                            }
+                            
+                            if (!accountIDs.isEmpty() && accountIDs.get(0) != currentUserId) {
+                                accountIDs.removeIf(id -> id == currentUserId);
+                                accountIDs.add(0, currentUserId);
+                            } else if (accountIDs.isEmpty()) {
+                                accountIDs.add(currentUserId);
+                            }
+
+                            // only 4 accounts
+                            while (accountIDs.size() > 4) {
+                                accountIDs.remove(accountIDs.size() - 1);
+                            }
+
+                            // write back to file
+                            try (FileWriter writer = new FileWriter(accountsFile)) {
+                                for (int i = 0; i < accountIDs.size(); i++) {
+                                    writer.write(accountIDs.get(i) + "\n");
+                                }
+                            } catch (IOException exception) {
+                                JOptionPane.showMessageDialog(null, "Error saving accounts file");
+                            }
+                        });
+
+                        gbc.insets = new Insets(5, 30, 5, 30);
+                        gbc.weighty = 0;
+                        accountsPanel.add(accountButton, gbc);                        
+                    }
                     themeButton.setVisible(false);
                     signOutButton.setVisible(false);
+                    deleteAccountButton.setVisible(false);
                     closeButton.setVisible(false);
                 }
 
@@ -342,6 +515,7 @@ public class OverflowMenu extends JLayeredPane {
 
                 themeButton.setVisible(true);
                 signOutButton.setVisible(true);
+                deleteAccountButton.setVisible(true);
                 closeButton.setVisible(true);
             }
 
@@ -384,8 +558,14 @@ public class OverflowMenu extends JLayeredPane {
         JLabel profileIcon = new JLabel();
         profileIcon.setIcon(genderIcon);
 
+        float baseFontSize = 24f; // max size (shorter name)
+        float minFontSize = 10f;  // min size (longer name)
+        float scaleFactor = 30f;
+
+        float fontSize = baseFontSize + (scaleFactor / this.user.getFullName().length());
+        fontSize = Math.max(fontSize, minFontSize);
         JLabel nameLabel = new JLabel(this.user.getFullName());
-        nameLabel.setFont(CustomFonts.OPEN_SANS_EXTRA_BOLD.deriveFont(30f));
+        nameLabel.setFont(CustomFonts.OPEN_SANS_EXTRA_BOLD.deriveFont(fontSize));
         nameLabel.setForeground(Color.BLACK);
 
         JLabel usernameLabel = new JLabel("@" + this.user.getUsername());
@@ -431,6 +611,7 @@ public class OverflowMenu extends JLayeredPane {
             themeButton.setVisible(false);
             switchAccountButton.setVisible(false);
             signOutButton.setVisible(false);
+            deleteAccountButton.setVisible(false);
             closeButton.setVisible(false);
             editPanel.setVisible(true);
 
@@ -471,8 +652,34 @@ public class OverflowMenu extends JLayeredPane {
         button.setPreferredSize(new Dimension(MENU_WIDTH, 70));
         button.setFocusPainted(false);
         button.setBorderPainted(false);
+        button.setOpaque(true);
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent evt) {
+                button.setBackground(new Color(223, 223, 223));
+                button.repaint();
+            }
 
-        if(text.equals("Theme")) {
+            @Override
+            public void mouseExited(MouseEvent evt) {
+                button.setBackground(Color.WHITE);
+                button.repaint();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                button.setBackground(new Color(223, 223, 223));
+                button.repaint();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                button.setBackground(Color.WHITE);
+                button.repaint();
+            }
+        });
+
+        if(text.equals("Theme") || text.equals("Dark Theme") || text.equals("Light Theme")) {
             File sunFilePath = new File("images/icons/sun.png");
             File moonFilePath = new File("images/icons/moon.png");
             if(!sunFilePath.exists() || !moonFilePath.exists())
@@ -482,14 +689,36 @@ public class OverflowMenu extends JLayeredPane {
             ImageIcon moonIcon = new ImageIcon(moonFilePath.toString());
 
             button.addActionListener(e -> {
-                if(button.getIcon() == moonIcon) {
+                String theme = "Light";
+                String newTheme;
+
+                try(BufferedReader reader = new BufferedReader(new FileReader(themeFile))) {
+                    theme = reader.readLine();
+                } catch(FileNotFoundException exception) {
+                    JOptionPane.showMessageDialog(null, "Could not locate file location: " + themeFile);
+                } catch(IOException exception) {
+                    JOptionPane.showMessageDialog(null, "Could not write file: " + themeFile);
+                }
+
+                if(theme.equals("Dark")) {
+                    newTheme = "Light";
                     button.setIcon(sunIcon);
                     button.setText("Light Theme");
                 }
                 else {
+                    newTheme = "Dark";
                     button.setIcon(moonIcon);
                     button.setText("Dark Theme");
                 }
+                
+                try(FileWriter writer = new FileWriter(themeFile)) {
+                    writer.write(newTheme);
+                } catch(FileNotFoundException exception) {
+                    JOptionPane.showMessageDialog(null, "Could not locate file location: " + themeFile);
+                } catch(IOException exception) {
+                    JOptionPane.showMessageDialog(null, "Could not write file: " + themeFile);
+                }
+                
                 frame.revalidate();
                 frame.repaint();
             });
@@ -498,6 +727,18 @@ public class OverflowMenu extends JLayeredPane {
             button.addActionListener(e -> {
                 frame.getLayeredPane().remove(this);
                 frame.getContentPane().removeAll();
+
+                UIManager.getDefaults().clear();  // Clear all cached UI properties
+                try {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
+                    for (Window window : Window.getWindows()) {
+                        SwingUtilities.updateComponentTreeUI(window);
+                        window.repaint();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
                 frame.add(new SignUpPage(this.frame, this.panel, this.user));
                 frame.revalidate();
                 frame.repaint();
@@ -507,6 +748,18 @@ public class OverflowMenu extends JLayeredPane {
             button.addActionListener(e -> {
                 frame.getLayeredPane().remove(this);
                 frame.getContentPane().removeAll();
+
+                UIManager.getDefaults().clear();  // Clear all cached UI properties
+                try {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
+                    for (Window window : Window.getWindows()) {
+                        SwingUtilities.updateComponentTreeUI(window);
+                        window.repaint();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
                 frame.add(new SignInPage(this.frame, this.panel, this.user));
                 frame.revalidate();
                 frame.repaint();
@@ -526,11 +779,85 @@ public class OverflowMenu extends JLayeredPane {
                 this.frame.repaint();
             });
         }
+        if(text.equals("Delete Account")) {
+            UserDAO userDAO = new UserDAO();
+            
+            button.addActionListener(e -> {
+                userDAO.deleteUser(this.user.getUserId());
+                User.setUsers(userDAO.getAllUsers());
+
+                frame.getLayeredPane().remove(this);
+                this.frame.getContentPane().removeAll();
+                this.frame.setLayout(new BorderLayout());
+                GUIComponents.overflowMenu = null;
+                this.user = new User();
+                this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                this.frame.add(this.panel, BorderLayout.CENTER);
+                this.panel.removeAll();
+                this.frame.revalidate();
+                this.frame.repaint();
+            });
+        }
         if(text.equals("Close / Exit")) {
             if(isExpanded) button.setVisible(false);
             button.addActionListener(e -> frame.dispose());
         }
 
         return button;
+    }
+
+    private static class RoundedButton extends JButton {
+        private Color backgroundColor;
+        private final int cornerRadius;
+
+        public RoundedButton(int radius, Color bgColor) {
+            this.cornerRadius = radius;
+            this.backgroundColor = bgColor;
+            setOpaque(false);
+        }
+
+        @Override
+        public void setBackground(Color bgColor) {
+            this.backgroundColor = bgColor;
+            repaint();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g.create();
+
+            // Enable anti-aliasing for smooth rendering
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            int width = getWidth();
+            int height = getHeight();
+            int arcSize = cornerRadius * 2;
+
+            // Make panel transparent
+            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+            g2d.setColor(backgroundColor != null ? backgroundColor : getBackground());
+            g2d.fillRoundRect(0, 0, width - 1, height - 1, arcSize, arcSize);
+
+            // Draw the icon (if set)
+            Icon icon = getIcon();
+            if (icon != null) {
+                int iconWidth = icon.getIconWidth();
+                int iconHeight = icon.getIconHeight();
+                int iconX = (width - iconWidth - getText().length() * 5) / 2; // Adjust spacing
+                int iconY = (height - iconHeight) / 2;
+                icon.paintIcon(this, g2d, iconX, iconY);
+            }
+
+            FontMetrics fm = g2d.getFontMetrics();
+            int textX = (width - fm.stringWidth(getText())) / 2;
+            int textY = (height + fm.getAscent()) / 2 - 2;
+
+            // Fill rounded rectangle
+            g2d.setColor(getForeground());
+            g2d.drawString(getText(), textX, textY);
+
+            g2d.dispose();
+        }
     }
 }
