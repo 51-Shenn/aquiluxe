@@ -37,6 +37,9 @@ public class MainApp extends JFrame {
         add(new GUIComponents(this, contentPanel, null), BorderLayout.NORTH);
         add(contentPanel, BorderLayout.CENTER);
 
+        Dialog dialog = new Dialog(this);
+        dialog.showSuccessDialog();
+
         setVisible(true);
     }
 

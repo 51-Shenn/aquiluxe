@@ -3,12 +3,12 @@ package gui;
 import datamodels.User;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import org.w3c.dom.events.MouseEvent;
 
 public class OverflowMenu extends JLayeredPane {
 
@@ -35,6 +35,7 @@ public class OverflowMenu extends JLayeredPane {
             MENU_HEIGHT = 550;
         else
             MENU_HEIGHT = 800;
+        setBackground(Color.BLACK);
         add(createOverflowMenu(), JLayeredPane.POPUP_LAYER);
     }
 
@@ -267,6 +268,18 @@ public class OverflowMenu extends JLayeredPane {
                 addAccountButton.addActionListener(ee -> {
                     frame.getLayeredPane().remove(this);
                     frame.getContentPane().removeAll();
+
+                    UIManager.getDefaults().clear();  // Clear all cached UI properties
+                    try {
+                        UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
+                        for (Window window : Window.getWindows()) {
+                            SwingUtilities.updateComponentTreeUI(window);
+                            window.repaint();
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+
                     frame.add(new SignInPage(this.frame, this.panel, this.user));
                     frame.revalidate();
                     frame.repaint();
@@ -350,6 +363,7 @@ public class OverflowMenu extends JLayeredPane {
 
                 themeButton.setVisible(true);
                 signOutButton.setVisible(true);
+                deleteAccountButton.setVisible(true);
                 closeButton.setVisible(true);
             }
 
@@ -392,8 +406,14 @@ public class OverflowMenu extends JLayeredPane {
         JLabel profileIcon = new JLabel();
         profileIcon.setIcon(genderIcon);
 
+        float baseFontSize = 24f; // max size (shorter name)
+        float minFontSize = 10f;  // min size (longer name)
+        float scaleFactor = 30f;
+
+        float fontSize = baseFontSize + (scaleFactor / this.user.getFullName().length());
+        fontSize = Math.max(fontSize, minFontSize);
         JLabel nameLabel = new JLabel(this.user.getFullName());
-        nameLabel.setFont(CustomFonts.OPEN_SANS_EXTRA_BOLD.deriveFont(30f));
+        nameLabel.setFont(CustomFonts.OPEN_SANS_EXTRA_BOLD.deriveFont(fontSize));
         nameLabel.setForeground(Color.BLACK);
 
         JLabel usernameLabel = new JLabel("@" + this.user.getUsername());
@@ -446,23 +466,6 @@ public class OverflowMenu extends JLayeredPane {
             this.revalidate();
             this.repaint();
         });
-        editButton.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent evt) {
-                editButton.setBackground(Color.BLUE.darker());
-            }
-        
-            public void mouseExited(MouseEvent evt) {
-                editButton.setBackground(Color.BLUE);
-            }
-        
-            public void mousePressed(MouseEvent evt) {
-                editButton.setBackground(Color.CYAN);
-            }
-        
-            public void mouseReleased(MouseEvent evt) {
-                editButton.setBackground(Color.BLUE);
-            }
-        });
 
         return editButton;
     }
@@ -497,6 +500,32 @@ public class OverflowMenu extends JLayeredPane {
         button.setPreferredSize(new Dimension(MENU_WIDTH, 70));
         button.setFocusPainted(false);
         button.setBorderPainted(false);
+        button.setOpaque(true);
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent evt) {
+                button.setBackground(new Color(223, 223, 223));
+                button.repaint();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent evt) {
+                button.setBackground(Color.WHITE);
+                button.repaint();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                button.setBackground(new Color(223, 223, 223));
+                button.repaint();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                button.setBackground(Color.WHITE);
+                button.repaint();
+            }
+        });
 
         if(text.equals("Theme")) {
             File sunFilePath = new File("images/icons/sun.png");
