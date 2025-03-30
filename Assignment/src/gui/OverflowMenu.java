@@ -10,9 +10,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -335,22 +333,7 @@ public class OverflowMenu extends JLayeredPane {
                 gbc.weighty = 1;
 
                 if(accountsFile.exists()) {
-                    try (BufferedReader reader = new BufferedReader(new FileReader(accountsFile))) {
-                        String line;
-                        int index = 0;
-                        while ((line = reader.readLine()) != null && index < userAccountsID.length) {
-                            try {
-                                userAccountsID[index] = Integer.parseInt(line.trim());
-                                index++;
-                            } catch (NumberFormatException exception) {
-                                JOptionPane.showMessageDialog(null, "Invalid number format in file: " + line);
-                            }
-                        }
-                    } catch (FileNotFoundException exception) {
-                        JOptionPane.showMessageDialog(null, "Could not locate file: " + accountsFile);
-                    } catch (IOException exception) {
-                        JOptionPane.showMessageDialog(null, "Error reading file: " + accountsFile);
-                    }
+                    userAccountsID = UserController.loadExistingUserInFile(userAccountsID, accountsFile);
                 }
 
                 for (int userID : userAccountsID) {
@@ -448,49 +431,7 @@ public class OverflowMenu extends JLayeredPane {
                             this.frame.revalidate();
                             this.frame.repaint();
 
-                            ArrayList<Integer> accountIDs = new ArrayList<>();
-                            if (accountsFile.exists()) {
-                                try (BufferedReader reader = new BufferedReader(new FileReader(accountsFile))) {
-                                    String line;
-                                    while ((line = reader.readLine()) != null) {
-                                        try {
-                                            accountIDs.add(Integer.valueOf(line.trim()));
-                                        } catch (NumberFormatException exception) {}
-                                    }
-                                } catch (IOException exception) {
-                                    JOptionPane.showMessageDialog(null, "Error reading file: " + accountsFile);
-                                }
-                            }
-
-                            int currentUserId = this.user.getUserId();
-
-                            for (int i = 1; i < accountIDs.size(); i++) {
-                                if (accountIDs.get(i) == currentUserId) {
-                                    accountIDs.remove(i);
-                                    break;
-                                }
-                            }
-                            
-                            if (!accountIDs.isEmpty() && accountIDs.get(0) != currentUserId) {
-                                accountIDs.removeIf(id -> id == currentUserId);
-                                accountIDs.add(0, currentUserId);
-                            } else if (accountIDs.isEmpty()) {
-                                accountIDs.add(currentUserId);
-                            }
-
-                            // only 4 accounts
-                            while (accountIDs.size() > 4) {
-                                accountIDs.remove(accountIDs.size() - 1);
-                            }
-
-                            // write back to file
-                            try (FileWriter writer = new FileWriter(accountsFile)) {
-                                for (int i = 0; i < accountIDs.size(); i++) {
-                                    writer.write(accountIDs.get(i) + "\n");
-                                }
-                            } catch (IOException exception) {
-                                JOptionPane.showMessageDialog(null, "Error saving accounts file");
-                            }
+                            UserController.switchToAccount(this.user, accountsFile);
                         });
 
                         gbc.insets = new Insets(5, 30, 5, 30);
@@ -572,7 +513,7 @@ public class OverflowMenu extends JLayeredPane {
         usernameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
         usernameLabel.setForeground(Color.GRAY);
 
-        JButton editButton = createEditButton(editFilePath);
+        editButton = createEditButton(editFilePath);
 
         gbc.insets = new Insets(25, 0, 0, 0);
         profileCard.add(profileIcon, gbc);
@@ -689,16 +630,8 @@ public class OverflowMenu extends JLayeredPane {
             ImageIcon moonIcon = new ImageIcon(moonFilePath.toString());
 
             button.addActionListener(e -> {
-                String theme = "Light";
+                String theme = UserController.loadTheme(themeFile);
                 String newTheme;
-
-                try(BufferedReader reader = new BufferedReader(new FileReader(themeFile))) {
-                    theme = reader.readLine();
-                } catch(FileNotFoundException exception) {
-                    JOptionPane.showMessageDialog(null, "Could not locate file location: " + themeFile);
-                } catch(IOException exception) {
-                    JOptionPane.showMessageDialog(null, "Could not write file: " + themeFile);
-                }
 
                 if(theme.equals("Dark")) {
                     newTheme = "Light";
@@ -710,14 +643,8 @@ public class OverflowMenu extends JLayeredPane {
                     button.setIcon(moonIcon);
                     button.setText("Dark Theme");
                 }
-                
-                try(FileWriter writer = new FileWriter(themeFile)) {
-                    writer.write(newTheme);
-                } catch(FileNotFoundException exception) {
-                    JOptionPane.showMessageDialog(null, "Could not locate file location: " + themeFile);
-                } catch(IOException exception) {
-                    JOptionPane.showMessageDialog(null, "Could not write file: " + themeFile);
-                }
+
+                UserController.useTheme(newTheme, themeFile);
                 
                 frame.revalidate();
                 frame.repaint();
@@ -767,6 +694,8 @@ public class OverflowMenu extends JLayeredPane {
         }
         if(text.equals("Sign Out")) {
             button.addActionListener(e -> {
+                UserController.removeUserFromFile(this.user.getUserId(), accountsFile);
+
                 frame.getLayeredPane().remove(this);
                 this.frame.getContentPane().removeAll();
                 this.frame.setLayout(new BorderLayout());
@@ -783,6 +712,8 @@ public class OverflowMenu extends JLayeredPane {
             UserDAO userDAO = new UserDAO();
             
             button.addActionListener(e -> {
+                UserController.removeUserFromFile(this.user.getUserId(), accountsFile);
+
                 userDAO.deleteUser(this.user.getUserId());
                 User.setUsers(userDAO.getAllUsers());
 
@@ -791,6 +722,7 @@ public class OverflowMenu extends JLayeredPane {
                 this.frame.setLayout(new BorderLayout());
                 GUIComponents.overflowMenu = null;
                 this.user = new User();
+
                 this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
                 this.frame.add(this.panel, BorderLayout.CENTER);
                 this.panel.removeAll();
@@ -804,60 +736,5 @@ public class OverflowMenu extends JLayeredPane {
         }
 
         return button;
-    }
-
-    private static class RoundedButton extends JButton {
-        private Color backgroundColor;
-        private final int cornerRadius;
-
-        public RoundedButton(int radius, Color bgColor) {
-            this.cornerRadius = radius;
-            this.backgroundColor = bgColor;
-            setOpaque(false);
-        }
-
-        @Override
-        public void setBackground(Color bgColor) {
-            this.backgroundColor = bgColor;
-            repaint();
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2d = (Graphics2D) g.create();
-
-            // Enable anti-aliasing for smooth rendering
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            int width = getWidth();
-            int height = getHeight();
-            int arcSize = cornerRadius * 2;
-
-            // Make panel transparent
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-            g2d.setColor(backgroundColor != null ? backgroundColor : getBackground());
-            g2d.fillRoundRect(0, 0, width - 1, height - 1, arcSize, arcSize);
-
-            // Draw the icon (if set)
-            Icon icon = getIcon();
-            if (icon != null) {
-                int iconWidth = icon.getIconWidth();
-                int iconHeight = icon.getIconHeight();
-                int iconX = (width - iconWidth - getText().length() * 5) / 2; // Adjust spacing
-                int iconY = (height - iconHeight) / 2;
-                icon.paintIcon(this, g2d, iconX, iconY);
-            }
-
-            FontMetrics fm = g2d.getFontMetrics();
-            int textX = (width - fm.stringWidth(getText())) / 2;
-            int textY = (height + fm.getAscent()) / 2 - 2;
-
-            // Fill rounded rectangle
-            g2d.setColor(getForeground());
-            g2d.drawString(getText(), textX, textY);
-
-            g2d.dispose();
-        }
     }
 }

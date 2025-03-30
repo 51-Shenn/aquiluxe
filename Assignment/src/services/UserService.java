@@ -2,10 +2,18 @@ package services;
 
 import database.UserDAO;
 import datamodels.User;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class UserService {
 
@@ -410,5 +418,129 @@ public class UserService {
 
         User.displayUsers();
         System.out.println(User.getUsers());
+    }
+
+    public static int[] loadUserIDFromFile(int[] userAccountsID, File accountsFile) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(accountsFile))) {
+            String line;
+            int index = 0;
+            while ((line = reader.readLine()) != null && index < userAccountsID.length) {
+                try {
+                    userAccountsID[index] = Integer.parseInt(line.trim());
+                    index++;
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Invalid number format in file: " + line);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(null, "Could not locate file: " + accountsFile);
+        } catch (IOException exception) {
+            JOptionPane.showMessageDialog(null, "Error reading file: " + accountsFile);
+        }
+
+        return userAccountsID;
+    }
+
+    public static void updateUserAccountsFile(User user, File accountsFile) { 
+        ArrayList<Integer> accountIDs = new ArrayList<>();
+        if (accountsFile.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(accountsFile))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    try {
+                        accountIDs.add(Integer.valueOf(line.trim()));
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(null, "Invalid number format in file: " + line);
+                    }
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Error reading file: " + accountsFile);
+            }
+        }
+
+        int currentUserId = user.getUserId();
+
+        for (int i = 1; i < accountIDs.size(); i++) {
+            if (accountIDs.get(i) == currentUserId) {
+                accountIDs.remove(i);
+                break;
+            }
+        }
+        
+        if (!accountIDs.isEmpty() && accountIDs.get(0) != currentUserId) {
+            accountIDs.removeIf(id -> id == currentUserId);
+            accountIDs.add(0, currentUserId);
+        } else if (accountIDs.isEmpty()) {
+            accountIDs.add(currentUserId);
+        }
+
+        // only 4 accounts
+        while (accountIDs.size() > 4) {
+            accountIDs.remove(accountIDs.size() - 1);
+        }
+
+        // write back to file
+        try (FileWriter writer = new FileWriter(accountsFile)) {
+            for (int i = 0; i < accountIDs.size(); i++) {
+                writer.write(accountIDs.get(i) + "\n");
+            }
+        } catch (IOException exception) {
+            JOptionPane.showMessageDialog(null, "Error saving accounts file");
+        }
+    }
+
+    public static void removeUserFromAccountsFile(int userId, File accountsFile) {
+        ArrayList<Integer> accountIDs = new ArrayList<>();
+        
+        if (accountsFile.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(accountsFile))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    try {
+                        int id = Integer.parseInt(line.trim());
+                        // add to array list if not the one that is signed out or deleted
+                        if (id != userId) {
+                            accountIDs.add(id);
+                        }
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(null, "Invalid number format in file: " + line);
+                    }
+                }
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Error reading file: " + accountsFile);
+            }
+        }
+        
+        try (FileWriter writer = new FileWriter(accountsFile)) {
+            for (int id : accountIDs) {
+                writer.write(id + "\n");
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "Error updating accounts file");
+        }
+    }
+
+    public static String loadThemeFromFile(File themeFile) {
+        String theme = "Light";
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(themeFile))) {
+            theme = reader.readLine();
+        } catch(FileNotFoundException e) {
+            JOptionPane.showMessageDialog(null, "Could not locate file location: " + themeFile);
+        } catch(IOException e) {
+            JOptionPane.showMessageDialog(null, "Could not write file: " + themeFile);
+        }
+
+        return theme;
+    }
+
+    public static void applyNewTheme(String newTheme, File themeFile) {
+        try(FileWriter writer = new FileWriter(themeFile)) {
+            writer.write(newTheme);
+        } catch(FileNotFoundException e) {
+            JOptionPane.showMessageDialog(null, "Could not locate file location: " + themeFile);
+        } catch(IOException e) {
+            JOptionPane.showMessageDialog(null, "Could not write file: " + themeFile);
+        }
     }
 }
