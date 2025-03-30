@@ -1,11 +1,11 @@
 package database;
 
+import datamodels.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import datamodels.User;
 
 public class UserDAO {
 

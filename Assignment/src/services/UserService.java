@@ -139,6 +139,9 @@ public class UserService {
             userDAO.updateUserColumnValue(user.getUserId(), "user_email", email);
             userDAO.updateUserColumnValue(user.getUserId(), "phone_number", phoneNumber);
 
+            // if(!drivingLicense.trim().isEmpty())
+            userDAO.addCustomerDetails(user.getUserId(), "", drivingLicense);
+
             User.setUsers(userDAO.getAllUsers());
             return true;
         }
@@ -152,7 +155,7 @@ public class UserService {
             if((user.getUserEmail().equals(email) || user.getUsername().equals(email)) && user.getPassword().equals(userPassword))
                 return user;
         }
-
+        
         return new User();
     }
 
@@ -180,7 +183,7 @@ public class UserService {
             label.setText("Name must contain only letters and spaces");
             return false;
         }
-        label.setText("‎");
+        label.setText("");
         return true;
     }
     private static boolean fullNameValidator(User user, String fullName, JLabel label) {
@@ -255,7 +258,7 @@ public class UserService {
             return false;
         }
         else {
-            label.setText("‎");
+            label.setText("");
             return true;
         }
     }
@@ -277,7 +280,7 @@ public class UserService {
                     return false;
                 }
             }
-            label.setText("‎");
+            label.setText("");
             return true;
         }
         else {
@@ -334,7 +337,7 @@ public class UserService {
                     return false;
                 }
             }
-            label.setText("‎");
+            label.setText("");
             return true;
         }
         else {
@@ -389,13 +392,13 @@ public class UserService {
             return false;
         }
         else if(!password1.equals(password2)) {
-            label1.setText("‎");
+            label1.setText("");
             label2.setText("Password not match!");
             return false;
         }
         else {
-            label1.setText("‎");
-            label2.setText("‎");
+            label1.setText("");
+            label2.setText("");
             return true;
         }
     }

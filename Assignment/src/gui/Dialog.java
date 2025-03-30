@@ -10,6 +10,11 @@ public class Dialog extends JDialog {
         this.frame = frame;
     }
 
+    // custom
+    // message
+    // error
+    // success
+
     public void showSuccessDialog() {
         // JDialog messageDialog = new JDialog(this.frame, "Welcome", true); // true = modal dialog
         // messageDialog.setLayout(new BorderLayout());
