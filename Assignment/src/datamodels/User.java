@@ -142,13 +142,14 @@ public class User {
     // Debug
     @Override
     public String toString() {
-        return "User { " +
+        return " User { " +
                 "userId = " + userId +
                 ", fullName = '" + fullName + '\'' +
                 ", gender = '" + gender + '\'' +
                 ", phoneNumber = '" + phoneNumber + '\'' +
                 ", userEmail = '" + userEmail + '\'' +
                 ", username = '" + username + '\'' +
+                ", usertype = '" + userType + '\'' +
                 " }";
     }
 
