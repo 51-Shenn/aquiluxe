@@ -94,7 +94,6 @@ public class GUIComponents extends JPanel {
         }
 
         topBarButtons[0].addActionListener(e -> {
-            checkActivePage(topBarButtons, topBarButtons[0]);
             for (JButton button : topBarButtons) {
                 button.setForeground(Color.BLACK);
                 button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
@@ -108,7 +107,6 @@ public class GUIComponents extends JPanel {
         });
 
         topBarButtons[1].addActionListener(e -> {
-            checkActivePage(topBarButtons, topBarButtons[1]);
             for (JButton button : topBarButtons) {
                 button.setForeground(Color.BLACK);
                 button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
@@ -122,7 +120,6 @@ public class GUIComponents extends JPanel {
         });
 
         topBarButtons[2].addActionListener(e -> {
-            checkActivePage(topBarButtons, topBarButtons[2]);
             for (JButton button : topBarButtons) {
                 button.setForeground(Color.BLACK);
                 button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
@@ -141,7 +138,6 @@ public class GUIComponents extends JPanel {
         });
 
         topBarButtons[3].addActionListener(e -> {
-            checkActivePage(topBarButtons, topBarButtons[3]);
             for (JButton button : topBarButtons) {
                 button.setForeground(Color.BLACK);
                 button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
@@ -189,16 +185,5 @@ public class GUIComponents extends JPanel {
             return menu;
         }
         return new JButton("ERROR");
-    }
-
-    // change button color when clicked
-    private void checkActivePage(JButton[] topBarButtons, JButton activeButton) {
-        for (JButton button : topBarButtons) {
-            if (button == activeButton) {
-                button.setForeground(Colors.LIGHT_BLUE);
-            } else {
-                button.setForeground(Color.BLACK);
-            }
-        }
     }
 }
