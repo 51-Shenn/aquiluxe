@@ -127,11 +127,6 @@ public class GUIComponents extends JPanel {
             topBarButtons[2].setForeground(Color.BLUE);
             topBarButtons[2].setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
             this.panel.removeAll();
-            JPanel panel = new JPanel();
-
-            // test
-            panel.setBackground(Color.BLACK);
-            this.panel.add(panel);
 
             this.panel.revalidate();
             this.panel.repaint();

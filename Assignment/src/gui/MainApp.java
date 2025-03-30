@@ -3,6 +3,10 @@ package gui;
 import database.UserDAO;
 import datamodels.User;
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import javax.swing.*;
 
 public class MainApp extends JFrame {
@@ -14,14 +18,6 @@ public class MainApp extends JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        // Initialize frame
-        // try {
-        // UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        // SwingUtilities.updateComponentTreeUI(frame);
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // }
         setTitle("AQUILUXE");
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(1280, 720));
@@ -34,7 +30,20 @@ public class MainApp extends JFrame {
 
         JPanel contentPanel = new JPanel(new BorderLayout());
 
-        add(new GUIComponents(this, contentPanel, null), BorderLayout.NORTH);
+        UserDAO userDAO = new UserDAO();
+
+        File accountsFile = new File("files/settings/accounts.txt");
+        if (accountsFile.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(accountsFile))) {
+                String line = reader.readLine();
+                User loadUserFromFile = userDAO.getUserById(Integer.parseInt(line.trim()));
+                add(new GUIComponents(this, contentPanel, loadUserFromFile), BorderLayout.NORTH);
+            } catch (IOException exception) {
+                JOptionPane.showMessageDialog(null, "Error reading file: " + accountsFile);
+            }
+        } else
+            add(new GUIComponents(this, contentPanel, null), BorderLayout.NORTH);
+
         add(contentPanel, BorderLayout.CENTER);
 
         Dialog dialog = new Dialog(this);

@@ -8,6 +8,7 @@ import datamodels.Car;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.*;
 
 public class VehiclesPageDetails extends JPanel {
 
@@ -331,18 +332,22 @@ public class VehiclesPageDetails extends JPanel {
         rentButton.setBorderPainted(false);
         rentButton.setOpaque(true);
         rentButton.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseEntered(MouseEvent evt) {
                 rentButton.setBackground(Color.BLUE.darker());
             }
 
+            @Override
             public void mouseExited(MouseEvent evt) {
                 rentButton.setBackground(Color.BLUE);
             }
 
+            @Override
             public void mousePressed(MouseEvent evt) {
                 rentButton.setBackground(Color.CYAN);
             }
 
+            @Override
             public void mouseReleased(MouseEvent evt) {
                 rentButton.setBackground(Color.BLUE);
                 Car carSample = new Car(1001, "images/cars/Supra.jpg", "Toyota", "Supra", 2023, 3000, 800, "Red", 13.2,
@@ -551,7 +556,7 @@ public class VehiclesPageDetails extends JPanel {
 
     private class RoundedButton extends JButton {
         private Color backgroundColor;
-        private int cornerRadius;
+        private final int cornerRadius;
 
         public RoundedButton(int radius, Color bgColor) {
             this.cornerRadius = radius;
@@ -559,6 +564,7 @@ public class VehiclesPageDetails extends JPanel {
             setOpaque(false);
         }
 
+        @Override
         public void setBackground(Color bgColor) {
             this.backgroundColor = bgColor;
             repaint();

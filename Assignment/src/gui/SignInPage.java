@@ -15,6 +15,7 @@ public class SignInPage extends AuthenticationPage {
     private User user;
     private JPasswordField passwordInput;
     private JLabel passwordValidationLabel;
+    private final File accountsFile = new File("files/settings/accounts.txt");
 
     public SignInPage(JFrame frame, JPanel panel, User user) {
         this.frame = frame;
@@ -87,7 +88,6 @@ public class SignInPage extends AuthenticationPage {
                 this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
                 this.frame.add(this.panel, BorderLayout.CENTER);
                 this.panel.removeAll();
-//                this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
                 this.frame.revalidate();
                 this.frame.repaint();
             });
@@ -230,6 +230,8 @@ public class SignInPage extends AuthenticationPage {
                 this.panel.removeAll();
                 this.frame.revalidate();
                 this.frame.repaint();
+                
+                UserController.switchToAccount(this.user, accountsFile);
             }
         });
 

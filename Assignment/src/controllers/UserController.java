@@ -1,13 +1,13 @@
 package controllers;
 
-import javax.swing.JLabel;
-
 import datamodels.User;
+import java.io.File;
+import javax.swing.JLabel;
 import services.UserService;
 
 public class UserController {
 
-    // overloaded method for SignUpPage
+    // method overloading for SignUpPage
     public static boolean passNewUserDetails(String fullName, String gender, String email, String phone,
         JLabel fullNameValidationLabel, JLabel genderValidationLabel, JLabel emailValidationLabel, JLabel phoneValidationLabel) {
         return UserService.validateNewUserDetails(fullName, gender, email, phone, fullNameValidationLabel, genderValidationLabel, emailValidationLabel, phoneValidationLabel);
@@ -17,7 +17,7 @@ public class UserController {
         return UserService.validateNewUserDetails(fullName, gender, email, phone, password, confirmPassword, fullNameValidationLabel, genderValidationLabel, emailValidationLabel, phoneValidationLabel, passwordValidationLabel, confirmPasswordValidationLabel);
     }
 
-    // overloaded methods for ForgotPasswordPage
+    // method overloading for ForgotPasswordPage
     public static boolean passForgotPasswordDetails(String email, String phone, JLabel emailValidationLabel, JLabel phoneValidationLabel) {
         return UserService.validateForgotPasswordDetails(email, phone, emailValidationLabel, phoneValidationLabel);
     }
@@ -33,4 +33,27 @@ public class UserController {
         return UserService.signInUser(email, password);
     }
 
+    public static boolean passUpdateProfileDetails(User user, String fullName, String username, String  email, String  phoneNumber, String  drivingLicense, JLabel fullNameValidationLabel, JLabel usernameValidationLabel, JLabel emailValidationLabel, JLabel phoneNumberValidationLabel, JLabel drivingLicenseValidationLabel) {
+        return UserService.validateUpdateProfileDetails(user, fullName, username, email, phoneNumber, drivingLicense, fullNameValidationLabel, usernameValidationLabel, emailValidationLabel, phoneNumberValidationLabel, drivingLicenseValidationLabel);
+    }
+
+    public static int[] loadExistingUserInFile(int[] userIDArr, File accountsFile) {
+        return UserService.loadUserIDFromFile(userIDArr, accountsFile);
+    }
+
+    public static void switchToAccount(User user, File accountsFile) {
+        UserService.updateUserAccountsFile(user, accountsFile);
+    }
+
+    public static void removeUserFromFile(int id, File accountsFile) {
+        UserService.removeUserFromAccountsFile(id, accountsFile);
+    }
+
+    public static String loadTheme(File themeFile) {
+        return UserService.loadThemeFromFile(themeFile);
+    }
+
+    public static void useTheme(String newTheme, File themFile) {
+        UserService.applyNewTheme(newTheme, themFile);
+    }
 }
