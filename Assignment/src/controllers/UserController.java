@@ -37,6 +37,10 @@ public class UserController {
         return UserService.validateUpdateProfileDetails(user, fullName, username, email, phoneNumber, drivingLicense, fullNameValidationLabel, usernameValidationLabel, emailValidationLabel, phoneNumberValidationLabel, drivingLicenseValidationLabel);
     }
 
+    public static User loadCurrentUser(File accountsFile) {
+        return UserService.loadCurrentUserFromFile(accountsFile);
+    }
+
     public static int[] loadExistingUserInFile(int[] userIDArr, File accountsFile) {
         return UserService.loadUserIDFromFile(userIDArr, accountsFile);
     }
