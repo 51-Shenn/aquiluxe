@@ -470,7 +470,11 @@ public class VehiclesPage extends JPanel implements ActionListener{
             public void mouseExited(MouseEvent evt) {
                 deleteButton.setBackground(Color.RED);
             }
+<<<<<<<<< Temporary merge branch 1
+
+=========
             
+>>>>>>>>> Temporary merge branch 2
             @Override
             public void mousePressed(MouseEvent evt) {
                 deleteButton.setBackground(Color.ORANGE);
