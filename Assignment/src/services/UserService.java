@@ -422,6 +422,19 @@ public class UserService {
         System.out.println(User.getUsers());
     }
 
+    public static User loadCurrentUserFromFile(File accountsFile) {
+        UserDAO userDAO = new UserDAO();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(accountsFile))) {
+            String line = reader.readLine();
+            return userDAO.getUserById(Integer.parseInt(line.trim()));
+        } catch (IOException exception) {
+            JOptionPane.showMessageDialog(null, "Error reading file: " + accountsFile);
+        }
+
+        return new User();
+    }
+
     public static int[] loadUserIDFromFile(int[] userAccountsID, File accountsFile) {
         try (BufferedReader reader = new BufferedReader(new FileReader(accountsFile))) {
             String line;
