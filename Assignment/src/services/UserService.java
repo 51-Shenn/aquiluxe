@@ -165,13 +165,7 @@ public class UserService {
     public static User signInUser(String email, char[] password) {
         String userPassword = new String(password);
 
-        for (User user : User.getUsers().values()) {
-            if ((user.getUserEmail().equals(email) || user.getUsername().equals(email))
-                    && user.getPassword().equals(userPassword))
-                return user;
-        }
-
-        return new User();
+        return new UserDAO().authenticateUser(email, userPassword);
     }
 
     private static String capitalizeFullName(String fullName) {
