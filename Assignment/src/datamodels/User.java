@@ -12,7 +12,7 @@ public class User {
     private String password;
     private String userType;
 
-    private static HashMap<Integer, User> users = new HashMap<>();
+    // private static HashMap<Integer, User> users = new HashMap<>();
 
     // Default Constructor : for subclassing
     public User() {
@@ -129,14 +129,6 @@ public class User {
 
     public void setUserType(String userType) {
         this.userType = userType;
-    }
-
-    public static HashMap<Integer, User> getUsers() {
-        return users;
-    }
-
-    public static void setUsers(HashMap<Integer, User> setUser) {
-        users = setUser;
     }
 
     // Debug

@@ -94,7 +94,6 @@ public class UserService {
             User userAttempt = userDAO.authenticateUserForgotPassword(email, phone);
             if (userAttempt != null) {
                 userDAO.updateUserColumnValue(userAttempt.getUserId(), "password", userPassword);
-                User.setUsers(userDAO.getAllUsers());
 
                 return true;
             }
@@ -148,7 +147,6 @@ public class UserService {
             userDAO.updateUserColumnValue(user.getUserId(), "user_email", email);
             userDAO.updateUserColumnValue(user.getUserId(), "phone_number", phoneNumber);
 
-            User.setUsers(userDAO.getAllUsers());
             return true;
         } else
             return false;
@@ -406,9 +404,6 @@ public class UserService {
 
         UserDAO userDAO = new UserDAO();
         userDAO.addUser(fullName, gender, phone, email, username, userPassword, "Customer");
-        User.setUsers(userDAO.getAllUsers());
-
-        System.out.println(User.getUsers());
     }
 
     public static User loadCurrentUserFromFile(File accountsFile) {

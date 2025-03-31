@@ -1,7 +1,6 @@
 package gui;
 
 import controllers.UserController;
-import database.UserDAO;
 import datamodels.User;
 import java.awt.*;
 import java.io.File;
@@ -44,10 +43,6 @@ public class MainApp extends JFrame {
     }
 
     public static void main(String[] args) {
-        UserDAO userDAO = new UserDAO();
-        User.setUsers(userDAO.getAllUsers());
-        System.out.println(User.getUsers());
-
         new MainApp();
     }
 }
