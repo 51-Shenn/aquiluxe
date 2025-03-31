@@ -233,12 +233,36 @@ public class UserDAO {
                     User user = mapResultUser(rs);
                     return user;
                 }
-                return new User();
             }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("\nAUTHENTICATION FAILED\n");
         }
+        return null;
+    }
+
+    // get user by username and password
+    public User authenticateUserForgotPassword(String username, String phoneNumber) {
+        String sql = "SELECT * FROM users WHERE (username = ? OR user_email = ?) AND phone_number = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, username);
+            stmt.setString(3, phoneNumber);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    User user = mapResultUser(rs);
+                    return user;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nAUTHENTICATION FAILED\n");
+        }
+        return null;
     }
 
     // check if username exist : return boolean value

@@ -65,21 +65,19 @@ public class UserService {
         return isValidFullName && isValidGender && isValidEmailAddress && isValidPhoneNumber && isValidPassword;
     }
 
-    public static boolean validateForgotPasswordDetails(String email, String phone, JLabel emailValidationLabel,
-            JLabel phoneValidationLabel) {
+    public static boolean validateForgotPasswordDetails(String email, String phone, JLabel emailValidationLabel, JLabel phoneValidationLabel) {
         if (email.isEmpty()) {
             emailValidationLabel.setText("Username / Email Address cannot be blank");
             return false;
         } else if (phone.isEmpty()) {
             phoneValidationLabel.setText("Please enter your phone number.");
             return false;
-        } else {
-            for (User user : User.getUsers().values()) {
-                if ((user.getUserEmail().equals(email) || user.getUsername().equals(email))
-                        && user.getPhoneNumber().equals(phone))
-                    return true;
-            }
-        }
+        } 
+
+        UserDAO userDAO = new UserDAO();
+        User userAttempt = userDAO.authenticateUserForgotPassword(email, phone);
+        if (userAttempt != null) 
+            return true;
 
         emailValidationLabel.setText("Wrong email address or phone number.");
         phoneValidationLabel.setText("Wrong email address or phone number.");
@@ -88,20 +86,17 @@ public class UserService {
 
     public static boolean validateForgotPasswordDetails(String email, String phone, char[] password,
             char[] confirmPassword, JLabel passwordValidationLabel, JLabel confirmPasswordValidationLabel) {
-        boolean isValidPassword = passwordValidation(password, confirmPassword, passwordValidationLabel,
-                confirmPasswordValidationLabel);
+        boolean isValidPassword = passwordValidation(password, confirmPassword, passwordValidationLabel, confirmPasswordValidationLabel);
         String userPassword = new String(password);
-        if (isValidPassword) {
-            for (User user : User.getUsers().values()) {
-                if ((user.getUserEmail().equals(email) || user.getUsername().equals(email))
-                        && user.getPhoneNumber().equals(phone)) {
-                    UserDAO userDAO = new UserDAO();
-                    userDAO.updateUserColumnValue(user.getUserId(), "password", userPassword);
-                    User.setUsers(userDAO.getAllUsers());
 
-                    User.displayUsers();
-                    return true;
-                }
+        if (isValidPassword) {
+            UserDAO userDAO = new UserDAO();
+            User userAttempt = userDAO.authenticateUserForgotPassword(email, phone);
+            if (userAttempt != null) {
+                userDAO.updateUserColumnValue(userAttempt.getUserId(), "password", userPassword);
+                User.setUsers(userDAO.getAllUsers());
+
+                return true;
             }
         }
         return false;
@@ -125,13 +120,10 @@ public class UserService {
             passwordValidationLabel.setText("‎");
         }
 
-        for (User user : User.getUsers().values()) {
-            if ((user.getUserEmail().equals(email) || user.getUsername().equals(email))
-                    && user.getPassword().equals(userPassword)) {
-                System.out.println("Login successful!");
-                return true;
-            }
-        }
+        UserDAO userDAO = new UserDAO();
+        User userAttempt = userDAO.authenticateUser(email, userPassword);
+        if (userAttempt != null) 
+            return true;
 
         emailValidationLabel.setText("Wrong email address or password.");
         passwordValidationLabel.setText("Wrong email address or password.");
@@ -253,12 +245,7 @@ public class UserService {
     }
 
     private static boolean isUsernameTaken(String username) {
-        for (User user : User.getUsers().values()) {
-            if (user.getUsername().equals(username)) {
-                return true;
-            }
-        }
-        return false;
+        return new UserDAO().usernameExists(username);
     }
 
     private static boolean genderValidator(String gender, JLabel label) {
@@ -282,15 +269,15 @@ public class UserService {
         Matcher matcher = pattern.matcher(email);
 
         if (matcher.matches()) {
-            for (User user : User.getUsers().values()) {
-                if (user.getUserEmail().equals(email)) {
-                    label.setText("This email address has been taken!");
-                    return false;
-                }
+            if(isEmailAddressTaken(email)) {
+                label.setText("This email address has been taken!");
+                return false;
             }
+
             label.setText("‎");
             return true;
-        } else {
+        } 
+        else {
             label.setText("Invalid email format");
             return false;
         }
@@ -309,19 +296,24 @@ public class UserService {
         if (currentUser.getUserEmail().equals(email) && matcher.matches()) {
             label.setText("‎");
             return true;
-        } else if (matcher.matches()) {
-            for (User user : User.getUsers().values()) {
-                if (user.getUserEmail().equals(email)) {
-                    label.setText("This email address has been taken!");
-                    return false;
-                }
+        } 
+        else if (matcher.matches()) {
+            if(isEmailAddressTaken(email)) {
+                label.setText("This email address has been taken!");
+                return false;
             }
+            
             label.setText("‎");
             return true;
-        } else {
+        } 
+        else {
             label.setText("Invalid email format");
             return false;
         }
+    }
+
+    private static boolean isEmailAddressTaken(String email) {
+        return new UserDAO().emailExists(email);
     }
 
     private static boolean phoneNumberValidator(String phone, JLabel label) {
@@ -337,12 +329,11 @@ public class UserService {
         Matcher matcher = pattern.matcher(phone);
 
         if (matcher.matches()) {
-            for (User user : User.getUsers().values()) {
-                if (user.getPhoneNumber().equals(phone)) {
-                    label.setText("This phone number has been taken!");
-                    return false;
-                }
+            if (isPhoneNumberTaken(phone)) {
+                label.setText("This phone number has been taken!");
+                return false;
             }
+
             label.setText("‎");
             return true;
         } else {
@@ -364,19 +355,24 @@ public class UserService {
         if (currentUser.getPhoneNumber().equals(phone) && matcher.matches()) {
             label.setText("‎");
             return true;
-        } else if (matcher.matches()) {
-            for (User user : User.getUsers().values()) {
-                if (user.getPhoneNumber().equals(phone)) {
-                    label.setText("This phone number has been taken!");
-                    return false;
-                }
+        } 
+        else if (matcher.matches()) {
+            if (isPhoneNumberTaken(phone)) {
+                label.setText("This phone number has been taken!");
+                return false;
             }
+
             label.setText("‎");
             return true;
-        } else {
+        } 
+        else {
             label.setText("Invalid phone number");
             return false;
         }
+    }
+
+    private static boolean isPhoneNumberTaken(String phoneNumber) {
+        return new UserDAO().phoneNumberExists(phoneNumber);
     }
 
     private static boolean passwordValidation(char[] password, char[] confirmPassword, JLabel label1, JLabel label2) {
@@ -412,7 +408,6 @@ public class UserService {
         userDAO.addUser(fullName, gender, phone, email, username, userPassword, "Customer");
         User.setUsers(userDAO.getAllUsers());
 
-        User.displayUsers();
         System.out.println(User.getUsers());
     }
 
