@@ -44,14 +44,14 @@ public class OverflowMenu extends JLayeredPane {
             MENU_HEIGHT = 550;
         else
             MENU_HEIGHT = 800;
-        setBackground(Color.BLACK);
+        setBackground(Theme.getBackground());
         add(createOverflowMenu(), JLayeredPane.POPUP_LAYER);
     }
 
     private JPanel createOverflowMenu() {
         JPanel container = new JPanel();
         container.setLayout(null);
-        container.setBackground(Color.BLACK);
+        container.setBackground(Theme.getBackground());
         container.setBounds(0, 0, MENU_WIDTH, MENU_HEIGHT);
         container.add(createMainCard());
         return container;
@@ -118,7 +118,7 @@ public class OverflowMenu extends JLayeredPane {
         panel.add(closeButton, gbc);
 
         editPanel = new JPanel(new GridBagLayout());
-        editPanel.setBackground(Color.WHITE);
+        editPanel.setBackground(Theme.getBackground());
         GridBagConstraints gbc2 = new GridBagConstraints();
         gbc2.gridwidth = GridBagConstraints.REMAINDER;
         gbc2.weightx = 1;
@@ -150,16 +150,16 @@ public class OverflowMenu extends JLayeredPane {
         editPanel.add(drivingLicensePanel, gbc2);
 
         JPanel editPageButtonPanel = new JPanel(new GridBagLayout());
-        editPageButtonPanel.setBackground(Color.WHITE);
+        editPageButtonPanel.setBackground(Theme.getBackground());
         GridBagConstraints gbc3 = new GridBagConstraints();
         gbc3.anchor = GridBagConstraints.EAST;
         gbc3.weightx = 1;
         gbc3.insets = new Insets(10, 0, 5, 15);
 
-        RoundedButton updateButton = new RoundedButton(8, Color.GREEN);
+        RoundedButton updateButton = new RoundedButton(8, Theme.getSuccess());
         updateButton.setText("Update");
-        updateButton.setBackground(Color.GREEN);
-        updateButton.setForeground(Color.BLACK);
+        updateButton.setBackground(Theme.getSuccess());
+        updateButton.setForeground(Theme.getSuccessForeground());
         updateButton.setFont(CustomFonts.ROBOTO_BLACK.deriveFont(18f));
         updateButton.setBorderPainted(false);
         updateButton.setFocusPainted(false);
@@ -168,7 +168,7 @@ public class OverflowMenu extends JLayeredPane {
             boolean isValidUpdateDetails = UserController.passUpdateProfileDetails(this.user, fullNameField.getText(), usernameField.getText(), emailField.getText(), phoneNumberField.getText(), drivingLicenseField.getText(),
                 fullNameValidationLabel, usernameValidationLabel, emailValidationLabel, phoneNumberValidationLabel, drivingLicenseValidationLabel);
             if(isValidUpdateDetails) {
-                frame.getLayeredPane().remove(this);
+                this.frame.getLayeredPane().remove(this);
                 this.frame.getContentPane().removeAll();
                 this.frame.setLayout(new BorderLayout());
                 GUIComponents.overflowMenu = null;
@@ -184,10 +184,10 @@ public class OverflowMenu extends JLayeredPane {
             }
         });
 
-        RoundedButton cancelButton = new RoundedButton(8, Color.RED);
+        RoundedButton cancelButton = new RoundedButton(8, Theme.getError());
         cancelButton.setText("Cancel");
-        cancelButton.setBackground(Color.RED);
-        cancelButton.setForeground(Color.WHITE);
+        cancelButton.setBackground(Theme.getError());
+        cancelButton.setForeground(Theme.getErrorForeground());
         cancelButton.setFont(CustomFonts.ROBOTO_BLACK.deriveFont(18f));
         cancelButton.setBorderPainted(false);
         cancelButton.setFocusPainted(false);
@@ -222,15 +222,19 @@ public class OverflowMenu extends JLayeredPane {
 
     private JPanel createEditProfileInputField(String text, JTextField inputField, JLabel validationLabel) {
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(Color.WHITE);
+        panel.setBackground(Theme.getBackground());
         GridBagConstraints gbc = new GridBagConstraints();
 
         JLabel label = new JLabel(text + ":");
         label.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
+        label.setBackground(Theme.getBackground());
+        label.setForeground(Theme.getForeground());
 
         inputField.setPreferredSize(new Dimension(200, 40));
         inputField.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(17f));
-        inputField.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 1), new EmptyBorder(5, 10, 5, 10)));
+        inputField.setBackground(Theme.getBackground());
+        inputField.setForeground(Theme.getForeground());
+        inputField.setBorder(new CompoundBorder(new LineBorder(Theme.getForeground(), 1), new EmptyBorder(5, 10, 5, 10)));
 
         switch (text) {
             case "Full Name" -> inputField.setText(this.user.getFullName());
@@ -252,7 +256,7 @@ public class OverflowMenu extends JLayeredPane {
 
         panel.add(inputField, gbc);
 
-        validationLabel.setForeground(Color.RED);
+        validationLabel.setForeground(Theme.getError());
         validationLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(12f));
         gbc.gridx = 1;
         gbc.gridy = 2;
@@ -263,7 +267,7 @@ public class OverflowMenu extends JLayeredPane {
 
     private JPanel createSwitchAccountPanel(File iconFilePath) {
         JPanel switchAccountPanel = new JPanel(new BorderLayout());
-        switchAccountPanel.setBackground(Color.WHITE);
+        switchAccountPanel.setBackground(Theme.getBackground());
 
         ImageIcon switchIcon = new ImageIcon(iconFilePath.toString());
         JButton button = createMenuButton("Switch Account", switchIcon);
@@ -273,13 +277,13 @@ public class OverflowMenu extends JLayeredPane {
                 isExpanded = true;
                 switchAccountPanel.removeAll();
                 button.setText("Back");
-                button.setForeground(Color.BLUE);
+                button.setForeground(Theme.getSpecial());
                 button.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(20f));
                 button.setIcon(null);
                 switchAccountPanel.add(button, BorderLayout.SOUTH);
 
                 JPanel accountsPanel = new JPanel(new GridBagLayout());
-                accountsPanel.setBackground(Color.WHITE);
+                accountsPanel.setBackground(Theme.getBackground());
 
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.anchor = GridBagConstraints.NORTHWEST;
@@ -290,7 +294,7 @@ public class OverflowMenu extends JLayeredPane {
 
                 JLabel accountLabel = new JLabel("Accounts");
                 accountLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(20f));
-                accountLabel.setForeground(Color.BLACK);
+                accountLabel.setForeground(Theme.getForeground());
                 gbc.weighty = 0;
                 accountsPanel.add(accountLabel, gbc);
 
@@ -303,8 +307,8 @@ public class OverflowMenu extends JLayeredPane {
                 addAccountButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(18f));
                 addAccountButton.setIcon(plusIcon);
                 addAccountButton.setFocusPainted(false);
-                addAccountButton.setForeground(Color.BLACK);
-                addAccountButton.setBackground(Color.WHITE);
+                addAccountButton.setForeground(Theme.getForeground());
+                addAccountButton.setBackground(Theme.getBackground());
                 addAccountButton.setHorizontalAlignment(SwingConstants.LEFT);
                 addAccountButton.setIconTextGap(30);
                 addAccountButton.setBorder(new EmptyBorder(15, 25, 15, 25));
@@ -341,8 +345,8 @@ public class OverflowMenu extends JLayeredPane {
                         UserDAO userDAO = new UserDAO();
                         User everyUser = userDAO.getUserById(userID);
 
-                        RoundedButton accountButton = new RoundedButton(20, Color.WHITE);
-                        accountButton.setBackground(Color.WHITE);
+                        RoundedButton accountButton = new RoundedButton(20, Theme.getBackground());
+                        accountButton.setBackground(Theme.getBackground());
                         accountButton.addMouseListener(new MouseAdapter() {
                             @Override
                             public void mouseEntered(MouseEvent evt) {
@@ -352,7 +356,7 @@ public class OverflowMenu extends JLayeredPane {
                 
                             @Override
                             public void mouseExited(MouseEvent evt) {
-                                accountButton.setBackground(Color.WHITE);
+                                accountButton.setBackground(Theme.getBackground());
                                 accountButton.repaint();
                             }
                 
@@ -364,7 +368,7 @@ public class OverflowMenu extends JLayeredPane {
                 
                             @Override
                             public void mouseReleased(MouseEvent evt) {
-                                accountButton.setBackground(Color.WHITE);
+                                accountButton.setBackground(Theme.getBackground());
                                 accountButton.repaint();
                             }
                         });
@@ -399,7 +403,7 @@ public class OverflowMenu extends JLayeredPane {
                         accountDetails.setBackground(new Color(255, 255, 255, 0));
 
                         JLabel fullNameLabel = new JLabel(everyUser.getFullName());
-                        fullNameLabel.setForeground(Color.BLACK);
+                        fullNameLabel.setForeground(Theme.getForeground());
                         fullNameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(18f));
                         JLabel usernameLabel = new JLabel("@" + everyUser.getUsername());
                         usernameLabel.setForeground(Color.GRAY);
@@ -449,7 +453,7 @@ public class OverflowMenu extends JLayeredPane {
                 isExpanded = false;
                 switchAccountPanel.removeAll();
                 button.setText("Switch Account");
-                button.setForeground(Color.BLACK);
+                button.setForeground(Theme.getForeground());
                 button.setFont(CustomFonts.ROBOTO_BLACK.deriveFont(20f));
                 button.setIcon(switchIcon);
                 switchAccountPanel.add(button, BorderLayout.CENTER);
@@ -473,10 +477,10 @@ public class OverflowMenu extends JLayeredPane {
 
     private JPanel createProfileCard() {
         JPanel profileMainPanel = new JPanel(new GridBagLayout());
-        profileMainPanel.setBackground(Color.WHITE);
+        profileMainPanel.setBackground(Theme.getBackground());
 
         JPanel profileCard = new JPanel(new GridBagLayout());
-        profileCard.setBackground(Color.WHITE);
+        profileCard.setBackground(Theme.getBackground());
         profileCard.setPreferredSize(new Dimension(MENU_WIDTH, MENU_HEIGHT));
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -507,7 +511,7 @@ public class OverflowMenu extends JLayeredPane {
         fontSize = Math.max(fontSize, minFontSize);
         JLabel nameLabel = new JLabel(this.user.getFullName());
         nameLabel.setFont(CustomFonts.OPEN_SANS_EXTRA_BOLD.deriveFont(fontSize));
-        nameLabel.setForeground(Color.BLACK);
+        nameLabel.setForeground(Theme.getForeground());
 
         JLabel usernameLabel = new JLabel("@" + this.user.getUsername());
         usernameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
@@ -543,8 +547,8 @@ public class OverflowMenu extends JLayeredPane {
         editButton.setIconTextGap(15);
         editButton.setHorizontalTextPosition(SwingConstants.LEFT);
         editButton.setFont(CustomFonts.ROBOTO_BLACK.deriveFont(18f));
-        editButton.setBackground(Color.WHITE);
-        editButton.setForeground(Color.BLACK);
+        editButton.setBackground(Theme.getBackground());
+        editButton.setForeground(Theme.getForeground());
         editButton.setFocusPainted(false);
         editButton.setBorderPainted(false);
         editButton.addActionListener(e -> {
@@ -565,7 +569,7 @@ public class OverflowMenu extends JLayeredPane {
 
     private JPanel createMenuCard(String text, File iconFilePath) {
         JPanel card = new JPanel(new GridBagLayout());
-        card.setBackground(Color.WHITE);
+        card.setBackground(Theme.getBackground());
         ImageIcon icon = new ImageIcon(iconFilePath.toString());
 
         JButton button = createMenuButton(text, icon);
@@ -586,9 +590,9 @@ public class OverflowMenu extends JLayeredPane {
         button.setIcon(icon);
         button.setIconTextGap(30);
         button.setHorizontalAlignment(SwingConstants.LEFT);
-        button.setBackground(Color.WHITE);
+        button.setBackground(Theme.getBackground());
         button.setBorder(new EmptyBorder(0, 50, 0, 0));
-        button.setForeground(Color.BLACK);
+        button.setForeground(Theme.getForeground());
         button.setFont(CustomFonts.ROBOTO_BLACK.deriveFont(20f));
         button.setPreferredSize(new Dimension(MENU_WIDTH, 70));
         button.setFocusPainted(false);
@@ -603,7 +607,7 @@ public class OverflowMenu extends JLayeredPane {
 
             @Override
             public void mouseExited(MouseEvent evt) {
-                button.setBackground(Color.WHITE);
+                button.setBackground(Theme.getBackground());
                 button.repaint();
             }
 
@@ -615,7 +619,7 @@ public class OverflowMenu extends JLayeredPane {
 
             @Override
             public void mouseReleased(MouseEvent evt) {
-                button.setBackground(Color.WHITE);
+                button.setBackground(Theme.getBackground());
                 button.repaint();
             }
         });
@@ -645,9 +649,16 @@ public class OverflowMenu extends JLayeredPane {
                 }
 
                 UserController.useTheme(newTheme, themeFile);
-                
-                frame.revalidate();
-                frame.repaint();
+
+                this.frame.getLayeredPane().remove(this);
+                this.frame.getContentPane().removeAll();
+                this.frame.setLayout(new BorderLayout());
+                GUIComponents.overflowMenu = null;
+                this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                this.frame.add(this.panel, BorderLayout.CENTER);
+                this.panel.removeAll();
+                this.frame.revalidate();
+                this.frame.repaint();
             });
         }
         if(text.equals("Sign Up")) {
