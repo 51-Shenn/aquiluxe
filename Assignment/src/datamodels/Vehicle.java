@@ -1,5 +1,8 @@
 package datamodels;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Vehicle {
     private int vehicleId;
     private String imagePath;
@@ -18,6 +21,8 @@ public class Vehicle {
     private int seatingCapacity;
     private boolean availability;
     private String features;
+
+    private static List<Vehicle> vehicles = new ArrayList<Vehicle>();
 
     // Default Constructor
     public Vehicle() {
@@ -205,5 +210,13 @@ public class Vehicle {
 
     public void setFeatures(String features) {
         this.features = features;
+    }
+
+    public static List<Vehicle> getVehicles() {
+        return vehicles;
+    }
+
+    public static void setVehicles(List<Vehicle> setVehicle) {
+        vehicles = setVehicle;
     }
 }
