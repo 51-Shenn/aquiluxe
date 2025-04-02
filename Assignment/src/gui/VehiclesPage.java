@@ -1,12 +1,12 @@
 package gui;
 
 import datamodels.Car;
+import datamodels.Bike;
 import datamodels.Vehicle;
 import controllers.VehicleController;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;

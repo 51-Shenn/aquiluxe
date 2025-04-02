@@ -21,6 +21,7 @@ public class Vehicle {
     private int seatingCapacity;
     private boolean availability;
     private String features;
+    private String vehicleType;
 
     private static List<Vehicle> vehicles = new ArrayList<Vehicle>();
 
@@ -52,11 +53,10 @@ public class Vehicle {
         this.features = features;
     }
 
-    // Getters and Setters
-    public void setVehicle(int vehicleId, String imagePath, String brand, String model, int year, int capacity,
+    public Vehicle(int vehicleId, String imagePath, String brand, String model, int year, int capacity,
             int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
             double rentalPriceDay, String transmission, String fuelType, int seatingCapacity, boolean availability,
-            String features) {
+            String features, String vehicleType) {
         this.vehicleId = vehicleId;
         this.imagePath = imagePath;
         this.brand = brand;
@@ -74,6 +74,32 @@ public class Vehicle {
         this.seatingCapacity = seatingCapacity;
         this.availability = availability;
         this.features = features;
+        this.vehicleType = vehicleType;
+    }
+
+    // Getters and Setters
+    public void setVehicle(int vehicleId, String imagePath, String brand, String model, int year, int capacity,
+            int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
+            double rentalPriceDay, String transmission, String fuelType, int seatingCapacity, boolean availability,
+            String features, String vehicleType) {
+        this.vehicleId = vehicleId;
+        this.imagePath = imagePath;
+        this.brand = brand;
+        this.model = model;
+        this.year = year;
+        this.capacity = capacity;
+        this.horsepower = horsepower;
+        this.color = color;
+        this.mpg = mpg;
+        this.vinNumber = vinNumber;
+        this.registrationNumber = registrationNumber;
+        this.rentalPriceDay = rentalPriceDay;
+        this.transmission = transmission;
+        this.fuelType = fuelType;
+        this.seatingCapacity = seatingCapacity;
+        this.availability = availability;
+        this.features = features;
+        this.vehicleType = vehicleType;   
     }
 
     public int getVehicleId() {
@@ -218,5 +244,13 @@ public class Vehicle {
 
     public static void setVehicles(List<Vehicle> setVehicle) {
         vehicles = setVehicle;
+    }
+
+    public String getVehicletype() {
+        return vehicleType;
+    }
+
+    public void setVehicletype(String vehicleType) {
+        this.vehicleType = vehicleType;
     }
 }

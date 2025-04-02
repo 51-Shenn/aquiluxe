@@ -14,8 +14,8 @@ public class VehicleDAO {
     public int addVehicle(String imagePath, String brand, String model, int year, int capacity,
             int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
             double rentalPriceDay, String transmission, String fuelType, int seatingCapacity, boolean availability,
-            String features) {
-        String sql = "INSERT INTO vehicles (image_path, brand, model, year, capacity, horsepower, color, mpg, vin_number, registration_number, rental_price_day, transmission, fuel_type, seating_capacity, availability, features) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String features, String vehicleType) {
+        String sql = "INSERT INTO vehicles (image_path, brand, model, year, capacity, horsepower, color, mpg, vin_number, registration_number, rental_price_day, transmission, fuel_type, seating_capacity, availability, features, vehicle_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -36,6 +36,7 @@ public class VehicleDAO {
             stmt.setInt(14, seatingCapacity);
             stmt.setBoolean(15, availability);
             stmt.setString(16, features);
+            stmt.setString(17, vehicleType);
 
             stmt.executeUpdate();
 
@@ -72,6 +73,7 @@ public class VehicleDAO {
                 rs.getInt("seating_capacity"),
                 rs.getBoolean("availability"),
                 rs.getString("features"));
+                //rs.getString("vehicle_type");
     }
 
     // get all vehicles
