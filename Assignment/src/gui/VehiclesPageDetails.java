@@ -506,7 +506,11 @@ public class VehiclesPageDetails extends JPanel {
         JLabel featuresLabel = new JLabel("Features");
         featuresLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
 
+        JLabel featuresContent = new JLabel(this.car.getFeatures());
+        featuresContent.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(20f));
+
         featuresContainer.add(featuresLabel,BorderLayout.NORTH);
+        featuresContainer.add(featuresContent,BorderLayout.CENTER);
 
         carMainFeaturesContainer.add(featuresContainer,BorderLayout.CENTER);
 

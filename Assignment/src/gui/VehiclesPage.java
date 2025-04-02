@@ -447,6 +447,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         filters.setBounds(50,25,200,50);
         filters.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
 
+        //if car then array of cars if bike then array of bikes else array of vehicles
         RoundedButton carButton = new RoundedButton(10,Color.WHITE);
         carButton.setIcon(carIcon);
         carButton.setBounds(365,25,65,50);
@@ -983,49 +984,20 @@ public class VehiclesPage extends JPanel implements ActionListener{
     }
 
     private void showAddCarPopup() {
-        // Create a semi-transparent overlay panel
-        JPanel overlay = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.setColor(new Color(0, 0, 0, 150)); // 150/255 opacity (60%)
-                g.fillRect(0, 0, getWidth(), getHeight());
-            }
-        };
-        overlay.setLayout(new GridBagLayout());
-        overlay.setOpaque(false);
-        overlay.setBounds(0, 0, frame.getWidth(), frame.getHeight());
-
-        overlay.addMouseListener(new MouseAdapter() {});
-        overlay.addMouseMotionListener(new MouseAdapter() {});
-        overlay.setFocusable(true);
-        overlay.requestFocusInWindow();
+        // Create the dialog
+        JDialog dialog = new JDialog(frame, "Add New Car", true); // true for modal
+        dialog.setPreferredSize(new Dimension(1600, 900));
+        dialog.setLayout(new BorderLayout());
+        dialog.setBackground(Color.WHITE);
     
-        // Create the popup admin panel
-        JPanel popup = new JPanel(new BorderLayout());
-        popup.setBackground(Color.WHITE);
-        popup.setPreferredSize(new Dimension(1600, 900));
-
-        // Add title and close button
-        JPanel topBarPopUp = new JPanel(new BorderLayout());
-        popup.add(topBarPopUp,BorderLayout.NORTH);
-
         JLabel title = new JLabel("Add New Car", JLabel.CENTER);
         title.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
-        topBarPopUp.add(title, BorderLayout.CENTER);
+        dialog.add(title, BorderLayout.NORTH);
     
-        JButton closeButton = new JButton("X");
-        closeButton.addActionListener(e -> {
-            frame.getLayeredPane().remove(overlay);
-            frame.revalidate();
-            frame.repaint();
-        });
-        topBarPopUp.add(closeButton, BorderLayout.EAST);
-    
-        // Add form components (example: text fields for car details)
+        // Add form components
         JPanel formPanel = new JPanel(new GridLayout(0, 2, 10, 10));
         formPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
-
+    
         initImageUploader(formPanel);
         // formPanel.add(new JLabel("Brand:"));
         // formPanel.add(new JTextField());
@@ -1060,25 +1032,22 @@ public class VehiclesPage extends JPanel implements ActionListener{
         // formPanel.add(new JLabel("Features:"));
         // formPanel.add(new JTextField());
     
-        popup.add(formPanel, BorderLayout.CENTER);
-    
+        dialog.add(formPanel, BorderLayout.CENTER);
+
         // Add submit button
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(e -> {
             // Handle form submission here
-            JOptionPane.showMessageDialog(popup, "Car added successfully!");
-            frame.getLayeredPane().remove(overlay);
-            frame.revalidate();
-            frame.repaint();
+            JOptionPane.showMessageDialog(dialog, "Car added successfully!");
+            dialog.dispose();
         });
-        popup.add(submitButton, BorderLayout.SOUTH);
-    
-        // Add the popup to the overlay
-        overlay.add(popup);
-        frame.getLayeredPane().add(overlay, JLayeredPane.POPUP_LAYER);
-        frame.revalidate();
-        frame.repaint();
-    }
+        dialog.add(submitButton, BorderLayout.SOUTH);
+
+        // Finalize and show the dialog
+        dialog.pack();
+        dialog.setLocationRelativeTo(frame); // Center relative to parent frame
+        dialog.setVisible(true);
+    } 
 
     private JLabel imageLabel;
     private JButton selectButton, removeButton;
