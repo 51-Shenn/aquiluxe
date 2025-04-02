@@ -425,9 +425,13 @@ public class VehiclesPage extends JPanel implements ActionListener{
     private JPanel createCarTopBar(){
 
         ImageIcon searchIcon = null;
+        ImageIcon carIcon = null;
+        ImageIcon bikeIcon = null;
         try {
             searchIcon = new ImageIcon("images/vehiclepageicons/search-interface-symbol.png");
-            if (searchIcon.getIconWidth() == -1) {
+            carIcon = new ImageIcon("images/vehiclepageicons/car.png");
+            bikeIcon = new ImageIcon("images/vehiclepageicons/bike.png");
+            if (searchIcon.getIconWidth() == -1 || carIcon.getIconWidth() == -1 || bikeIcon.getIconWidth() == -1) {
                 throw new Exception("Image file not found or invalid.");
             }
         } catch (Exception e) {
@@ -443,12 +447,33 @@ public class VehiclesPage extends JPanel implements ActionListener{
         filters.setBounds(50,25,200,50);
         filters.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
 
+        RoundedButton carButton = new RoundedButton(10,Color.WHITE);
+        carButton.setIcon(carIcon);
+        carButton.setBounds(365,25,65,50);
+        carButton.setFocusable(false);
+        carButton.setBackground(Color.WHITE);
+        carButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(12.5f));
+
+        RoundedButton bikeButton = new RoundedButton(10,Color.WHITE);
+        bikeButton.setIcon(bikeIcon);
+        bikeButton.setBounds(430,25,65,50);
+        bikeButton.setFocusable(false);
+        bikeButton.setBackground(Color.WHITE);
+        bikeButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(12.5f));
+
+        RoundedButton allButton = new RoundedButton(10,Color.WHITE);
+        allButton.setText("ALL");
+        allButton.setBounds(300,25,65,50);
+        allButton.setFocusable(false);
+        allButton.setBackground(Color.WHITE);
+        allButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
+
         JTextField searchBar = new JTextField();
         searchBar.setText("Search for vehicles");
         searchBar.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(20f));
         searchBar.setForeground(Color.GRAY);
         searchBar.setBorder(new CompoundBorder(new LineBorder(Color.BLACK,1), new EmptyBorder(10,15,10,5)));
-        searchBar.setBounds(300,25,900,50);
+        searchBar.setBounds(500,25,700,50);
         searchBar.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -518,6 +543,9 @@ public class VehiclesPage extends JPanel implements ActionListener{
         });
         addButton.addActionListener(e -> showAddCarPopup());
 
+        topBar.add(allButton);
+        topBar.add(carButton);
+        topBar.add(bikeButton);
         topBar.add(searchBar);
         topBar.add(searchButton);
         topBar.add(filters);
