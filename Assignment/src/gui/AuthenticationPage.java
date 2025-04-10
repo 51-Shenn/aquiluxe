@@ -1,9 +1,9 @@
 package gui;
 
-import javax.swing.*;
-import javax.swing.border.*;
 import java.awt.*;
 import java.io.File;
+import javax.swing.*;
+import javax.swing.border.*;
 
 public abstract class AuthenticationPage extends JPanel {
 
@@ -23,10 +23,9 @@ public abstract class AuthenticationPage extends JPanel {
 
     public AuthenticationPage() {
         setLayout(new GridBagLayout());
-        setBackground(Color.BLACK);
         add((createLoginPage()));
     }
-
+    
     protected JPanel createLoginPage() {
         // container that separate left and right panel
         JPanel container = new JPanel(new GridLayout(1, 1));

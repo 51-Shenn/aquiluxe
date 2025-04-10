@@ -26,7 +26,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         
         this.frame = frame;
         this.panel = panel;
-        this.setBackground(Color.BLACK);
+        this.setBackground(Theme.getBackground());
         this.setLayout(new BorderLayout());
 
         this.add(createCarCardsContainer(), BorderLayout.CENTER);
@@ -54,7 +54,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         image = new ImageIcon(rImage);
 
         JPanel carCards = new JPanel(new GridLayout(0,3,50,30));
-        carCards.setBackground(Color.WHITE);
+        carCards.setBackground(Theme.getBackground());
 
         //sample details just to show output
         String[] cars ={"PORSCHE","TOYOTA","NISSAN",
@@ -112,7 +112,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
         JPanel carCard = new JPanel();
         carCard.setLayout(new BorderLayout());
-        carCard.setBackground(Color.WHITE);
+        carCard.setBackground(Theme.getBackground());
         carCard.setPreferredSize(new Dimension(100, 400));
         carCard.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0, 35), 3));
 
@@ -120,46 +120,46 @@ public class VehiclesPage extends JPanel implements ActionListener{
         JButton carDetails = new JButton();
         carDetails.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
         carDetails.setFocusable(false);
-        carDetails.setBackground(Color.WHITE);
+        carDetails.setBackground(Theme.getBackground());
         carDetails.setBorderPainted(false);
         carDetails.setContentAreaFilled(false);
         carDetails.setOpaque(true);
 
-        RoundedButton carRent = new RoundedButton(10,Color.BLUE);
+        RoundedButton carRent = new RoundedButton(10, Theme.getSpecial());
         carRent.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
         carRent.setText("RENT");
         carRent.setFocusable(false);
         carRent.setBorderPainted(false);
         carRent.setContentAreaFilled(false);
-        carRent.setBackground(Color.BLUE);
-        carRent.setForeground(Color.WHITE);
+        carRent.setBackground(Theme.getSpecial());
+        carRent.setForeground(Theme.getSpecialForeground());
         carRent.setOpaque(true);
 
         carRent.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
-                carRent.setBackground(Color.BLUE.darker());
+                carRent.setBackground(Theme.getSpecial().darker());
             }
             
             @Override
             public void mouseExited(MouseEvent evt) {
-                carRent.setBackground(Color.BLUE);
+                carRent.setBackground(Theme.getSpecial());
             }
             
             @Override
             public void mousePressed(MouseEvent evt) {
-                carRent.setBackground(Color.CYAN);
+                carRent.setBackground(Theme.getSpecial().brighter());
             }
             
             @Override
             public void mouseReleased(MouseEvent evt) {
-                carRent.setBackground(Color.BLUE);
+                carRent.setBackground(Theme.getSpecial());
             }
         });
 
         JPanel buttonPanel = new JPanel(new GridLayout(1,2,0,5));
         buttonPanel.setPreferredSize(new Dimension(350,50));
-        buttonPanel.setBackground(Color.WHITE);
+        buttonPanel.setBackground(Theme.getBackground());
         buttonPanel.add(carDetails);
         buttonPanel.add(carRent);
 
@@ -168,30 +168,32 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carName.setHorizontalTextPosition(JLabel.LEFT);
         carName.setFont(CustomFonts.OPEN_SANS_EXTRA_BOLD.deriveFont(20f));
         carName.setPreferredSize(new Dimension(50,20));
-        carName.setForeground(Color.BLACK);
+        carName.setForeground(Theme.getForeground());
 
         JLabel carModel = new JLabel(model);
         carModel.setHorizontalTextPosition(JLabel.LEFT);
         carModel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(17.5f));
         carModel.setPreferredSize(new Dimension(50,10));
-        carModel.setForeground(Color.BLACK);
+        carModel.setForeground(Theme.getForeground());
 
         JLabel carRentPrice = new JLabel(price);
         carRentPrice.setHorizontalTextPosition(JLabel.RIGHT);
         carRentPrice.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(17.5f));
-        carRentPrice.setForeground(Color.BLUE);
+        carRentPrice.setForeground(Theme.getSpecial());
 
         JLabel carAvailability = new JLabel(availability);
         carAvailability.setOpaque(true);
         carAvailability.setHorizontalAlignment(JLabel.CENTER);
         carAvailability.setFont(CustomFonts.OPEN_SANS_EXTRA_BOLD.deriveFont(15f));
         if(availability.equals("AVAILABLE")){
-            carAvailability.setBackground(Color.BLUE);
+            carAvailability.setBackground(Theme.getSuccess());
+            carAvailability.setForeground(Theme.getSuccessForeground());
         }
         else{
-            carAvailability.setBackground(Color.RED);
+            carAvailability.setBackground(Theme.getError());
+            carAvailability.setForeground(Theme.getErrorForeground());
         }
-        carAvailability.setForeground(Color.WHITE);
+        
         carAvailability.setPreferredSize(new Dimension(200,20));
 
         JLabel carTypeLabel = new JLabel(carType);
@@ -205,16 +207,16 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carNamePanel.add(carModel);
         carNamePanel.add(carTypeLabel);
         carNamePanel.setPreferredSize(new Dimension(50,150));
-        carNamePanel.setBackground(Color.WHITE);
+        carNamePanel.setBackground(Theme.getBackground());
         JPanel carRentPriceAvailabilityPanel = new JPanel();
         carRentPriceAvailabilityPanel.add(carRentPrice,BorderLayout.NORTH);
         carRentPriceAvailabilityPanel.add(carAvailability,BorderLayout.SOUTH);
         carRentPriceAvailabilityPanel.setPreferredSize(new Dimension(50,150));
-        carRentPriceAvailabilityPanel.setBackground(Color.WHITE);
+        carRentPriceAvailabilityPanel.setBackground(Theme.getBackground());
 
         //container for both details at the center
         JPanel carInfoNameRentPanel = new JPanel(new GridLayout(1,2,5,5));
-        carInfoNameRentPanel.setBackground(Color.WHITE);
+        carInfoNameRentPanel.setBackground(Theme.getBackground());
         carInfoNameRentPanel.add(carNamePanel);
         carInfoNameRentPanel.add(carRentPriceAvailabilityPanel);
 
@@ -230,14 +232,14 @@ public class VehiclesPage extends JPanel implements ActionListener{
         seatsLabel.setIcon(seatsIcon);
         seatsLabel.setHorizontalTextPosition(JLabel.RIGHT);
         seatsLabel.setOpaque(true);
-        seatsLabel.setBackground(Color.WHITE);
+        seatsLabel.setBackground(Theme.getBackground());
         // seatsLabel.setPreferredSize(new Dimension(0,35));
         seatsLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(12.5f));
         seatsLabel.setHorizontalAlignment(JLabel.CENTER);
         JLabel fuelTypeLabel = new JLabel(fuelType);
         fuelTypeLabel.setIcon(fuelIcon);
         fuelTypeLabel.setHorizontalTextPosition(JLabel.RIGHT);
-        fuelTypeLabel.setBackground(Color.WHITE);
+        fuelTypeLabel.setBackground(Theme.getBackground());
         fuelTypeLabel.setOpaque(true);
         // fuelTypeLabel.setPreferredSize(new Dimension(0,35));
         fuelTypeLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(12.5f));
@@ -245,7 +247,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         JLabel transLabel = new JLabel(transmission);
         transLabel.setIcon(transmissionIcon);
         transLabel.setHorizontalTextPosition(JLabel.RIGHT);
-        transLabel.setBackground(Color.WHITE);
+        transLabel.setBackground(Theme.getBackground());
         transLabel.setOpaque(true);
         //transLabel.setPreferredSize(new Dimension(0,35));
         transLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(12.5f));
@@ -256,7 +258,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         gbc.gridy = 0;
         gbc.gridx = 0;
         gbc.anchor = GridBagConstraints.WEST;
-        carInfoPanel.setBackground(Color.WHITE);
+        carInfoPanel.setBackground(Theme.getBackground());
         carInfoPanel.add(transLabel,gbc);
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.CENTER;
@@ -270,7 +272,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carEverythingPanel.add(carPicturePanel, BorderLayout.NORTH);
         carEverythingPanel.add(carInfoNameRentPanel, BorderLayout.CENTER);
         carEverythingPanel.add(carInfoPanel,BorderLayout.SOUTH);
-        carEverythingPanel.setBackground(Color.WHITE);
+        carEverythingPanel.setBackground(Theme.getBackground());
         carEverythingPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -398,7 +400,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
         JPanel topBar = new JPanel();
         topBar.setLayout(null);
-        topBar.setBackground(Color.WHITE);
+        topBar.setBackground(Theme.getBackground());
         topBar.setPreferredSize(new Dimension(1600,100));
 
         JLabel filters = new JLabel("Filter");
@@ -409,14 +411,14 @@ public class VehiclesPage extends JPanel implements ActionListener{
         searchBar.setText("Search for vehicles");
         searchBar.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(20f));
         searchBar.setForeground(Color.GRAY);
-        searchBar.setBorder(new CompoundBorder(new LineBorder(Color.BLACK,1), new EmptyBorder(10,15,10,5)));
+        searchBar.setBorder(new CompoundBorder(new LineBorder(Theme.getForeground(),1), new EmptyBorder(10,15,10,5)));
         searchBar.setBounds(300,25,900,50);
         searchBar.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
                 if (searchBar.getText().equals("Search for vehicles")) {
                     searchBar.setText(""); // Clear text when clicked
-                    searchBar.setForeground(Color.BLACK); // Set normal text color
+                    searchBar.setForeground(Theme.getForeground()); // Set normal text color
                 }
             }
 
@@ -433,9 +435,9 @@ public class VehiclesPage extends JPanel implements ActionListener{
         searchButton.setIcon(searchIcon);
         searchButton.setBounds(1200,25,85,50);
         searchButton.setFocusable(false);
-        searchButton.setBackground(Color.WHITE);
+        searchButton.setBackground(Theme.getBackground());
         searchButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(12.5f));
-        searchButton.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+        searchButton.setBorder(BorderFactory.createLineBorder(Theme.getForeground(),1));
 
         JLabel sortByLabel = new JLabel("Sort By:");
         sortByLabel.setBounds(1350,25,75,50);
@@ -451,11 +453,11 @@ public class VehiclesPage extends JPanel implements ActionListener{
         ImageIcon addIcon = new ImageIcon("images/vehiclepageicons/add.png");
 
         JPanel adminButtons = new JPanel(new GridLayout(1,2,0,0));
-        adminButtons.setBackground(Color.WHITE);
+        adminButtons.setBackground(Theme.getBackground());
         adminButtons.setBounds(1660,25,200,50);
-        RoundedButton deleteButton = new RoundedButton(10,Color.WHITE);
+        RoundedButton deleteButton = new RoundedButton(10, Theme.getError());
         deleteButton.setIcon(deleteIcon);
-        deleteButton.setBackground(Color.RED);
+        deleteButton.setBackground(Theme.getError());
         deleteButton.setOpaque(true);
         deleteButton.setFocusable(false);
         deleteButton.setContentAreaFilled(true);
@@ -463,27 +465,27 @@ public class VehiclesPage extends JPanel implements ActionListener{
         deleteButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
-                deleteButton.setBackground(Color.RED.darker());
+                deleteButton.setBackground(Theme.getError().darker());
             }
             
             @Override
             public void mouseExited(MouseEvent evt) {
-                deleteButton.setBackground(Color.RED);
+                deleteButton.setBackground(Theme.getError());
             }
-
+            
             @Override
             public void mousePressed(MouseEvent evt) {
-                deleteButton.setBackground(Color.ORANGE);
+                deleteButton.setBackground(Theme.getError().darker());
             }
             
             @Override
             public void mouseReleased(MouseEvent evt) {
-                deleteButton.setBackground(Color.RED);
+                deleteButton.setBackground(Theme.getError());
             }
         });
-        RoundedButton addButton = new RoundedButton(10,Color.WHITE);
+        RoundedButton addButton = new RoundedButton(10, Theme.getSuccess());
         addButton.setIcon(addIcon);
-        addButton.setBackground(Color.GREEN);
+        addButton.setBackground(Theme.getSuccess());
         addButton.setOpaque(true);
         addButton.setFocusable(false);
         addButton.setContentAreaFilled(true);
@@ -491,22 +493,22 @@ public class VehiclesPage extends JPanel implements ActionListener{
         addButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
-                addButton.setBackground(Color.GREEN.darker());
+                addButton.setBackground(Theme.getSuccess().darker());
             }
             
             @Override
             public void mouseExited(MouseEvent evt) {
-                addButton.setBackground(Color.GREEN);
+                addButton.setBackground(Theme.getSuccess());
             }
             
             @Override
             public void mousePressed(MouseEvent evt) {
-                addButton.setBackground(Color.YELLOW);
+                addButton.setBackground(Theme.getSuccess().darker());
             }
             
             @Override
             public void mouseReleased(MouseEvent evt) {
-                addButton.setBackground(Color.GREEN);
+                addButton.setBackground(Theme.getSuccess());
             }
         });
 
@@ -557,7 +559,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         brandComboBox.setPreferredSize(new Dimension(200,30));
 
         JPanel brandFilterPanel = new JPanel(new GridLayout(2,1,0,0));
-        brandFilterPanel.setBackground(Color.WHITE);
+        brandFilterPanel.setBackground(Theme.getBackground());
         brandFilterPanel.add(brandLabel);
         brandFilterPanel.add(brandComboBox);
 
@@ -571,7 +573,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         modelComboBox.setEnabled(false);
 
         JPanel modelFilterPanel = new JPanel(new GridLayout(2,1,0,0));
-        modelFilterPanel.setBackground(Color.WHITE);
+        modelFilterPanel.setBackground(Theme.getBackground());
         modelFilterPanel.add(modelLabel);
         modelFilterPanel.add(modelComboBox);
 
@@ -586,7 +588,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         yearComboBox.setSelectedIndex(0);
 
         JPanel yearFilterPanel = new JPanel(new GridLayout(2,1,0,0));
-        yearFilterPanel.setBackground(Color.WHITE);
+        yearFilterPanel.setBackground(Theme.getBackground());
         yearFilterPanel.add(yearLabel);
         yearFilterPanel.add(yearComboBox);
 
@@ -599,7 +601,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         transTypeComboBox.setPreferredSize(new Dimension(200,30));
 
         JPanel transFilterPanel = new JPanel(new GridLayout(2,1,0,0));
-        transFilterPanel.setBackground(Color.WHITE);
+        transFilterPanel.setBackground(Theme.getBackground());
         transFilterPanel.add(transLabel);
         transFilterPanel.add(transTypeComboBox);
 
@@ -612,7 +614,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         fuelTypeComboBox.setPreferredSize(new Dimension(200,30));
 
         JPanel fuelFilterPanel = new JPanel(new GridLayout(2,1,0,0));
-        fuelFilterPanel.setBackground(Color.WHITE);
+        fuelFilterPanel.setBackground(Theme.getBackground());
         fuelFilterPanel.add(fuelLabel);
         fuelFilterPanel.add(fuelTypeComboBox);
 
@@ -625,7 +627,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         availabilityComboBox.setPreferredSize(new Dimension(200,30));
 
         JPanel availabilityFilterPanel = new JPanel(new GridLayout(2,1,0,0));
-        availabilityFilterPanel.setBackground(Color.WHITE);
+        availabilityFilterPanel.setBackground(Theme.getBackground());
         availabilityFilterPanel.add(availabilityLabel);
         availabilityFilterPanel.add(availabilityComboBox);
 
@@ -638,7 +640,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carTypeComboBox.setPreferredSize(new Dimension(200,30));
 
         JPanel carTypeFilterPanel = new JPanel(new GridLayout(2,1,0,0));
-        carTypeFilterPanel.setBackground(Color.WHITE);
+        carTypeFilterPanel.setBackground(Theme.getBackground());
         carTypeFilterPanel.add(carTypeLabel);
         carTypeFilterPanel.add(carTypeComboBox);
 
@@ -647,7 +649,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
         JSlider seatSlider = new JSlider(0,7,0);
         seatSlider.setFocusable(false);
-        seatSlider.setBackground(Color.WHITE);
+        seatSlider.setBackground(Theme.getBackground());
         seatSlider.setMajorTickSpacing(1);
         seatSlider.setPaintTicks(true);
         seatSlider.setPaintLabels(true);
@@ -663,7 +665,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         });
 
         JPanel seatFilterPanel = new JPanel(new GridLayout(2,1,0,0));
-        seatFilterPanel.setBackground(Color.WHITE);
+        seatFilterPanel.setBackground(Theme.getBackground());
         seatFilterPanel.add(seatLabel);
         seatFilterPanel.add(seatSlider);
 
@@ -713,21 +715,21 @@ public class VehiclesPage extends JPanel implements ActionListener{
             });    
 
         JPanel pricePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 7, 0));
-        pricePanel.setBackground(Color.WHITE);
+        pricePanel.setBackground(Theme.getBackground());
         pricePanel.add(minPriceField);
         pricePanel.add(new JLabel("-"));
         pricePanel.add(maxPriceField);
         pricePanel.setPreferredSize(new Dimension(200,60));
             // filter name add label and suf to a panel then only format it to spacing down the filters
         JPanel priceFilterPanel = new JPanel(new GridLayout(2,1,0,0));
-        priceFilterPanel.setBackground(Color.WHITE);
+        priceFilterPanel.setBackground(Theme.getBackground());
         priceFilterPanel.add(priceLabel);
         priceFilterPanel.add(pricePanel);
 
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 15));
         leftPanel.setPreferredSize(new Dimension(300,1600));
-        leftPanel.setBackground(Color.WHITE);
+        leftPanel.setBackground(Theme.getBackground());
         leftPanel.add(brandFilterPanel);
         leftPanel.add(modelFilterPanel);
         leftPanel.add(yearFilterPanel);
@@ -766,7 +768,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
     private JPanel createCarRightPanel() {
         JPanel rightPanel = new JPanel(new BorderLayout());
         rightPanel.setPreferredSize(new Dimension(300,900));
-        rightPanel.setBackground(Color.WHITE);
+        rightPanel.setBackground(Theme.getBackground());
 
         return rightPanel;
     }
@@ -804,60 +806,5 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
         // Return the greyscale image as an ImageIcon
         return new ImageIcon(brighterGreyImage);
-    }
-
-    private static class RoundedButton extends JButton {
-        private Color backgroundColor;
-        private final int cornerRadius;
-
-        public RoundedButton(int radius, Color bgColor) {
-            this.cornerRadius = radius;
-            this.backgroundColor = bgColor;
-            setOpaque(false);
-        }
-
-        @Override
-        public void setBackground(Color bgColor) {
-            this.backgroundColor = bgColor;
-            repaint();
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2d = (Graphics2D) g.create();
-
-            // Enable anti-aliasing for smooth rendering
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            int width = getWidth();
-            int height = getHeight();
-            int arcSize = cornerRadius * 2;
-
-            // Make panel transparent
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-            g2d.setColor(backgroundColor != null ? backgroundColor : getBackground());
-            g2d.fillRoundRect(0, 0, width - 1, height - 1, arcSize, arcSize);
-
-            // Draw the icon (if set)
-            Icon icon = getIcon();
-            if (icon != null) {
-                int iconWidth = icon.getIconWidth();
-                int iconHeight = icon.getIconHeight();
-                int iconX = (width - iconWidth - getText().length() * 5) / 2; // Adjust spacing
-                int iconY = (height - iconHeight) / 2;
-                icon.paintIcon(this, g2d, iconX, iconY);
-            }
-
-            FontMetrics fm = g2d.getFontMetrics();
-            int textX = (width - fm.stringWidth(getText())) / 2;
-            int textY = (height + fm.getAscent()) / 2 - 2;
-
-            // Fill rounded rectangle
-            g2d.setColor(getForeground());
-            g2d.drawString(getText(), textX, textY);
-
-            g2d.dispose();
-        }
     }
 }

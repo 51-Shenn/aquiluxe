@@ -1,7 +1,5 @@
 package datamodels;
 
-import java.util.HashMap;
-
 public class User {
     private int userId;
     private String fullName;
@@ -10,8 +8,9 @@ public class User {
     private String userEmail;
     private String username;
     private String password;
+    private String userType;
 
-    private static HashMap<Integer, User> users = new HashMap<>();
+    // private static HashMap<Integer, User> users = new HashMap<>();
 
     // Default Constructor : for subclassing
     public User() {
@@ -32,20 +31,34 @@ public class User {
         this.password = password;
     }
 
-    public User(String fullName, String gender, String phoneNumber, String userEmail, String username, String password) {
+    // public User(String fullName, String gender, String phoneNumber, String userEmail, String username,
+    //         String password, String usertype) {
+    //     this.fullName = fullName;
+    //     this.gender = gender;
+    //     this.phoneNumber = phoneNumber;
+    //     this.username = username;
+    //     this.userEmail = userEmail;
+    //     this.password = password;
+    //     this.userType = usertype;
+
+    //     users.put(userId, this);
+    // }
+
+    public User(int userId, String fullName, String gender, String phoneNumber, String userEmail, String username,
+            String password, String userType) {
+        this.userId = userId;
         this.fullName = fullName;
         this.gender = gender;
         this.phoneNumber = phoneNumber;
         this.username = username;
         this.userEmail = userEmail;
         this.password = password;
-
-        users.put(userId, this);
+        this.userType = userType;
     }
 
     // Getters and Setters
     public void setUser(int userId, String fullName, String gender, String phoneNumber,
-            String userEmail, String username, String password) {
+            String userEmail, String username, String password, String userType) {
         this.userId = userId;
         this.fullName = fullName;
         this.gender = gender;
@@ -53,6 +66,7 @@ public class User {
         this.userEmail = userEmail;
         this.username = username;
         this.password = password;
+        this.userType = userType;
     }
 
     public int getUserId() {
@@ -107,37 +121,25 @@ public class User {
         this.password = password;
     }
 
-    public static HashMap<Integer, User> getUsers() {
-        return users;
+    public String getUserType() {
+        return userType;
     }
 
-    public static void setUsers(HashMap<Integer, User> setUser) {
-        users = setUser;
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     // Debug
     @Override
     public String toString() {
-        return "User { " +
+        return " User { " +
                 "userId = " + userId +
                 ", fullName = '" + fullName + '\'' +
                 ", gender = '" + gender + '\'' +
                 ", phoneNumber = '" + phoneNumber + '\'' +
                 ", userEmail = '" + userEmail + '\'' +
                 ", username = '" + username + '\'' +
+                ", usertype = '" + userType + '\'' +
                 " }";
-    }
-
-    public static void displayUsers() {
-        for (User user : users.values()) {
-            System.out.println(
-                    "UserID: " + user.getUserId() +
-                    ", Name: " + user.getFullName() +
-                    ", Username: " + user.getUsername() +
-                    ", Gender: " + user.getGender() +
-                    ", Email: " + user.getUserEmail() +
-                    ", Phone Number: " + user.getPhoneNumber() +
-                    ", Password: " + user.getPassword());
-        }
     }
 }
