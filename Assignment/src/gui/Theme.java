@@ -12,7 +12,7 @@ public class Theme {
     private final static File THEME_FILE = new File("files/settings/theme.txt");
 
     public static Color getBackground() {
-        return isDarkMode() ? new Color(0x000000) : new Color(0xFFFFFF);
+        return isDarkMode() ? new Color(0x121212) : new Color(0xFFFFFF);
     }
 
     public static Color getForeground() {
