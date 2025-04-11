@@ -1,7 +1,5 @@
 package datamodels;
 
-import java.util.HashMap;
-
 public class User {
     private int userId;
     private String fullName;
@@ -12,7 +10,7 @@ public class User {
     private String password;
     private String userType;
 
-    private static HashMap<Integer, User> users = new HashMap<>();
+    // private static HashMap<Integer, User> users = new HashMap<>();
 
     // Default Constructor : for subclassing
     public User() {
@@ -31,18 +29,18 @@ public class User {
         this.password = password;
     }
 
-    public User(String fullName, String gender, String phoneNumber, String userEmail, String username,
-            String password, String usertype) {
-        this.fullName = fullName;
-        this.gender = gender;
-        this.phoneNumber = phoneNumber;
-        this.username = username;
-        this.userEmail = userEmail;
-        this.password = password;
-        this.userType = usertype;
+    // public User(String fullName, String gender, String phoneNumber, String userEmail, String username,
+    //         String password, String usertype) {
+    //     this.fullName = fullName;
+    //     this.gender = gender;
+    //     this.phoneNumber = phoneNumber;
+    //     this.username = username;
+    //     this.userEmail = userEmail;
+    //     this.password = password;
+    //     this.userType = usertype;
 
-        users.put(userId, this);
-    }
+    //     users.put(userId, this);
+    // }
 
     public User(int userId, String fullName, String gender, String phoneNumber, String userEmail, String username,
             String password, String userType) {
@@ -129,14 +127,6 @@ public class User {
         this.userType = userType;
     }
 
-    public static HashMap<Integer, User> getUsers() {
-        return users;
-    }
-
-    public static void setUsers(HashMap<Integer, User> setUser) {
-        users = setUser;
-    }
-
     // Debug
     @Override
     public String toString() {
@@ -149,18 +139,5 @@ public class User {
                 ", username = '" + username + '\'' +
                 ", usertype = '" + userType + '\'' +
                 " }";
-    }
-
-    public static void displayUsers() {
-        for (User user : users.values()) {
-            System.out.println(
-                    "UserID: " + user.getUserId() +
-                            ", Name: " + user.getFullName() +
-                            ", Username: " + user.getUsername() +
-                            ", Gender: " + user.getGender() +
-                            ", Email: " + user.getUserEmail() +
-                            ", Phone Number: " + user.getPhoneNumber() +
-                            ", Password: " + user.getPassword());
-        }
     }
 }

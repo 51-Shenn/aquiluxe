@@ -1,11 +1,11 @@
 package database;
 
+import datamodels.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import datamodels.User;
 
 public class UserDAO {
 
@@ -219,13 +219,38 @@ public class UserDAO {
 
     // get user by username and password
     public User authenticateUser(String username, String password) {
-        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+        String sql = "SELECT * FROM users WHERE (username = ? OR user_email = ?) AND password = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, username);
-            stmt.setString(2, password);
+            stmt.setString(2, username);
+            stmt.setString(3, password);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    User user = mapResultUser(rs);
+                    return user;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nAUTHENTICATION FAILED\n");
+        }
+        return null;
+    }
+
+    // get user by username and password
+    public User authenticateUserForgotPassword(String username, String phoneNumber) {
+        String sql = "SELECT * FROM users WHERE (username = ? OR user_email = ?) AND phone_number = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, username);
+            stmt.setString(3, phoneNumber);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -284,5 +309,24 @@ public class UserDAO {
         return false;
     }
 
-    // check if phonenumber exist : return boolean value
+    // check if phone number exist : return boolean value
+    public boolean phoneNumberExists(String phoneNumber) {
+        String sql = "SELECT COUNT(*) FROM users WHERE phone_number = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, phoneNumber);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO CHECK PHONE NUMBER\n");
+        }
+        return false;
+    }
 }
