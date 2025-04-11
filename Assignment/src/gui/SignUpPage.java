@@ -305,6 +305,15 @@ public class SignUpPage extends AuthenticationPage {
                     currentPage = "USER";
                     this.frame.setContentPane(new SignInPage(this.frame, this.panel, this.user));
                     this.frame.validate();
+
+                    Dialog dialog = new Dialog(this.frame);
+                    dialog.showDialog(
+                        "SUCCESS",
+                        "Sign Up",
+                        "Account Created Successfully",
+                        "Awesome! Your account is ready — let's get you signed in!",
+                        false
+                    );
                 }
             }
         });

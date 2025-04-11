@@ -165,22 +165,41 @@ public class OverflowMenu extends JLayeredPane {
         updateButton.setFocusPainted(false);
         updateButton.setPreferredSize(new Dimension(100, 50));
         updateButton.addActionListener(e -> {
-            boolean isValidUpdateDetails = UserController.passUpdateProfileDetails(this.user, fullNameField.getText(), usernameField.getText(), emailField.getText(), phoneNumberField.getText(), drivingLicenseField.getText(),
-                fullNameValidationLabel, usernameValidationLabel, emailValidationLabel, phoneNumberValidationLabel, drivingLicenseValidationLabel);
-            if(isValidUpdateDetails) {
-                this.frame.getLayeredPane().remove(this);
-                this.frame.getContentPane().removeAll();
-                this.frame.setLayout(new BorderLayout());
-                GUIComponents.overflowMenu = null;
-                
-                UserDAO userDAO = new UserDAO();
-                this.user = userDAO.getUserById(this.user.getUserId());
+            Dialog dialog = new Dialog(this.frame);
+            boolean proceed = dialog.showDialog(
+                "HAZARD",
+                "Confirm Update",
+                "Update Your Profile?",
+                "Updating your profile will overwrite your current information.",
+                true
+            );
+            
+            if(proceed) {
+                boolean isValidUpdateDetails = UserController.passUpdateProfileDetails(this.user, fullNameField.getText(), usernameField.getText(), emailField.getText(), phoneNumberField.getText(), drivingLicenseField.getText(),
+                    fullNameValidationLabel, usernameValidationLabel, emailValidationLabel, phoneNumberValidationLabel, drivingLicenseValidationLabel);
+                if(isValidUpdateDetails) {
+                    this.frame.getLayeredPane().remove(this);
+                    this.frame.getContentPane().removeAll();
+                    this.frame.setLayout(new BorderLayout());
+                    GUIComponents.overflowMenu = null;
+                    
+                    UserDAO userDAO = new UserDAO();
+                    this.user = userDAO.getUserById(this.user.getUserId());
 
-                this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
-                this.frame.add(this.panel, BorderLayout.CENTER);
-                this.panel.removeAll();
-                this.frame.revalidate();
-                this.frame.repaint();
+                    this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                    this.frame.add(this.panel, BorderLayout.CENTER);
+                    this.panel.removeAll();
+                    this.frame.revalidate();
+                    this.frame.repaint();
+
+                    dialog.showDialog(
+                        "SUCCESS",
+                        "Update Profile",
+                        "Profile Updated",
+                        "Your information has been saved.",
+                        false
+                    );
+                }
             }
         });
 
@@ -434,7 +453,16 @@ public class OverflowMenu extends JLayeredPane {
                             this.panel.removeAll();
                             this.frame.revalidate();
                             this.frame.repaint();
-
+                            
+                            Dialog dialog = new Dialog(this.frame);
+                            dialog.showDialog(
+                                "SUCCESS",
+                                "Switch Account",
+                                "Switched to " + this.user.getUsername(),
+                                "Signed in as " + this.user.getUsername(),
+                                false
+                            );
+                            
                             UserController.switchToAccount(this.user, accountsFile);
                         });
 
@@ -705,44 +733,76 @@ public class OverflowMenu extends JLayeredPane {
         }
         if(text.equals("Sign Out")) {
             button.addActionListener(e -> {
-                UserController.removeUserFromFile(this.user.getUserId(), accountsFile);
+                Dialog dialog = new Dialog(this.frame);
+                boolean proceed = dialog.showDialog(
+                    "HAZARD",
+                    "Sign Out",
+                    "Sign Out?",
+                    "Logging out will end your session.",
+                    true
+                );  
 
-                frame.getLayeredPane().remove(this);
-                this.frame.getContentPane().removeAll();
-                this.frame.setLayout(new BorderLayout());
-                GUIComponents.overflowMenu = null;
-                this.user = new User();
-                this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
-                this.frame.add(this.panel, BorderLayout.CENTER);
-                this.panel.removeAll();
-                this.frame.revalidate();
-                this.frame.repaint();
+                if(proceed) {
+                    UserController.removeUserFromFile(this.user.getUserId(), accountsFile);
+
+                    frame.getLayeredPane().remove(this);
+                    this.frame.getContentPane().removeAll();
+                    this.frame.setLayout(new BorderLayout());
+                    GUIComponents.overflowMenu = null;
+                    this.user = new User();
+                    this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                    this.frame.add(this.panel, BorderLayout.CENTER);
+                    this.panel.removeAll();
+                    this.frame.revalidate();
+                    this.frame.repaint();
+                }
             });
         }
         if(text.equals("Delete Account")) {
             UserDAO userDAO = new UserDAO();
             
             button.addActionListener(e -> {
-                UserController.removeUserFromFile(this.user.getUserId(), accountsFile);
+                Dialog dialog = new Dialog(this.frame);
+                boolean proceed = dialog.showDialog(
+                    "HAZARD",
+                    "Delete Account",
+                    "Delete Your Account?",
+                    "This action cannot be undone. Proceed with deletion?",
+                    true
+                );                
 
-                userDAO.deleteUser(this.user.getUserId());
+                if(proceed) {
+                    UserController.removeUserFromFile(this.user.getUserId(), accountsFile);
 
-                frame.getLayeredPane().remove(this);
-                this.frame.getContentPane().removeAll();
-                this.frame.setLayout(new BorderLayout());
-                GUIComponents.overflowMenu = null;
-                this.user = new User();
+                    userDAO.deleteUser(this.user.getUserId());
 
-                this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
-                this.frame.add(this.panel, BorderLayout.CENTER);
-                this.panel.removeAll();
-                this.frame.revalidate();
-                this.frame.repaint();
+                    frame.getLayeredPane().remove(this);
+                    this.frame.getContentPane().removeAll();
+                    this.frame.setLayout(new BorderLayout());
+                    GUIComponents.overflowMenu = null;
+                    this.user = new User();
+
+                    this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                    this.frame.add(this.panel, BorderLayout.CENTER);
+                    this.panel.removeAll();
+                    this.frame.revalidate();
+                    this.frame.repaint();
+                }
             });
         }
         if(text.equals("Close / Exit")) {
             if(isExpanded) button.setVisible(false);
-            button.addActionListener(e -> frame.dispose());
+            button.addActionListener(e -> {
+                Dialog dialog = new Dialog(this.frame);
+                boolean proceed = dialog.showDialog(
+                    "HAZARD",
+                    "Exit",
+                    "Close App?",
+                    "Are you sure you want to exit?",
+                    true
+                );
+                if(proceed) this.frame.dispose();
+            });
         }
 
         return button;

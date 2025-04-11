@@ -236,6 +236,15 @@ public class ForgotPasswordPage extends AuthenticationPage {
                     currentPage = "USER";
                     this.frame.setContentPane(new SignInPage(this.frame, this.panel, this.user));
                     this.frame.validate();
+
+                    Dialog dialog = new Dialog(this.frame);
+                    dialog.showDialog(
+                        "SUCCESS",
+                        "Password Updated",
+                        "Password Changed Successfully",
+                        "You can now use your new password to log in.",
+                        false
+                    );
                 }
             }
         });

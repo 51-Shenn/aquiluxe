@@ -230,6 +230,15 @@ public class SignInPage extends AuthenticationPage {
                 this.panel.removeAll();
                 this.frame.revalidate();
                 this.frame.repaint();
+
+                Dialog dialog = new Dialog(this.frame);
+                dialog.showDialog(
+                    "SUCCESS",
+                    "Welcome",
+                    "Login Successful",
+                    "You're in! " + this.user.getUsername(),
+                    false
+                );
                 
                 UserController.switchToAccount(this.user, accountsFile);
             }

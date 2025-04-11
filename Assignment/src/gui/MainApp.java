@@ -27,19 +27,16 @@ public class MainApp extends JFrame {
 
         JPanel contentPanel = new JPanel(new BorderLayout());
 
-        File accountsFile = new File("files/settings/accounts.txt");
-        if (accountsFile.exists()) {
-            User currentUser = UserController.loadCurrentUser(accountsFile);
-            add(new GUIComponents(this, contentPanel, currentUser), BorderLayout.NORTH);
-        }
-        else add(new GUIComponents(this, contentPanel, null), BorderLayout.NORTH);
+         File accountsFile = new File("files/settings/accounts.txt");
+         if (accountsFile.exists()) {
+             User currentUser = UserController.loadCurrentUser(accountsFile);
+             add(new GUIComponents(this, contentPanel, currentUser), BorderLayout.NORTH);
+         }
+         else add(new GUIComponents(this, contentPanel, null), BorderLayout.NORTH);
         
         add(contentPanel, BorderLayout.CENTER);
 
-        // Dialog dialog = new Dialog(this);
-        // dialog.showSuccessDialog();
-
-        setVisible(true);
+         setVisible(true);
     }
 
     public static void main(String[] args) {
