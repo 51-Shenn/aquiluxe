@@ -41,71 +41,6 @@ public class VehiclesPageDetails extends JPanel {
 
     // Top panel
     private JPanel carMainPanel() {
-        /*  Sample data
-        String brand = "Porsche";
-        String model = "GT3 RS";
-        int year = 2023, pricePerDay = 0;
-
-        /*  Images
-        ImageIcon image = new ImageIcon("images/cars/Supra.jpg");
-        JLabel carPicture = new JLabel(image);
-        ImageIcon transmissionIcon = new ImageIcon("images/vehiclepageicons/manual-transmission.png");
-        ImageIcon fuelIcon = new ImageIcon("images/vehiclepageicons/gas-station.png");
-        ImageIcon seatsIcon = new ImageIcon("images/vehiclepageicons/car-seat.png");
-        ImageIcon carTypeIcon = new ImageIcon("images/vehiclepageicons/chassis.png");
-        ImageIcon topSpeedIcon = new ImageIcon("images/vehiclepageicons/speedometer.png");
-        ImageIcon capacityIcon = new ImageIcon("images/vehiclepageicons/engine.png");
-
-        JLabel brandModelYearLabel = new JLabel(brand + " " + model + " " + year);
-        brandModelYearLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
-
-        JLabel pricePerDayLabel = new JLabel("RM" + pricePerDay + " / day");
-        pricePerDayLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(25f));
-
-        JLabel featuresLabel = new JLabel("Features");
-        featuresLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(25f));
-
-        JLabel detailsLabel = new JLabel("Details");
-        detailsLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(25f));
-
-        JPanel brandModelYearPricePanel = new JPanel(new GridLayout(2, 1, 5, 5));
-        brandModelYearPricePanel.add(brandModelYearLabel);
-        brandModelYearPricePanel.add(pricePerDayLabel);
-
-        JPanel detailsLabelPanel = new JPanel(new GridLayout(2, 1, 5, 5));
-        detailsLabelPanel.add(detailsLabel);
-        detailsLabelPanel.setPreferredSize(new Dimension(600, 75));
-
-        JPanel picturePanel = new JPanel(new BorderLayout());
-        picturePanel.add(carPicture, BorderLayout.CENTER);
-
-        JPanel featuresPanel = new JPanel(new BorderLayout());
-        featuresPanel.add(featuresLabel,BorderLayout.CENTER);
-
-        JPanel textContainer = new JPanel(new BorderLayout());
-        textContainer.setPreferredSize(new Dimension(600, 75));
-        textContainer.add(brandModelYearPricePanel, BorderLayout.CENTER);
-
-        JPanel carPictureContainer = new JPanel(new BorderLayout());
-        carPictureContainer.setPreferredSize(new Dimension(600, 600)); // Same size as car image
-        carPictureContainer.add(carPicture, BorderLayout.CENTER);
-
-        JPanel detailsPanel = new JPanel(new GridLayout(3, 3, 2, 2));
-        detailsPanel.add(new JLabel(transmissionIcon));
-        detailsPanel.add(new JLabel(fuelIcon));
-        detailsPanel.add(new JLabel(seatsIcon));
-        detailsPanel.add(new JLabel(carTypeIcon));
-        detailsPanel.add(new JLabel(topSpeedIcon));
-        detailsPanel.add(new JLabel(capacityIcon));
-
-        JButton rentButton = new JButton("RENT");
-
-        JPanel carDetailsPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10,10,10,10);
-        carDetailsPanel.setPreferredSize(new Dimension(800, 1000));
-        carDetailsPanel.setBackground(Color.BLUE);
-        */
         carMainPanel = new JPanel(new BorderLayout());
         carMainPanel.setPreferredSize(new Dimension(1600,450));
 
@@ -174,7 +109,7 @@ public class VehiclesPageDetails extends JPanel {
 
         technicalSpecsPanel.add(detailsLabelPanel,BorderLayout.NORTH);
 
-        //sample
+        //get pass through car
         String transmission = car.getTransmission();
         String fuelType = car.getFuelType();
         int seats = car.getSeatingCapacity();
@@ -370,17 +305,14 @@ public class VehiclesPageDetails extends JPanel {
 
     private JPanel carCodesPanel() {
         // additional not so important details for users like codes: ID,Numbers at the bottom bar
-        int vehicleId = 1111;
-        String vinNumber = "4Y1SL65848Z411439";
-        String registrationNumber = "GOLD 1";
 
-        JLabel vehilceIdLabel = new JLabel("Vehicle ID : " + vehicleId);
+        JLabel vehilceIdLabel = new JLabel("Vehicle ID : " + car.getVehicleId());
         vehilceIdLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(12.5f));
 
-        JLabel vinNumberLabel = new JLabel("VIN Number : " + vinNumber);
+        JLabel vinNumberLabel = new JLabel("VIN Number : " + car.getVinNumber());
         vinNumberLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(12.5f));
 
-        JLabel registrationNumberLabel = new JLabel("Registration Number : " + registrationNumber);
+        JLabel registrationNumberLabel = new JLabel("Registration Number : " + car.getRegistrationNumber());
         registrationNumberLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(12.5f));
 
         JPanel carCodesPanel = new JPanel(new GridLayout(3,1,5,5));

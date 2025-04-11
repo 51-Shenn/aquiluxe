@@ -992,13 +992,59 @@ public class VehiclesPage extends JPanel implements ActionListener{
     
         JLabel title = new JLabel("Add New Car", JLabel.CENTER);
         title.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
+        title.setBackground(Color.WHITE);
         dialog.add(title, BorderLayout.NORTH);
     
         // Add form components
-        JPanel formPanel = new JPanel(new GridLayout(0, 2, 10, 10));
-        formPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        // need to use jscrollpane
+        JPanel formPanel = new JPanel(new GridLayout(1,2,1,1));
+        formPanel.setBackground(Color.WHITE);
+
+        JPanel picturePanel = new JPanel(new BorderLayout());
+        JLabel carUploadImage = new JLabel("Car Image: ");
+        picturePanel.add(carUploadImage);
+        picturePanel.add(initImageUploader());
+        formPanel.add(picturePanel);
+
+        JScrollPane informationPanel = new JScrollPane();
+        formPanel.add(informationPanel);
+        // gbc.gridy = 0;
+        // gbc.gridx = 1;
+        // gbc.weightx = 2;
+        // gbc.weighty = 1;
+        // gbc.fill = GridBagConstraints.HORIZONTAL;
+        // formPanel.add(new JLabel("Brand:"), gbc);
+
+        // gbc.gridy = 1;
+        // gbc.weighty = 1;
+        // gbc.weightx = 5;
+        // JTextField brandInput = new JTextField();
+        // formPanel.add(brandInput, gbc);
+
+        // gbc.gridy = 2;
+        // gbc.weightx = 2;
+        // gbc.weighty = 1;
+        // gbc.fill = GridBagConstraints.HORIZONTAL;
+        // formPanel.add(new JLabel("Model:"), gbc);
+
+        // gbc.gridy = 3;
+        // gbc.weighty = 1;
+        // gbc.weightx = 5;
+        // JTextField modelInput = new JTextField();
+        // formPanel.add(modelInput, gbc);
+
+        // gbc.gridy = 4;
+        // gbc.weightx = 2;
+        // gbc.weighty = 1;
+        // gbc.fill = GridBagConstraints.HORIZONTAL;
+        // formPanel.add(new JLabel("Year:"), gbc);
+
+        // gbc.gridy = 5;
+        // gbc.weighty = 1;
+        // gbc.weightx = 5;
+        // JComboBox yearInput = new JComboBox<>();
+        // formPanel.add(yearInput, gbc);
     
-        initImageUploader(formPanel);
         // formPanel.add(new JLabel("Brand:"));
         // formPanel.add(new JTextField());
         // formPanel.add(new JLabel("Model:"));
@@ -1035,7 +1081,32 @@ public class VehiclesPage extends JPanel implements ActionListener{
         dialog.add(formPanel, BorderLayout.CENTER);
 
         // Add submit button
-        JButton submitButton = new JButton("Submit");
+        RoundedButton submitButton = new RoundedButton(20,Color.BLUE);
+        submitButton.setText("Submit");
+        submitButton.setForeground(Color.WHITE);
+        submitButton.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
+        submitButton.setPreferredSize(new Dimension(1600,100));
+        submitButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent evt) {
+                submitButton.setBackground(Color.BLUE.darker());
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent evt) {
+                submitButton.setBackground(Color.BLUE);
+            }
+            
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                submitButton.setBackground(Color.CYAN);
+            }
+            
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                submitButton.setBackground(Color.BLUE);
+            }
+        });
         submitButton.addActionListener(e -> {
             // Handle form submission here
             JOptionPane.showMessageDialog(dialog, "Car added successfully!");
@@ -1055,19 +1126,28 @@ public class VehiclesPage extends JPanel implements ActionListener{
     private final String IMAGE_DIR = "images/cars/";
 
     // In your form initialization method:
-    private void initImageUploader(JPanel formPanel) {
+    private JPanel initImageUploader() {
         // Image Upload Components
         JPanel imageUploadPanel = new JPanel(new BorderLayout());
         
         // Label for image preview
         imageLabel = new JLabel("No Image Selected", JLabel.CENTER);
+        imageLabel.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(15f));
         imageLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        imageLabel.setPreferredSize(new Dimension(200, 200));
+        imageLabel.setPreferredSize(new Dimension(500, 500));
         
         // Buttons
         JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.setBackground(Color.WHITE);
         selectButton = new JButton("Select Image");
+        selectButton.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(20f));
+        selectButton.setPreferredSize(new Dimension(250, 100));
+        selectButton.setFocusable(false);
+
         removeButton = new JButton("Remove");
+        removeButton.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(20f));
+        removeButton.setPreferredSize(new Dimension(250, 100));
+        removeButton.setFocusable(false);
         removeButton.setEnabled(false);
         
         buttonPanel.add(selectButton);
@@ -1077,13 +1157,11 @@ public class VehiclesPage extends JPanel implements ActionListener{
         imageUploadPanel.add(imageLabel, BorderLayout.CENTER);
         imageUploadPanel.add(buttonPanel, BorderLayout.SOUTH);
         
-        // Add to your form (adjust grid position as needed)
-        formPanel.add(new JLabel("Car Image:"));
-        formPanel.add(imageUploadPanel);
-        
         // Event Listeners
         selectButton.addActionListener(this::handleImageSelect);
         removeButton.addActionListener(this::handleImageRemove);
+
+        return imageUploadPanel;
     }
 
     // Handle image selection
