@@ -169,8 +169,8 @@ public class OverflowMenu extends JLayeredPane {
             boolean proceed = dialog.showDialog(
                 "HAZARD",
                 "Confirm Update",
-                "Update Your Profile?",
-                "Updating your profile will overwrite your current information.",
+                "Warning: Changes Ahead",
+                "Your existing information will be overwritten.",
                 true
             );
             
