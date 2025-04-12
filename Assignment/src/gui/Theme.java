@@ -1,8 +1,9 @@
 package gui;
 
-import controllers.UserController;
 import java.awt.Color;
 import java.io.File;
+
+import controllers.UserController;
 
 public class Theme {
     public static Color LIGHT_BLUE = new Color(0x306CFE);

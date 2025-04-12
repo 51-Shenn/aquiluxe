@@ -1,9 +1,12 @@
 package gui;
 
-import controllers.UserController;
-import database.UserDAO;
-import datamodels.User;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
@@ -11,15 +14,30 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import javax.swing.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import controllers.UserController;
+import database.UserDAO;
+import datamodels.User;
+
 public class OverflowMenu extends JLayeredPane {
 
-    private final JFrame frame;
-    private final JPanel panel;
+    private JFrame frame;
+    private JPanel panel;
     private User user;
     public final int MENU_WIDTH;
     public final int MENU_HEIGHT;
@@ -27,6 +45,7 @@ public class OverflowMenu extends JLayeredPane {
     private JPanel themeButton;
     private JPanel switchAccountButton;
     private JPanel signOutButton;
+    
     private JPanel deleteAccountButton;
     private JPanel closeButton;
     private JPanel editPanel;
@@ -34,6 +53,14 @@ public class OverflowMenu extends JLayeredPane {
     private final File themeFile = new File("files/settings/theme.txt");
     private final File accountsFile = new File("files/settings/accounts.txt");
     private int[] userAccountsID = new int[4];
+
+    public OverflowMenu() {
+        this.frame = new JFrame();
+        this.panel = new JPanel();
+        this.user = new User();
+        this.MENU_WIDTH = 0;
+        this.MENU_HEIGHT = 0;
+    }
 
     public OverflowMenu(JFrame frame, JPanel panel, User user) {
         this.frame = frame;
@@ -46,6 +73,118 @@ public class OverflowMenu extends JLayeredPane {
             MENU_HEIGHT = 800;
         setBackground(Theme.getBackground());
         add(createOverflowMenu(), JLayeredPane.POPUP_LAYER);
+    }
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
+
+    public JPanel getPanel() {
+        return panel;
+    }
+
+    public void setPanel(JPanel panel) {
+        this.panel = panel;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public int getMENU_WIDTH() {
+        return MENU_WIDTH;
+    }
+
+    public int getMENU_HEIGHT() {
+        return MENU_HEIGHT;
+    }
+
+    public boolean isExpanded() {
+        return isExpanded;
+    }
+
+    public void setExpanded(boolean isExpanded) {
+        this.isExpanded = isExpanded;
+    }
+
+    public JPanel getThemeButton() {
+        return themeButton;
+    }
+
+    public void setThemeButton(JPanel themeButton) {
+        this.themeButton = themeButton;
+    }
+
+    public JPanel getSwitchAccountButton() {
+        return switchAccountButton;
+    }
+
+    public void setSwitchAccountButton(JPanel switchAccountButton) {
+        this.switchAccountButton = switchAccountButton;
+    }
+
+    public JPanel getSignOutButton() {
+        return signOutButton;
+    }
+
+    public void setSignOutButton(JPanel signOutButton) {
+        this.signOutButton = signOutButton;
+    }
+
+    public JPanel getDeleteAccountButton() {
+        return deleteAccountButton;
+    }
+
+    public void setDeleteAccountButton(JPanel deleteAccountButton) {
+        this.deleteAccountButton = deleteAccountButton;
+    }
+
+    public JPanel getCloseButton() {
+        return closeButton;
+    }
+
+    public void setCloseButton(JPanel closeButton) {
+        this.closeButton = closeButton;
+    }
+
+    public JPanel getEditPanel() {
+        return editPanel;
+    }
+
+    public void setEditPanel(JPanel editPanel) {
+        this.editPanel = editPanel;
+    }
+
+    public JButton getEditButton() {
+        return editButton;
+    }
+
+    public void setEditButton(JButton editButton) {
+        this.editButton = editButton;
+    }
+
+    public File getThemeFile() {
+        return themeFile;
+    }
+
+    public File getAccountsFile() {
+        return accountsFile;
+    }
+
+    public int[] getUserAccountsID() {
+        return userAccountsID;
+    }
+
+    public void setUserAccountsID(int[] userAccountsID) {
+        this.userAccountsID = userAccountsID;
     }
 
     private JPanel createOverflowMenu() {

@@ -1,18 +1,37 @@
 package gui;
 
-import controllers.UserController;
-import datamodels.User;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Window;
 import java.io.File;
-import javax.swing.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import controllers.UserController;
+import datamodels.User;
+
 public class SignUpPage extends AuthenticationPage {
 
-    private final JFrame frame;
-    private final JPanel panel;
+    private JFrame frame;
+    private JPanel panel;
     private User user;
     private JTextField fullNameInput;
     private String genderInput;
@@ -24,6 +43,12 @@ public class SignUpPage extends AuthenticationPage {
     private JLabel genderValidationLabel;
     private JLabel passwordValidationLabel;
     private JLabel confirmPasswordValidationLabel;
+
+    public SignUpPage() {
+        this.frame = new JFrame();
+        this.panel = new JPanel();
+        this.user = new User();
+    }
 
     public SignUpPage(JFrame frame, JPanel panel, User user) {
         this.frame = frame;
@@ -40,6 +65,102 @@ public class SignUpPage extends AuthenticationPage {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
+
+    public JPanel getPanel() {
+        return panel;
+    }
+
+    public void setPanel(JPanel panel) {
+        this.panel = panel;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public JTextField getFullNameInput() {
+        return fullNameInput;
+    }
+
+    public void setFullNameInput(JTextField fullNameInput) {
+        this.fullNameInput = fullNameInput;
+    }
+
+    public String getGenderInput() {
+        return genderInput;
+    }
+
+    public void setGenderInput(String genderInput) {
+        this.genderInput = genderInput;
+    }
+
+    public JPasswordField getPasswordInput() {
+        return passwordInput;
+    }
+
+    public void setPasswordInput(JPasswordField passwordInput) {
+        this.passwordInput = passwordInput;
+    }
+
+    public JPasswordField getConfirmPasswordInput() {
+        return confirmPasswordInput;
+    }
+
+    public void setConfirmPasswordInput(JPasswordField confirmPasswordInput) {
+        this.confirmPasswordInput = confirmPasswordInput;
+    }
+
+    public String getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(String currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public JLabel getFullNameValidationLabel() {
+        return fullNameValidationLabel;
+    }
+
+    public void setFullNameValidationLabel(JLabel fullNameValidationLabel) {
+        this.fullNameValidationLabel = fullNameValidationLabel;
+    }
+
+    public JLabel getGenderValidationLabel() {
+        return genderValidationLabel;
+    }
+
+    public void setGenderValidationLabel(JLabel genderValidationLabel) {
+        this.genderValidationLabel = genderValidationLabel;
+    }
+
+    public JLabel getPasswordValidationLabel() {
+        return passwordValidationLabel;
+    }
+
+    public void setPasswordValidationLabel(JLabel passwordValidationLabel) {
+        this.passwordValidationLabel = passwordValidationLabel;
+    }
+
+    public JLabel getConfirmPasswordValidationLabel() {
+        return confirmPasswordValidationLabel;
+    }
+
+    public void setConfirmPasswordValidationLabel(JLabel confirmPasswordValidationLabel) {
+        this.confirmPasswordValidationLabel = confirmPasswordValidationLabel;
     }
 
     @Override
