@@ -147,8 +147,13 @@ public class UserService {
             userDAO.updateUserColumnValue(user.getUserId(), "user_email", email);
             userDAO.updateUserColumnValue(user.getUserId(), "phone_number", phoneNumber);
 
+            if(!drivingLicense.isEmpty()) {
+                userDAO.addCustomerDetails(user.getUserId(), "", drivingLicense);
+            }
+            
             return true;
-        } else
+        } 
+        else
             return false;
     }
 

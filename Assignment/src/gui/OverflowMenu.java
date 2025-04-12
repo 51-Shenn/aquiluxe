@@ -459,7 +459,7 @@ public class OverflowMenu extends JLayeredPane {
                                 "SUCCESS",
                                 "Switch Account",
                                 "Switched to " + this.user.getUsername(),
-                                "Signed in as " + this.user.getUsername(),
+                                "All switched! You're logged in as " + this.user.getUsername(),
                                 false
                             );
                             
