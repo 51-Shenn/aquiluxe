@@ -12,7 +12,7 @@ import javax.swing.JButton;
 
 public class RoundedButton extends JButton {
     private Color backgroundColor;
-    private final int cornerRadius;
+    private int cornerRadius;
 
     public RoundedButton() {
         this.cornerRadius = 0;
@@ -34,6 +34,10 @@ public class RoundedButton extends JButton {
 
     public int getCornerRadius() {
         return cornerRadius;
+    }
+
+    public void setCornerRadius(int cornerRadius) {
+        this.cornerRadius = cornerRadius;
     }
 
     @Override

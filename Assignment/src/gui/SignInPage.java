@@ -32,7 +32,7 @@ public class SignInPage extends AuthenticationPage {
     private User user;
     private JPasswordField passwordInput;
     private JLabel passwordValidationLabel;
-    private final File accountsFile = new File("files/settings/accounts.txt");
+    private final File ACCOUNTS_FILE = new File("files/settings/accounts.txt");
 
     public SignInPage() {
         this.frame = new JFrame();
@@ -97,8 +97,8 @@ public class SignInPage extends AuthenticationPage {
         this.passwordValidationLabel = passwordValidationLabel;
     }
 
-    public File getAccountsFile() {
-        return accountsFile;
+    public File getACCOUNTS_FILE() {
+        return ACCOUNTS_FILE;
     }
 
    @Override
@@ -307,7 +307,7 @@ public class SignInPage extends AuthenticationPage {
                     false
                 );
                 
-                UserController.switchToAccount(this.user, accountsFile);
+                UserController.switchToAccount(this.user, ACCOUNTS_FILE);
             }
         });
 

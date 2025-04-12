@@ -50,8 +50,8 @@ public class OverflowMenu extends JLayeredPane {
     private JPanel closeButton;
     private JPanel editPanel;
     private JButton editButton;
-    private final File themeFile = new File("files/settings/theme.txt");
-    private final File accountsFile = new File("files/settings/accounts.txt");
+    private final File THEME_FILE = new File("files/settings/theme.txt");
+    private final File ACCOUNTS_FILE = new File("files/settings/accounts.txt");
     private int[] userAccountsID = new int[4];
 
     public OverflowMenu() {
@@ -171,12 +171,12 @@ public class OverflowMenu extends JLayeredPane {
         this.editButton = editButton;
     }
 
-    public File getThemeFile() {
-        return themeFile;
+    public File getTHEME_FILE() {
+        return THEME_FILE;
     }
 
-    public File getAccountsFile() {
-        return accountsFile;
+    public File getACCOUNTS_FILE() {
+        return ACCOUNTS_FILE;
     }
 
     public int[] getUserAccountsID() {
@@ -227,18 +227,18 @@ public class OverflowMenu extends JLayeredPane {
             panel.add(createMenuCard("Sign Up", signInFilePath), gbc);
             panel.add(createMenuCard("Sign In", signInFilePath), gbc);
         } else {
-            if(!themeFile.exists()) {
+            if(!THEME_FILE.exists()) {
                 themeButton = createMenuCard("Theme", sunMoonFilePath);
             }
             else {
-                try(BufferedReader reader = new BufferedReader(new FileReader(themeFile))) {
+                try(BufferedReader reader = new BufferedReader(new FileReader(THEME_FILE))) {
                     String line = reader.readLine();
                     themeButton = line.equals("Dark") ? createMenuCard("Dark Theme", moonFilePath) : createMenuCard("Light Theme", sunFilePath);
 
                 } catch(FileNotFoundException exception) {
-                    JOptionPane.showMessageDialog(null, "Could not locate file location: " + themeFile);
+                    JOptionPane.showMessageDialog(null, "Could not locate file location: " + THEME_FILE);
                 } catch(IOException exception) {
-                    JOptionPane.showMessageDialog(null, "Could not write file: " + themeFile);
+                    JOptionPane.showMessageDialog(null, "Could not write file: " + THEME_FILE);
                 }
             }
             panel.add(themeButton, gbc);
@@ -494,8 +494,8 @@ public class OverflowMenu extends JLayeredPane {
 
                 gbc.weighty = 1;
 
-                if(accountsFile.exists()) {
-                    userAccountsID = UserController.loadExistingUserInFile(userAccountsID, accountsFile);
+                if(ACCOUNTS_FILE.exists()) {
+                    userAccountsID = UserController.loadExistingUserInFile(userAccountsID, ACCOUNTS_FILE);
                 }
 
                 for (int userID : userAccountsID) {
@@ -602,7 +602,7 @@ public class OverflowMenu extends JLayeredPane {
                                 false
                             );
                             
-                            UserController.switchToAccount(this.user, accountsFile);
+                            UserController.switchToAccount(this.user, ACCOUNTS_FILE);
                         });
 
                         gbc.insets = new Insets(5, 30, 5, 30);
@@ -801,7 +801,7 @@ public class OverflowMenu extends JLayeredPane {
             ImageIcon moonIcon = new ImageIcon(moonFilePath.toString());
 
             button.addActionListener(e -> {
-                String theme = UserController.loadTheme(themeFile);
+                String theme = UserController.loadTheme(THEME_FILE);
                 String newTheme;
 
                 if(theme.equals("Dark")) {
@@ -815,7 +815,7 @@ public class OverflowMenu extends JLayeredPane {
                     button.setText("Dark Theme");
                 }
 
-                UserController.useTheme(newTheme, themeFile);
+                UserController.useTheme(newTheme, THEME_FILE);
 
                 this.frame.getLayeredPane().remove(this);
                 this.frame.getContentPane().removeAll();
@@ -882,7 +882,7 @@ public class OverflowMenu extends JLayeredPane {
                 );  
 
                 if(proceed) {
-                    UserController.removeUserFromFile(this.user.getUserId(), accountsFile);
+                    UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
 
                     frame.getLayeredPane().remove(this);
                     this.frame.getContentPane().removeAll();
@@ -911,7 +911,7 @@ public class OverflowMenu extends JLayeredPane {
                 );                
 
                 if(proceed) {
-                    UserController.removeUserFromFile(this.user.getUserId(), accountsFile);
+                    UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
 
                     userDAO.deleteUser(this.user.getUserId());
 
