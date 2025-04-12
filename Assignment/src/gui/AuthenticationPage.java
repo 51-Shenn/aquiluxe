@@ -1,9 +1,26 @@
 package gui;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.io.File;
-import javax.swing.*;
-import javax.swing.border.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 public abstract class AuthenticationPage extends JPanel {
 
@@ -20,10 +37,74 @@ public abstract class AuthenticationPage extends JPanel {
     protected JTextField phoneInput;
     protected JLabel emailValidationLabel;
     protected JLabel phoneValidationLabel;
-
+    
     public AuthenticationPage() {
         setLayout(new GridBagLayout());
         add((createLoginPage()));
+    }
+
+    public float getTITLE_TEXT_SIZE() {
+        return TITLE_TEXT_SIZE;
+    }
+
+    public float getNORMAL_TEXT_SIZE() {
+        return NORMAL_TEXT_SIZE;
+    }
+
+    public float getBUTTON_TEXT_SIZE() {
+        return BUTTON_TEXT_SIZE;
+    }
+
+    public int getHEIGHT() {
+        return HEIGHT;
+    }
+
+    public Border getBORDER() {
+        return BORDER;
+    }
+
+    public Border getPADDING() {
+        return PADDING;
+    }
+
+    public Font getTITLE_FONT() {
+        return TITLE_FONT;
+    }
+
+    public Font getINPUT_FONT() {
+        return INPUT_FONT;
+    }
+
+    public JTextField getEmailInput() {
+        return emailInput;
+    }
+
+    public void setEmailInput(JTextField emailInput) {
+        this.emailInput = emailInput;
+    }
+
+    public JTextField getPhoneInput() {
+        return phoneInput;
+    }
+
+    public void setPhoneInput(JTextField phoneInput) {
+        this.phoneInput = phoneInput;
+    }
+
+    public JLabel getEmailValidationLabel() {
+        return emailValidationLabel;
+    }
+
+    public void setEmailValidationLabel(JLabel emailValidationLabel) {
+        this.emailValidationLabel = emailValidationLabel;
+    }
+
+    public JLabel getPhoneValidationLabel() {
+        return phoneValidationLabel;
+    }
+
+    public void setPhoneValidationLabel(JLabel phoneValidationLabel) {
+        this.phoneValidationLabel = phoneValidationLabel;
     }
     
     protected JPanel createLoginPage() {

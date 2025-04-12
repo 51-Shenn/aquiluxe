@@ -1,17 +1,43 @@
 package gui;
 
-import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+
 import javax.swing.Icon;
 import javax.swing.JButton;
 
 public class RoundedButton extends JButton {
     private Color backgroundColor;
-    private final int cornerRadius;
+    private int cornerRadius;
+
+    public RoundedButton() {
+        this.cornerRadius = 0;
+    }
 
     public RoundedButton(int radius, Color bgColor) {
         this.cornerRadius = radius;
         this.backgroundColor = bgColor;
         setOpaque(false);
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+    }
+
+    public int getCornerRadius() {
+        return cornerRadius;
+    }
+
+    public void setCornerRadius(int cornerRadius) {
+        this.cornerRadius = cornerRadius;
     }
 
     @Override

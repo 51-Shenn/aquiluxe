@@ -6,24 +6,53 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
-import javax.swing.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class Dialog extends JDialog {
 
-    private final JFrame frame;
+    private JFrame frame;
     private final File SUCCESS_ICON = new File("images/icons/success.png");
     private final File ERROR_ICON = new File("images/icons/error.png");
     private final File HAZARD_ICON = new File("images/icons/hazard.png");
     private boolean confirmation;
 
+    public Dialog() {
+        this.frame = new JFrame();
+    }
+
     public Dialog(JFrame frame) {
         this.frame = frame;
     }
 
-    // custom
-    // message
-    // error
-    // success
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public File getSUCCESS_ICON() {
+        return SUCCESS_ICON;
+    }
+
+    public File getERROR_ICON() {
+        return ERROR_ICON;
+    }
+
+    public File getHAZARD_ICON() {
+        return HAZARD_ICON;
+    }
+
+    public boolean isConfirmation() {
+        return confirmation;
+    }
+
+    public void setConfirmation(boolean confirmation) {
+        this.confirmation = confirmation;
+    }
 
     public boolean showDialog(String dialogType, String dialogTitle, String messageTitle, String messageContent, boolean closeOperation) {
         JDialog messageDialog = new JDialog(this.frame, dialogTitle, true); // true = modal dialog
@@ -114,5 +143,9 @@ public class Dialog extends JDialog {
         button.setFocusable(false);
 
         return button;
+    }
+
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
     }
 }

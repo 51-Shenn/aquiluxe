@@ -1,20 +1,38 @@
 package gui;
 
-import datamodels.User;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.io.File;
-import javax.swing.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
+
+import datamodels.User;
 
 public class GUIComponents extends JPanel {
 
-    private final JFrame frame;
-    private final JPanel panel;
+    private JFrame frame;
+    private JPanel panel;
     private User user;
     public static OverflowMenu overflowMenu;
     private JButton[] topBarButtons = new JButton[4];
     private String[] topBarButtonsLabels = { "Home", "Vehicles", "About", "Contact" };
 
+    public GUIComponents() {
+        this.frame = new JFrame();
+        this.panel = new JPanel();
+    }
+    
     public GUIComponents(JFrame frame, JPanel panel, User user) {
         try {
             // Set the Windows Look and Feel
@@ -34,6 +52,54 @@ public class GUIComponents extends JPanel {
         add(createTopBar(), BorderLayout.WEST);
         add(menuButton(), BorderLayout.EAST);
         this.panel.add(new HomePage(this.frame, this.panel), BorderLayout.CENTER);
+    }
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
+
+    public JPanel getPanel() {
+        return panel;
+    }
+
+    public void setPanel(JPanel panel) {
+        this.panel = panel;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public static OverflowMenu getOverflowMenu() {
+        return overflowMenu;
+    }
+
+    public static void setOverflowMenu(OverflowMenu overflowMenu) {
+        GUIComponents.overflowMenu = overflowMenu;
+    }
+
+    public JButton[] getTopBarButtons() {
+        return topBarButtons;
+    }
+
+    public void setTopBarButtons(JButton[] topBarButtons) {
+        this.topBarButtons = topBarButtons;
+    }
+
+    public String[] getTopBarButtonsLabels() {
+        return topBarButtonsLabels;
+    }
+
+    public void setTopBarButtonsLabels(String[] topBarButtonsLabels) {
+        this.topBarButtonsLabels = topBarButtonsLabels;
     }
 
     private JButton logo() {
