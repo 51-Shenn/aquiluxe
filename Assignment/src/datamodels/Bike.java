@@ -3,6 +3,7 @@ package datamodels;
 public class Bike extends Vehicle {
 
     private String bikeType;
+
     // Default Constructor
     public Bike() {
         super();
@@ -14,16 +15,16 @@ public class Bike extends Vehicle {
             double rentalPriceDay, String transmission, String fuelType, String bikeType, int seatingCapacity,
             boolean availability, String features) {
         super(vehicleId, imagePath, brand, model, year, capacity, horsepower, color, mpg, vinNumber, registrationNumber,
-                rentalPriceDay, transmission, fuelType, seatingCapacity, availability, features);
+                rentalPriceDay, transmission, fuelType, bikeType, seatingCapacity, availability, features);
         this.bikeType = bikeType;
     }
 
     // Getter and Setters
-    public String getCarType() {
+    public String getBikeType() {
         return bikeType;
     }
 
-    public void setCarType(String bikeType) {
+    public void setBikeType(String bikeType) {
         this.bikeType = bikeType;
     }
 }
