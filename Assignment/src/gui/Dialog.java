@@ -6,7 +6,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -137,8 +136,9 @@ public class Dialog extends JDialog {
 
     private JButton createDialogButton(String text) {
         JButton button = new JButton(text);
-        button.setPreferredSize(new Dimension(100, 40));
+        button.setPreferredSize(new Dimension(110, 40));
         button.setBackground(Color.WHITE);
+        button.setFont(CustomFonts.INSTRUMENT_SANS_REGULAR.deriveFont(17f));
         button.setOpaque(false);
         button.setFocusable(false);
 

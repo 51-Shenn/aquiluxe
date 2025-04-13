@@ -1,5 +1,9 @@
 package gui;
 
+import controllers.UserController;
+import database.UserDAO;
+import datamodels.Customer;
+import datamodels.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,7 +18,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -29,10 +32,6 @@ import javax.swing.UIManager;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-
-import controllers.UserController;
-import database.UserDAO;
-import datamodels.User;
 
 public class OverflowMenu extends JLayeredPane {
 
@@ -197,10 +196,10 @@ public class OverflowMenu extends JLayeredPane {
     }
 
     private JPanel createMainCard() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBounds(0, 0, MENU_WIDTH, MENU_HEIGHT);
-        panel.setBackground(new Color(0, 0, 0, 40));
-        panel.setBorder(new LineBorder(new Color(0, 0, 0, 60), 1));
+        JPanel mainCardPanel = new JPanel(new GridBagLayout());
+        mainCardPanel.setBounds(0, 0, MENU_WIDTH, MENU_HEIGHT);
+        mainCardPanel.setBackground(new Color(0, 0, 0, 40));
+        mainCardPanel.setBorder(new LineBorder(new Color(0, 0, 0, 60), 1));
 
         File sunMoonFilePath = new File("images/icons/sun-moon.png");
         File sunFilePath = new File("images/icons/sun.png");
@@ -219,13 +218,13 @@ public class OverflowMenu extends JLayeredPane {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.insets = new Insets(1, 0, 0, 0);
-        panel.add(createProfileCard(), gbc);
+        mainCardPanel.add(createProfileCard(), gbc);
 
         gbc.weighty = 1;
 
         if (this.user.getFullName().equals("Guest") && this.user.getUsername().equals("guest")) {
-            panel.add(createMenuCard("Sign Up", signInFilePath), gbc);
-            panel.add(createMenuCard("Sign In", signInFilePath), gbc);
+            mainCardPanel.add(createMenuCard("Sign Up", signInFilePath), gbc);
+            mainCardPanel.add(createMenuCard("Sign In", signInFilePath), gbc);
         } else {
             if(!THEME_FILE.exists()) {
                 themeButton = createMenuCard("Theme", sunMoonFilePath);
@@ -234,27 +233,26 @@ public class OverflowMenu extends JLayeredPane {
                 try(BufferedReader reader = new BufferedReader(new FileReader(THEME_FILE))) {
                     String line = reader.readLine();
                     themeButton = line.equals("Dark") ? createMenuCard("Dark Theme", moonFilePath) : createMenuCard("Light Theme", sunFilePath);
-
                 } catch(FileNotFoundException exception) {
                     JOptionPane.showMessageDialog(null, "Could not locate file location: " + THEME_FILE);
                 } catch(IOException exception) {
                     JOptionPane.showMessageDialog(null, "Could not write file: " + THEME_FILE);
                 }
             }
-            panel.add(themeButton, gbc);
+            mainCardPanel.add(themeButton, gbc);
 
             switchAccountButton = createSwitchAccountPanel(switchFilePath);
-            panel.add(switchAccountButton, gbc);
+            mainCardPanel.add(switchAccountButton, gbc);
 
             signOutButton = createMenuCard("Sign Out", signOutFilePath);
-            panel.add(signOutButton, gbc);
+            mainCardPanel.add(signOutButton, gbc);
 
             deleteAccountButton = createMenuCard("Delete Account", deleteFilePath);
-            panel.add(deleteAccountButton, gbc);
+            mainCardPanel.add(deleteAccountButton, gbc);
         }
 
         closeButton = createMenuCard("Close / Exit", roundCloseFilePath);
-        panel.add(closeButton, gbc);
+        mainCardPanel.add(closeButton, gbc);
 
         editPanel = new JPanel(new GridBagLayout());
         editPanel.setBackground(Theme.getBackground());
@@ -317,17 +315,18 @@ public class OverflowMenu extends JLayeredPane {
                 boolean isValidUpdateDetails = UserController.passUpdateProfileDetails(this.user, fullNameField.getText(), usernameField.getText(), emailField.getText(), phoneNumberField.getText(), drivingLicenseField.getText(),
                     fullNameValidationLabel, usernameValidationLabel, emailValidationLabel, phoneNumberValidationLabel, drivingLicenseValidationLabel);
                 if(isValidUpdateDetails) {
-                    this.frame.getLayeredPane().remove(this);
-                    this.frame.getContentPane().removeAll();
-                    this.frame.setLayout(new BorderLayout());
-                    GUIComponents.overflowMenu = null;
-                    
+                    this.frame.getLayeredPane().remove(this);                    
                     UserDAO userDAO = new UserDAO();
                     this.user = userDAO.getUserById(this.user.getUserId());
 
-                    this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                    this.frame.getContentPane().removeAll();
+                    this.frame.setLayout(new BorderLayout());
+                    GUIComponents.overflowMenu = null;
+                    GUIComponents guiComponents = new GUIComponents(this.frame, this.panel, this.user);
+                    this.frame.add(guiComponents, BorderLayout.NORTH);
                     this.frame.add(this.panel, BorderLayout.CENTER);
                     this.panel.removeAll();
+                    this.panel.add(new HomePage(this.frame, this.panel, this.user, guiComponents), BorderLayout.CENTER);
                     this.frame.revalidate();
                     this.frame.repaint();
 
@@ -373,9 +372,9 @@ public class OverflowMenu extends JLayeredPane {
         gbc2.anchor = GridBagConstraints.NORTH;
         gbc2.fill = GridBagConstraints.BOTH;
         gbc2.insets = new Insets(1, 0, 0, 0);
-        panel.add(editPanel, gbc2);
+        mainCardPanel.add(editPanel, gbc2);
 
-        return panel;
+        return mainCardPanel;
     }
 
     private JPanel createEditProfileInputField(String text, JTextField inputField, JLabel validationLabel) {
@@ -399,7 +398,14 @@ public class OverflowMenu extends JLayeredPane {
             case "Username" -> inputField.setText(this.user.getUsername());
             case "Email Address" -> inputField.setText(this.user.getUserEmail());
             case "Phone Number (+60)" -> inputField.setText(this.user.getPhoneNumber());
-            case "Driving License" -> inputField.setText("");
+            case "Driving License" -> {
+                try {
+                    Customer customer = new UserDAO().getCustomerById(this.user);
+                    inputField.setText(customer.getLicense());
+                } catch (Exception e) {
+                    inputField.setText("");
+                }
+            }
         }
 
         gbc.insets = new Insets(5, 30, 0, 30);
@@ -583,13 +589,16 @@ public class OverflowMenu extends JLayeredPane {
                         accountButton.add(accountDetails, gbcButton);
                         accountButton.addActionListener(ex -> {
                             frame.getLayeredPane().remove(this);
+                            this.user = everyUser;
+
                             this.frame.getContentPane().removeAll();
                             this.frame.setLayout(new BorderLayout());
                             GUIComponents.overflowMenu = null;
-                            this.user = everyUser;
-                            this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                            GUIComponents guiComponents = new GUIComponents(this.frame, this.panel, this.user);
+                            this.frame.add(guiComponents, BorderLayout.NORTH);
                             this.frame.add(this.panel, BorderLayout.CENTER);
                             this.panel.removeAll();
+                            this.panel.add(new HomePage(this.frame, this.panel, this.user, guiComponents), BorderLayout.CENTER);
                             this.frame.revalidate();
                             this.frame.repaint();
                             
@@ -598,7 +607,7 @@ public class OverflowMenu extends JLayeredPane {
                                 "SUCCESS",
                                 "Switch Account",
                                 "Switched to " + this.user.getUsername(),
-                                "Signed in as " + this.user.getUsername(),
+                                "All switched! You're logged in as " + this.user.getUsername(),
                                 false
                             );
                             
@@ -821,9 +830,11 @@ public class OverflowMenu extends JLayeredPane {
                 this.frame.getContentPane().removeAll();
                 this.frame.setLayout(new BorderLayout());
                 GUIComponents.overflowMenu = null;
-                this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                GUIComponents guiComponents = new GUIComponents(this.frame, this.panel, this.user);
+                this.frame.add(guiComponents, BorderLayout.NORTH);
                 this.frame.add(this.panel, BorderLayout.CENTER);
                 this.panel.removeAll();
+                this.panel.add(new HomePage(this.frame, this.panel, this.user, guiComponents), BorderLayout.CENTER);
                 this.frame.revalidate();
                 this.frame.repaint();
             });
@@ -885,13 +896,16 @@ public class OverflowMenu extends JLayeredPane {
                     UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
 
                     frame.getLayeredPane().remove(this);
+                    this.user = new User();
+                    
                     this.frame.getContentPane().removeAll();
                     this.frame.setLayout(new BorderLayout());
                     GUIComponents.overflowMenu = null;
-                    this.user = new User();
-                    this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                    GUIComponents guiComponents = new GUIComponents(this.frame, this.panel, this.user);
+                    this.frame.add(guiComponents, BorderLayout.NORTH);
                     this.frame.add(this.panel, BorderLayout.CENTER);
                     this.panel.removeAll();
+                    this.panel.add(new HomePage(this.frame, this.panel, this.user, guiComponents), BorderLayout.CENTER);
                     this.frame.revalidate();
                     this.frame.repaint();
                 }
@@ -916,14 +930,16 @@ public class OverflowMenu extends JLayeredPane {
                     userDAO.deleteUser(this.user.getUserId());
 
                     frame.getLayeredPane().remove(this);
+                    this.user = new User();
+
                     this.frame.getContentPane().removeAll();
                     this.frame.setLayout(new BorderLayout());
                     GUIComponents.overflowMenu = null;
-                    this.user = new User();
-
-                    this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                    GUIComponents guiComponents = new GUIComponents(this.frame, this.panel, this.user);
+                    this.frame.add(guiComponents, BorderLayout.NORTH);
                     this.frame.add(this.panel, BorderLayout.CENTER);
                     this.panel.removeAll();
+                    this.panel.add(new HomePage(this.frame, this.panel, this.user, guiComponents), BorderLayout.CENTER);
                     this.frame.revalidate();
                     this.frame.repaint();
                 }
