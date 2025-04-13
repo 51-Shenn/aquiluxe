@@ -76,7 +76,7 @@ public class RentalPage extends JPanel {
 
     private JPanel createLeftContainer() {
         // create container for left panel
-        RoundedPanel leftContainer = new RoundedPanel(30, Colors.LIGHT_BLUE);
+        RoundedPanel leftContainer = new RoundedPanel(30, Theme.getSpecial());
         leftContainer.setLayout(new BorderLayout(0, 5));
         leftContainer.setBorder(BorderFactory.createEmptyBorder(10, 40, 40, 40));
 
@@ -92,7 +92,7 @@ public class RentalPage extends JPanel {
         // rental car summary panel
         JPanel summaryPanel = new JPanel();
         summaryPanel.setLayout(new BorderLayout(0, 10));
-        summaryPanel.setBackground(Colors.LIGHT_BLUE);
+        summaryPanel.setBackground(Theme.getSpecial());
 
         // rental car summary container
         RoundedPanel carPanel = new RoundedPanel(20, Color.WHITE);
@@ -237,7 +237,7 @@ public class RentalPage extends JPanel {
     // rental page right container
     private JPanel createRightContainer() {
         // create container for inputs
-        RoundedPanel rightContainer = new RoundedPanel(30, Colors.LIGHT_BLUE);
+        RoundedPanel rightContainer = new RoundedPanel(30, Theme.getSpecial());
 
         rightContainer.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -269,7 +269,7 @@ public class RentalPage extends JPanel {
     // demo
     private JPanel createBillingInfoPanel() {
         JPanel billingContainer = new JPanel(new BorderLayout());
-        billingContainer.setBackground(Colors.LIGHT_BLUE);
+        billingContainer.setBackground(Theme.getSpecial());
         billingContainer.add(createTitlePanel("Billing Info"), BorderLayout.NORTH);
 
         RoundedPanel billingInfoPanel = new RoundedPanel(20, Color.WHITE);
@@ -296,7 +296,7 @@ public class RentalPage extends JPanel {
     // demo
     private JPanel createRentalDetailsPanel() {
         JPanel rentalContainer = new JPanel(new BorderLayout());
-        rentalContainer.setBackground(Colors.LIGHT_BLUE);
+        rentalContainer.setBackground(Theme.getSpecial());
         rentalContainer.add(createTitlePanel("Rental Details"), BorderLayout.NORTH);
 
         RoundedPanel rentalDetailsPanel = new RoundedPanel(20, Color.WHITE);
@@ -323,7 +323,7 @@ public class RentalPage extends JPanel {
     // demo
     private JPanel createPaymentMethodContainer() {
         JPanel paymentContainer = new JPanel(new BorderLayout());
-        paymentContainer.setBackground(Colors.LIGHT_BLUE);
+        paymentContainer.setBackground(Theme.getSpecial());
         paymentContainer.add(createTitlePanel("Payment Method"), BorderLayout.NORTH);
 
         RoundedPanel paymentMethodPanel = new RoundedPanel(20, Color.WHITE);
@@ -439,10 +439,10 @@ public class RentalPage extends JPanel {
     private JPanel createTitlePanel(String title) {
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
-        titlePanel.setBackground(Colors.LIGHT_BLUE);
+        titlePanel.setBackground(Theme.getSpecial());
         titlePanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 5, 0));
 
-        JLabel titleLabel = createLabel(title, 30f, Color.WHITE, Colors.LIGHT_BLUE, 50, -1);
+        JLabel titleLabel = createLabel(title, 30f, Color.WHITE, Theme.getSpecial(), 50, -1);
         titleLabel.setHorizontalAlignment(JLabel.LEFT);
 
         titlePanel.add(titleLabel);
