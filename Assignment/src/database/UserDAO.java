@@ -1,18 +1,19 @@
 package database;
 
+import datamodels.Customer;
+import datamodels.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import datamodels.User;
 
 public class UserDAO {
 
     // add user by parameter
     public int addUser(String fullName, String gender, String phoneNumber, String userEmail, String username,
-            String password) {
-        String sql = "INSERT INTO users (full_name, gender, phone_number, user_email, username, password) VALUES (?, ?, ?, ?, ?, ?)";
+            String password, String userType) {
+        String sql = "INSERT INTO users (full_name, gender, phone_number, user_email, username, password, usertype) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         Connection conn = DatabaseConnection.getConnection();
         if (conn == null) {
@@ -27,6 +28,7 @@ public class UserDAO {
             stmt.setString(4, userEmail);
             stmt.setString(5, username);
             stmt.setString(6, password);
+            stmt.setString(7, userType);
 
             stmt.executeUpdate();
 
@@ -89,7 +91,8 @@ public class UserDAO {
                 rs.getString("phone_number"),
                 rs.getString("user_email"),
                 rs.getString("username"),
-                rs.getString("password"));
+                rs.getString("password"),
+                rs.getString("usertype"));
     }
 
     // get all users
@@ -130,6 +133,40 @@ public class UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("\nFAILED TO GET USER BY ID\n");
+        }
+        return null;
+    }
+
+    // get customer by specific id
+    public Customer getCustomerById(User user) {
+        int userId = user.getUserId();
+
+        String sql = "SELECT * FROM customers WHERE user_id = ? ORDER BY created_at DESC LIMIT 1;";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Customer customer = new Customer(
+                        userId,
+                        user.getFullName(),
+                        user.getGender(),
+                        user.getPhoneNumber(),
+                        user.getUserEmail(),
+                        user.getUsername(),
+                        user.getPassword(),
+                        rs.getString("address"),
+                        rs.getString("license")
+                    );
+                    return customer;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO GET CUSTOMER BY ID\n");
         }
         return null;
     }
@@ -217,13 +254,38 @@ public class UserDAO {
 
     // get user by username and password
     public User authenticateUser(String username, String password) {
-        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+        String sql = "SELECT * FROM users WHERE (username = ? OR user_email = ?) AND password = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, username);
-            stmt.setString(2, password);
+            stmt.setString(2, username);
+            stmt.setString(3, password);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    User user = mapResultUser(rs);
+                    return user;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nAUTHENTICATION FAILED\n");
+        }
+        return null;
+    }
+
+    // get user by username and password
+    public User authenticateUserForgotPassword(String username, String phoneNumber) {
+        String sql = "SELECT * FROM users WHERE (username = ? OR user_email = ?) AND phone_number = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, username);
+            stmt.setString(2, username);
+            stmt.setString(3, phoneNumber);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -276,6 +338,27 @@ public class UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("\nFAILED TO CHECK EMAIL\n");
+        }
+        return false;
+    }
+
+    // check if phone number exist : return boolean value
+    public boolean phoneNumberExists(String phoneNumber) {
+        String sql = "SELECT COUNT(*) FROM users WHERE phone_number = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, phoneNumber);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO CHECK PHONE NUMBER\n");
         }
         return false;
     }

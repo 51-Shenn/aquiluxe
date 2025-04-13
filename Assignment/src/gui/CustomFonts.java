@@ -1,9 +1,10 @@
 package gui;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.io.IOException;
 import java.util.Objects;
+import javax.swing.JOptionPane;
 
 public class CustomFonts {
 
@@ -27,6 +28,12 @@ public class CustomFonts {
     public static final Font ROBOTO_BOLD;
     public static final Font ROBOTO_BLACK;
 
+    public static final Font INSTRUMENT_SANS_REGULAR;
+    public static final Font INSTRUMENT_SANS_MEDIUM;
+    public static final Font INSTRUMENT_SANS_SEMI_BOLD;
+    public static final Font INSTRUMENT_SANS_BOLD;
+
+
     static {
         // more fonts types can be added here
         CINZEL_DECORATIVE_REGULAR = loadFont("resources/fonts/CinzelDecorative/CinzelDecorative-Regular.ttf");
@@ -42,6 +49,11 @@ public class CustomFonts {
         ROBOTO_SEMI_BOLD = loadFont("resources/fonts/Roboto/static/Roboto-SemiBold.ttf");
         ROBOTO_BOLD = loadFont("resources/fonts/Roboto/static/Roboto-Bold.ttf");
         ROBOTO_BLACK = loadFont("resources/fonts/Roboto/static/Roboto-Black.ttf");
+
+        INSTRUMENT_SANS_REGULAR = loadFont("resources/fonts/InstrumentSans/static/InstrumentSans-Regular.ttf");
+        INSTRUMENT_SANS_MEDIUM = loadFont("resources/fonts/InstrumentSans/static/InstrumentSans-Medium.ttf");
+        INSTRUMENT_SANS_SEMI_BOLD = loadFont("resources/fonts/InstrumentSans/static/InstrumentSans-SemiBold.ttf");
+        INSTRUMENT_SANS_BOLD = loadFont("resources/fonts/InstrumentSans/static/InstrumentSans-Bold.ttf");
     }
 
     private static Font loadFont(String path) {

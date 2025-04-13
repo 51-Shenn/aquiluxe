@@ -2,26 +2,42 @@ package gui;
 
 import controllers.UserController;
 import datamodels.User;
-import java.awt.*;
-import java.io.BufferedReader;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Window;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
 public class SignInPage extends AuthenticationPage {
 
-    private final JFrame frame;
-    private final JPanel panel;
+    private JFrame frame;
+    private JPanel panel;
     private User user;
     private JPasswordField passwordInput;
     private JLabel passwordValidationLabel;
-    private final File accountsFile = new File("files/settings/accounts.txt");
+    private final File ACCOUNTS_FILE = new File("files/settings/accounts.txt");
 
+    public SignInPage() {
+        this.frame = new JFrame();
+        this.panel = new JPanel();
+        this.user = new User();
+    }
+    
     public SignInPage(JFrame frame, JPanel panel, User user) {
         this.frame = frame;
         this.panel = panel;
@@ -39,7 +55,51 @@ public class SignInPage extends AuthenticationPage {
         }
     }
 
-    @Override
+   public JFrame getFrame() {
+        return frame;
+    }
+
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
+
+    public JPanel getPanel() {
+        return panel;
+    }
+
+    public void setPanel(JPanel panel) {
+        this.panel = panel;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public JPasswordField getPasswordInput() {
+        return passwordInput;
+    }
+
+    public void setPasswordInput(JPasswordField passwordInput) {
+        this.passwordInput = passwordInput;
+    }
+
+    public JLabel getPasswordValidationLabel() {
+        return passwordValidationLabel;
+    }
+
+    public void setPasswordValidationLabel(JLabel passwordValidationLabel) {
+        this.passwordValidationLabel = passwordValidationLabel;
+    }
+
+    public File getACCOUNTS_FILE() {
+        return ACCOUNTS_FILE;
+    }
+
+   @Override
     protected JLabel createWallpaperLabel() {
         JLabel wallpaperLabel = new JLabel();
         wallpaperLabel.setOpaque(false);
@@ -90,9 +150,11 @@ public class SignInPage extends AuthenticationPage {
                 this.frame.getContentPane().removeAll();
                 this.frame.setLayout(new BorderLayout());
                 GUIComponents.overflowMenu = null;
-                this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                GUIComponents guiComponents = new GUIComponents(this.frame, this.panel, this.user);
+                this.frame.add(guiComponents, BorderLayout.NORTH);
                 this.frame.add(this.panel, BorderLayout.CENTER);
                 this.panel.removeAll();
+                this.panel.add(new HomePage(this.frame, this.panel, this.user, guiComponents), BorderLayout.CENTER);
                 this.frame.revalidate();
                 this.frame.repaint();
             });
@@ -227,62 +289,28 @@ public class SignInPage extends AuthenticationPage {
             boolean isValidSignInDetails = UserController.passSignInDetails(emailInput.getText(), passwordInput.getPassword(), emailValidationLabel, passwordValidationLabel);
             if(isValidSignInDetails) {
                 this.user = UserController.passSignInDetails(emailInput.getText(), passwordInput.getPassword());
-                JPanel newContentPane = new JPanel(new BorderLayout());
-                this.frame.setContentPane(newContentPane);
+
+                this.frame.getContentPane().removeAll();
+                this.frame.setLayout(new BorderLayout());
                 GUIComponents.overflowMenu = null;
-                this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                GUIComponents guiComponents = new GUIComponents(this.frame, this.panel, this.user);
+                this.frame.add(guiComponents, BorderLayout.NORTH);
                 this.frame.add(this.panel, BorderLayout.CENTER);
                 this.panel.removeAll();
+                this.panel.add(new HomePage(this.frame, this.panel, this.user, guiComponents), BorderLayout.CENTER);
                 this.frame.revalidate();
                 this.frame.repaint();
+
+                Dialog dialog = new Dialog(this.frame);
+                dialog.showDialog(
+                    "SUCCESS",
+                    "Welcome",
+                    "Login Successful",
+                    "You're in! " + this.user.getUsername(),
+                    false
+                );
                 
-                // check if file exists
-                accountsFile.getParentFile().mkdirs();
-
-                // read existing accounts
-                ArrayList<Integer> accountIDs = new ArrayList<>();
-                if (accountsFile.exists()) {
-                    try (BufferedReader reader = new BufferedReader(new FileReader(accountsFile))) {
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            try {
-                                accountIDs.add(Integer.valueOf(line.trim()));
-                            } catch (NumberFormatException exception) {}
-                        }
-                    } catch (IOException exception) {
-                        JOptionPane.showMessageDialog(null, "Error reading file: " + accountsFile);
-                    }
-                }
-
-                int currentUserId = this.user.getUserId();
-
-                for (int i = 1; i < accountIDs.size(); i++) {
-                    if (accountIDs.get(i) == currentUserId) {
-                        accountIDs.remove(i);
-                        break;
-                    }
-                }
-                
-                if (!accountIDs.isEmpty() && accountIDs.get(0) != currentUserId) {
-                    accountIDs.removeIf(id -> id == currentUserId);
-                    accountIDs.add(0, currentUserId);
-                } else if (accountIDs.isEmpty()) {
-                    accountIDs.add(currentUserId);
-                }
-
-                // only 4 accounts
-                while (accountIDs.size() > 4) {
-                    accountIDs.remove(accountIDs.size() - 1);
-                }
-
-                // write back to file
-                try (FileWriter writer = new FileWriter(accountsFile)) {
-                    for (int i = 0; i < accountIDs.size(); i++) {
-                        writer.write(accountIDs.get(i) + "\n");
-                    }
-                } catch (IOException exception) {
-                    JOptionPane.showMessageDialog(null, "Error saving accounts file");
-                }
+                UserController.switchToAccount(this.user, ACCOUNTS_FILE);
             }
         });
 
