@@ -1,5 +1,7 @@
 package gui;
 
+import controllers.UserController;
+import datamodels.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,7 +11,6 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Window;
 import java.io.File;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,9 +22,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
-
-import controllers.UserController;
-import datamodels.User;
 
 public class SignInPage extends AuthenticationPage {
 
@@ -152,9 +150,11 @@ public class SignInPage extends AuthenticationPage {
                 this.frame.getContentPane().removeAll();
                 this.frame.setLayout(new BorderLayout());
                 GUIComponents.overflowMenu = null;
-                this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                GUIComponents guiComponents = new GUIComponents(this.frame, this.panel, this.user);
+                this.frame.add(guiComponents, BorderLayout.NORTH);
                 this.frame.add(this.panel, BorderLayout.CENTER);
                 this.panel.removeAll();
+                this.panel.add(new HomePage(this.frame, this.panel, this.user, guiComponents), BorderLayout.CENTER);
                 this.frame.revalidate();
                 this.frame.repaint();
             });
@@ -289,12 +289,15 @@ public class SignInPage extends AuthenticationPage {
             boolean isValidSignInDetails = UserController.passSignInDetails(emailInput.getText(), passwordInput.getPassword(), emailValidationLabel, passwordValidationLabel);
             if(isValidSignInDetails) {
                 this.user = UserController.passSignInDetails(emailInput.getText(), passwordInput.getPassword());
-                JPanel newContentPane = new JPanel(new BorderLayout());
-                this.frame.setContentPane(newContentPane);
+
+                this.frame.getContentPane().removeAll();
+                this.frame.setLayout(new BorderLayout());
                 GUIComponents.overflowMenu = null;
-                this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                GUIComponents guiComponents = new GUIComponents(this.frame, this.panel, this.user);
+                this.frame.add(guiComponents, BorderLayout.NORTH);
                 this.frame.add(this.panel, BorderLayout.CENTER);
                 this.panel.removeAll();
+                this.panel.add(new HomePage(this.frame, this.panel, this.user, guiComponents), BorderLayout.CENTER);
                 this.frame.revalidate();
                 this.frame.repaint();
 

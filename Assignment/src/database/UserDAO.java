@@ -1,5 +1,6 @@
 package database;
 
+import datamodels.Customer;
 import datamodels.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -132,6 +133,40 @@ public class UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("\nFAILED TO GET USER BY ID\n");
+        }
+        return null;
+    }
+
+    // get customer by specific id
+    public Customer getCustomerById(User user) {
+        int userId = user.getUserId();
+
+        String sql = "SELECT * FROM customers WHERE user_id = ? ORDER BY created_at DESC LIMIT 1;";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Customer customer = new Customer(
+                        userId,
+                        user.getFullName(),
+                        user.getGender(),
+                        user.getPhoneNumber(),
+                        user.getUserEmail(),
+                        user.getUsername(),
+                        user.getPassword(),
+                        rs.getString("address"),
+                        rs.getString("license")
+                    );
+                    return customer;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO GET CUSTOMER BY ID\n");
         }
         return null;
     }

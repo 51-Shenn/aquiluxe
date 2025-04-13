@@ -20,7 +20,7 @@ import datamodels.Rental.RentalStatus;
 public class RentalDAO {
 
     // add new rental
-    public int addRental(int customerId, int vehicleId, LocalDate startDate, LocalDate endDate,
+    public static int addRental(Customer customer, Vehicle vehicle, LocalDate startDate, LocalDate endDate,
             LocalTime pickupTime, LocalTime dropoffTime, double totalCost, RentalStatus rentalStatus,
             PaymentStatus paymentStatus) {
         String sql = "INSERT INTO rentals (customer_id, vehicle_id, start_date, end_date, pickup_time, dropoff_time, total_cost, rental_status, payment_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -30,8 +30,8 @@ public class RentalDAO {
 
         try (PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setInt(1, customerId);
-            stmt.setInt(2, vehicleId);
+            stmt.setInt(1, customer.getUserId());
+            stmt.setInt(2, vehicle.getVehicleId());
             stmt.setDate(3, Date.valueOf(startDate));
             stmt.setDate(4, Date.valueOf(endDate));
             stmt.setTime(5, Time.valueOf(pickupTime));
@@ -46,7 +46,7 @@ public class RentalDAO {
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     // update vehicle availability if rented
-                    updateVehicleAvailability(vehicleId, false);
+                    updateVehicleAvailability(vehicle, false);
                     return generatedKeys.getInt(1);
                 } else {
                     throw new SQLException("Creating rental failed, no ID obtained.");
@@ -66,22 +66,20 @@ public class RentalDAO {
     }
 
     // update vehicle availability
-    private void updateVehicleAvailability(int vehicleId, boolean availability) {
-        VehicleDAO vehicleDAO = new VehicleDAO();
-        vehicleDAO.updateVehicleColumnValue(vehicleId, "availability", String.valueOf(availability));
+    private static void updateVehicleAvailability(Vehicle vehicle, boolean availability) {
+        VehicleDAO.updateVehicleColumnValue(vehicle, "availability", String.valueOf(availability));
     }
 
     // Mapping Result of SQL to rental object : reduce redundant code
-    private Rental mapResultRental(ResultSet rs) throws SQLException {
+    private static Rental mapResultRental(ResultSet rs) throws SQLException {
         UserDAO userDAO = new UserDAO();
-        VehicleDAO vehicleDAO = new VehicleDAO();
 
         // get the customer and vehicle
         int customerId = rs.getInt("customer_id");
         int vehicleId = rs.getInt("vehicle_id");
 
         Customer customer = (Customer) userDAO.getUserById(customerId);
-        Vehicle vehicle = vehicleDAO.getVehicleById(vehicleId);
+        Vehicle vehicle = VehicleDAO.getVehicleById(vehicleId);
 
         // convert string status to enum
         RentalStatus rentalStatus = RentalStatus.valueOf(rs.getString("rental_status"));
@@ -102,7 +100,7 @@ public class RentalDAO {
     }
 
     // get rental by ID
-    public Rental getRentalById(int rentalId) {
+    public static Rental getRentalById(int rentalId) {
         String sql = "SELECT * FROM rentals WHERE rental_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -123,7 +121,7 @@ public class RentalDAO {
     }
 
     // get all rentals
-    public List<Rental> getAllRentals() {
+    public static List<Rental> getAllRentals() {
         String sql = "SELECT * FROM rentals";
         List<Rental> rentals = new ArrayList<>();
 
@@ -143,14 +141,14 @@ public class RentalDAO {
     }
 
     // get rentals by customer ID
-    public List<Rental> getRentalsByCustomerId(int customerId) {
+    public static List<Rental> getRentalsByCustomer(Customer customer) {
         String sql = "SELECT * FROM rentals WHERE customer_id = ?";
         List<Rental> rentals = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, customerId);
+            stmt.setInt(1, customer.getUserId());
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -166,14 +164,14 @@ public class RentalDAO {
     }
 
     // get rentals by vehicle ID
-    public List<Rental> getRentalsByVehicleId(int vehicleId) {
+    public static List<Rental> getRentalsByVehicle(Vehicle vehicle) {
         String sql = "SELECT * FROM rentals WHERE vehicle_id = ?";
         List<Rental> rentals = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, vehicleId);
+            stmt.setInt(1, vehicle.getVehicleId());
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -189,7 +187,7 @@ public class RentalDAO {
     }
 
     // get rentals by status
-    public List<Rental> getRentalsByStatus(RentalStatus status) {
+    public static List<Rental> getRentalsByStatus(RentalStatus status) {
         String sql = "SELECT * FROM rentals WHERE rental_status = ?";
         List<Rental> rentals = new ArrayList<>();
 
@@ -212,7 +210,7 @@ public class RentalDAO {
     }
 
     // get rentals by payment status
-    public List<Rental> getRentalsByPaymentStatus(PaymentStatus status) {
+    public static List<Rental> getRentalsByPaymentStatus(PaymentStatus status) {
         String sql = "SELECT * FROM rentals WHERE payment_status = ?";
         List<Rental> rentals = new ArrayList<>();
 
@@ -235,7 +233,7 @@ public class RentalDAO {
     }
 
     // get rentals by date range
-    public List<Rental> getRentalsByDateRange(LocalDate startDate, LocalDate endDate) {
+    public static List<Rental> getRentalsByDateRange(LocalDate startDate, LocalDate endDate) {
         String sql = "SELECT * FROM rentals WHERE start_date >= ? AND end_date <= ?";
         List<Rental> rentals = new ArrayList<>();
 
@@ -259,7 +257,7 @@ public class RentalDAO {
     }
 
     // get active rentals (PENDING / OVERDUE)
-    public List<Rental> getActiveRentals() {
+    public static List<Rental> getActiveRentals() {
         String sql = "SELECT * FROM rentals WHERE rental_status = 'PENDING' OR rental_status = 'OVERDUE'";
         List<Rental> rentals = new ArrayList<>();
 
@@ -279,22 +277,24 @@ public class RentalDAO {
     }
 
     // update rental status
-    public boolean updateRentalStatus(int rentalId, RentalStatus status) {
+    public static boolean updateRentalStatus(Rental rental, RentalStatus status) {
         String sql = "UPDATE rentals SET rental_status = ? WHERE rental_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, status.toString());
-            stmt.setInt(2, rentalId);
+            stmt.setInt(2, rental.getRentalId());
 
             int rowsUpdated = stmt.executeUpdate();
 
-            // if rental is completed, make the vehicle available again
-            if (status == RentalStatus.COMPLETED) {
-                Rental rental = getRentalById(rentalId);
-                if (rental != null) {
-                    updateVehicleAvailability(rental.getRentVehicle().getVehicleId(), true);
+            if (rowsUpdated > 0) {
+                // update the rental object status
+                rental.setRentalStatus(status);
+
+                // If rental is completed, make vehicle available again
+                if (status == RentalStatus.COMPLETED) {
+                    updateVehicleAvailability(rental.getRentVehicle(), true);
                 }
             }
 
@@ -306,14 +306,14 @@ public class RentalDAO {
     }
 
     // update payment status
-    public boolean updatePaymentStatus(int rentalId, PaymentStatus status) {
+    public static boolean updatePaymentStatus(Rental rental, PaymentStatus status) {
         String sql = "UPDATE rentals SET payment_status = ? WHERE rental_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, status.toString());
-            stmt.setInt(2, rentalId);
+            stmt.setInt(2, rental.getRentalId());
 
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
@@ -324,14 +324,14 @@ public class RentalDAO {
     }
 
     // update rental total cost
-    public boolean updateRentalTotalCost(int rentalId, double totalCost) {
+    public static boolean updateRentalTotalCost(Rental rental, double totalCost) {
         String sql = "UPDATE rentals SET total_cost = ? WHERE rental_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setDouble(1, totalCost);
-            stmt.setInt(2, rentalId);
+            stmt.setInt(2, rental.getRentalId());
 
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
@@ -342,9 +342,8 @@ public class RentalDAO {
     }
 
     // delete rental
-    public boolean deleteRental(int rentalId) {
+    public static boolean deleteRental(Rental rental) {
         // get rental to know which vehicle to update
-        Rental rental = getRentalById(rentalId);
         if (rental == null) {
             return false;
         }
@@ -354,13 +353,13 @@ public class RentalDAO {
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, rentalId);
+            stmt.setInt(1, rental.getRentalId());
 
             int rowsDeleted = stmt.executeUpdate();
 
             // Make the vehicle available again if rental is deleted
             if (rowsDeleted > 0) {
-                updateVehicleAvailability(rental.getRentVehicle().getVehicleId(), true);
+                updateVehicleAvailability(rental.getRentVehicle(), true);
             }
 
             return rowsDeleted > 0;
@@ -371,7 +370,7 @@ public class RentalDAO {
     }
 
     // check for overdue rentals and update their status
-    public void checkForOverdueRentals() {
+    public static void checkForOverdueRentals() {
         String sql = "UPDATE rentals SET rental_status = 'OVERDUE' WHERE end_date < ? AND rental_status = 'PENDING'";
 
         try (Connection conn = DatabaseConnection.getConnection();

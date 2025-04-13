@@ -15,7 +15,7 @@ public class Car extends Vehicle {
             double rentalPriceDay, String transmission, String fuelType, String carType, int seatingCapacity,
             boolean availability, String features) {
         super(vehicleId, imagePath, brand, model, year, capacity, horsepower, color, mpg, vinNumber, registrationNumber,
-                rentalPriceDay, transmission, fuelType, seatingCapacity, availability, features);
+                rentalPriceDay, transmission, fuelType, carType, seatingCapacity, availability, features);
         this.carType = carType;
     }
 

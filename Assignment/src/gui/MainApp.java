@@ -1,9 +1,15 @@
 package gui;
 
 import controllers.UserController;
+import database.VehicleDAO;
 import datamodels.User;
+import datamodels.Vehicle;
+
 import java.awt.*;
+import java.util.List;
 import java.io.File;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 public class MainApp extends JFrame {
@@ -35,6 +41,15 @@ public class MainApp extends JFrame {
             add(new GUIComponents(this, contentPanel, null), BorderLayout.NORTH);
 
         add(contentPanel, BorderLayout.CENTER);
+
+        // Testing VehicleDAO
+        List<Vehicle> vehicles = new ArrayList<>();
+        vehicles = VehicleDAO.getAllVehicles();
+        System.out.println("Available Vehicles: " + vehicles);
+        for (Vehicle vehicle : vehicles) {
+            System.out.println(vehicle.getClass() + " " + vehicle.getBrand() + " " +
+                    vehicle.getModel() + " " + vehicle.getVehicleType());
+        }
 
         setVisible(true);
     }
