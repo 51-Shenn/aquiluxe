@@ -1,5 +1,7 @@
 package services;
 
+import database.UserDAO;
+import datamodels.User;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,12 +12,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
-import database.UserDAO;
-import datamodels.User;
 
 public class UserService {
 
@@ -532,7 +530,14 @@ public class UserService {
         try (BufferedReader reader = new BufferedReader(new FileReader(themeFile))) {
             theme = reader.readLine();
         } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(null, "Could not locate file location: " + themeFile);
+            // write to file if does not exist
+            try (FileWriter writer = new FileWriter(themeFile)) {
+                writer.write("Light");
+            } catch (FileNotFoundException exception) {
+                JOptionPane.showMessageDialog(null, "Could not locate file location: " + themeFile);
+            } catch (IOException exception) {
+                JOptionPane.showMessageDialog(null, "Could not write file: " + themeFile);
+            }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not write file: " + themeFile);
         }

@@ -233,7 +233,6 @@ public class OverflowMenu extends JLayeredPane {
                 try(BufferedReader reader = new BufferedReader(new FileReader(THEME_FILE))) {
                     String line = reader.readLine();
                     themeButton = line.equals("Dark") ? createMenuCard("Dark Theme", moonFilePath) : createMenuCard("Light Theme", sunFilePath);
-
                 } catch(FileNotFoundException exception) {
                     JOptionPane.showMessageDialog(null, "Could not locate file location: " + THEME_FILE);
                 } catch(IOException exception) {

@@ -1,5 +1,6 @@
 package gui;
 
+import datamodels.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -7,7 +8,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,8 +16,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
-
-import datamodels.User;
 
 public class GUIComponents extends JPanel {
 
@@ -51,7 +49,7 @@ public class GUIComponents extends JPanel {
 
         add(createTopBar(), BorderLayout.WEST);
         add(menuButton(), BorderLayout.EAST);
-        this.panel.add(new HomePage(this.frame, this.panel), BorderLayout.CENTER);
+        this.panel.add(new HomePage(this.frame, this.panel, this.user, this), BorderLayout.CENTER);
     }
 
     public JFrame getFrame() {
@@ -114,10 +112,10 @@ public class GUIComponents extends JPanel {
                 button.setForeground(Theme.getForeground());
                 button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
             }
-            topBarButtons[0].setForeground(Theme.getForeground());
+            topBarButtons[0].setForeground(Theme.getSpecial());
             topBarButtons[0].setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
             this.panel.removeAll();
-            this.panel.add(new HomePage(this.frame, this.panel), BorderLayout.CENTER);
+            this.panel.add(new HomePage(this.frame, this.panel, this.user, this), BorderLayout.CENTER);
             this.panel.revalidate();
             this.panel.repaint();
         });
@@ -151,9 +149,15 @@ public class GUIComponents extends JPanel {
 
         for (int i = 0; i < topBarButtonsLabels.length; i++) {
             topBarButtons[i] = new JButton(topBarButtonsLabels[i]);
-            topBarButtons[i].setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
+            if(i == 0) {
+                topBarButtons[0].setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
+                topBarButtons[0].setForeground(Theme.getSpecial());
+            }
+            else {
+                topBarButtons[i].setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
+                topBarButtons[i].setForeground(Theme.getForeground());
+            }
             topBarButtons[i].setBackground(Theme.getBackground());
-            topBarButtons[i].setForeground(Theme.getForeground());
             topBarButtons[i].setPreferredSize(new Dimension(150, 50));
             topBarButtons[i].setBorderPainted(false); // no border
             topBarButtons[i].setFocusPainted(false); // no highlight
@@ -162,7 +166,7 @@ public class GUIComponents extends JPanel {
         topBarButtons[0].addActionListener(e -> {
             pageIndicator(0);
             this.panel.removeAll();
-            this.panel.add(new HomePage(this.frame, this.panel), BorderLayout.CENTER);
+            this.panel.add(new HomePage(this.frame, this.panel, this.user, this), BorderLayout.CENTER);
             this.panel.revalidate();
             this.panel.repaint();
         });

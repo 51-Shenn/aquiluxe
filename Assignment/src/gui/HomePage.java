@@ -1,24 +1,57 @@
 package gui;
 
-import javax.swing.*;
+import datamodels.User;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 public class HomePage extends JPanel {
 
     private JFrame frame;
     private JPanel panel;
+    private User user;
+    private GUIComponents guiComponents;
 
     HomePage() {
         this.frame = new JFrame();
         this.panel = new JPanel();
+        this.user = new User();
     }
 
-    HomePage(JFrame frame, JPanel panel) {
+    HomePage(JFrame frame, JPanel panel, User user, GUIComponents guiComponents) {
         this.frame = frame;
         this.panel = panel;
+        this.user = user;
+        this.guiComponents = guiComponents;
 
-        setBackground(Color.BLACK);
-        add(createHomePage(), BorderLayout.CENTER);
+        setBackground(Theme.getBackground());
+        setLayout(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.anchor = GridBagConstraints.NORTH;
+        add(createHomePage(), gbc);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public GUIComponents getGuiComponents() {
+        return guiComponents;
+    }
+
+    public void setGuiComponents(GUIComponents guiComponents) {
+        this.guiComponents = guiComponents;
     }
 
     public JFrame getFrame() {
@@ -39,14 +72,267 @@ public class HomePage extends JPanel {
 
     private JPanel createHomePage() {
         JPanel homePagePanel = new JPanel(new GridBagLayout());
+        homePagePanel.setBackground(Theme.getBackground());
 
-        JLabel label = new JLabel("AQUILUXE");
-        label.setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(80f));
-        label.setForeground(Color.WHITE);
-        label.setOpaque(true);
-        label.setBackground(new Color(0, 0, 0, 0));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(70, 80, 0, 0);
+        gbc.anchor = GridBagConstraints.NORTH;
+        homePagePanel.add(createTitlePanel(), gbc);
 
-        homePagePanel.add(label);
+        gbc.insets = new Insets(0, 0, 0, 0);
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.gridheight = GridBagConstraints.REMAINDER;
+
+        homePagePanel.add(createWallpaperPanel(), gbc);
+
         return homePagePanel;
+    }
+
+    private JPanel createWallpaperPanel() {
+        JPanel wallpaperPanel = new JPanel(new GridBagLayout());
+        wallpaperPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.weighty = 0;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.anchor = GridBagConstraints.NORTHEAST;
+        gbc.insets = new Insets(0, 0, 20, 0);
+
+        wallpaperPanel.add(createButtonPanel(), gbc);
+
+        try {
+            File whitePorsche = new File("images/wallpapers/porsche-white.png");
+            // File blackPorsche = new File("images/wallpapers/porsche-black.png");
+            // if(Theme.isDarkMode()) {
+                BufferedImage originalImage = ImageIO.read(whitePorsche);
+                BufferedImage resizedImage = resizeImage(originalImage, 1100, 609);
+                JLabel wallpaper = new JLabel(new ImageIcon(resizedImage));
+                wallpaperPanel.add(wallpaper, gbc);
+            // }
+            // else {
+            //     BufferedImage originalImage = ImageIO.read(blackPorsche);
+            //     BufferedImage resizedImage = resizeImage(originalImage, 1200, 900);
+            //     JLabel wallpaper = new JLabel(new ImageIcon(resizedImage));
+            //     wallpaperPanel.add(wallpaper, gbc);
+            // }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return wallpaperPanel;
+    }
+
+    private JPanel createTitlePanel() {
+        JPanel titlePanel = new JPanel(new GridBagLayout());
+        titlePanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        String[] title = {"Every Drive Should Feel", "Like a Privilege."};
+        for(int i = 0; i < title.length; i++) {
+            JLabel titleLabel = new JLabel(title[i]);
+            titleLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(70f));
+            titleLabel.setForeground(Theme.getForeground());
+
+            if(i == title.length - 1) {
+                gbc.insets = new Insets(0, 0, 50, 0);
+            }
+            titlePanel.add(titleLabel, gbc);
+        }
+
+        String[] description = {
+            "Discover a seamless car rental experience designed for discerning drivers.",
+            "Choose from our exclusive fleet of luxury vehicles - Each meticulously",
+            "maintained for comfort, performance, and style. Whether for business,",
+            "leisure, or a special occasion, we deliver the keys to excellence.",
+        };
+
+        gbc.insets = new Insets(0, 0, 5, 0);
+        for(String text : description) {
+            JLabel descriptionLabel = new JLabel(text);
+            descriptionLabel.setFont(CustomFonts.INSTRUMENT_SANS_MEDIUM.deriveFont(22f));
+            descriptionLabel.setForeground(new Color(0x595959));
+            
+            titlePanel.add(descriptionLabel, gbc);
+        }        
+
+        RoundedButton startButton = new RoundedButton(20, Theme.getSpecial());
+        startButton.setText("Start Browsing");
+        startButton.setBackground(Theme.getSpecial());
+        startButton.setForeground(Theme.getSpecialForeground());
+        startButton.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(24f));
+        startButton.setPreferredSize(new Dimension(250, 80));
+        startButton.setMinimumSize(new Dimension(250, 80));
+        startButton.setBorderPainted(false);
+        startButton.setFocusPainted(false);
+        startButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent evt) {
+                startButton.setBackground(Theme.getSpecial().brighter());
+                startButton.repaint();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent evt) {
+                startButton.setBackground(Theme.getSpecial());
+                startButton.repaint();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                startButton.setBackground(Theme.getSpecial().brighter());
+                startButton.repaint();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                startButton.setBackground(Theme.getSpecial());
+                startButton.repaint();
+            }
+        });
+        startButton.addActionListener(e -> {
+            JButton[] topBarButtons = this.guiComponents.getTopBarButtons();
+            for(JButton button : topBarButtons) {
+                button.setForeground(Theme.getForeground());
+                button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
+            }
+            topBarButtons[1].setForeground(Theme.getSpecial());
+            topBarButtons[1].setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
+
+            this.panel.removeAll();
+            this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
+            this.panel.revalidate();
+            this.panel.repaint();
+        });
+
+        gbc.insets = new Insets(50, 0, 0, 0);
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.WEST;
+
+        titlePanel.add(startButton, gbc);
+
+        return titlePanel;
+    }
+
+    private JPanel createButtonPanel() {
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        buttonPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(50, 0, 100,80);
+        gbc.weightx = 1;
+        gbc.anchor = GridBagConstraints.NORTHEAST;
+        
+        JPanel packButtonPanel = new JPanel();
+        packButtonPanel.setBackground(Theme.getBackground());
+        
+        RoundedButton signInButton = createButton("Sign In", Theme.getBackground(), Theme.getForeground());
+        signInButton.addActionListener(e -> {
+            frame.getLayeredPane().remove(this);
+            frame.getContentPane().removeAll();
+
+            UIManager.getDefaults().clear();  // Clear all cached UI properties
+            try {
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
+                for (Window window : Window.getWindows()) {
+                    SwingUtilities.updateComponentTreeUI(window);
+                    window.repaint();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            frame.add(new SignInPage(this.frame, this.panel, this.user));
+            frame.revalidate();
+            frame.repaint();
+        });
+
+        RoundedButton signUpButton = createButton("Sign Up", Theme.getSpecial(), Theme.getSpecialForeground());
+        signUpButton.addActionListener(e -> {
+            frame.getLayeredPane().remove(this);
+            frame.getContentPane().removeAll();
+
+            UIManager.getDefaults().clear();  // Clear all cached UI properties
+            try {
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
+                for (Window window : Window.getWindows()) {
+                    SwingUtilities.updateComponentTreeUI(window);
+                    window.repaint();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            frame.add(new SignUpPage(this.frame, this.panel, this.user));
+            frame.revalidate();
+            frame.repaint();
+        });
+    
+        packButtonPanel.add(signInButton);
+        packButtonPanel.add(signUpButton);
+
+        buttonPanel.add(packButtonPanel, gbc);
+    
+        return buttonPanel;
+    }
+    
+    private RoundedButton createButton(String text, Color background, Color foreground) {
+        RoundedButton button = new RoundedButton(15, background);
+        button.setText(text);
+        button.setBackground(background);
+        button.setForeground(foreground);
+        button.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(22f));
+        button.setPreferredSize(new Dimension(150, 70));
+        button.setMinimumSize(new Dimension(150, 70));
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent evt) {
+                button.setBackground(background.brighter());
+                button.repaint();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent evt) {
+                button.setBackground(background);
+                button.repaint();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                button.setBackground(background.brighter());
+                button.repaint();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                button.setBackground(background);
+                button.repaint();
+            }
+        });
+
+        return button;
+    }
+
+    public static BufferedImage resizeImage(BufferedImage originalImage, int width, int height) {
+        BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = resizedImage.createGraphics();
+
+        // rendering high quality
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // draw image
+        g2d.drawImage(originalImage, 0, 0, width, height, null);
+        g2d.dispose();
+
+        return resizedImage;
     }
 }
