@@ -1,9 +1,15 @@
 package gui;
 
 import controllers.UserController;
+import database.VehicleDAO;
 import datamodels.User;
+import datamodels.Vehicle;
+
 import java.awt.*;
+import java.util.List;
 import java.io.File;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 public class MainApp extends JFrame {
@@ -27,16 +33,25 @@ public class MainApp extends JFrame {
 
         JPanel contentPanel = new JPanel(new BorderLayout());
 
-         File accountsFile = new File("files/settings/accounts.txt");
-         if (accountsFile.exists()) {
-             User currentUser = UserController.loadCurrentUser(accountsFile);
-             add(new GUIComponents(this, contentPanel, currentUser), BorderLayout.NORTH);
-         }
-         else add(new GUIComponents(this, contentPanel, null), BorderLayout.NORTH);
-        
+        File accountsFile = new File("files/settings/accounts.txt");
+        if (accountsFile.exists()) {
+            User currentUser = UserController.loadCurrentUser(accountsFile);
+            add(new GUIComponents(this, contentPanel, currentUser), BorderLayout.NORTH);
+        } else
+            add(new GUIComponents(this, contentPanel, null), BorderLayout.NORTH);
+
         add(contentPanel, BorderLayout.CENTER);
 
-         setVisible(true);
+        // Testing VehicleDAO
+        List<Vehicle> vehicles = new ArrayList<>();
+        vehicles = VehicleDAO.getAllVehicles();
+        System.out.println("Available Vehicles: " + vehicles);
+        for (Vehicle vehicle : vehicles) {
+            System.out.println(vehicle.getClass() + " " + vehicle.getBrand() + " " +
+                    vehicle.getModel() + " " + vehicle.getVehicleType());
+        }
+
+        setVisible(true);
     }
 
     public static void main(String[] args) {
