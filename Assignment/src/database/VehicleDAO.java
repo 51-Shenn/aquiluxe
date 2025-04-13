@@ -5,37 +5,39 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import datamodels.Bike;
+import datamodels.Car;
 import datamodels.Vehicle;
 
 public class VehicleDAO {
 
     // add vehicle by parameter
-    public int addVehicle(String imagePath, String brand, String model, int year, int capacity,
-            int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
-            double rentalPriceDay, String transmission, String fuelType, int seatingCapacity, boolean availability,
-            String features) {
-        String sql = "INSERT INTO vehicles (image_path, brand, model, year, capacity, horsepower, color, mpg, vin_number, registration_number, rental_price_day, transmission, fuel_type, seating_capacity, availability, features) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public static int addVehicle(Vehicle vehicle) {
+        String sql = "INSERT INTO vehicles (image_path, brand, model, year, capacity, horsepower, color, mpg, vin_number, registration_number, rental_price_day, transmission, fuel_type, vehicle_type, seating_capacity, availability, features) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setString(1, imagePath);
-            stmt.setString(2, brand);
-            stmt.setString(3, model);
-            stmt.setInt(4, year);
-            stmt.setInt(5, capacity);
-            stmt.setInt(6, horsepower);
-            stmt.setString(7, color);
-            stmt.setDouble(8, mpg);
-            stmt.setString(9, vinNumber);
-            stmt.setString(10, registrationNumber);
-            stmt.setDouble(11, rentalPriceDay);
-            stmt.setString(12, transmission);
-            stmt.setString(13, fuelType);
-            stmt.setInt(14, seatingCapacity);
-            stmt.setBoolean(15, availability);
-            stmt.setString(16, features);
+            stmt.setString(1, vehicle.getImagePath());
+            stmt.setString(2, vehicle.getBrand());
+            stmt.setString(3, vehicle.getModel());
+            stmt.setInt(4, vehicle.getYear());
+            stmt.setInt(5, vehicle.getCapacity());
+            stmt.setInt(6, vehicle.getHorsepower());
+            stmt.setString(7, vehicle.getColor());
+            stmt.setDouble(8, vehicle.getMpg());
+            stmt.setString(9, vehicle.getVinNumber());
+            stmt.setString(10, vehicle.getRegistrationNumber());
+            stmt.setDouble(11, vehicle.getRentalPriceDay());
+            stmt.setString(12, vehicle.getTransmission());
+            stmt.setString(13, vehicle.getFuelType());
+            stmt.setString(14, vehicle.getVehicleType());
+            stmt.setInt(15, vehicle.getSeatingCapacity());
+            stmt.setBoolean(16, vehicle.isAvailability());
+            stmt.setString(17, vehicle.getFeatures());
 
             stmt.executeUpdate();
 
@@ -54,28 +56,46 @@ public class VehicleDAO {
     }
 
     // Mapping Result of SQL to vehicle object : reduce redundant code
-    private Vehicle mapResultVehicle(ResultSet rs) throws SQLException {
-        return new Vehicle(rs.getInt("vehicle_id"),
-                rs.getString("image_path"),
-                rs.getString("brand"),
-                rs.getString("model"),
-                rs.getInt("year"),
-                rs.getInt("capacity"),
-                rs.getInt("horsepower"),
-                rs.getString("color"),
-                rs.getDouble("mpg"),
-                rs.getString("vin_number"),
-                rs.getString("registration_number"),
-                rs.getDouble("rental_price_day"),
-                rs.getString("transmission"),
-                rs.getString("fuel_type"),
-                rs.getInt("seating_capacity"),
-                rs.getBoolean("availability"),
-                rs.getString("features"));
+    private static final String[] CAR_TYPES = { "suv", "sedan", "coupe", "convertible", "hatchback", "wagon" };
+
+    private static final String[] BIKE_TYPES = { "superbike", "touring", "cruiser" };
+
+    private static Vehicle mapResultVehicle(ResultSet rs) throws SQLException {
+        // Common vehicle fields
+        int vehicleId = rs.getInt("vehicle_id");
+        String imagePath = rs.getString("image_path");
+        String brand = rs.getString("brand");
+        String model = rs.getString("model");
+        int year = rs.getInt("year");
+        int capacity = rs.getInt("capacity");
+        int horsepower = rs.getInt("horsepower");
+        String color = rs.getString("color");
+        double mpg = rs.getDouble("mpg");
+        String vin = rs.getString("vin_number");
+        String regNumber = rs.getString("registration_number");
+        double rentalPrice = rs.getDouble("rental_price_day");
+        String transmission = rs.getString("transmission");
+        String fuelType = rs.getString("fuel_type");
+        String vehicleType = rs.getString("vehicle_type").toLowerCase();
+        int seatingCapacity = rs.getInt("seating_capacity");
+        boolean available = rs.getBoolean("availability");
+        String features = rs.getString("features");
+
+        if (Arrays.asList(CAR_TYPES).contains(vehicleType)) {
+            return new Car(vehicleId, imagePath, brand, model, year, capacity, horsepower,
+                    color, mpg, vin, regNumber, rentalPrice, transmission,
+                    fuelType, vehicleType, seatingCapacity, available, features);
+        } else if (Arrays.asList(BIKE_TYPES).contains(vehicleType)) {
+            return new Bike(vehicleId, imagePath, brand, model, year, capacity, horsepower,
+                    color, mpg, vin, regNumber, rentalPrice, transmission,
+                    fuelType, vehicleType, seatingCapacity, available, features);
+        } else {
+            return new Vehicle();
+        }
     }
 
     // get all vehicles
-    public List<Vehicle> getAllVehicles() {
+    public static List<Vehicle> getAllVehicles() {
         String sql = "SELECT * FROM Vehicles";
         List<Vehicle> vehicles = new ArrayList<>();
 
@@ -95,7 +115,7 @@ public class VehicleDAO {
     }
 
     // get vehicle by specific id
-    public Vehicle getVehicleById(int vehicleId) {
+    public static Vehicle getVehicleById(int vehicleId) {
         String sql = "SELECT * FROM vehicles WHERE vehicle_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -117,7 +137,7 @@ public class VehicleDAO {
     }
 
     // filter vehicles with value of column
-    public List<Vehicle> filterVehiclesByColumn(String column, String value) {
+    public static List<Vehicle> filterVehiclesByColumn(String column, String value) {
         String sql = "SELECT * FROM vehicles WHERE " + column + " = ?";
         List<Vehicle> vehicles = new ArrayList<>();
 
@@ -140,8 +160,8 @@ public class VehicleDAO {
     }
 
     // search vehicle by keywords
-    public List<Vehicle> searchVehiclesByKeyword(String column, String keyword) {
-        String sql = "SELECT * FROM vehicles WHERE " + column + " LIKE ?";
+    public static List<Vehicle> searchVehiclesByKeyword(String column, String keyword) {
+        String sql = "SELECT * FROM vehicles WHERE " + column + " ILIKE ?";
         List<Vehicle> vehicles = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -163,14 +183,14 @@ public class VehicleDAO {
     }
 
     // update vehicle values
-    public boolean updateVehicleColumnValue(int vehicleId, String column, String value) {
+    public static boolean updateVehicleColumnValue(Vehicle vehicle, String column, String value) {
         String sql = "UPDATE vehicles SET " + column + " = ? WHERE vehicle_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, value);
-            stmt.setInt(2, vehicleId);
+            stmt.setInt(2, vehicle.getVehicleId());
 
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
@@ -181,13 +201,13 @@ public class VehicleDAO {
     }
 
     // delete vehicle
-    public boolean deleteVehicle(int vehicleId) {
+    public static boolean deleteVehicle(Vehicle vehicle) {
         String sql = "DELETE FROM vehicles WHERE vehicle_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, vehicleId);
+            stmt.setInt(1, vehicle.getVehicleId());
 
             int rowsDeleted = stmt.executeUpdate();
             return rowsDeleted > 0;
@@ -198,7 +218,7 @@ public class VehicleDAO {
     }
 
     // get available vehicles
-    public List<Vehicle> getAvailableVehicles() {
+    public static List<Vehicle> getAvailableVehicles() {
         String sql = "SELECT * FROM vehicles WHERE availability = TRUE";
         List<Vehicle> vehicles = new ArrayList<>();
 
@@ -206,14 +226,14 @@ public class VehicleDAO {
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
+                while (rs.next()) {
                     Vehicle vehicle = mapResultVehicle(rs);
                     vehicles.add(vehicle);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("\nAUTHENTICATION FAILED\n");
+            throw new RuntimeException("\nFAILED TO GET AVAILABLE VEHICLES\n");
         }
         return vehicles;
     }
