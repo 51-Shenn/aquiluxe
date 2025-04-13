@@ -309,13 +309,16 @@ public class HomePage extends JPanel {
                     UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
 
                     frame.getLayeredPane().remove(this);
+                    this.user = new User();
+
                     this.frame.getContentPane().removeAll();
                     this.frame.setLayout(new BorderLayout());
                     GUIComponents.overflowMenu = null;
-                    this.user = new User();
-                    this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                    GUIComponents newGuiComponents = new GUIComponents(this.frame, this.panel, this.user);
+                    this.frame.add(newGuiComponents, BorderLayout.NORTH);
                     this.frame.add(this.panel, BorderLayout.CENTER);
                     this.panel.removeAll();
+                    this.panel.add(new HomePage(this.frame, this.panel, this.user, newGuiComponents), BorderLayout.CENTER);
                     this.frame.revalidate();
                     this.frame.repaint();
                 }
