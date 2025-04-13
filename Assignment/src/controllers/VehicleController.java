@@ -7,7 +7,6 @@ import javax.swing.*;
 
 import java.util.ArrayList;
 
-import datamodels.Car;
 import services.VehicleService;
 
 public class VehicleController {
