@@ -416,6 +416,7 @@ public class UserService {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(accountsFile))) {
             String line = reader.readLine();
+            if(line == null) return new User();
             return userDAO.getUserById(Integer.parseInt(line.trim()));
         } catch (IOException exception) {
             JOptionPane.showMessageDialog(null, "Error reading file: " + accountsFile);

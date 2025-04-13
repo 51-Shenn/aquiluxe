@@ -1,13 +1,28 @@
 package gui;
 
+import controllers.UserController;
 import datamodels.User;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.RenderingHints;
+import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 public class HomePage extends JPanel {
 
@@ -15,6 +30,7 @@ public class HomePage extends JPanel {
     private JPanel panel;
     private User user;
     private GUIComponents guiComponents;
+    private final File ACCOUNTS_FILE = new File("files/settings/accounts.txt");
 
     HomePage() {
         this.frame = new JFrame();
@@ -210,7 +226,7 @@ public class HomePage extends JPanel {
             this.panel.repaint();
         });
 
-        gbc.insets = new Insets(50, 0, 0, 0);
+        gbc.insets = new Insets(70, 0, 0, 0);
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.WEST;
 
@@ -231,50 +247,82 @@ public class HomePage extends JPanel {
         JPanel packButtonPanel = new JPanel();
         packButtonPanel.setBackground(Theme.getBackground());
         
-        RoundedButton signInButton = createButton("Sign In", Theme.getBackground(), Theme.getForeground());
-        signInButton.addActionListener(e -> {
-            frame.getLayeredPane().remove(this);
-            frame.getContentPane().removeAll();
+        if(this.user.getUsername().equals("guest")) {
+            RoundedButton signInButton = createButton("Sign In", Theme.getBackground(), Theme.getForeground());
+            signInButton.addActionListener(e -> {
+                frame.getLayeredPane().remove(this);
+                frame.getContentPane().removeAll();
 
-            UIManager.getDefaults().clear();  // Clear all cached UI properties
-            try {
-                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
-                for (Window window : Window.getWindows()) {
-                    SwingUtilities.updateComponentTreeUI(window);
-                    window.repaint();
+                UIManager.getDefaults().clear();  // Clear all cached UI properties
+                try {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
+                    for (Window window : Window.getWindows()) {
+                        SwingUtilities.updateComponentTreeUI(window);
+                        window.repaint();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
 
-            frame.add(new SignInPage(this.frame, this.panel, this.user));
-            frame.revalidate();
-            frame.repaint();
-        });
+                frame.add(new SignInPage(this.frame, this.panel, this.user));
+                frame.revalidate();
+                frame.repaint();
+            });
 
-        RoundedButton signUpButton = createButton("Sign Up", Theme.getSpecial(), Theme.getSpecialForeground());
-        signUpButton.addActionListener(e -> {
-            frame.getLayeredPane().remove(this);
-            frame.getContentPane().removeAll();
+            RoundedButton signUpButton = createButton("Sign Up", Theme.getSpecial(), Theme.getSpecialForeground());
+            signUpButton.addActionListener(e -> {
+                frame.getLayeredPane().remove(this);
+                frame.getContentPane().removeAll();
 
-            UIManager.getDefaults().clear();  // Clear all cached UI properties
-            try {
-                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
-                for (Window window : Window.getWindows()) {
-                    SwingUtilities.updateComponentTreeUI(window);
-                    window.repaint();
+                UIManager.getDefaults().clear();  // Clear all cached UI properties
+                try {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
+                    for (Window window : Window.getWindows()) {
+                        SwingUtilities.updateComponentTreeUI(window);
+                        window.repaint();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
 
-            frame.add(new SignUpPage(this.frame, this.panel, this.user));
-            frame.revalidate();
-            frame.repaint();
-        });
-    
-        packButtonPanel.add(signInButton);
-        packButtonPanel.add(signUpButton);
+                frame.add(new SignUpPage(this.frame, this.panel, this.user));
+                frame.revalidate();
+                frame.repaint();
+            });
+        
+            packButtonPanel.add(signInButton);
+            packButtonPanel.add(signUpButton);
+        }
+        else {
+            RoundedButton signOutButton = createButton("Sign Out", Theme.getError(), Theme.getErrorForeground());
+            signOutButton.addActionListener(e -> {
+                Dialog dialog = new Dialog(this.frame);
+                boolean proceed = dialog.showDialog(
+                    "HAZARD",
+                    "Sign Out",
+                    "Sign Out?",
+                    "Logging out will end your session.",
+                    true
+                );  
+
+                if(proceed) {
+                    UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
+
+                    frame.getLayeredPane().remove(this);
+                    this.frame.getContentPane().removeAll();
+                    this.frame.setLayout(new BorderLayout());
+                    GUIComponents.overflowMenu = null;
+                    this.user = new User();
+                    this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                    this.frame.add(this.panel, BorderLayout.CENTER);
+                    this.panel.removeAll();
+                    this.frame.revalidate();
+                    this.frame.repaint();
+                }
+            });
+
+            packButtonPanel.add(signOutButton);
+        }
 
         buttonPanel.add(packButtonPanel, gbc);
     
@@ -294,7 +342,7 @@ public class HomePage extends JPanel {
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
-                button.setBackground(background.brighter());
+                button.setBackground(background.darker());
                 button.repaint();
             }
 
@@ -306,7 +354,7 @@ public class HomePage extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent evt) {
-                button.setBackground(background.brighter());
+                button.setBackground(background.darker());
                 button.repaint();
             }
 
@@ -334,5 +382,9 @@ public class HomePage extends JPanel {
         g2d.dispose();
 
         return resizedImage;
+    }
+
+    public File getACCOUNTS_FILE() {
+        return ACCOUNTS_FILE;
     }
 }

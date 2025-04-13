@@ -1,6 +1,9 @@
 package gui;
 
+import controllers.UserController;
+import datamodels.User;
 import java.awt.*;
+import java.io.File;
 import javax.swing.*;
 
 public class MainApp extends JFrame {
@@ -24,13 +27,12 @@ public class MainApp extends JFrame {
 
         JPanel contentPanel = new JPanel(new BorderLayout());
 
-        // File accountsFile = new File("files/settings/accounts.txt");
-        // if (accountsFile.exists()) {
-        //     User currentUser = UserController.loadCurrentUser(accountsFile);
-        //     add(new GUIComponents(this, contentPanel, currentUser), BorderLayout.NORTH);
-        // }
-        // else 
-        add(new GUIComponents(this, contentPanel, null), BorderLayout.NORTH);
+        File accountsFile = new File("files/settings/accounts.txt");
+        if (accountsFile.exists()) {
+            User currentUser = UserController.loadCurrentUser(accountsFile);
+            add(new GUIComponents(this, contentPanel, currentUser), BorderLayout.NORTH);
+        }
+        else add(new GUIComponents(this, contentPanel, null), BorderLayout.NORTH);
         
         add(contentPanel, BorderLayout.CENTER);
 

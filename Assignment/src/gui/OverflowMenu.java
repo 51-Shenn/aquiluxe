@@ -196,10 +196,10 @@ public class OverflowMenu extends JLayeredPane {
     }
 
     private JPanel createMainCard() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBounds(0, 0, MENU_WIDTH, MENU_HEIGHT);
-        panel.setBackground(new Color(0, 0, 0, 40));
-        panel.setBorder(new LineBorder(new Color(0, 0, 0, 60), 1));
+        JPanel mainCardPanel = new JPanel(new GridBagLayout());
+        mainCardPanel.setBounds(0, 0, MENU_WIDTH, MENU_HEIGHT);
+        mainCardPanel.setBackground(new Color(0, 0, 0, 40));
+        mainCardPanel.setBorder(new LineBorder(new Color(0, 0, 0, 60), 1));
 
         File sunMoonFilePath = new File("images/icons/sun-moon.png");
         File sunFilePath = new File("images/icons/sun.png");
@@ -218,13 +218,13 @@ public class OverflowMenu extends JLayeredPane {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.insets = new Insets(1, 0, 0, 0);
-        panel.add(createProfileCard(), gbc);
+        mainCardPanel.add(createProfileCard(), gbc);
 
         gbc.weighty = 1;
 
         if (this.user.getFullName().equals("Guest") && this.user.getUsername().equals("guest")) {
-            panel.add(createMenuCard("Sign Up", signInFilePath), gbc);
-            panel.add(createMenuCard("Sign In", signInFilePath), gbc);
+            mainCardPanel.add(createMenuCard("Sign Up", signInFilePath), gbc);
+            mainCardPanel.add(createMenuCard("Sign In", signInFilePath), gbc);
         } else {
             if(!THEME_FILE.exists()) {
                 themeButton = createMenuCard("Theme", sunMoonFilePath);
@@ -239,20 +239,20 @@ public class OverflowMenu extends JLayeredPane {
                     JOptionPane.showMessageDialog(null, "Could not write file: " + THEME_FILE);
                 }
             }
-            panel.add(themeButton, gbc);
+            mainCardPanel.add(themeButton, gbc);
 
             switchAccountButton = createSwitchAccountPanel(switchFilePath);
-            panel.add(switchAccountButton, gbc);
+            mainCardPanel.add(switchAccountButton, gbc);
 
             signOutButton = createMenuCard("Sign Out", signOutFilePath);
-            panel.add(signOutButton, gbc);
+            mainCardPanel.add(signOutButton, gbc);
 
             deleteAccountButton = createMenuCard("Delete Account", deleteFilePath);
-            panel.add(deleteAccountButton, gbc);
+            mainCardPanel.add(deleteAccountButton, gbc);
         }
 
         closeButton = createMenuCard("Close / Exit", roundCloseFilePath);
-        panel.add(closeButton, gbc);
+        mainCardPanel.add(closeButton, gbc);
 
         editPanel = new JPanel(new GridBagLayout());
         editPanel.setBackground(Theme.getBackground());
@@ -371,9 +371,9 @@ public class OverflowMenu extends JLayeredPane {
         gbc2.anchor = GridBagConstraints.NORTH;
         gbc2.fill = GridBagConstraints.BOTH;
         gbc2.insets = new Insets(1, 0, 0, 0);
-        panel.add(editPanel, gbc2);
+        mainCardPanel.add(editPanel, gbc2);
 
-        return panel;
+        return mainCardPanel;
     }
 
     private JPanel createEditProfileInputField(String text, JTextField inputField, JLabel validationLabel) {
@@ -398,8 +398,12 @@ public class OverflowMenu extends JLayeredPane {
             case "Email Address" -> inputField.setText(this.user.getUserEmail());
             case "Phone Number (+60)" -> inputField.setText(this.user.getPhoneNumber());
             case "Driving License" -> {
-                Customer customer = new UserDAO().getCustomerById(this.user);
-                inputField.setText(customer.getLicense());
+                try {
+                    Customer customer = new UserDAO().getCustomerById(this.user);
+                    inputField.setText(customer.getLicense());
+                } catch (Exception e) {
+                    inputField.setText("");
+                }
             }
         }
 
