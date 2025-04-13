@@ -12,11 +12,11 @@ public class Bike extends Vehicle {
     // Parameterized Constructor
     public Bike(int vehicleId, String imagePath, String brand, String model, int year, int capacity,
             int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
-            double rentalPriceDay, String transmission, String fuelType, String bikeType, int seatingCapacity,
+            double rentalPriceDay, String transmission, String fuelType, String vehicleType, int seatingCapacity,
             boolean availability, String features) {
         super(vehicleId, imagePath, brand, model, year, capacity, horsepower, color, mpg, vinNumber, registrationNumber,
                 rentalPriceDay, transmission, fuelType, seatingCapacity, availability, features);
-        this.bikeType = bikeType;
+        this.bikeType = vehicleType;
     }
 
     // Getter and Setters
