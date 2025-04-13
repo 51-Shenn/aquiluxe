@@ -826,9 +826,11 @@ public class OverflowMenu extends JLayeredPane {
                 this.frame.getContentPane().removeAll();
                 this.frame.setLayout(new BorderLayout());
                 GUIComponents.overflowMenu = null;
-                this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
+                GUIComponents guiComponents = new GUIComponents(this.frame, this.panel, this.user);
+                this.frame.add(guiComponents, BorderLayout.NORTH);
                 this.frame.add(this.panel, BorderLayout.CENTER);
                 this.panel.removeAll();
+                this.panel.add(new HomePage(this.frame, this.panel, this.user, guiComponents), BorderLayout.CENTER);
                 this.frame.revalidate();
                 this.frame.repaint();
             });
