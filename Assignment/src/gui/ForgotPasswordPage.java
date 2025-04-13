@@ -1,17 +1,31 @@
 package gui;
 
-import controllers.UserController;
-import datamodels.User;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
 import java.io.File;
-import javax.swing.*;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
+import controllers.UserController;
+import datamodels.User;
+
 public class ForgotPasswordPage extends AuthenticationPage {
 
-    private final JFrame frame;
-    private final JPanel panel;
+    private JFrame frame;
+    private JPanel panel;
     private User user;
     private JPasswordField passwordInput;
     private JPasswordField confirmPasswordInput;
@@ -20,10 +34,80 @@ public class ForgotPasswordPage extends AuthenticationPage {
     private JLabel passwordValidationLabel;
     private JLabel confirmPasswordValidationLabel;
 
+    public ForgotPasswordPage() {
+        this.frame = new JFrame();
+        this.panel = new JPanel();
+        this.user = new User();
+    }
+
     public ForgotPasswordPage(JFrame frame, JPanel panel, User user) {
         this.frame = frame;
         this.panel = panel;
         this.user = user;
+    }
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
+
+    public JPanel getPanel() {
+        return panel;
+    }
+
+    public void setPanel(JPanel panel) {
+        this.panel = panel;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public JPasswordField getPasswordInput() {
+        return passwordInput;
+    }
+
+    public void setPasswordInput(JPasswordField passwordInput) {
+        this.passwordInput = passwordInput;
+    }
+
+    public JPasswordField getConfirmPasswordInput() {
+        return confirmPasswordInput;
+    }
+
+    public void setConfirmPasswordInput(JPasswordField confirmPasswordInput) {
+        this.confirmPasswordInput = confirmPasswordInput;
+    }
+
+    public String getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(String currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public JLabel getPasswordValidationLabel() {
+        return passwordValidationLabel;
+    }
+
+    public void setPasswordValidationLabel(JLabel passwordValidationLabel) {
+        this.passwordValidationLabel = passwordValidationLabel;
+    }
+
+    public JLabel getConfirmPasswordValidationLabel() {
+        return confirmPasswordValidationLabel;
+    }
+
+    public void setConfirmPasswordValidationLabel(JLabel confirmPasswordValidationLabel) {
+        this.confirmPasswordValidationLabel = confirmPasswordValidationLabel;
     }
 
     @Override
@@ -236,6 +320,15 @@ public class ForgotPasswordPage extends AuthenticationPage {
                     currentPage = "USER";
                     this.frame.setContentPane(new SignInPage(this.frame, this.panel, this.user));
                     this.frame.validate();
+
+                    Dialog dialog = new Dialog(this.frame);
+                    dialog.showDialog(
+                        "SUCCESS",
+                        "Password Updated",
+                        "Password Changed Successfully",
+                        "You can now use your new password to log in.",
+                        false
+                    );
                 }
             }
         });

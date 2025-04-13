@@ -1,8 +1,10 @@
 package controllers;
 
-import datamodels.User;
 import java.io.File;
+
 import javax.swing.JLabel;
+
+import datamodels.User;
 import services.UserService;
 
 public class UserController {
