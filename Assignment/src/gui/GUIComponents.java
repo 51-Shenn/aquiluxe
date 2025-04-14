@@ -2,7 +2,6 @@ package gui;
 
 import datamodels.User;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -42,7 +41,7 @@ public class GUIComponents extends JPanel {
         setBackground(Theme.getBackground());
         setPreferredSize(new Dimension(frame.getWidth(), 80));
         setLayout(new BorderLayout());
-        setBorder(new LineBorder(new Color(0, 0, 0, 30), 1));
+        setBorder(new LineBorder(Theme.getTransparencyColor(), 1));
 
         add(createTopBar(), BorderLayout.WEST);
         add(menuButton(), BorderLayout.EAST);

@@ -195,8 +195,8 @@ public class OverflowMenu extends JLayeredPane {
     private JPanel createMainCard() {
         JPanel mainCardPanel = new JPanel(new GridBagLayout());
         mainCardPanel.setBounds(0, 0, MENU_WIDTH, MENU_HEIGHT);
-        mainCardPanel.setBackground(new Color(0, 0, 0, 40));
-        mainCardPanel.setBorder(new LineBorder(new Color(0, 0, 0, 60), 1));
+        mainCardPanel.setBackground(Theme.getSecondaryForeground());
+        mainCardPanel.setBorder(new LineBorder(Theme.getSecondaryForeground(), 1));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx = 1;
@@ -453,7 +453,7 @@ public class OverflowMenu extends JLayeredPane {
                 addAccountButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseEntered(MouseEvent evt) {
-                        addAccountButton.setBackground(new Color(223, 223, 223));
+                        addAccountButton.setBackground(Theme.getHoverBackground());
                         addAccountButton.repaint();
                     }
         
@@ -465,7 +465,7 @@ public class OverflowMenu extends JLayeredPane {
         
                     @Override
                     public void mousePressed(MouseEvent evt) {
-                        addAccountButton.setBackground(new Color(223, 223, 223));
+                        addAccountButton.setBackground(Theme.getPressedBackground());
                         addAccountButton.repaint();
                     }
         
@@ -493,7 +493,7 @@ public class OverflowMenu extends JLayeredPane {
                         accountButton.addMouseListener(new MouseAdapter() {
                             @Override
                             public void mouseEntered(MouseEvent evt) {
-                                accountButton.setBackground(new Color(223, 223, 223));
+                                accountButton.setBackground(Theme.getHoverBackground());
                                 accountButton.repaint();
                             }
                 
@@ -505,7 +505,7 @@ public class OverflowMenu extends JLayeredPane {
                 
                             @Override
                             public void mousePressed(MouseEvent evt) {
-                                accountButton.setBackground(new Color(223, 223, 223));
+                                accountButton.setBackground(Theme.getPressedBackground());
                                 accountButton.repaint();
                             }
                 
@@ -733,7 +733,7 @@ public class OverflowMenu extends JLayeredPane {
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
-                button.setBackground(new Color(223, 223, 223));
+                button.setBackground(Theme.getHoverBackground());
                 button.repaint();
             }
 
@@ -745,7 +745,7 @@ public class OverflowMenu extends JLayeredPane {
 
             @Override
             public void mousePressed(MouseEvent evt) {
-                button.setBackground(new Color(223, 223, 223));
+                button.setBackground(Theme.getPressedBackground());
                 button.repaint();
             }
 
