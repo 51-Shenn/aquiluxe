@@ -195,8 +195,8 @@ public class OverflowMenu extends JLayeredPane {
     private JPanel createMainCard() {
         JPanel mainCardPanel = new JPanel(new GridBagLayout());
         mainCardPanel.setBounds(0, 0, MENU_WIDTH, MENU_HEIGHT);
-        mainCardPanel.setBackground(Theme.getSecondaryForeground());
-        mainCardPanel.setBorder(new LineBorder(Theme.getSecondaryForeground(), 1));
+        mainCardPanel.setBackground(Theme.getTransparencyColor());
+        mainCardPanel.setBorder(new LineBorder(Theme.getTransparencyColor(), 1));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx = 1;
@@ -351,8 +351,8 @@ public class OverflowMenu extends JLayeredPane {
     }
 
     private JPanel createEditProfileInputField(String text, JTextField inputField, JLabel validationLabel) {
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(Theme.getBackground());
+        JPanel editPanel = new JPanel(new GridBagLayout());
+        editPanel.setBackground(Theme.getBackground());
         GridBagConstraints gbc = new GridBagConstraints();
 
         JLabel label = new JLabel(text + ":");
@@ -387,20 +387,20 @@ public class OverflowMenu extends JLayeredPane {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.weightx = 1;
         gbc.weighty = 1;
-        panel.add(label, gbc);
+        editPanel.add(label, gbc);
 
         validationLabel.setText("‎");
         gbc.insets = new Insets(2, 30, 2, 30);
 
-        panel.add(inputField, gbc);
+        editPanel.add(inputField, gbc);
 
         validationLabel.setForeground(Theme.getError());
         validationLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(12f));
         gbc.gridx = 1;
         gbc.gridy = 2;
-        panel.add(validationLabel, gbc);
+        editPanel.add(validationLabel, gbc);
 
-        return panel;
+        return editPanel;
     }
 
     private JPanel createSwitchAccountPanel(ImageIcon icon) {
