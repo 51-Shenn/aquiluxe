@@ -160,7 +160,7 @@ public class HomePage extends JPanel {
         for(String text : description) {
             JLabel descriptionLabel = new JLabel(text);
             descriptionLabel.setFont(CustomFonts.INSTRUMENT_SANS_MEDIUM.deriveFont(22f));
-            descriptionLabel.setForeground(new Color(0x595959));
+            descriptionLabel.setForeground(Theme.getSecondaryForeground());
             
             titlePanel.add(descriptionLabel, gbc);
         }        
@@ -177,7 +177,7 @@ public class HomePage extends JPanel {
         startButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
-                startButton.setBackground(Theme.getSpecial().brighter());
+                startButton.setBackground(Theme.getHoverSpecial());
                 startButton.repaint();
             }
 
@@ -189,7 +189,7 @@ public class HomePage extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent evt) {
-                startButton.setBackground(Theme.getSpecial().brighter());
+                startButton.setBackground(Theme.getPressedSpecial());
                 startButton.repaint();
             }
 
@@ -238,9 +238,59 @@ public class HomePage extends JPanel {
         if(this.user.getPassword() == null) {
             RoundedButton signInButton = createButton("Sign In", Theme.getBackground(), Theme.getForeground());
             signInButton.addActionListener(new Navigation().toSignInPage(this.frame, this.panel, this.user));
+            signInButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    signInButton.setBackground(Theme.getHoverBackground());
+                    signInButton.repaint();
+                }
+    
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    signInButton.setBackground(Theme.getBackground());
+                    signInButton.repaint();
+                }
+    
+                @Override
+                public void mousePressed(MouseEvent evt) {
+                    signInButton.setBackground(Theme.getPressedBackground());
+                    signInButton.repaint();
+                }
+    
+                @Override
+                public void mouseReleased(MouseEvent evt) {
+                    signInButton.setBackground(Theme.getBackground());
+                    signInButton.repaint();
+                }
+            });
 
             RoundedButton signUpButton = createButton("Sign Up", Theme.getSpecial(), Theme.getSpecialForeground());
             signUpButton.addActionListener(new Navigation().toSignUpPage(this.frame, this.panel, this.user));
+            signUpButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    signUpButton.setBackground(Theme.getHoverSpecial());
+                    signUpButton.repaint();
+                }
+    
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    signUpButton.setBackground(Theme.getSpecial());
+                    signUpButton.repaint();
+                }
+    
+                @Override
+                public void mousePressed(MouseEvent evt) {
+                    signUpButton.setBackground(Theme.getPressedSpecial());
+                    signUpButton.repaint();
+                }
+    
+                @Override
+                public void mouseReleased(MouseEvent evt) {
+                    signUpButton.setBackground(Theme.getSpecial());
+                    signUpButton.repaint();
+                }
+            });
         
             packButtonPanel.add(signInButton);
             packButtonPanel.add(signUpButton);
@@ -264,6 +314,31 @@ public class HomePage extends JPanel {
                     new Navigation().homePageNavigation(this.frame, this.panel, this.user);                    
                 }
             });
+            signOutButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    signOutButton.setBackground(Theme.getHoverError());
+                    signOutButton.repaint();
+                }
+    
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    signOutButton.setBackground(Theme.getError());
+                    signOutButton.repaint();
+                }
+    
+                @Override
+                public void mousePressed(MouseEvent evt) {
+                    signOutButton.setBackground(Theme.getPressedError());
+                    signOutButton.repaint();
+                }
+    
+                @Override
+                public void mouseReleased(MouseEvent evt) {
+                    signOutButton.setBackground(Theme.getError());
+                    signOutButton.repaint();
+                }
+            });
 
             packButtonPanel.add(signOutButton);
         }
@@ -283,31 +358,6 @@ public class HomePage extends JPanel {
         button.setMinimumSize(new Dimension(150, 70));
         button.setBorderPainted(false);
         button.setFocusPainted(false);
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent evt) {
-                button.setBackground(background.darker());
-                button.repaint();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent evt) {
-                button.setBackground(background);
-                button.repaint();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent evt) {
-                button.setBackground(background.darker());
-                button.repaint();
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent evt) {
-                button.setBackground(background);
-                button.repaint();
-            }
-        });
 
         return button;
     }
