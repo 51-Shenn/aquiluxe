@@ -4,36 +4,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Vehicle {
-    private int vehicleId;
-    private String imagePath;
-    private String brand;
-    private String model;
-    private int year;
-    private int capacity;
-    private int horsepower;
-    private String color;
-    private double mpg;
-    private String vinNumber;
-    private String registrationNumber;
-    private double rentalPriceDay;
-    private String transmission;
-    private String fuelType;
-    private int seatingCapacity;
-    private boolean availability;
-    private String features;
-    private String vehicleType;
+    protected int vehicleId;
+    protected String imagePath;
+    protected String brand;
+    protected String model;
+    protected int year;
+    protected int capacity;
+    protected int horsepower;
+    protected String color;
+    protected double mpg;
+    protected String vinNumber;
+    protected String registrationNumber;
+    protected double rentalPriceDay;
+    protected String transmission;
+    protected String fuelType;
+    protected String vehicleType;
+    protected int seatingCapacity;
+    protected boolean availability;
+    protected String features;
 
-    private static List<Vehicle> vehicles = new ArrayList<Vehicle>();
+    protected static List<Vehicle> vehicles = new ArrayList<Vehicle>();
 
     // Default Constructor
     public Vehicle() {
+        this(0, null, null, null, 0, 0, 0, null, 0.0, null, null, 0.0, null, null, null, 0, false, null);
     }
 
     // Parameterized Constructor
     public Vehicle(int vehicleId, String imagePath, String brand, String model, int year, int capacity,
             int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
-            double rentalPriceDay, String transmission, String fuelType, int seatingCapacity, boolean availability,
-            String features) {
+            double rentalPriceDay, String transmission, String fuelType, String vehicleType, int seatingCapacity,
+            boolean availability, String features) {
         this.vehicleId = vehicleId;
         this.imagePath = imagePath;
         this.brand = brand;
@@ -48,40 +49,17 @@ public class Vehicle {
         this.rentalPriceDay = rentalPriceDay;
         this.transmission = transmission;
         this.fuelType = fuelType;
-        this.seatingCapacity = seatingCapacity;
-        this.availability = availability;
-        this.features = features;
-    }
-
-    public Vehicle(int vehicleId, String imagePath, String brand, String model, int year, int capacity,
-            int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
-            double rentalPriceDay, String transmission, String fuelType, int seatingCapacity, boolean availability,
-            String features, String vehicleType) {
-        this.vehicleId = vehicleId;
-        this.imagePath = imagePath;
-        this.brand = brand;
-        this.model = model;
-        this.year = year;
-        this.capacity = capacity;
-        this.horsepower = horsepower;
-        this.color = color;
-        this.mpg = mpg;
-        this.vinNumber = vinNumber;
-        this.registrationNumber = registrationNumber;
-        this.rentalPriceDay = rentalPriceDay;
-        this.transmission = transmission;
-        this.fuelType = fuelType;
-        this.seatingCapacity = seatingCapacity;
-        this.availability = availability;
-        this.features = features;
         this.vehicleType = vehicleType;
+        this.seatingCapacity = seatingCapacity;
+        this.availability = availability;
+        this.features = features;
     }
 
     // Getters and Setters
     public void setVehicle(int vehicleId, String imagePath, String brand, String model, int year, int capacity,
             int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
-            double rentalPriceDay, String transmission, String fuelType, int seatingCapacity, boolean availability,
-            String features, String vehicleType) {
+            double rentalPriceDay, String transmission, String fuelType, String vehicleType, int seatingCapacity,
+            boolean availability, String features) {
         this.vehicleId = vehicleId;
         this.imagePath = imagePath;
         this.brand = brand;
@@ -96,10 +74,11 @@ public class Vehicle {
         this.rentalPriceDay = rentalPriceDay;
         this.transmission = transmission;
         this.fuelType = fuelType;
+        this.vehicleType = vehicleType;
         this.seatingCapacity = seatingCapacity;
         this.availability = availability;
         this.features = features;
-        this.vehicleType = vehicleType;   
+        this.vehicleType = vehicleType;
     }
 
     public int getVehicleId() {
@@ -196,6 +175,14 @@ public class Vehicle {
 
     public void setFuelType(String fuelType) {
         this.fuelType = fuelType;
+    }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
     }
 
     public String getColor() {

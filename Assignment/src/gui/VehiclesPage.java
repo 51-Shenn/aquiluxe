@@ -21,14 +21,14 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
-public class VehiclesPage extends JPanel implements ActionListener{
+public class VehiclesPage extends JPanel implements ActionListener {
 
     private ArrayList<Car> cars = new ArrayList<Car>();
     private ArrayList<Car> sortedCars = new ArrayList<Car>();
     public static final ImageIcon TRANSMISSION;
     public static final ImageIcon FUEL;
     public static final ImageIcon SEATS;
-    
+
     static {
         TRANSMISSION = new ImageIcon("images/vehiclepageicons/manual-transmission.png");
         FUEL = new ImageIcon("images/vehiclepageicons/gas-station.png");
@@ -41,20 +41,32 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
     public VehiclesPage(JFrame frame, JPanel panel) {
 
-        //sample details just to show output
-        this.cars.add(new Car(1,"images/cars/PorscheGT3.jpg","PORSCHE","GT3 RS WEISSACH",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"weissach package :)"));
-        this.cars.add(new Car(1,"images/cars/Supra.jpg","TOYOTA","SUPRA MK5",2024,2998,382,"red",16.0,"WP0ZZZ99ZTS392124","VMK 5",499,"AUTO","GAS","COUPE",2,true,"it's that a supra?"));
-        this.cars.add(new Car(1,"images/cars/F8.jpg","FERRARI","F8",2023,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"car"));
-        this.cars.add(new Car(1,"images/cars/SVJ.jpg","LAMBORGHINI","AVENTADOR SVJ",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"v12"));
-        this.cars.add(new Car(1,"images/cars/RRGhost.jpg","ROLLS-ROYCE","GHOST",2021,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"quiet"));
-        this.cars.add(new Car(1,"images/cars/PorscheGT3.jpg","PORSCHE","GT3 RS WEISSACH",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"weissach package :)"));
-        this.cars.add(new Car(1,"images/cars/PorscheGT3.jpg","PORSCHE","GT3 RS WEISSACH",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"weissach package :)"));
-        this.cars.add(new Car(1,"images/cars/PorscheGT3.jpg","PORSCHE","GT3 RS WEISSACH",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"weissach package :)"));
-        this.cars.add(new Car(1,"images/cars/PorscheGT3.jpg","PORSCHE","GT3 RS WEISSACH",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"weissach package :)"));
-        this.cars.add(new Car(1,"images/cars/PorscheGT3.jpg","PORSCHE","GT3 RS WEISSACH",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"weissach package :)"));
-        this.cars.add(new Car(1,"images/cars/PorscheGT3.jpg","PORSCHE","GT3 RS WEISSACH",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"weissach package :)"));
-        this.cars.add(new Car(1,"images/cars/PorscheGT3.jpg","PORSCHE","GT3 RS WEISSACH",2024,3996,518,"black",16.0,"WP0ZZZ99ZTS392124","GT3",699,"AUTO","GAS","COUPE",2,true,"weissach package :)"));
-        
+        // sample details just to show output
+        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
+                16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
+        this.cars.add(new Car(1, "images/cars/Supra.jpg", "TOYOTA", "SUPRA MK5", 2024, 2998, 382, "red", 16.0,
+                "WP0ZZZ99ZTS392124", "VMK 5", 499, "AUTO", "GAS", "COUPE", 2, true, "it's that a supra?"));
+        this.cars.add(new Car(1, "images/cars/F8.jpg", "FERRARI", "F8", 2023, 3996, 518, "black", 16.0,
+                "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "car"));
+        this.cars.add(new Car(1, "images/cars/SVJ.jpg", "LAMBORGHINI", "AVENTADOR SVJ", 2024, 3996, 518, "black", 16.0,
+                "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "v12"));
+        this.cars.add(new Car(1, "images/cars/RRGhost.jpg", "ROLLS-ROYCE", "GHOST", 2021, 3996, 518, "black", 16.0,
+                "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "quiet"));
+        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
+                16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
+        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
+                16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
+        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
+                16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
+        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
+                16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
+        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
+                16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
+        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
+                16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
+        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
+                16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
+
         this.frame = frame;
         this.panel = panel;
         this.sortedCars = this.cars;
@@ -62,48 +74,49 @@ public class VehiclesPage extends JPanel implements ActionListener{
         this.setLayout(new BorderLayout());
 
         this.add(createCarCardsContainer(this.cars), BorderLayout.CENTER);
-        this.add(createCarTopBar(),BorderLayout.NORTH);
+        this.add(createCarTopBar(), BorderLayout.NORTH);
 
     }
 
-    private JPanel createCarCards(ArrayList<Car> car){
-        //images in the future will change this to loop to check all car images
+    private JPanel createCarCards(ArrayList<Car> car) {
+        // images in the future will change this to loop to check all car images
 
-        carCards = new JPanel(new GridLayout(0,3,50,30));
+        carCards = new JPanel(new GridLayout(0, 3, 50, 30));
         carCards.setBackground(Color.WHITE);
 
-        //sample details just to show output
+        // sample details just to show output
         ArrayList<Car> carss = car;
-        
-                for (Car c : carss){
-                    ImageIcon image = null;
-                    try {
-                        image = new ImageIcon(c.getImagePath());
 
-                        // Check if any image failed to load
-                        if (image.getIconWidth() == -1) {
-                            throw new Exception("One or more images failed to load.");
-                        }
+        for (Car c : carss) {
+            ImageIcon image = null;
+            try {
+                image = new ImageIcon(c.getImagePath());
 
-                    } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, "Error loading images: " + e.getMessage());
-                    }
-                    Image rImage = image.getImage().getScaledInstance(400,400,Image.SCALE_SMOOTH);
-                    image = new ImageIcon(rImage);
-
-                    String availability = c.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
-                    String rentPrice = "RM" + c.getRentalPriceDay() + "/per day";
-
-                    carCards.add(createCarCard(c, image, c.getBrand(), c.getModel(), c.getTransmission(), c.getFuelType(), c.getCarType(),
-                    c.getSeatingCapacity(), rentPrice, availability, frame, panel));
+                // Check if any image failed to load
+                if (image.getIconWidth() == -1) {
+                    throw new Exception("One or more images failed to load.");
                 }
-        
-                return carCards;
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error loading images: " + e.getMessage());
             }
-        
-    public static JPanel createCarCard(Car car, ImageIcon image, String brand, String model, String transmission, String fuelType,
-                                 String carType, int seats, String price, String availability, JFrame frame, JPanel panel) {
-        
+            Image rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
+            image = new ImageIcon(rImage);
+
+            String availability = c.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
+            String rentPrice = "RM" + c.getRentalPriceDay() + "/per day";
+
+            carCards.add(createCarCard(c, image, c.getBrand(), c.getModel(), c.getTransmission(), c.getFuelType(),
+                    c.getCarType(),
+                    c.getSeatingCapacity(), rentPrice, availability, frame, panel));
+        }
+
+        return carCards;
+    }
+
+    public static JPanel createCarCard(Car car, ImageIcon image, String brand, String model, String transmission,
+            String fuelType,
+            String carType, int seats, String price, String availability, JFrame frame, JPanel panel) {
 
         ImageIcon transmissionIcon = TRANSMISSION;
         ImageIcon fuelIcon = FUEL;
@@ -115,8 +128,8 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carCard.setPreferredSize(new Dimension(350, 400));
         carCard.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0, 35), 3));
 
-        //create buttons on the bottom
-        RoundedButton carDetails = new RoundedButton(0,Color.WHITE);
+        // create buttons on the bottom
+        RoundedButton carDetails = new RoundedButton(0, Color.WHITE);
         carDetails.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
         carDetails.setFocusable(false);
         carDetails.setBackground(Color.WHITE);
@@ -124,7 +137,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carDetails.setContentAreaFilled(false);
         carDetails.setOpaque(true);
 
-        RoundedButton carRent = new RoundedButton(10,Color.BLUE);
+        RoundedButton carRent = new RoundedButton(10, Color.BLUE);
         carRent.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
         carRent.setText("RENT");
         carRent.setFocusable(false);
@@ -139,17 +152,17 @@ public class VehiclesPage extends JPanel implements ActionListener{
             public void mouseEntered(MouseEvent evt) {
                 carRent.setBackground(Color.BLUE.darker());
             }
-            
+
             @Override
             public void mouseExited(MouseEvent evt) {
                 carRent.setBackground(Color.BLUE);
             }
-            
+
             @Override
             public void mousePressed(MouseEvent evt) {
                 carRent.setBackground(Color.CYAN);
             }
-            
+
             @Override
             public void mouseReleased(MouseEvent evt) {
                 carRent.setBackground(Color.BLUE);
@@ -157,23 +170,23 @@ public class VehiclesPage extends JPanel implements ActionListener{
             }
         });
 
-        JPanel buttonPanel = new JPanel(new GridLayout(1,2,0,5));
-        buttonPanel.setPreferredSize(new Dimension(350,50));
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 0, 5));
+        buttonPanel.setPreferredSize(new Dimension(350, 50));
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.add(carDetails);
         buttonPanel.add(carRent);
 
-        //car name model and car type on the left and price on the right
+        // car name model and car type on the left and price on the right
         JLabel carName = new JLabel(brand);
         carName.setHorizontalTextPosition(JLabel.LEFT);
         carName.setFont(CustomFonts.OPEN_SANS_EXTRA_BOLD.deriveFont(20f));
-        carName.setPreferredSize(new Dimension(50,20));
+        carName.setPreferredSize(new Dimension(50, 20));
         carName.setForeground(Color.BLACK);
 
         JLabel carModel = new JLabel(model);
         carModel.setHorizontalTextPosition(JLabel.LEFT);
         carModel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(17.5f));
-        carModel.setPreferredSize(new Dimension(50,10));
+        carModel.setPreferredSize(new Dimension(50, 10));
         carModel.setForeground(Color.BLACK);
 
         JLabel carRentPrice = new JLabel(price);
@@ -185,47 +198,46 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carAvailability.setOpaque(true);
         carAvailability.setHorizontalAlignment(JLabel.CENTER);
         carAvailability.setFont(CustomFonts.OPEN_SANS_EXTRA_BOLD.deriveFont(15f));
-        if(availability.equals("AVAILABLE")){
+        if (availability.equals("AVAILABLE")) {
             carAvailability.setBackground(Color.BLUE);
-        }
-        else{
+        } else {
             carAvailability.setBackground(Color.RED);
         }
         carAvailability.setForeground(Color.WHITE);
-        carAvailability.setPreferredSize(new Dimension(200,20));
+        carAvailability.setPreferredSize(new Dimension(200, 20));
 
         JLabel carTypeLabel = new JLabel(carType);
         carTypeLabel.setHorizontalTextPosition(JLabel.LEFT);
         carTypeLabel.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(12.5f));
-        carTypeLabel.setPreferredSize(new Dimension(50,10));
+        carTypeLabel.setPreferredSize(new Dimension(50, 10));
         carTypeLabel.setForeground(Color.GRAY);
 
-        JPanel carNamePanel = new JPanel(new GridLayout(3,1,0,0));
+        JPanel carNamePanel = new JPanel(new GridLayout(3, 1, 0, 0));
         carNamePanel.add(carName);
         carNamePanel.add(carModel);
         carNamePanel.add(carTypeLabel);
-        carNamePanel.setPreferredSize(new Dimension(50,150));
+        carNamePanel.setPreferredSize(new Dimension(50, 150));
         carNamePanel.setBackground(Color.WHITE);
         JPanel carRentPriceAvailabilityPanel = new JPanel();
-        carRentPriceAvailabilityPanel.add(carRentPrice,BorderLayout.NORTH);
-        carRentPriceAvailabilityPanel.add(carAvailability,BorderLayout.SOUTH);
-        carRentPriceAvailabilityPanel.setPreferredSize(new Dimension(50,150));
+        carRentPriceAvailabilityPanel.add(carRentPrice, BorderLayout.NORTH);
+        carRentPriceAvailabilityPanel.add(carAvailability, BorderLayout.SOUTH);
+        carRentPriceAvailabilityPanel.setPreferredSize(new Dimension(50, 150));
         carRentPriceAvailabilityPanel.setBackground(Color.WHITE);
 
-        //container for both details at the center
-        JPanel carInfoNameRentPanel = new JPanel(new GridLayout(1,2,5,5));
+        // container for both details at the center
+        JPanel carInfoNameRentPanel = new JPanel(new GridLayout(1, 2, 5, 5));
         carInfoNameRentPanel.setBackground(Color.WHITE);
         carInfoNameRentPanel.add(carNamePanel);
         carInfoNameRentPanel.add(carRentPriceAvailabilityPanel);
 
-        //container for picture at the top
+        // container for picture at the top
         JLabel carPicture = new JLabel(image);
-        carPicture.setPreferredSize(new Dimension(225,225));
-        
+        carPicture.setPreferredSize(new Dimension(225, 225));
+
         JPanel carPicturePanel = new JPanel(new BorderLayout());
         carPicturePanel.add(carPicture);
 
-        //minor details of the car at the bottom but the top of the buttons
+        // minor details of the car at the bottom but the top of the buttons
         JLabel seatsLabel = new JLabel(Integer.toString(seats));
         seatsLabel.setIcon(seatsIcon);
         seatsLabel.setHorizontalTextPosition(JLabel.RIGHT);
@@ -247,7 +259,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         transLabel.setHorizontalTextPosition(JLabel.RIGHT);
         transLabel.setBackground(Color.WHITE);
         transLabel.setOpaque(true);
-        //transLabel.setPreferredSize(new Dimension(0,35));
+        // transLabel.setPreferredSize(new Dimension(0,35));
         transLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(12.5f));
         transLabel.setHorizontalAlignment(JLabel.CENTER);
         JPanel carInfoPanel = new JPanel(new GridBagLayout());
@@ -257,19 +269,19 @@ public class VehiclesPage extends JPanel implements ActionListener{
         gbc.gridx = 0;
         gbc.anchor = GridBagConstraints.WEST;
         carInfoPanel.setBackground(Color.WHITE);
-        carInfoPanel.add(transLabel,gbc);
+        carInfoPanel.add(transLabel, gbc);
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.CENTER;
-        carInfoPanel.add(fuelTypeLabel,gbc);
+        carInfoPanel.add(fuelTypeLabel, gbc);
         gbc.gridx = 2;
         gbc.anchor = GridBagConstraints.EAST;
-        carInfoPanel.add(seatsLabel,gbc);
+        carInfoPanel.add(seatsLabel, gbc);
 
         // a container to put every detail and infos
-        JPanel carEverythingPanel = new JPanel(new BorderLayout(0,2));
+        JPanel carEverythingPanel = new JPanel(new BorderLayout(0, 2));
         carEverythingPanel.add(carPicturePanel, BorderLayout.NORTH);
         carEverythingPanel.add(carInfoNameRentPanel, BorderLayout.CENTER);
-        carEverythingPanel.add(carInfoPanel,BorderLayout.SOUTH);
+        carEverythingPanel.add(carInfoPanel, BorderLayout.SOUTH);
         carEverythingPanel.setBackground(Color.WHITE);
         carEverythingPanel.addMouseListener(new MouseAdapter() {
             @Override
@@ -282,6 +294,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
                     panel.repaint();
                 }
             }
+
             @Override
             public void mousePressed(MouseEvent evt) {
                 if (SwingUtilities.isLeftMouseButton(evt)) {
@@ -318,18 +331,19 @@ public class VehiclesPage extends JPanel implements ActionListener{
                 }
             }
         });
-        //if is customer
+        // if is customer
         carDetails.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Check if the click is on the image
                 if (SwingUtilities.isLeftMouseButton(e)) {
                     panel.removeAll();
-                    panel.add(new VehiclesPageDetails(frame, panel,car), BorderLayout.CENTER);
+                    panel.add(new VehiclesPageDetails(frame, panel, car), BorderLayout.CENTER);
                     panel.revalidate();
                     panel.repaint();
                 }
             }
+
             @Override
             public void mousePressed(MouseEvent evt) {
                 if (SwingUtilities.isLeftMouseButton(evt)) {
@@ -347,7 +361,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
                     seatsLabel.setIcon(toGreyScale(seatsIcon));
                 }
             }
-        
+
             @Override
             public void mouseReleased(MouseEvent evt) {
                 if (SwingUtilities.isLeftMouseButton(evt)) {
@@ -374,45 +388,46 @@ public class VehiclesPage extends JPanel implements ActionListener{
         // carDetails.setOpaque(true);
 
         // carDetails.addMouseListener(new MouseAdapter() {
-        //     @Override
-        //     public void mouseEntered(MouseEvent evt) {
-        //         carDetails.setBackground(Color.RED.darker());
-        //     }
-            
-        //     @Override
-        //     public void mouseExited(MouseEvent evt) {
-        //         carDetails.setBackground(Color.RED);
-        //     }
-            
-        //     @Override
-        //     public void mousePressed(MouseEvent evt) {
-        //         carDetails.setBackground(Color.ORANGE);
-        //     }
-            
-        //     @Override
-        //     public void mouseReleased(MouseEvent evt) {
-        //         carDetails.setBackground(Color.RED);
-        //     }
+        // @Override
+        // public void mouseEntered(MouseEvent evt) {
+        // carDetails.setBackground(Color.RED.darker());
+        // }
+
+        // @Override
+        // public void mouseExited(MouseEvent evt) {
+        // carDetails.setBackground(Color.RED);
+        // }
+
+        // @Override
+        // public void mousePressed(MouseEvent evt) {
+        // carDetails.setBackground(Color.ORANGE);
+        // }
+
+        // @Override
+        // public void mouseReleased(MouseEvent evt) {
+        // carDetails.setBackground(Color.RED);
+        // }
         // });
 
-        //add the bottom buttons panel and the container for all specific car infos into the main card container
+        // add the bottom buttons panel and the container for all specific car infos
+        // into the main card container
         carCard.add(buttonPanel, BorderLayout.SOUTH);
-        carCard.add(carEverythingPanel,BorderLayout.CENTER);
+        carCard.add(carEverythingPanel, BorderLayout.CENTER);
 
         return carCard;
     }
 
     private JScrollPane createCarCardsContainer(ArrayList<Car> car) {
 
-        //JPanel carCards = new JPanel(new GridLayout(0,3,20,15));
+        // JPanel carCards = new JPanel(new GridLayout(0,3,20,15));
 
         JPanel carCardsPanel = new JPanel(new BorderLayout());
-        carCardsPanel.add(createCarCards(car),BorderLayout.CENTER);
-        carCardsPanel.add(createCarRightPanel(),BorderLayout.EAST);
-        carCardsPanel.add(createBottomBar(),BorderLayout.SOUTH);
-        carCardsPanel.add(createCarLeftPanel(),BorderLayout.WEST);
+        carCardsPanel.add(createCarCards(car), BorderLayout.CENTER);
+        carCardsPanel.add(createCarRightPanel(), BorderLayout.EAST);
+        carCardsPanel.add(createBottomBar(), BorderLayout.SOUTH);
+        carCardsPanel.add(createCarLeftPanel(), BorderLayout.WEST);
 
-        JScrollPane container = new JScrollPane(carCardsPanel); 
+        JScrollPane container = new JScrollPane(carCardsPanel);
         container.getVerticalScrollBar().setUnitIncrement(30);
         container.setBorder(BorderFactory.createEmptyBorder());
         container.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -422,7 +437,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
     private JComboBox<String> sortComboBox;
 
-    private JPanel createCarTopBar(){
+    private JPanel createCarTopBar() {
 
         ImageIcon searchIcon = null;
         ImageIcon carIcon = null;
@@ -435,36 +450,36 @@ public class VehiclesPage extends JPanel implements ActionListener{
                 throw new Exception("Image file not found or invalid.");
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,"Error loading image: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error loading image: " + e.getMessage());
         }
 
         JPanel topBar = new JPanel();
         topBar.setLayout(null);
         topBar.setBackground(Color.WHITE);
-        topBar.setPreferredSize(new Dimension(1600,100));
+        topBar.setPreferredSize(new Dimension(1600, 100));
 
         JLabel filters = new JLabel("Filter");
-        filters.setBounds(50,25,200,50);
+        filters.setBounds(50, 25, 200, 50);
         filters.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
 
-        //if car then array of cars if bike then array of bikes else array of vehicles
-        RoundedButton carButton = new RoundedButton(10,Color.WHITE);
+        // if car then array of cars if bike then array of bikes else array of vehicles
+        RoundedButton carButton = new RoundedButton(10, Color.WHITE);
         carButton.setIcon(carIcon);
-        carButton.setBounds(365,25,65,50);
+        carButton.setBounds(365, 25, 65, 50);
         carButton.setFocusable(false);
         carButton.setBackground(Color.WHITE);
         carButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(12.5f));
 
-        RoundedButton bikeButton = new RoundedButton(10,Color.WHITE);
+        RoundedButton bikeButton = new RoundedButton(10, Color.WHITE);
         bikeButton.setIcon(bikeIcon);
-        bikeButton.setBounds(430,25,65,50);
+        bikeButton.setBounds(430, 25, 65, 50);
         bikeButton.setFocusable(false);
         bikeButton.setBackground(Color.WHITE);
         bikeButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(12.5f));
 
-        RoundedButton allButton = new RoundedButton(10,Color.WHITE);
+        RoundedButton allButton = new RoundedButton(10, Color.WHITE);
         allButton.setText("ALL");
-        allButton.setBounds(300,25,65,50);
+        allButton.setBounds(300, 25, 65, 50);
         allButton.setFocusable(false);
         allButton.setBackground(Color.WHITE);
         allButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
@@ -473,8 +488,8 @@ public class VehiclesPage extends JPanel implements ActionListener{
         searchBar.setText("Search for vehicles");
         searchBar.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(20f));
         searchBar.setForeground(Color.GRAY);
-        searchBar.setBorder(new CompoundBorder(new LineBorder(Color.BLACK,1), new EmptyBorder(10,15,10,5)));
-        searchBar.setBounds(500,25,700,50);
+        searchBar.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 1), new EmptyBorder(10, 15, 10, 5)));
+        searchBar.setBounds(500, 25, 700, 50);
         searchBar.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -495,48 +510,48 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
         JButton searchButton = new JButton();
         searchButton.setIcon(searchIcon);
-        searchButton.setBounds(1200,25,85,50);
+        searchButton.setBounds(1200, 25, 85, 50);
         searchButton.setFocusable(false);
         searchButton.setBackground(Color.WHITE);
         searchButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(12.5f));
-        searchButton.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+        searchButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
         JLabel sortByLabel = new JLabel("Sort By:");
-        sortByLabel.setBounds(1350,25,75,50);
+        sortByLabel.setBounds(1350, 25, 75, 50);
         sortByLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(17.5f));
         sortByLabel.setHorizontalAlignment(JLabel.RIGHT);
 
-        String[] sortOptions = {" Best Match ", " Lowest Price ", " Highest Price ", " Newest ", " Oldest "};
+        String[] sortOptions = { " Best Match ", " Lowest Price ", " Highest Price ", " Newest ", " Oldest " };
         sortComboBox = new JComboBox<>(sortOptions);
-        sortComboBox.setBounds(1450,25,150,50);
+        sortComboBox.setBounds(1450, 25, 150, 50);
         sortComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
         sortComboBox.addActionListener(this);
         ImageIcon addIcon = new ImageIcon("images/vehiclepageicons/add.png");
 
-        RoundedButton addButton = new RoundedButton(10,Color.WHITE);
+        RoundedButton addButton = new RoundedButton(10, Color.WHITE);
         addButton.setIcon(addIcon);
         addButton.setBackground(Color.GREEN);
         addButton.setOpaque(true);
         addButton.setFocusable(false);
         addButton.setContentAreaFilled(true);
         addButton.setBorderPainted(false);
-        addButton.setBounds(1660,25,200,50);
+        addButton.setBounds(1660, 25, 200, 50);
         addButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
                 addButton.setBackground(Color.GREEN.darker());
             }
-            
+
             @Override
             public void mouseExited(MouseEvent evt) {
                 addButton.setBackground(Color.GREEN);
             }
-            
+
             @Override
             public void mousePressed(MouseEvent evt) {
                 addButton.setBackground(Color.YELLOW);
             }
-            
+
             @Override
             public void mouseReleased(MouseEvent evt) {
                 addButton.setBackground(Color.GREEN);
@@ -569,19 +584,22 @@ public class VehiclesPage extends JPanel implements ActionListener{
     private JTextField maxPriceField;
 
     private JPanel createCarLeftPanel() {
-        //sample data
-        //in future loop through every car brands and model and list them through the filter + "ALL"
-        //when user pick a brand filter model will update and only show few models follow the brand same as cartype
-        String[] brands = {"ALL","NISSAN","LAMBORGHINI","FERRARI","PORSCHE"};
-        String[] models = {"ALL","AVENTADOR SVJ","GT3 RS WEISSACH","SUPRA MK5"};
-        String[] transType = {"ALL","MANUAL","AUTO"};
-        String[] fuelType = {"ALL","GAS","HYBRID","ELECTRIC"};
-        String[] availability = {"ALL","AVAILABLE","UNAVAILABLE"};
-        String[] carType = {"ALL","SUV","MPV","SEDAN","CONVERTIBLE","COUPE","PICKUP TRUCK","HATCHBACK","WAGON"};
+        // sample data
+        // in future loop through every car brands and model and list them through the
+        // filter + "ALL"
+        // when user pick a brand filter model will update and only show few models
+        // follow the brand same as cartype
+        String[] brands = { "ALL", "NISSAN", "LAMBORGHINI", "FERRARI", "PORSCHE" };
+        String[] models = { "ALL", "AVENTADOR SVJ", "GT3 RS WEISSACH", "SUPRA MK5" };
+        String[] transType = { "ALL", "MANUAL", "AUTO" };
+        String[] fuelType = { "ALL", "GAS", "HYBRID", "ELECTRIC" };
+        String[] availability = { "ALL", "AVAILABLE", "UNAVAILABLE" };
+        String[] carType = { "ALL", "SUV", "MPV", "SEDAN", "CONVERTIBLE", "COUPE", "PICKUP TRUCK", "HATCHBACK",
+                "WAGON" };
 
         String[] year = new String[76];
         int newestYear = 2025;
-        for (int i = 75; i >= 0; i--){
+        for (int i = 75; i >= 0; i--) {
             year[i] = Integer.toString(newestYear - i);
         }
 
@@ -591,9 +609,9 @@ public class VehiclesPage extends JPanel implements ActionListener{
         brandComboBox = new JComboBox<>(brands);
         brandComboBox.addActionListener(this);
         brandComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
-        brandComboBox.setPreferredSize(new Dimension(200,30));
+        brandComboBox.setPreferredSize(new Dimension(200, 30));
 
-        JPanel brandFilterPanel = new JPanel(new GridLayout(2,1,0,0));
+        JPanel brandFilterPanel = new JPanel(new GridLayout(2, 1, 0, 0));
         brandFilterPanel.setBackground(Color.WHITE);
         brandFilterPanel.add(brandLabel);
         brandFilterPanel.add(brandComboBox);
@@ -604,10 +622,10 @@ public class VehiclesPage extends JPanel implements ActionListener{
         modelComboBox = new JComboBox<>(models);
         modelComboBox.addActionListener(this);
         modelComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
-        modelComboBox.setPreferredSize(new Dimension(200,30));
+        modelComboBox.setPreferredSize(new Dimension(200, 30));
         modelComboBox.setEnabled(false);
 
-        JPanel modelFilterPanel = new JPanel(new GridLayout(2,1,0,0));
+        JPanel modelFilterPanel = new JPanel(new GridLayout(2, 1, 0, 0));
         modelFilterPanel.setBackground(Color.WHITE);
         modelFilterPanel.add(modelLabel);
         modelFilterPanel.add(modelComboBox);
@@ -619,9 +637,9 @@ public class VehiclesPage extends JPanel implements ActionListener{
         yearComboBox.insertItemAt("ALL", 0);
         yearComboBox.addActionListener(this);
         yearComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
-        yearComboBox.setPreferredSize(new Dimension(200,30));
+        yearComboBox.setPreferredSize(new Dimension(200, 30));
 
-        JPanel yearFilterPanel = new JPanel(new GridLayout(2,1,0,0));
+        JPanel yearFilterPanel = new JPanel(new GridLayout(2, 1, 0, 0));
         yearFilterPanel.setBackground(Color.WHITE);
         yearFilterPanel.add(yearLabel);
         yearFilterPanel.add(yearComboBox);
@@ -632,9 +650,9 @@ public class VehiclesPage extends JPanel implements ActionListener{
         transTypeComboBox = new JComboBox<>(transType);
         transTypeComboBox.addActionListener(this);
         transTypeComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
-        transTypeComboBox.setPreferredSize(new Dimension(200,30));
+        transTypeComboBox.setPreferredSize(new Dimension(200, 30));
 
-        JPanel transFilterPanel = new JPanel(new GridLayout(2,1,0,0));
+        JPanel transFilterPanel = new JPanel(new GridLayout(2, 1, 0, 0));
         transFilterPanel.setBackground(Color.WHITE);
         transFilterPanel.add(transLabel);
         transFilterPanel.add(transTypeComboBox);
@@ -645,9 +663,9 @@ public class VehiclesPage extends JPanel implements ActionListener{
         fuelTypeComboBox = new JComboBox<>(fuelType);
         fuelTypeComboBox.addActionListener(this);
         fuelTypeComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
-        fuelTypeComboBox.setPreferredSize(new Dimension(200,30));
+        fuelTypeComboBox.setPreferredSize(new Dimension(200, 30));
 
-        JPanel fuelFilterPanel = new JPanel(new GridLayout(2,1,0,0));
+        JPanel fuelFilterPanel = new JPanel(new GridLayout(2, 1, 0, 0));
         fuelFilterPanel.setBackground(Color.WHITE);
         fuelFilterPanel.add(fuelLabel);
         fuelFilterPanel.add(fuelTypeComboBox);
@@ -658,9 +676,9 @@ public class VehiclesPage extends JPanel implements ActionListener{
         availabilityComboBox = new JComboBox<>(availability);
         availabilityComboBox.addActionListener(this);
         availabilityComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
-        availabilityComboBox.setPreferredSize(new Dimension(200,30));
+        availabilityComboBox.setPreferredSize(new Dimension(200, 30));
 
-        JPanel availabilityFilterPanel = new JPanel(new GridLayout(2,1,0,0));
+        JPanel availabilityFilterPanel = new JPanel(new GridLayout(2, 1, 0, 0));
         availabilityFilterPanel.setBackground(Color.WHITE);
         availabilityFilterPanel.add(availabilityLabel);
         availabilityFilterPanel.add(availabilityComboBox);
@@ -671,9 +689,9 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carTypeComboBox = new JComboBox<>(carType);
         carTypeComboBox.addActionListener(this);
         carTypeComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
-        carTypeComboBox.setPreferredSize(new Dimension(200,30));
+        carTypeComboBox.setPreferredSize(new Dimension(200, 30));
 
-        JPanel carTypeFilterPanel = new JPanel(new GridLayout(2,1,0,0));
+        JPanel carTypeFilterPanel = new JPanel(new GridLayout(2, 1, 0, 0));
         carTypeFilterPanel.setBackground(Color.WHITE);
         carTypeFilterPanel.add(carTypeLabel);
         carTypeFilterPanel.add(carTypeComboBox);
@@ -681,7 +699,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         JLabel seatLabel = new JLabel("Seats: ALL");
         seatLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
 
-        seatSlider = new JSlider(0,7,0);
+        seatSlider = new JSlider(0, 7, 0);
         seatSlider.setFocusable(false);
         seatSlider.setBackground(Color.WHITE);
         seatSlider.setMajorTickSpacing(1);
@@ -689,7 +707,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         seatSlider.setPaintLabels(true);
         seatSlider.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
 
-        JPanel seatFilterPanel = new JPanel(new GridLayout(2,1,0,0));
+        JPanel seatFilterPanel = new JPanel(new GridLayout(2, 1, 0, 0));
         seatFilterPanel.setBackground(Color.WHITE);
         seatFilterPanel.add(seatLabel);
         seatFilterPanel.add(seatSlider);
@@ -707,7 +725,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         // Set the preferred size to control height
         minPriceField.setPreferredSize(new Dimension(50, 40));
         minPriceField.addFocusListener(new FocusListener() {
-        @Override
+            @Override
             public void focusGained(FocusEvent e) {
                 if (minPriceField.getText().equals("Min")) {
                     minPriceField.setText(""); // Clear text when clicked
@@ -724,49 +742,59 @@ public class VehiclesPage extends JPanel implements ActionListener{
         maxPriceField.setPreferredSize(new Dimension(50, 40));
         maxPriceField.addFocusListener(new FocusListener() {
             @Override
-                public void focusGained(FocusEvent e) {
-                    if (maxPriceField.getText().equals("Max")) {
-                        maxPriceField.setText(""); // Clear text when clicked
-                    }
+            public void focusGained(FocusEvent e) {
+                if (maxPriceField.getText().equals("Max")) {
+                    maxPriceField.setText(""); // Clear text when clicked
                 }
-    
-                @Override
-                public void focusLost(FocusEvent e) {
-                    if (maxPriceField.getText().isEmpty()) {
-                        maxPriceField.setText("Max"); // Restore placeholder
-                    }
-                }
-        });
-        minPriceField.addActionListener(e -> refreshCards(VehicleController.allFilterCombination(this.sortedCars, (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
-        yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(), (String) transTypeComboBox.getSelectedItem(), 
-        (String) availabilityComboBox.getSelectedItem(), (String) carTypeComboBox.getSelectedItem(), seatSlider.getValue(),
-        (String) minPriceField.getText(), (String) maxPriceField.getText())));
-        maxPriceField.addActionListener(e -> refreshCards(VehicleController.allFilterCombination(this.sortedCars, (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
-        yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(), (String) transTypeComboBox.getSelectedItem(), 
-        (String) availabilityComboBox.getSelectedItem(), (String) carTypeComboBox.getSelectedItem(), seatSlider.getValue(),
-        (String) minPriceField.getText(), (String) maxPriceField.getText())));
+            }
 
-            seatSlider.addChangeListener(e -> {
-                int value = seatSlider.getValue();
-                if (value == 0) {
-                    seatLabel.setText("Seats: ALL");
-                } else {
-                    seatLabel.setText("Seats: " + value);
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (maxPriceField.getText().isEmpty()) {
+                    maxPriceField.setText("Max"); // Restore placeholder
                 }
-                refreshCards(VehicleController.allFilterCombination(this.sortedCars, (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
-                                                                    yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(), (String) transTypeComboBox.getSelectedItem(), 
-                                                                    (String) availabilityComboBox.getSelectedItem(), (String) carTypeComboBox.getSelectedItem(), seatSlider.getValue(),
-                                                                    (String) minPriceField.getText(), (String) maxPriceField.getText()));
-            });
+            }
+        });
+        minPriceField.addActionListener(e -> refreshCards(VehicleController.allFilterCombination(this.sortedCars,
+                (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
+                yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(),
+                (String) transTypeComboBox.getSelectedItem(),
+                (String) availabilityComboBox.getSelectedItem(), (String) carTypeComboBox.getSelectedItem(),
+                seatSlider.getValue(),
+                (String) minPriceField.getText(), (String) maxPriceField.getText())));
+        maxPriceField.addActionListener(e -> refreshCards(VehicleController.allFilterCombination(this.sortedCars,
+                (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
+                yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(),
+                (String) transTypeComboBox.getSelectedItem(),
+                (String) availabilityComboBox.getSelectedItem(), (String) carTypeComboBox.getSelectedItem(),
+                seatSlider.getValue(),
+                (String) minPriceField.getText(), (String) maxPriceField.getText())));
+
+        seatSlider.addChangeListener(e -> {
+            int value = seatSlider.getValue();
+            if (value == 0) {
+                seatLabel.setText("Seats: ALL");
+            } else {
+                seatLabel.setText("Seats: " + value);
+            }
+            refreshCards(VehicleController.allFilterCombination(this.sortedCars,
+                    (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
+                    yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(),
+                    (String) transTypeComboBox.getSelectedItem(),
+                    (String) availabilityComboBox.getSelectedItem(), (String) carTypeComboBox.getSelectedItem(),
+                    seatSlider.getValue(),
+                    (String) minPriceField.getText(), (String) maxPriceField.getText()));
+        });
 
         JPanel pricePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 7, 0));
         pricePanel.setBackground(Color.WHITE);
         pricePanel.add(minPriceField);
         pricePanel.add(new JLabel("-"));
         pricePanel.add(maxPriceField);
-        pricePanel.setPreferredSize(new Dimension(200,60));
-            // filter name add label and suf to a panel then only format it to spacing down the filters
-        JPanel priceFilterPanel = new JPanel(new GridLayout(2,1,0,0));
+        pricePanel.setPreferredSize(new Dimension(200, 60));
+        // filter name add label and suf to a panel then only format it to spacing down
+        // the filters
+        JPanel priceFilterPanel = new JPanel(new GridLayout(2, 1, 0, 0));
         priceFilterPanel.setBackground(Color.WHITE);
         priceFilterPanel.add(priceLabel);
         priceFilterPanel.add(pricePanel);
@@ -775,7 +803,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 15));
-        leftPanel.setPreferredSize(new Dimension(300,1600));
+        leftPanel.setPreferredSize(new Dimension(300, 1600));
         leftPanel.setBackground(Color.WHITE);
         leftPanel.add(brandFilterPanel);
         leftPanel.add(modelFilterPanel);
@@ -791,44 +819,45 @@ public class VehiclesPage extends JPanel implements ActionListener{
     }
 
     @Override
-    public void actionPerformed(ActionEvent e){
-        if(e.getSource() == sortComboBox){
-            if (sortComboBox.getSelectedItem() == " Best Match "){
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == sortComboBox) {
+            if (sortComboBox.getSelectedItem() == " Best Match ") {
                 this.sortedCars = this.cars;
-            }
-            else if (sortComboBox.getSelectedItem() == " Lowest Price "){
+            } else if (sortComboBox.getSelectedItem() == " Lowest Price ") {
                 this.sortedCars = VehicleController.passSortedByPriceLowToHigh(this.cars);
-            }
-            else if (sortComboBox.getSelectedItem() == " Highest Price "){
+            } else if (sortComboBox.getSelectedItem() == " Highest Price ") {
                 this.sortedCars = VehicleController.passSortedByPriceHighToLow(this.cars);
-            }
-            else if (sortComboBox.getSelectedItem() == " Newest "){
+            } else if (sortComboBox.getSelectedItem() == " Newest ") {
                 this.sortedCars = VehicleController.passSortedByYearNewestFirst(this.cars);
-            }
-            else if (sortComboBox.getSelectedItem() == " Oldest "){
+            } else if (sortComboBox.getSelectedItem() == " Oldest ") {
                 this.sortedCars = VehicleController.passSortedByYearOldestFirst(this.cars);
             }
-            refreshCards(VehicleController.allFilterCombination(this.sortedCars, (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
-                                                                yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(), (String) transTypeComboBox.getSelectedItem(), 
-                                                                (String) availabilityComboBox.getSelectedItem(), (String) carTypeComboBox.getSelectedItem(), seatSlider.getValue(),
-                                                                (String) minPriceField.getText(), (String) maxPriceField.getText()));
+            refreshCards(VehicleController.allFilterCombination(this.sortedCars,
+                    (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
+                    yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(),
+                    (String) transTypeComboBox.getSelectedItem(),
+                    (String) availabilityComboBox.getSelectedItem(), (String) carTypeComboBox.getSelectedItem(),
+                    seatSlider.getValue(),
+                    (String) minPriceField.getText(), (String) maxPriceField.getText()));
         }
-        if(e.getSource() == brandComboBox || e.getSource() == modelComboBox ||
-        e.getSource() == yearComboBox ||
-        e.getSource() == carTypeComboBox ||
-        e.getSource() == transTypeComboBox ||
-        e.getSource() == fuelTypeComboBox ||
-        e.getSource() == availabilityComboBox ||
-        e.getSource() == minPriceField ||
-        e.getSource() == maxPriceField){
-            refreshCards(VehicleController.allFilterCombination(this.sortedCars, (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
-                                                                yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(), (String) transTypeComboBox.getSelectedItem(), 
-                                                                (String) availabilityComboBox.getSelectedItem(), (String) carTypeComboBox.getSelectedItem(), seatSlider.getValue(),
-                                                                (String) minPriceField.getText(), (String) maxPriceField.getText()));
-            if (brandComboBox.getSelectedIndex() != 0){
+        if (e.getSource() == brandComboBox || e.getSource() == modelComboBox ||
+                e.getSource() == yearComboBox ||
+                e.getSource() == carTypeComboBox ||
+                e.getSource() == transTypeComboBox ||
+                e.getSource() == fuelTypeComboBox ||
+                e.getSource() == availabilityComboBox ||
+                e.getSource() == minPriceField ||
+                e.getSource() == maxPriceField) {
+            refreshCards(VehicleController.allFilterCombination(this.sortedCars,
+                    (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
+                    yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(),
+                    (String) transTypeComboBox.getSelectedItem(),
+                    (String) availabilityComboBox.getSelectedItem(), (String) carTypeComboBox.getSelectedItem(),
+                    seatSlider.getValue(),
+                    (String) minPriceField.getText(), (String) maxPriceField.getText()));
+            if (brandComboBox.getSelectedIndex() != 0) {
                 modelComboBox.setEnabled(true);
-            }
-            else{
+            } else {
                 modelComboBox.setSelectedIndex(0);
                 modelComboBox.setEnabled(false);
             }
@@ -840,28 +869,28 @@ public class VehiclesPage extends JPanel implements ActionListener{
         carCards.removeAll();
         carCards.setLayout(new GridLayout(0, 3, 50, 30));
         carCards.setBackground(Color.WHITE);
-    
+
         // Add new cards
         for (Car c : filteredCars) {
             ImageIcon image = new ImageIcon(c.getImagePath());
             Image rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
             image = new ImageIcon(rImage);
-    
+
             String availability = c.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
             String rentPrice = "RM" + c.getRentalPriceDay() + "/per day";
-    
-            JPanel card = createCarCard(c, image, c.getBrand(), c.getModel(), 
-                c.getTransmission(), c.getFuelType(), c.getCarType(),
-                c.getSeatingCapacity(), rentPrice, availability, frame, panel);
-                
+
+            JPanel card = createCarCard(c, image, c.getBrand(), c.getModel(),
+                    c.getTransmission(), c.getFuelType(), c.getCarType(),
+                    c.getSeatingCapacity(), rentPrice, availability, frame, panel);
+
             card.setPreferredSize(new Dimension(350, 400));
             carCards.add(card);
         }
-        
+
         // Add empty panels if needed
         if (filteredCars.size() < 12) {
             for (int i = filteredCars.size(); i < 12; i++) {
-                if (filteredCars.size() == 0 && i == 4){
+                if (filteredCars.size() == 0 && i == 4) {
                     JPanel empty = new JPanel(new BorderLayout());
                     JLabel noResultsLabel = new JLabel("No results found!");
                     noResultsLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
@@ -870,8 +899,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
                     empty.setBackground(Color.WHITE);
                     empty.add(noResultsLabel, BorderLayout.NORTH);
                     carCards.add(empty);
-                }
-                else{
+                } else {
                     JPanel empty = new JPanel();
                     empty.setPreferredSize(new Dimension(350, 400));
                     empty.setBackground(Color.WHITE);
@@ -879,7 +907,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
                 }
             }
         }
-        
+
         // Force layout update
         carCards.revalidate();
         carCards.repaint();
@@ -887,16 +915,16 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
     private JPanel createCarRightPanel() {
         JPanel rightPanel = new JPanel(new BorderLayout());
-        rightPanel.setPreferredSize(new Dimension(300,900));
+        rightPanel.setPreferredSize(new Dimension(300, 900));
         rightPanel.setBackground(Color.WHITE);
 
         return rightPanel;
     }
 
-    private JPanel createBottomBar(){
+    private JPanel createBottomBar() {
         JPanel bottomBar = new JPanel();
         bottomBar.setBackground(Color.BLACK);
-        bottomBar.setPreferredSize(new Dimension(800,500));
+        bottomBar.setPreferredSize(new Dimension(800, 500));
 
         return bottomBar;
     }
@@ -911,14 +939,14 @@ public class VehiclesPage extends JPanel implements ActionListener{
 
         // Convert the Image to a BufferedImage
         BufferedImage bufferedImage = new BufferedImage(
-            icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+                icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = bufferedImage.createGraphics();
         g2d.drawImage(image, 0, 0, null);
         g2d.dispose();
 
         // Convert the BufferedImage to greyscale
         BufferedImageOp op = new ColorConvertOp(
-            ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+                ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
         BufferedImage greyImage = op.filter(bufferedImage, null);
 
         RescaleOp rescaleOp = new RescaleOp(1.0f, 50, null); // Adjust brightness (offset = 50)
@@ -989,15 +1017,15 @@ public class VehiclesPage extends JPanel implements ActionListener{
         dialog.setPreferredSize(new Dimension(1600, 900));
         dialog.setLayout(new BorderLayout());
         dialog.setBackground(Color.WHITE);
-    
+
         JLabel title = new JLabel("Add New Car", JLabel.CENTER);
         title.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
         title.setBackground(Color.WHITE);
         dialog.add(title, BorderLayout.NORTH);
-    
+
         // Add form components
         // need to use jscrollpane
-        JPanel formPanel = new JPanel(new GridLayout(1,2,1,1));
+        JPanel formPanel = new JPanel(new GridLayout(1, 2, 1, 1));
         formPanel.setBackground(Color.WHITE);
 
         JPanel picturePanel = new JPanel(new BorderLayout());
@@ -1044,7 +1072,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         // gbc.weightx = 5;
         // JComboBox yearInput = new JComboBox<>();
         // formPanel.add(yearInput, gbc);
-    
+
         // formPanel.add(new JLabel("Brand:"));
         // formPanel.add(new JTextField());
         // formPanel.add(new JLabel("Model:"));
@@ -1077,31 +1105,31 @@ public class VehiclesPage extends JPanel implements ActionListener{
         // formPanel.add(new JTextField());
         // formPanel.add(new JLabel("Features:"));
         // formPanel.add(new JTextField());
-    
+
         dialog.add(formPanel, BorderLayout.CENTER);
 
         // Add submit button
-        RoundedButton submitButton = new RoundedButton(20,Color.BLUE);
+        RoundedButton submitButton = new RoundedButton(20, Color.BLUE);
         submitButton.setText("Submit");
         submitButton.setForeground(Color.WHITE);
         submitButton.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
-        submitButton.setPreferredSize(new Dimension(1600,100));
+        submitButton.setPreferredSize(new Dimension(1600, 100));
         submitButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
                 submitButton.setBackground(Color.BLUE.darker());
             }
-            
+
             @Override
             public void mouseExited(MouseEvent evt) {
                 submitButton.setBackground(Color.BLUE);
             }
-            
+
             @Override
             public void mousePressed(MouseEvent evt) {
                 submitButton.setBackground(Color.CYAN);
             }
-            
+
             @Override
             public void mouseReleased(MouseEvent evt) {
                 submitButton.setBackground(Color.BLUE);
@@ -1118,7 +1146,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         dialog.pack();
         dialog.setLocationRelativeTo(frame); // Center relative to parent frame
         dialog.setVisible(true);
-    } 
+    }
 
     private JLabel imageLabel;
     private JButton selectButton, removeButton;
@@ -1129,13 +1157,13 @@ public class VehiclesPage extends JPanel implements ActionListener{
     private JPanel initImageUploader() {
         // Image Upload Components
         JPanel imageUploadPanel = new JPanel(new BorderLayout());
-        
+
         // Label for image preview
         imageLabel = new JLabel("No Image Selected", JLabel.CENTER);
         imageLabel.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(15f));
         imageLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         imageLabel.setPreferredSize(new Dimension(500, 500));
-        
+
         // Buttons
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.setBackground(Color.WHITE);
@@ -1149,14 +1177,14 @@ public class VehiclesPage extends JPanel implements ActionListener{
         removeButton.setPreferredSize(new Dimension(250, 100));
         removeButton.setFocusable(false);
         removeButton.setEnabled(false);
-        
+
         buttonPanel.add(selectButton);
         buttonPanel.add(removeButton);
-        
+
         // Add to panel
         imageUploadPanel.add(imageLabel, BorderLayout.CENTER);
         imageUploadPanel.add(buttonPanel, BorderLayout.SOUTH);
-        
+
         // Event Listeners
         selectButton.addActionListener(this::handleImageSelect);
         removeButton.addActionListener(this::handleImageRemove);
@@ -1169,35 +1197,35 @@ public class VehiclesPage extends JPanel implements ActionListener{
         JFileChooser fileChooser = new JFileChooser();
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             selectedImageFile = fileChooser.getSelectedFile();
-            
+
             try {
                 BufferedImage img = ImageIO.read(selectedImageFile);
                 if (img.getWidth() == 900 && img.getHeight() == 900) {
                     // Create target directory if needed
                     new File(IMAGE_DIR).mkdirs();
-                    
+
                     // Copy file
                     String filename = selectedImageFile.getName();
                     File targetFile = new File(IMAGE_DIR + filename);
-                    Files.copy(selectedImageFile.toPath(), targetFile.toPath(), 
+                    Files.copy(selectedImageFile.toPath(), targetFile.toPath(),
                             StandardCopyOption.REPLACE_EXISTING);
-                    
+
                     // Display preview
                     ImageIcon icon = new ImageIcon(
-                        new ImageIcon(targetFile.getAbsolutePath())
-                        .getImage().getScaledInstance(500, 500, Image.SCALE_SMOOTH));
+                            new ImageIcon(targetFile.getAbsolutePath())
+                                    .getImage().getScaledInstance(500, 500, Image.SCALE_SMOOTH));
                     imageLabel.setIcon(icon);
                     imageLabel.setText("");
                     removeButton.setEnabled(true);
                 } else {
-                    JOptionPane.showMessageDialog(this, 
-                        "Image must be 900×900 pixels!", 
-                        "Invalid Size", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this,
+                            "Image must be 900×900 pixels!",
+                            "Invalid Size", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, 
-                    "Error loading image", 
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "Error loading image",
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -1207,7 +1235,7 @@ public class VehiclesPage extends JPanel implements ActionListener{
         if (selectedImageFile != null) {
             String filename = selectedImageFile.getName();
             File targetFile = new File(IMAGE_DIR + filename);
-            
+
             if (targetFile.exists() && targetFile.delete()) {
                 imageLabel.setIcon(null);
                 imageLabel.setText("No Image Selected");

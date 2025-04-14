@@ -10,7 +10,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.RenderingHints;
-import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -21,8 +20,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 
 public class HomePage extends JPanel {
 
@@ -121,19 +118,10 @@ public class HomePage extends JPanel {
 
         try {
             File whitePorsche = new File("images/wallpapers/porsche-white.png");
-            // File blackPorsche = new File("images/wallpapers/porsche-black.png");
-            // if(Theme.isDarkMode()) {
-                BufferedImage originalImage = ImageIO.read(whitePorsche);
-                BufferedImage resizedImage = resizeImage(originalImage, 1100, 609);
-                JLabel wallpaper = new JLabel(new ImageIcon(resizedImage));
-                wallpaperPanel.add(wallpaper, gbc);
-            // }
-            // else {
-            //     BufferedImage originalImage = ImageIO.read(blackPorsche);
-            //     BufferedImage resizedImage = resizeImage(originalImage, 1200, 900);
-            //     JLabel wallpaper = new JLabel(new ImageIcon(resizedImage));
-            //     wallpaperPanel.add(wallpaper, gbc);
-            // }
+            BufferedImage originalImage = ImageIO.read(whitePorsche);
+            BufferedImage resizedImage = resizeImage(originalImage, 1100, 609);
+            JLabel wallpaper = new JLabel(new ImageIcon(resizedImage));
+            wallpaperPanel.add(wallpaper, gbc);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -247,48 +235,12 @@ public class HomePage extends JPanel {
         JPanel packButtonPanel = new JPanel();
         packButtonPanel.setBackground(Theme.getBackground());
         
-        if(this.user.getUsername().equals("guest")) {
+        if(this.user.getPassword() == null) {
             RoundedButton signInButton = createButton("Sign In", Theme.getBackground(), Theme.getForeground());
-            signInButton.addActionListener(e -> {
-                frame.getLayeredPane().remove(this);
-                frame.getContentPane().removeAll();
-
-                UIManager.getDefaults().clear();  // Clear all cached UI properties
-                try {
-                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
-                    for (Window window : Window.getWindows()) {
-                        SwingUtilities.updateComponentTreeUI(window);
-                        window.repaint();
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-
-                frame.add(new SignInPage(this.frame, this.panel, this.user));
-                frame.revalidate();
-                frame.repaint();
-            });
+            signInButton.addActionListener(new Navigation().toSignInPage(this.frame, this.panel, this.user));
 
             RoundedButton signUpButton = createButton("Sign Up", Theme.getSpecial(), Theme.getSpecialForeground());
-            signUpButton.addActionListener(e -> {
-                frame.getLayeredPane().remove(this);
-                frame.getContentPane().removeAll();
-
-                UIManager.getDefaults().clear();  // Clear all cached UI properties
-                try {
-                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
-                    for (Window window : Window.getWindows()) {
-                        SwingUtilities.updateComponentTreeUI(window);
-                        window.repaint();
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-
-                frame.add(new SignUpPage(this.frame, this.panel, this.user));
-                frame.revalidate();
-                frame.repaint();
-            });
+            signUpButton.addActionListener(new Navigation().toSignUpPage(this.frame, this.panel, this.user));
         
             packButtonPanel.add(signInButton);
             packButtonPanel.add(signUpButton);
@@ -307,17 +259,9 @@ public class HomePage extends JPanel {
 
                 if(proceed) {
                     UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
-
-                    frame.getLayeredPane().remove(this);
-                    this.frame.getContentPane().removeAll();
-                    this.frame.setLayout(new BorderLayout());
-                    GUIComponents.overflowMenu = null;
+                    
                     this.user = new User();
-                    this.frame.add(new GUIComponents(this.frame, this.panel, this.user), BorderLayout.NORTH);
-                    this.frame.add(this.panel, BorderLayout.CENTER);
-                    this.panel.removeAll();
-                    this.frame.revalidate();
-                    this.frame.repaint();
+                    new Navigation().homePageNavigation(this.frame, this.panel, this.user);                    
                 }
             });
 

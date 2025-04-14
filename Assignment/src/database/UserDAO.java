@@ -300,6 +300,8 @@ public class UserDAO {
         return null;
     }
 
+    // get user by email and password
+
     // check if username exist : return boolean value
     public boolean usernameExists(String username) {
         String sql = "SELECT COUNT(*) FROM users WHERE username = ?";

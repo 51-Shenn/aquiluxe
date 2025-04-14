@@ -15,13 +15,13 @@ import datamodels.Rental;
 public class PaymentDAO {
 
     // add new payment
-    public int addPayment(int rentalId, double amount, String paymentMethod, LocalDate paymentDate) {
+    public static int addPayment(Rental rental, double amount, String paymentMethod, LocalDate paymentDate) {
         String sql = "INSERT INTO payments (rental_id, amount, payment_method, payment_date) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setInt(1, rentalId);
+            stmt.setInt(1, rental.getRentalId());
             stmt.setDouble(2, amount);
             stmt.setString(3, paymentMethod);
             stmt.setDate(4, Date.valueOf(paymentDate));
@@ -44,10 +44,9 @@ public class PaymentDAO {
     }
 
     // Mapping Result of SQL to payment object : reduce redundant code
-    private Payment mapResultPayment(ResultSet rs) throws SQLException {
-        RentalDAO rentalDAO = new RentalDAO();
+    private static Payment mapResultPayment(ResultSet rs) throws SQLException {
         int rentalId = rs.getInt("rental_id");
-        Rental rental = rentalDAO.getRentalById(rentalId);
+        Rental rental = RentalDAO.getRentalById(rentalId);
 
         return new Payment(
                 rs.getInt("payment_id"),
@@ -58,7 +57,7 @@ public class PaymentDAO {
     }
 
     // get payment by ID
-    public Payment getPaymentById(int paymentId) {
+    public static Payment getPaymentById(int paymentId) {
         String sql = "SELECT * FROM payments WHERE payment_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -79,13 +78,13 @@ public class PaymentDAO {
     }
 
     // get payment by rental ID
-    public Payment getPaymentByRentalId(int rentalId) {
+    public static Payment getPaymentByRental(Rental rental) {
         String sql = "SELECT * FROM payments WHERE rental_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, rentalId);
+            stmt.setInt(1, rental.getRentalId());
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -100,7 +99,7 @@ public class PaymentDAO {
     }
 
     // get all payments
-    public List<Payment> getAllPayments() {
+    public static List<Payment> getAllPayments() {
         String sql = "SELECT * FROM payments";
         List<Payment> payments = new ArrayList<>();
 
@@ -120,7 +119,7 @@ public class PaymentDAO {
     }
 
     // get payments by payment method
-    public List<Payment> getPaymentsByMethod(String paymentMethod) {
+    public static List<Payment> getPaymentsByMethod(String paymentMethod) {
         String sql = "SELECT * FROM payments WHERE payment_method = ?";
         List<Payment> payments = new ArrayList<>();
 
@@ -143,7 +142,7 @@ public class PaymentDAO {
     }
 
     // get payments by date range
-    public List<Payment> getPaymentsByDateRange(LocalDate startDate, LocalDate endDate) {
+    public static List<Payment> getPaymentsByDateRange(LocalDate startDate, LocalDate endDate) {
         String sql = "SELECT * FROM payments WHERE payment_date BETWEEN ? AND ?";
         List<Payment> payments = new ArrayList<>();
 
@@ -167,14 +166,14 @@ public class PaymentDAO {
     }
 
     // update payment amount
-    public boolean updatePaymentAmount(int paymentId, double amount) {
+    public static boolean updatePaymentAmount(Payment payment, double amount) {
         String sql = "UPDATE payments SET amount = ? WHERE payment_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setDouble(1, amount);
-            stmt.setInt(2, paymentId);
+            stmt.setInt(2, payment.getPaymentId());
 
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
@@ -185,14 +184,14 @@ public class PaymentDAO {
     }
 
     // update payment method
-    public boolean updatePaymentMethod(int paymentId, String paymentMethod) {
+    public static boolean updatePaymentMethod(Payment payment, String paymentMethod) {
         String sql = "UPDATE payments SET payment_method = ? WHERE payment_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, paymentMethod);
-            stmt.setInt(2, paymentId);
+            stmt.setInt(2, payment.getPaymentId());
 
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
@@ -203,13 +202,13 @@ public class PaymentDAO {
     }
 
     // delete payment
-    public boolean deletePayment(int paymentId) {
+    public static boolean deletePayment(Payment payment) {
         String sql = "DELETE FROM payments WHERE payment_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, paymentId);
+            stmt.setInt(1, payment.getPaymentId());
 
             int rowsDeleted = stmt.executeUpdate();
             return rowsDeleted > 0;
@@ -220,7 +219,7 @@ public class PaymentDAO {
     }
 
     // calculate total payments for a date range
-    public double calculateTotalPayments(LocalDate startDate, LocalDate endDate) {
+    public static double calculateTotalPayments(LocalDate startDate, LocalDate endDate) {
         String sql = "SELECT SUM(amount) AS total FROM payments WHERE payment_date BETWEEN ? AND ?";
 
         try (Connection conn = DatabaseConnection.getConnection();

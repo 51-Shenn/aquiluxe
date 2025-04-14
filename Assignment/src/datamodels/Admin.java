@@ -6,6 +6,7 @@ public class Admin extends User {
     // Default Constructor
     public Admin() {
         super();
+        this.position = "";
     }
 
     // Parameterized Constructor

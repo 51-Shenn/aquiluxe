@@ -11,6 +11,7 @@ public class Payment {
 
     // Default Constructor
     public Payment() {
+        this(0, new Rental(), 0.0, "", LocalDate.now()); // Default values
     }
 
     // Constructor

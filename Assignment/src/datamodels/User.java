@@ -1,22 +1,20 @@
 package datamodels;
 
 public class User {
-    private int userId;
-    private String fullName;
-    private String gender;
-    private String phoneNumber;
-    private String userEmail;
-    private String username;
-    private String password;
-    private String userType;
+    protected int userId;
+    protected String fullName;
+    protected String gender;
+    protected String phoneNumber;
+    protected String userEmail;
+    protected String username;
+    protected String password;
+    protected String userType;
 
     // private static HashMap<Integer, User> users = new HashMap<>();
 
     // Default Constructor : for subclassing
     public User() {
-        this.fullName = "Guest";
-        this.username = "guest";
-        this.gender = "Male";
+        this(0, "Guest", "male", "", "", "guest", "");
     }
 
     // Parameterized Constructor
@@ -31,17 +29,18 @@ public class User {
         this.password = password;
     }
 
-    // public User(String fullName, String gender, String phoneNumber, String userEmail, String username,
-    //         String password, String usertype) {
-    //     this.fullName = fullName;
-    //     this.gender = gender;
-    //     this.phoneNumber = phoneNumber;
-    //     this.username = username;
-    //     this.userEmail = userEmail;
-    //     this.password = password;
-    //     this.userType = usertype;
+    // public User(String fullName, String gender, String phoneNumber, String
+    // userEmail, String username,
+    // String password, String usertype) {
+    // this.fullName = fullName;
+    // this.gender = gender;
+    // this.phoneNumber = phoneNumber;
+    // this.username = username;
+    // this.userEmail = userEmail;
+    // this.password = password;
+    // this.userType = usertype;
 
-    //     users.put(userId, this);
+    // users.put(userId, this);
     // }
 
     public User(int userId, String fullName, String gender, String phoneNumber, String userEmail, String username,

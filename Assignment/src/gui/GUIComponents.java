@@ -7,12 +7,9 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.io.File;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
@@ -30,7 +27,7 @@ public class GUIComponents extends JPanel {
         this.frame = new JFrame();
         this.panel = new JPanel();
     }
-    
+
     public GUIComponents(JFrame frame, JPanel panel, User user) {
         try {
             // Set the Windows Look and Feel
@@ -38,7 +35,7 @@ public class GUIComponents extends JPanel {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         this.frame = frame;
         this.panel = panel;
         this.user = user;
@@ -108,7 +105,7 @@ public class GUIComponents extends JPanel {
         logo.setFocusPainted(false); // no highlight
         logo.setContentAreaFilled(false); // no fill
         logo.addActionListener(e -> {
-            for(JButton button : topBarButtons) {
+            for (JButton button : topBarButtons) {
                 button.setForeground(Theme.getForeground());
                 button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
             }
@@ -149,11 +146,10 @@ public class GUIComponents extends JPanel {
 
         for (int i = 0; i < topBarButtonsLabels.length; i++) {
             topBarButtons[i] = new JButton(topBarButtonsLabels[i]);
-            if(i == 0) {
+            if (i == 0) {
                 topBarButtons[0].setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
                 topBarButtons[0].setForeground(Theme.getSpecial());
-            }
-            else {
+            } else {
                 topBarButtons[i].setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
                 topBarButtons[i].setForeground(Theme.getForeground());
             }
@@ -198,7 +194,7 @@ public class GUIComponents extends JPanel {
     }
 
     private void pageIndicator(int index) {
-        for(JButton button : topBarButtons) {
+        for (JButton button : topBarButtons) {
             button.setForeground(Theme.getForeground());
             button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
         }
@@ -207,35 +203,29 @@ public class GUIComponents extends JPanel {
     }
 
     private JButton menuButton() {
-        File kebabMenu = new File("images/icons/kebab-menu.png");
+        if (this.user == null)
+            this.user = new User();
 
-        if(this.user == null) this.user = new User();
+        JButton menu = new JButton();
+        menu.setIcon(IconLoader.getMenuIcon());
+        menu.setPreferredSize(new Dimension(100, 50));
+        menu.setBorderPainted(false); // no border
+        menu.setFocusPainted(false);
+        menu.setBackground(Theme.getBackground());
+        menu.addActionListener(e -> {
+            if (overflowMenu == null) {
+                overflowMenu = new OverflowMenu(this.frame, this.panel, this.user);
+                this.frame.getLayeredPane().add(overflowMenu, JLayeredPane.POPUP_LAYER);
+                overflowMenu.setBounds(this.frame.getWidth() - (overflowMenu.MENU_WIDTH + 35), 90,
+                        overflowMenu.MENU_WIDTH, overflowMenu.MENU_HEIGHT);
+            } else {
+                this.frame.getLayeredPane().remove(overflowMenu);
+                overflowMenu = null;
+            }
+            this.frame.revalidate();
+            this.frame.repaint();
+        });
 
-        if (!kebabMenu.exists())
-            JOptionPane.showMessageDialog(null, "Failed to load image:\n" + kebabMenu);
-        else {
-            ImageIcon kebabMenuIcon = new ImageIcon(kebabMenu.toString());
-            JButton menu = new JButton();
-            menu.setIcon(kebabMenuIcon);
-            menu.setPreferredSize(new Dimension(100, 50));
-            menu.setBorderPainted(false); // no border
-            menu.setFocusPainted(false);
-            menu.setBackground(Theme.getBackground());
-            menu.addActionListener(e -> {
-                if (overflowMenu == null) {
-                    overflowMenu = new OverflowMenu(this.frame, this.panel, this.user);
-                    this.frame.getLayeredPane().add(overflowMenu, JLayeredPane.POPUP_LAYER);
-                    overflowMenu.setBounds(this.frame.getWidth() - (overflowMenu.MENU_WIDTH + 35), 90, overflowMenu.MENU_WIDTH, overflowMenu.MENU_HEIGHT);
-                } else {
-                    this.frame.getLayeredPane().remove(overflowMenu);
-                    overflowMenu = null;
-                }
-                this.frame.revalidate();
-                this.frame.repaint();
-            });
-
-            return menu;
-        }
-        return new JButton("ERROR");
+        return menu;
     }
 }
