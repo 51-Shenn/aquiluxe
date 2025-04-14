@@ -3,10 +3,11 @@ package gui;
 import datamodels.Car;
 import javax.swing.*;
 
+import controllers.RentalController;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import controllers.VehicleController;
 
 public class VehiclesPageDetails extends JPanel {
 
@@ -264,12 +265,9 @@ public class VehiclesPageDetails extends JPanel {
             @Override
             public void mouseReleased(MouseEvent evt) {
                 rentButton.setBackground(Color.BLUE);
-                Car carSample = new Car(1001, "images/cars/Supra.jpg", "Toyota", "Supra", 2023, 3000, 800, "Red", 13.2,
-                        "12345678901234567", "REGISID123456", 999.99, "Automatic", "Hybrid", "Coupe", 2, true,
-                        "Aerodynamic Body");
-
-                VehicleController vehicleController = new VehicleController(frame, panel);
-                vehicleController.gotoRentalPage(carSample);
+                // pass selected car to rental controller
+                RentalController rentalController = new RentalController(frame, panel);
+                rentalController.gotoRentalPage(car);
             }
         });
         rentPanel.add(rentButton);
