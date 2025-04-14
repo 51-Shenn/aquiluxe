@@ -197,30 +197,15 @@ public class SignUpPage extends AuthenticationPage {
         titleLabel.setForeground(Color.BLACK);
 
         JButton closeButton = new JButton();
-        File closeImage = new File("images/icons/close.png");
-        if (!closeImage.exists()) {
-            JOptionPane.showMessageDialog(null, "Failed to load image:\n" + closeImage + "\n");
-        } else {
-            ImageIcon closeIcon = new ImageIcon(closeImage.toString());
-            closeButton.setPreferredSize(new Dimension(50, 50));
-            closeButton.setBackground(Color.WHITE);
-            closeButton.setIcon(closeIcon);
-            closeButton.setBorderPainted(false);
-            closeButton.setContentAreaFilled(false);
-            closeButton.setFocusPainted(false);
-            closeButton.addActionListener(e -> {                
-                this.frame.getContentPane().removeAll();
-                this.frame.setLayout(new BorderLayout());
-                GUIComponents.overflowMenu = null;
-                GUIComponents guiComponents = new GUIComponents(this.frame, this.panel, this.user);
-                this.frame.add(guiComponents, BorderLayout.NORTH);
-                this.frame.add(this.panel, BorderLayout.CENTER);
-                this.panel.removeAll();
-                this.panel.add(new HomePage(this.frame, this.panel, this.user, guiComponents), BorderLayout.CENTER);
-                this.frame.revalidate();
-                this.frame.repaint();
-            });
-        }
+        closeButton.setPreferredSize(new Dimension(50, 50));
+        closeButton.setBackground(Color.WHITE);
+        closeButton.setIcon(IconLoader.getXIcon());
+        closeButton.setBorderPainted(false);
+        closeButton.setContentAreaFilled(false);
+        closeButton.setFocusPainted(false);
+        closeButton.addActionListener(e -> {
+            new Navigation().homePageNavigation(this.frame, this.panel, this.user);
+        });
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 250, 0, 0);

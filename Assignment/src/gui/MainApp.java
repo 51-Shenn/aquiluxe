@@ -28,8 +28,7 @@ public class MainApp extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        ImageIcon carLogoIcon = new ImageIcon("images/icons/car-logo.png");
-        setIconImage(carLogoIcon.getImage()); // Window Icon
+        setIconImage(IconLoader.getAppIcon().getImage()); // Window Icon
 
         JPanel contentPanel = new JPanel(new BorderLayout());
 

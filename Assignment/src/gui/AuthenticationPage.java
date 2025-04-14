@@ -8,12 +8,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.io.File;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -172,9 +169,6 @@ public abstract class AuthenticationPage extends JPanel {
         emailInput.setMinimumSize(new Dimension(700, HEIGHT));
         emailInput.setForeground(Color.BLACK);
         emailInput.setBorder(new CompoundBorder(BORDER, PADDING));
-        // emailInput.addKeyListener(e -> {
-
-        // });
 
         emailValidationLabel = new JLabel("");
         emailValidationLabel.setForeground(Color.RED);
@@ -233,32 +227,26 @@ public abstract class AuthenticationPage extends JPanel {
     }
     protected JButton createEyeButton(JPasswordField passwordField) {
         JButton eyeButton = new JButton();
-        File eyeOn = new File("images/icons/eye-on.png");
-        File eyeOff = new File("images/icons/eye-off.png");
+        
+        ImageIcon eyeOnIcon = IconLoader.getEyeOnIcon();
+        ImageIcon eyeOffIcon = IconLoader.getEyeOffIcon();
 
-        if (!eyeOn.exists() || !eyeOff.exists())
-            JOptionPane.showMessageDialog(null, "Failed to load image:\n" + eyeOn + "\n" + eyeOff);
-        else {
-            ImageIcon eyeOnIcon = new ImageIcon(eyeOn.toString());
-            ImageIcon eyeOffIcon = new ImageIcon(eyeOff.toString());
-
-            eyeButton.setIcon(eyeOffIcon);
-            eyeButton.setBackground(Color.WHITE);
-            eyeButton.setBorderPainted(false);
-            eyeButton.setFocusPainted(false);
-            eyeButton.setContentAreaFilled(false);
-            eyeButton.setPreferredSize(new Dimension(100, HEIGHT));
-            eyeButton.addActionListener(e -> {
-                if(eyeButton.getIcon() == eyeOffIcon) {
-                    eyeButton.setIcon(eyeOnIcon);
-                    passwordField.setEchoChar((char) 0);
-                }
-                else {
-                    eyeButton.setIcon(eyeOffIcon);
-                    passwordField.setEchoChar('•');
-                }
-            });
-        }
+        eyeButton.setIcon(eyeOffIcon);
+        eyeButton.setBackground(Color.WHITE);
+        eyeButton.setBorderPainted(false);
+        eyeButton.setFocusPainted(false);
+        eyeButton.setContentAreaFilled(false);
+        eyeButton.setPreferredSize(new Dimension(100, HEIGHT));
+        eyeButton.addActionListener(e -> {
+            if(eyeButton.getIcon() == eyeOffIcon) {
+                eyeButton.setIcon(eyeOnIcon);
+                passwordField.setEchoChar((char) 0);
+            }
+            else {
+                eyeButton.setIcon(eyeOffIcon);
+                passwordField.setEchoChar('•');
+            }
+        });
 
         return eyeButton;
     }
