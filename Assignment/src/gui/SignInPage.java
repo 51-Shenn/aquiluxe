@@ -131,7 +131,7 @@ public class SignInPage extends AuthenticationPage {
         titleContainer.setBackground(Color.WHITE);
 
         JLabel titleLabel = new JLabel("Sign In");
-        titleLabel.setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(60f));
+        titleLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(60f));
         titleLabel.setForeground(Color.BLACK);
 
         JButton closeButton = new JButton();

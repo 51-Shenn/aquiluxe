@@ -1,5 +1,7 @@
 package gui;
 
+import controllers.UserController;
+import datamodels.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -8,7 +10,6 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.io.File;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,9 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
-
-import controllers.UserController;
-import datamodels.User;
 
 public class ForgotPasswordPage extends AuthenticationPage {
 
@@ -142,7 +140,7 @@ public class ForgotPasswordPage extends AuthenticationPage {
         titleContainer.setBackground(Color.WHITE);
 
         JLabel titleLabel = new JLabel("Forgot Password");
-        titleLabel.setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(55f));
+        titleLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(60f));
         titleLabel.setForeground(Color.BLACK);
 
         titleContainer.add(titleLabel);
