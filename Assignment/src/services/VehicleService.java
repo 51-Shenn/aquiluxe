@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import datamodels.Car;
+import database.VehicleDAO;
 
 public class VehicleService {
 //filters
