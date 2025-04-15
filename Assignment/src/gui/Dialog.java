@@ -1,11 +1,9 @@
 package gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,6 +20,7 @@ public class Dialog extends JDialog {
 
     public Dialog(JFrame frame) {
         this.frame = frame;
+        setBackground(Theme.getBackground());
     }
 
     public JFrame getFrame() {
@@ -41,7 +40,10 @@ public class Dialog extends JDialog {
         messageDialog.setLayout(new GridBagLayout());
         messageDialog.setSize(new Dimension(600, 450));
         messageDialog.setResizable(false);
-        messageDialog.setBackground(Color.WHITE);
+        messageDialog.setBackground(Theme.getBackground());
+        messageDialog.getContentPane().setBackground(Theme.getBackground());
+
+        // if true make the dialog not closable unless a input is received
         if(closeOperation)
             messageDialog.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         else
@@ -50,6 +52,7 @@ public class Dialog extends JDialog {
         GridBagConstraints gbc = new GridBagConstraints();
 
         JPanel messageIconPanel = new JPanel(new GridBagLayout());
+        messageIconPanel.setBackground(Theme.getBackground());
         switch (dialogType) {
             case "SUCCESS" -> messageIconPanel.add(new JLabel(IconLoader.getDialogSuccessIcon()));
             case "ERROR" -> messageIconPanel.add(new JLabel(IconLoader.getDialogErrorIcon()));
@@ -57,9 +60,14 @@ public class Dialog extends JDialog {
         }
 
         JPanel messageTextPanel = new JPanel(new GridBagLayout());
+        messageTextPanel.setBackground(Theme.getBackground());
+
         JLabel messageTitleLabel = new JLabel(messageTitle);
+        messageTitleLabel.setForeground(Theme.getForeground());
         messageTitleLabel.setFont(CustomFonts.ROBOTO_BLACK.deriveFont(30f));
+
         JLabel messageContentLabel = new JLabel(messageContent);
+        messageContentLabel.setForeground(Theme.getForeground());
         messageContentLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(20f));
 
         gbc.weightx = 1;
@@ -76,14 +84,14 @@ public class Dialog extends JDialog {
         messageDialog.add(messageIconPanel, gbc);
         messageDialog.add(messageTextPanel, gbc);
 
-        // Add a "Close" button
         JPanel messageButtonPanel = new JPanel(new GridBagLayout());
+        messageButtonPanel.setBackground(Theme.getBackground());
 
         GridBagConstraints gbcButton = new GridBagConstraints();
         gbcButton.insets = new Insets(0, 5, 0, 5);
 
         if(dialogType.equals("ERROR") || dialogType.equals("HAZARD")) {
-            JButton cancelButton = createDialogButton("Cancel");
+            RoundedButton cancelButton = createDialogButton("Cancel");
             cancelButton.addActionListener(e -> {
                 messageDialog.dispose();
                 confirmation = false;
@@ -93,7 +101,7 @@ public class Dialog extends JDialog {
             if(dialogType.equals("ERROR")) buttonText = "OK";
             else buttonText = "Continue";
 
-            JButton oKButton = createDialogButton(buttonText);
+            RoundedButton oKButton = createDialogButton(buttonText);
             oKButton.addActionListener(e -> {
                 messageDialog.dispose();
                 confirmation = true;
@@ -104,7 +112,7 @@ public class Dialog extends JDialog {
         }
 
         else if(dialogType.equals("SUCCESS")) {
-            JButton oKButton = createDialogButton("OK");
+            RoundedButton oKButton = createDialogButton("OK");
             oKButton.addActionListener(e -> {messageDialog.dispose();});
 
             messageButtonPanel.add(oKButton, gbcButton);
@@ -117,12 +125,14 @@ public class Dialog extends JDialog {
         return confirmation;
     }
 
-    private JButton createDialogButton(String text) {
-        JButton button = new JButton(text);
+    private RoundedButton createDialogButton(String text) {
+        RoundedButton button = new RoundedButton(5, Theme.getHoverBackground());
+        button.setText(text);
         button.setPreferredSize(new Dimension(110, 40));
-        button.setBackground(Color.WHITE);
+        button.setForeground(Theme.getForeground());
         button.setFont(CustomFonts.INSTRUMENT_SANS_REGULAR.deriveFont(17f));
-        button.setOpaque(false);
+        // button.setOpaque(true);
+        button.setBorderPainted(false);
         button.setFocusable(false);
 
         return button;

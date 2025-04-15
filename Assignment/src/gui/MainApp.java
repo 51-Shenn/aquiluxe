@@ -4,12 +4,10 @@ import controllers.UserController;
 import database.VehicleDAO;
 import datamodels.User;
 import datamodels.Vehicle;
-
 import java.awt.*;
-import java.util.List;
 import java.io.File;
 import java.util.ArrayList;
-
+import java.util.List;
 import javax.swing.*;
 
 public class MainApp extends JFrame {
@@ -30,7 +28,8 @@ public class MainApp extends JFrame {
 
         setIconImage(IconLoader.getAppIcon().getImage()); // Window Icon
 
-        JPanel contentPanel = new JPanel(new BorderLayout());
+        JPanel contentPanel;
+        contentPanel = new JPanel(new BorderLayout());
 
         File accountsFile = new File("files/settings/accounts.txt");
         if (accountsFile.exists()) {
