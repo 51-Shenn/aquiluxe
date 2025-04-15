@@ -49,6 +49,8 @@ public class OverflowMenu extends JLayeredPane {
     private final File THEME_FILE = new File("files/settings/theme.txt");
     private final File ACCOUNTS_FILE = new File("files/settings/accounts.txt");
     private int[] userAccountsID = new int[4];
+    private static int invokeAdminPortalCounter = 0;
+    private static String generatedUUID;
 
     public OverflowMenu() {
         this.frame = new JFrame();
@@ -69,6 +71,22 @@ public class OverflowMenu extends JLayeredPane {
             MENU_HEIGHT = 800;
         setBackground(Theme.getBackground());
         add(createOverflowMenu(), JLayeredPane.POPUP_LAYER);
+    }
+
+    public static int getInvokeAdminPortalCounter() {
+        return invokeAdminPortalCounter;
+    }
+
+    public static void setInvokeAdminPortalCounter(int invokeAdminPortalCounter) {
+        OverflowMenu.invokeAdminPortalCounter = invokeAdminPortalCounter;
+    }
+
+    public static String getGeneratedUUID() {
+        return generatedUUID;
+    }
+
+    public static void setGeneratedUUID(String generatedUUID) {
+        OverflowMenu.generatedUUID = generatedUUID;
     }
 
     public JFrame getFrame() {
@@ -208,7 +226,7 @@ public class OverflowMenu extends JLayeredPane {
 
         gbc.weighty = 1;
 
-        if (this.user.getFullName().equals("Guest") && this.user.getUsername().equals("guest")) {
+        if (this.user.getFullName().equals("Guest") && this.user.getUsername().equals("guest") && this.user.getPassword() == null) {
             mainCardPanel.add(createMenuCard("Sign Up", IconLoader.getSignInIcon()), gbc);
             mainCardPanel.add(createMenuCard("Sign In", IconLoader.getSignInIcon()), gbc);
         } else {
@@ -534,7 +552,10 @@ public class OverflowMenu extends JLayeredPane {
                         gbcButton.gridx = 0;
                         gbcButton.gridy = 0;
                         gbcButton.weightx = 0;
-                        accountButton.add(new JLabel(genderIcon), gbcButton);
+                        
+                        JLabel profilePicture = new JLabel(genderIcon);
+
+                        accountButton.add(profilePicture, gbcButton);
 
                         JPanel accountDetails = new JPanel(new GridBagLayout());
                         accountDetails.setBackground(new Color(255, 255, 255, 0));
@@ -542,6 +563,7 @@ public class OverflowMenu extends JLayeredPane {
                         JLabel fullNameLabel = new JLabel(everyUser.getFullName());
                         fullNameLabel.setForeground(Theme.getForeground());
                         fullNameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(18f));
+
                         JLabel usernameLabel = new JLabel("@" + everyUser.getUsername());
                         usernameLabel.setForeground(Color.GRAY);
                         usernameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(14f));
@@ -650,6 +672,17 @@ public class OverflowMenu extends JLayeredPane {
         JLabel usernameLabel = new JLabel("@" + this.user.getUsername());
         usernameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
         usernameLabel.setForeground(Color.GRAY);
+        usernameLabel.addMouseListener(new MouseAdapter() {        
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                invokeAdminPortalCounter++;
+                if (invokeAdminPortalCounter >= 7) {
+                    Dialog dialog = new Dialog();
+                    dialog.adminPortalDialog();
+                    invokeAdminPortalCounter = 0;
+                }
+            }
+        });
 
         editButton = createEditButton(IconLoader.getEditProfileIcon());
 

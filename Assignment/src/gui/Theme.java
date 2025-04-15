@@ -27,7 +27,7 @@ public class Theme {
     }
 
     public static Color getPressedBackground() {
-        return isDarkMode() ? new Color(0x383838) : new Color(0xE0E7FF);
+        return isDarkMode() ? new Color(0x383838) : new Color(0xD3D3D3);
     }
 
     public static Color getForeground() {
@@ -60,6 +60,10 @@ public class Theme {
 
     public static Color getHoverSuccess() {
         return isDarkMode() ? new Color(0x34CE57) : new Color(0x218838);
+    }
+
+    public static Color getPressedSuccess() {
+        return isDarkMode() ? new Color(0x2DBE4D) : new Color(0x1E7E34);
     }
 
     public static Color getSuccessForeground() {
