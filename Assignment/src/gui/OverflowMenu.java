@@ -50,6 +50,7 @@ public class OverflowMenu extends JLayeredPane {
     private final File ACCOUNTS_FILE = new File("files/settings/accounts.txt");
     private int[] userAccountsID = new int[4];
     private static int invokeAdminPortalCounter = 0;
+    private static String generatedUUID;
 
     public OverflowMenu() {
         this.frame = new JFrame();
@@ -70,6 +71,22 @@ public class OverflowMenu extends JLayeredPane {
             MENU_HEIGHT = 800;
         setBackground(Theme.getBackground());
         add(createOverflowMenu(), JLayeredPane.POPUP_LAYER);
+    }
+
+    public static int getInvokeAdminPortalCounter() {
+        return invokeAdminPortalCounter;
+    }
+
+    public static void setInvokeAdminPortalCounter(int invokeAdminPortalCounter) {
+        OverflowMenu.invokeAdminPortalCounter = invokeAdminPortalCounter;
+    }
+
+    public static String getGeneratedUUID() {
+        return generatedUUID;
+    }
+
+    public static void setGeneratedUUID(String generatedUUID) {
+        OverflowMenu.generatedUUID = generatedUUID;
     }
 
     public JFrame getFrame() {

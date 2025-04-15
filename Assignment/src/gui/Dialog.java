@@ -5,11 +5,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.UUID;
+import javax.swing.BorderFactory;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 public class Dialog extends JDialog {
 
@@ -38,7 +41,7 @@ public class Dialog extends JDialog {
     }
 
     public void adminPortalDialog() {
-        JDialog adminDialog = new JDialog(this.frame, "Admin Portal", true);
+        JDialog adminDialog = new JDialog(this.frame, "Admin Portal", false);
         adminDialog.setLayout(new GridBagLayout());
         adminDialog.setSize(new Dimension(800, 650));
         adminDialog.setResizable(false);
@@ -46,34 +49,74 @@ public class Dialog extends JDialog {
         adminDialog.getContentPane().setBackground(Theme.getBackground());
 
         JLabel dialogTitle = new JLabel("Admin Portal");
-        dialogTitle.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(30f));
+        dialogTitle.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(50f));
         dialogTitle.setForeground(Theme.getForeground());
 
+        JPanel adminPassPanel = new JPanel(new GridBagLayout());
+        adminPassPanel.setBackground(Theme.getBackground());
+        
+        JLabel passwordLabel = new JLabel("Password: ");
+        passwordLabel.setForeground(Theme.getForeground());
+        passwordLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(20f));
+
         JTextField adminPassField = new JTextField();
-        adminPassField.setText("");
+        adminPassField.setPreferredSize(new Dimension(400, 50));
         adminPassField.setCaretColor(Theme.getForeground());
         adminPassField.setBackground(Theme.getBackground());
         adminPassField.setForeground(Theme.getForeground());
+        adminPassField.setBorder(BorderFactory.createCompoundBorder(adminPassField.getBorder(), new EmptyBorder(0, 10, 0, 10)));
         adminPassField.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(20f));
 
-        UUID uuid = UUID.randomUUID();
-        String uuidString = uuid.toString();
+        GridBagConstraints gbcPanel = new GridBagConstraints();
+        gbcPanel.weightx = 1;
+        gbcPanel.fill = GridBagConstraints.HORIZONTAL;
+        gbcPanel.anchor = GridBagConstraints.WEST;
+        gbcPanel.gridwidth = GridBagConstraints.REMAINDER;
+
+        adminPassPanel.add(passwordLabel, gbcPanel);
+        adminPassPanel.add(adminPassField, gbcPanel);
 
         JTextField uuidField = new JTextField();
-        uuidField.setText(uuidString);
+        uuidField.setEditable(false);
         uuidField.setCaretColor(Theme.getForeground());
         uuidField.setBackground(Theme.getBackground());
         uuidField.setForeground(Theme.getForeground());
-        uuidField.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(20f));
+        uuidField.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(18f));
+        uuidField.setBorder(new LineBorder(Theme.getBackground()));
+
+        RoundedButton getPassKeyButton = new RoundedButton(10, Theme.getSuccess());
+        getPassKeyButton.setText("Get Pass Key");
+        getPassKeyButton.setForeground(Theme.getSuccessForeground());
+        getPassKeyButton.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(20f));
+        getPassKeyButton.setPreferredSize(new Dimension(150, 50));
+        getPassKeyButton.setOpaque(false);
+        getPassKeyButton.setBorderPainted(false);
+        getPassKeyButton.setFocusable(false);
+        getPassKeyButton.addActionListener(e -> {
+            UUID uuid = UUID.randomUUID();
+            String uuidString = uuid.toString();
+            uuidField.setEditable(true);
+            uuidField.setText(uuidString);
+            uuidField.setEditable(false);
+            OverflowMenu.setGeneratedUUID(uuidString);
+            adminDialog.revalidate();
+            adminDialog.repaint();
+        });
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx = 1;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(30, 20, 0, 20);
+        gbc.fill = GridBagConstraints.NONE;
         adminDialog.add(dialogTitle, gbc);
-        adminDialog.add(adminPassField, gbc);
-        adminDialog.add(uuidField);
+
+        gbc.weightx = 0;
+        gbc.insets = new Insets(80, 0, 0, 0);
+        adminDialog.add(adminPassPanel, gbc);
+        gbc.insets = new Insets(10, 0, 50, 0);
+        adminDialog.add(uuidField, gbc);
+
+        adminDialog.add(getPassKeyButton, gbc);
+
 
         adminDialog.setLocationRelativeTo(this.frame);
         adminDialog.setVisible(true);
