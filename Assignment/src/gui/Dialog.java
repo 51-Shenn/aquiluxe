@@ -4,10 +4,12 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.UUID;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class Dialog extends JDialog {
 
@@ -33,6 +35,48 @@ public class Dialog extends JDialog {
 
     public void setConfirmation(boolean confirmation) {
         this.confirmation = confirmation;
+    }
+
+    public void adminPortalDialog() {
+        JDialog adminDialog = new JDialog(this.frame, "Admin Portal", true);
+        adminDialog.setLayout(new GridBagLayout());
+        adminDialog.setSize(new Dimension(800, 650));
+        adminDialog.setResizable(false);
+        adminDialog.setBackground(Theme.getBackground());
+        adminDialog.getContentPane().setBackground(Theme.getBackground());
+
+        JLabel dialogTitle = new JLabel("Admin Portal");
+        dialogTitle.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(30f));
+        dialogTitle.setForeground(Theme.getForeground());
+
+        JTextField adminPassField = new JTextField();
+        adminPassField.setText("");
+        adminPassField.setCaretColor(Theme.getForeground());
+        adminPassField.setBackground(Theme.getBackground());
+        adminPassField.setForeground(Theme.getForeground());
+        adminPassField.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(20f));
+
+        UUID uuid = UUID.randomUUID();
+        String uuidString = uuid.toString();
+
+        JTextField uuidField = new JTextField();
+        uuidField.setText(uuidString);
+        uuidField.setCaretColor(Theme.getForeground());
+        uuidField.setBackground(Theme.getBackground());
+        uuidField.setForeground(Theme.getForeground());
+        uuidField.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(20f));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = 1;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(30, 20, 0, 20);
+        adminDialog.add(dialogTitle, gbc);
+        adminDialog.add(adminPassField, gbc);
+        adminDialog.add(uuidField);
+
+        adminDialog.setLocationRelativeTo(this.frame);
+        adminDialog.setVisible(true);
     }
 
     public boolean showDialog(String dialogType, String dialogTitle, String messageTitle, String messageContent, boolean closeOperation) {
@@ -112,10 +156,10 @@ public class Dialog extends JDialog {
         }
 
         else if(dialogType.equals("SUCCESS")) {
-            RoundedButton oKButton = createDialogButton("OK");
-            oKButton.addActionListener(e -> {messageDialog.dispose();});
+            RoundedButton OkButton = createDialogButton("OK");
+            OkButton.addActionListener(e -> {messageDialog.dispose();});
 
-            messageButtonPanel.add(oKButton, gbcButton);
+            messageButtonPanel.add(OkButton, gbcButton);
         }
 
         messageDialog.add(messageButtonPanel, gbc);
@@ -131,7 +175,6 @@ public class Dialog extends JDialog {
         button.setPreferredSize(new Dimension(110, 40));
         button.setForeground(Theme.getForeground());
         button.setFont(CustomFonts.INSTRUMENT_SANS_REGULAR.deriveFont(17f));
-        // button.setOpaque(true);
         button.setBorderPainted(false);
         button.setFocusable(false);
 
