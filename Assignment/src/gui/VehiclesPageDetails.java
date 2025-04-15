@@ -6,8 +6,8 @@ import datamodels.Vehicle;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.*;
 import java.util.List;
+import javax.swing.*;
 
 public class VehiclesPageDetails extends JPanel {
 
@@ -85,11 +85,11 @@ public class VehiclesPageDetails extends JPanel {
         Image rImage = image.getImage().getScaledInstance(700, 700, java.awt.Image.SCALE_SMOOTH);
         image = new ImageIcon(rImage);
 
-        // car picutre at the center
+        // vehicle picutre at the center
         JLabel carPicture = new JLabel(image);
         carDetailsPanel.add(carPicture, BorderLayout.CENTER);
 
-        // Panel on top to hold the name and price of car
+        // Panel on top to hold the name and price of vehicle
         JLabel brandModelYearLabel = new JLabel(vehicle.getBrand() + " " + vehicle.getModel() + " " + vehicle.getYear());
         brandModelYearLabel.setForeground(Theme.getForeground());
         brandModelYearLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(35f));
@@ -131,7 +131,7 @@ public class VehiclesPageDetails extends JPanel {
 
         technicalSpecsPanel.add(detailsLabelPanel, BorderLayout.NORTH);
 
-        // get pass through car
+        // get pass through vehicle
         String transmission = vehicle.getTransmission();
         String fuelType = vehicle.getFuelType();
         int seats = vehicle.getSeatingCapacity();
@@ -141,11 +141,11 @@ public class VehiclesPageDetails extends JPanel {
         int horsepower = vehicle.getHorsepower();
         String color = vehicle.getColor();
 
-        // loop through every details of the car and show
+        // loop through every details of the vehicle and show
         ImageIcon[] detailsIcons = new ImageIcon[8];
         ImageIcon transmissionIcon = new ImageIcon("images/vehiclepageicons/manual-transmission.png");
         ImageIcon fuelIcon = new ImageIcon("images/vehiclepageicons/gas-station.png");
-        ImageIcon seatsIcon = new ImageIcon("images/vehiclepageicons/car-seat.png");
+        ImageIcon seatsIcon = new ImageIcon("images/vehiclepageicons/vehicle-seat.png");
         ImageIcon carTypeIcon = new ImageIcon("images/vehiclepageicons/chassis.png");
         ImageIcon capacityIcon = new ImageIcon("images/vehiclepageicons/engine.png");
         ImageIcon mpgIcon = new ImageIcon("images/vehiclepageicons/fuel-gauge.png");
@@ -449,12 +449,12 @@ public class VehiclesPageDetails extends JPanel {
             Image rImage = image.getImage().getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH);
             image = new ImageIcon(rImage);
 
-            String availability = car.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
-            String rentPrice = "RM" + car.getRentalPriceDay() + "/per day";
+            String availability = vehicle.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
+            String rentPrice = "RM" + vehicle.getRentalPriceDay() + "/per day";
 
-            carsContainer.add(VehiclesPage.createCarCard(car, image, car.getBrand(), car.getModel(),
-                    car.getTransmission(), car.getFuelType(), car.getCarType(),
-                    car.getSeatingCapacity(), rentPrice, availability, frame, panel));
+            carsContainer.add(VehiclesPage.createCarCard(vehicle, image, vehicle.getBrand(), vehicle.getModel(),
+                    vehicle.getTransmission(), vehicle.getFuelType(), vehicle.getVehicleType(),
+                    vehicle.getSeatingCapacity(), rentPrice, availability, frame, panel));
             count++;
         }
 
@@ -501,7 +501,7 @@ public class VehiclesPageDetails extends JPanel {
         featuresLabel.setForeground(Theme.getForeground());
         featuresLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(30f));
 
-        JLabel featuresContent = new JLabel(this.car.getFeatures());
+        JLabel featuresContent = new JLabel(this.vehicle.getFeatures());
         featuresContent.setForeground(Theme.getSecondaryForeground());
         featuresContent.setFont(CustomFonts.INSTRUMENT_SANS_SEMI_BOLD.deriveFont(20f));
 
