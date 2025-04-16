@@ -235,7 +235,7 @@ public class HomePage extends JPanel {
         JPanel packButtonPanel = new JPanel();
         packButtonPanel.setBackground(Theme.getBackground());
         
-        if(this.user.getPassword() == null) {
+        if(this.user.getUserId() == 0) {
             RoundedButton signInButton = createButton("Sign In", Theme.getBackground(), Theme.getForeground());
             signInButton.addActionListener(new Navigation().toSignInPage(this.frame, this.panel, this.user));
             signInButton.addMouseListener(new MouseAdapter() {

@@ -2,6 +2,7 @@ package gui;
 
 import controllers.UserController;
 import database.UserDAO;
+import datamodels.Admin;
 import datamodels.Customer;
 import datamodels.User;
 import java.awt.BorderLayout;
@@ -51,6 +52,7 @@ public class OverflowMenu extends JLayeredPane {
     private int[] userAccountsID = new int[4];
     private static int invokeAdminPortalCounter = 0;
     private static String generatedUUID;
+    private static String position;
 
     public OverflowMenu() {
         this.frame = new JFrame();
@@ -65,12 +67,20 @@ public class OverflowMenu extends JLayeredPane {
         this.panel = panel;
         this.user = user;
         MENU_WIDTH = 400;
-        if(this.user.getFullName().equals("Guest") && this.user.getUsername().equals("guest"))
+        if(this.user.getUserId() == 0)
             MENU_HEIGHT = 550;
         else
             MENU_HEIGHT = 800;
         setBackground(Theme.getBackground());
         add(createOverflowMenu(), JLayeredPane.POPUP_LAYER);
+    }
+
+    public static String getPosition() {
+        return position;
+    }
+
+    public static void setPosition(String position) {
+        OverflowMenu.position = position;
     }
 
     public static int getInvokeAdminPortalCounter() {
@@ -226,7 +236,7 @@ public class OverflowMenu extends JLayeredPane {
 
         gbc.weighty = 1;
 
-        if (this.user.getFullName().equals("Guest") && this.user.getUsername().equals("guest") && this.user.getPassword() == null) {
+        if (this.user.getUserId() == 0) {
             mainCardPanel.add(createMenuCard("Sign Up", IconLoader.getSignInIcon()), gbc);
             mainCardPanel.add(createMenuCard("Sign In", IconLoader.getSignInIcon()), gbc);
         } else {
@@ -303,6 +313,11 @@ public class OverflowMenu extends JLayeredPane {
         updateButton.setPreferredSize(new Dimension(100, 50));
         updateButton.addActionListener(e -> {
             Dialog dialog = new Dialog(this.frame);
+
+            try {
+                Dialog.getAdminDialog().dispose();
+            } catch(Exception exception) {}
+
             boolean proceed = dialog.showDialog(
                 "HAZARD",
                 "Confirm Update",
@@ -391,11 +406,19 @@ public class OverflowMenu extends JLayeredPane {
             case "Email Address" -> inputField.setText(this.user.getUserEmail());
             case "Phone Number (+60)" -> inputField.setText(this.user.getPhoneNumber());
             case "Driving License" -> {
-                try {
-                    Customer customer = new UserDAO().getCustomerById(this.user);
-                    inputField.setText(customer.getLicense());
-                } catch (Exception e) {
-                    inputField.setText("");
+                if(this.user.getUserType().equals("Customer")) {
+                    try {
+                        Customer customer = new UserDAO().getCustomerById(this.user);
+                        inputField.setText(customer.getLicense());
+                    } catch (Exception e) {
+                        inputField.setText("");
+                    }
+                }
+                else if(this.user.getUserType().equals("Admin")) {
+                    label.setText("Position:");
+                    Admin admin = new UserDAO().getAdminById(this.user);
+                    inputField.setText(admin.getAdminRole());
+                    inputField.setEditable(false);
                 }
             }
         }
@@ -672,17 +695,21 @@ public class OverflowMenu extends JLayeredPane {
         JLabel usernameLabel = new JLabel("@" + this.user.getUsername());
         usernameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
         usernameLabel.setForeground(Color.GRAY);
-        usernameLabel.addMouseListener(new MouseAdapter() {        
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                invokeAdminPortalCounter++;
-                if (invokeAdminPortalCounter >= 7) {
-                    Dialog dialog = new Dialog();
-                    dialog.adminPortalDialog();
-                    invokeAdminPortalCounter = 0;
-                }
+        if(this.user.getUserId() != 0) {
+            if(this.user.getUserType().equals("Customer") ) {
+                usernameLabel.addMouseListener(new MouseAdapter() {        
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        invokeAdminPortalCounter++;
+                        if (invokeAdminPortalCounter >= 7) {
+                            Dialog dialog = new Dialog();
+                            dialog.adminPortalDialog();
+                            invokeAdminPortalCounter = 0;
+                        }
+                    }
+                });
             }
-        });
+        }
 
         editButton = createEditButton(IconLoader.getEditProfileIcon());
 

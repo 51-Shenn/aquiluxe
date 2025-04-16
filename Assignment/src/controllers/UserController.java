@@ -1,10 +1,9 @@
 package controllers;
 
-import java.io.File;
-
-import javax.swing.JLabel;
-
 import datamodels.User;
+import java.io.File;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 import services.UserService;
 
 public class UserController {
@@ -61,5 +60,9 @@ public class UserController {
 
     public static void useTheme(String newTheme, File themFile) {
         UserService.applyNewTheme(newTheme, themFile);
+    }
+
+    public static String passAdminPassword(String password, JTextField uuidField) {
+        return UserService.adminPasswordValidation(password, uuidField);
     }
 }

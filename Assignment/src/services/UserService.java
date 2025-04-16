@@ -2,6 +2,7 @@ package services;
 
 import database.UserDAO;
 import datamodels.User;
+import gui.OverflowMenu;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 public class UserService {
 
@@ -147,8 +149,16 @@ public class UserService {
             userDAO.updateUserColumnValue(user.getUserId(), "user_email", email);
             userDAO.updateUserColumnValue(user.getUserId(), "phone_number", phoneNumber);
 
-            if(!drivingLicense.isEmpty()) {
+            if(drivingLicense.equals(OverflowMenu.getGeneratedUUID())) {
+                userDAO.updateUserColumnValue(user.getUserId(), "usertype", "Admin");
+                String position = capitalizeFullName(OverflowMenu.getPosition());
+                userDAO.addAdminPosition(user.getUserId(), position);
+            }
+            else if(!drivingLicense.isEmpty()) {
                 userDAO.addCustomerDetails(user.getUserId(), "", drivingLicense);
+            }
+            else {
+                drivingLicenseValidationLabel.setText("Invalid UUID");
             }
             
             return true;
@@ -554,5 +564,24 @@ public class UserService {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not write file: " + themeFile);
         }
+    }
+
+    public static String adminPasswordValidation(String password, JTextField uuidField) {
+        final String MANAGER_PASSWORD = "Manager";
+        final String EMPLOYEE_PASSWORD = "Employee";
+
+        switch (password) {
+            case MANAGER_PASSWORD -> {
+                OverflowMenu.setPosition("MANAGER");
+                return "MANAGER";
+            }
+            case EMPLOYEE_PASSWORD -> {
+                OverflowMenu.setPosition("EMPLOYEE");
+                return "EMPLOYEE";
+            }
+            default -> uuidField.setText("Invalid Password. Please try again");
+        }
+
+        return "";
     }
 }
