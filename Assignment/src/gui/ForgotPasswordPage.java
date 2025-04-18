@@ -7,14 +7,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
-import java.io.File;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.CompoundBorder;
@@ -112,14 +108,7 @@ public class ForgotPasswordPage extends AuthenticationPage {
     protected JLabel createWallpaperLabel() {
         JLabel wallpaperLabel = new JLabel();
         wallpaperLabel.setOpaque(false);
-        File imageFile = new File("images/wallpapers/car-wallpaper-1.png");
-        if (!imageFile.exists()) {
-            JOptionPane.showMessageDialog(null, "Failed to load image: " + imageFile);
-        } else {
-            ImageIcon backgroundImage = new ImageIcon(imageFile.toString());
-            Image image = backgroundImage.getImage().getScaledInstance(960, 1080, Image.SCALE_SMOOTH);
-            wallpaperLabel.setIcon(new ImageIcon(image));
-        }
+        wallpaperLabel.setIcon(ImageLoader.getForgotPasswordWallpaper());
 
         wallpaperLabel.setLayout(new GridBagLayout());
 

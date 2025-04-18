@@ -5,21 +5,31 @@ import java.awt.Color;
 import java.io.File;
 
 public class Theme {
-    public static Color LIGHT_BLUE = new Color(0x306CFE);
-    public static Color OFF_WHITE = new Color(0xF4F7FF);
-    public static Color BLACK = new Color(0x0A0908);
+    // public static Color LIGHT_BLUE = new Color(0x306CFE);
+    // public static Color OFF_WHITE = new Color(0xF4F7FF);
+    // public static Color BLACK = new Color(0x0A0908);
     
+    private static final Color BLACK = new Color(0x000000);
+    private static final Color WHITE = new Color(0xFFFFFF);
     private static final Color SUCCESS = new Color(0x28A745);
     private static final Color ERROR = new Color(0xDC3545);
     
     private final static File THEME_FILE = new File("files/settings/theme.txt");
+
+    public static Color getWhite() {
+        return WHITE;
+    }
+
+    public static Color getBlack() {
+        return BLACK;
+    }
 
     public static Color getTransparencyColor() {
         return isDarkMode() ? new Color(255, 255, 255, 20) : new Color(0, 0, 0, 20);
     }
 
     public static Color getBackground() {
-        return isDarkMode() ? new Color(0x121212) : new Color(0xFFFFFF);
+        return isDarkMode() ? new Color(0x121212) : WHITE;
     }
     
     public static Color getHoverBackground() {
@@ -31,7 +41,7 @@ public class Theme {
     }
 
     public static Color getForeground() {
-        return isDarkMode() ? new Color(0xFFFFFF) : new Color(0x000000);
+        return isDarkMode() ? WHITE : BLACK;
     }
 
     public static Color getSecondaryForeground() {
@@ -39,7 +49,7 @@ public class Theme {
     }
 
     public static Color getSpecial() {
-        return LIGHT_BLUE;
+        return new Color(0x306CFE);
     }
 
     public static Color getHoverSpecial() {
@@ -51,7 +61,7 @@ public class Theme {
     }
 
     public static Color getSpecialForeground() {
-        return new Color(0xFFFFFF);
+        return WHITE;
     }
 
     public static Color getSuccess() {
@@ -67,7 +77,7 @@ public class Theme {
     }
 
     public static Color getSuccessForeground() {
-        return new Color(0xFFFFFF);
+        return WHITE;
     }
 
     public static Color getError() {
@@ -83,23 +93,11 @@ public class Theme {
     }
 
     public static Color getErrorForeground() {
-        return new Color(0xFFFFFF);
+        return WHITE;
     }
 
     public static File getThemeFile() {
         return THEME_FILE;
-    }
-
-    public static void setLightBlue(Color newColor) {
-        LIGHT_BLUE = newColor;
-    }
-
-    public static void setOffWhite(Color newColor) {
-        OFF_WHITE = newColor;
-    }
-
-    public static void setBlack(Color newColor) {
-        BLACK = newColor;
     }
 
     public static boolean isDarkMode() {

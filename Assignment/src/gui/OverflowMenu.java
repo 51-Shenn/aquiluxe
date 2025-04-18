@@ -588,7 +588,7 @@ public class OverflowMenu extends JLayeredPane {
                         fullNameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(18f));
 
                         JLabel usernameLabel = new JLabel("@" + everyUser.getUsername());
-                        usernameLabel.setForeground(Color.GRAY);
+                        usernameLabel.setForeground(Theme.getSecondaryForeground());
                         usernameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(14f));
 
                         GridBagConstraints gbcDetails = new GridBagConstraints();
@@ -694,7 +694,7 @@ public class OverflowMenu extends JLayeredPane {
 
         JLabel usernameLabel = new JLabel("@" + this.user.getUsername());
         usernameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
-        usernameLabel.setForeground(Color.GRAY);
+        usernameLabel.setForeground(Theme.getSecondaryForeground());
         if(this.user.getUserId() != 0) {
             if(this.user.getUserType().equals("Customer") ) {
                 usernameLabel.addMouseListener(new MouseAdapter() {        

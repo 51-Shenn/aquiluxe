@@ -5,17 +5,12 @@ import datamodels.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -116,19 +111,12 @@ public class HomePage extends JPanel {
 
         wallpaperPanel.add(createButtonPanel(), gbc);
 
-        try {
-            File whitePorsche = new File("images/wallpapers/porsche-white.png");
-            BufferedImage originalImage = ImageIO.read(whitePorsche);
-            BufferedImage resizedImage = resizeImage(originalImage, 1100, 609);
-            JLabel wallpaper = new JLabel(new ImageIcon(resizedImage));
-            wallpaperPanel.add(wallpaper, gbc);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        JLabel wallpaper = new JLabel(ImageLoader.getWhitePorscheImage());
+        wallpaperPanel.add(wallpaper, gbc);
 
         return wallpaperPanel;
     }
-
+    
     private JPanel createTitlePanel() {
         JPanel titlePanel = new JPanel(new GridBagLayout());
         titlePanel.setBackground(Theme.getBackground());
@@ -360,22 +348,6 @@ public class HomePage extends JPanel {
         button.setFocusPainted(false);
 
         return button;
-    }
-
-    public static BufferedImage resizeImage(BufferedImage originalImage, int width, int height) {
-        BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = resizedImage.createGraphics();
-
-        // rendering high quality
-        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        // draw image
-        g2d.drawImage(originalImage, 0, 0, width, height, null);
-        g2d.dispose();
-
-        return resizedImage;
     }
 
     public File getACCOUNTS_FILE() {
