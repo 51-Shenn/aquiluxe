@@ -12,7 +12,7 @@ import javax.swing.UIManager;
 
 public class Navigation {
 
-    private void removeWindowsLookAndFeel() {
+    public static void removeWindowsLookAndFeel() {
         UIManager.getDefaults().clear();
         try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -22,6 +22,14 @@ public class Navigation {
             }
         } catch (Exception exception) {
             exception.printStackTrace();
+        }
+    }
+
+    public static void setWindowsLookAndFeel() {
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

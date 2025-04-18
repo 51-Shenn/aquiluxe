@@ -10,7 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 
 public class GUIComponents extends JPanel {
@@ -28,12 +27,7 @@ public class GUIComponents extends JPanel {
     }
 
     public GUIComponents(JFrame frame, JPanel panel, User user) {
-        try {
-            // Set the Windows Look and Feel
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Navigation.setWindowsLookAndFeel();
 
         this.frame = frame;
         this.panel = panel;

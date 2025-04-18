@@ -13,12 +13,8 @@ import javax.swing.*;
 public class MainApp extends JFrame {
 
     public MainApp() {
-        try {
-            // Set the Windows Look and Feel
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Navigation.setWindowsLookAndFeel();
+        
         setTitle("AQUILUXE");
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(1280, 720));
