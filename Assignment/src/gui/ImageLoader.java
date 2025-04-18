@@ -35,8 +35,7 @@ public class ImageLoader {
     }
 
     private static ImageIcon scaleImage(File imageFile, int width, int height) {
-        ImageIcon backgroundImage = new ImageIcon(imageFile.toString());
-        Image image = backgroundImage.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        Image image = new ImageIcon(imageFile.toString()).getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
 
         return new ImageIcon(image);
     }
