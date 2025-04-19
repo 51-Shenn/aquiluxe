@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -131,40 +132,42 @@ public class UserService {
         return false;
     }
 
-    public static boolean validateUpdateProfileDetails(User user, String fullName, String username, String email,
-            String phoneNumber, String drivingLicense,
-            JLabel fullNameValidationLabel, JLabel usernameValidationLabel, JLabel emailValidationLabel,
-            JLabel phoneNumberValidationLabel, JLabel drivingLicenseValidationLabel) {
+    public static boolean validateUpdateProfileDetails(User user, String fullName, String username, String email, String phoneNumber, String identityCard,
+            JLabel fullNameValidationLabel, JLabel usernameValidationLabel, JLabel emailValidationLabel, JLabel phoneNumberValidationLabel, JLabel icValidationLabel) {
 
         boolean isValidFullName = fullNameValidator(user, fullName, fullNameValidationLabel);
         boolean isValidUsername = usernameValidator(user, username, usernameValidationLabel);
         boolean isValidEmailAddress = emailAddressValidator(user, email, emailValidationLabel);
         boolean isValidPhoneNumber = phoneNumberValidator(user, phoneNumber, phoneNumberValidationLabel);
 
-        if (isValidFullName && isValidUsername && isValidEmailAddress && isValidPhoneNumber) {
-            UserDAO userDAO = new UserDAO();
-            fullName = capitalizeFullName(fullName);
-            userDAO.updateUserColumnValue(user.getUserId(), "full_name", fullName);
-            userDAO.updateUserColumnValue(user.getUserId(), "username", username);
-            userDAO.updateUserColumnValue(user.getUserId(), "user_email", email);
-            userDAO.updateUserColumnValue(user.getUserId(), "phone_number", phoneNumber);
+        if(user.getUserType().equals("Customer")) {
+            boolean isValidLicense = identityCardValidator(user, identityCard, icValidationLabel);
 
-            if(drivingLicense.equals(OverflowMenu.getGeneratedUUID())) {
-                userDAO.updateUserColumnValue(user.getUserId(), "usertype", "Admin");
-                String position = capitalizeFullName(OverflowMenu.getPosition());
-                userDAO.addAdminPosition(user.getUserId(), position);
-            }
-            else if(!drivingLicense.isEmpty()) {
-                userDAO.addCustomerDetails(user.getUserId(), "", drivingLicense);
-            }
-            else {
-                drivingLicenseValidationLabel.setText("Invalid UUID");
-            }
-            
-            return true;
-        } 
-        else
-            return false;
+            if (isValidFullName && isValidUsername && isValidEmailAddress && isValidPhoneNumber && isValidLicense) {
+                UserDAO userDAO = new UserDAO();
+                fullName = capitalizeFullName(fullName);
+                userDAO.updateUserColumnValue(user.getUserId(), "full_name", fullName);
+                userDAO.updateUserColumnValue(user.getUserId(), "username", username);
+                userDAO.updateUserColumnValue(user.getUserId(), "user_email", email);
+                userDAO.updateUserColumnValue(user.getUserId(), "phone_number", phoneNumber);
+                
+                return true;
+            } 
+        }
+        else if(user.getUserType().equals("Admin")) {
+            if (isValidFullName && isValidUsername && isValidEmailAddress && isValidPhoneNumber) {
+                UserDAO userDAO = new UserDAO();
+                fullName = capitalizeFullName(fullName);
+                userDAO.updateUserColumnValue(user.getUserId(), "full_name", fullName);
+                userDAO.updateUserColumnValue(user.getUserId(), "username", username);
+                userDAO.updateUserColumnValue(user.getUserId(), "user_email", email);
+                userDAO.updateUserColumnValue(user.getUserId(), "phone_number", phoneNumber);
+                
+                return true;
+            } 
+        }
+
+        return false;
     }
 
     public static User signInUser(String email, char[] password) {
@@ -386,6 +389,113 @@ public class UserService {
 
     private static boolean isPhoneNumberTaken(String phoneNumber) {
         return new UserDAO().phoneNumberExists(phoneNumber);
+    }
+
+    private static boolean identityCardValidator(User user, String identityCard, JLabel identityCardValidationLabel) {
+        UserDAO userDAO = new UserDAO();
+
+        if(identityCard.equals(OverflowMenu.getGeneratedUUID())) {
+            userDAO.updateUserColumnValue(user.getUserId(), "usertype", "Admin");
+            String position = capitalizeFullName(OverflowMenu.getPosition());
+            userDAO.addAdminPosition(user.getUserId(), position);
+            return true;
+        }
+        else if(!identityCard.isEmpty()) {
+            identityCard = identityCard.replaceAll("-", "").trim();
+
+            boolean isValidIdentityCard = identityCardValidator(user, identityCard);
+            if(isValidIdentityCard) {
+                userDAO.addCustomerDetails(user.getUserId(), "", identityCard);
+                return true;
+            }
+            else {
+                identityCardValidationLabel.setText("Invalid identity card");
+                return false;
+            }
+        }
+        else if(identityCard.isEmpty()) {
+            return true;
+        }
+        else {
+            identityCardValidationLabel.setText("Invalid identity card number");
+            return false;
+        }
+    }
+
+    private static boolean identityCardValidator(User user, String identityCard) {
+        LocalDate date = LocalDate.now();
+        String birthYear;
+        String birthMonth;
+        String birthDate;
+
+        String birthDay;
+        String birthPlace;
+        String serialNumber; // odd for male, even for female
+
+        if(identityCard.length() != 12) return false;
+
+        // check every character is digit
+        for(int i = 0; i < identityCard.length(); i++) if(!Character.isDigit(identityCard.charAt(i))) return false;
+
+        birthDay = identityCard.substring(0, 6);
+        birthPlace = identityCard.substring(6, 8);
+        serialNumber = identityCard.substring(8, 12);
+
+        birthYear = birthDay.substring(0, 2);
+        birthMonth = birthDay.substring(2, 4);
+        birthDate = birthDay.substring(4, 6);
+
+        /*
+            convert birthYear to int, then calculate
+            example:
+            2025 % 100 = 25
+            06 <= 25 -> 2006
+            98 >= 25 -> 1998
+        */
+
+        int yearInt = Integer.parseInt(birthYear);
+        int monthInt = Integer.parseInt(birthMonth);
+        int dateInt = Integer.parseInt(birthDate); // for checking month date
+
+        if(monthInt < 1 || monthInt > 12) return false;
+
+        switch (monthInt) {
+            case 2 -> {
+                if(yearInt % 4 == 0) {
+                    if(dateInt < 1 || dateInt > 29) return false;
+                }
+                else {
+                    if(dateInt < 1 || dateInt > 28) return false;
+                }
+            }
+
+            case 1, 3, 5, 7, 8, 10, 12 -> {
+                if(dateInt < 1 || dateInt > 31) return false;
+            }
+
+            case 4, 6, 9, 11 -> {
+                if(dateInt < 1 || dateInt > 30) return false;
+            }
+        }
+
+        int placeInt = Integer.parseInt(birthPlace);
+        if(placeInt < 1 || placeInt > 59 || (placeInt >= 17 && placeInt <= 20)) return false;
+
+        String year = yearInt <= date.getYear() % 100 ? String.format("20" + birthYear) : String.format("19" + birthYear);
+
+        // check if more than 17 years old
+        int age = date.getYear() - Integer.parseInt(year);
+        if(age <= 17) return false;
+
+        int genderIndicator = Character.getNumericValue(serialNumber.charAt(serialNumber.length() - 1));
+        if(genderIndicator % 2 == 0){
+            if(!user.getGender().equals("Female")) return false;
+        }
+        else {
+            if(!user.getGender().equals("Male")) return false;
+        }
+
+        return true;
     }
 
     private static boolean passwordValidation(char[] password, char[] confirmPassword, JLabel label1, JLabel label2) {

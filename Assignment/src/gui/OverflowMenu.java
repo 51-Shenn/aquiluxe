@@ -275,26 +275,26 @@ public class OverflowMenu extends JLayeredPane {
         JTextField usernameField = new JTextField();
         JTextField emailField = new JTextField();
         JTextField phoneNumberField = new JTextField();
-        JTextField drivingLicenseField = new JTextField();
+        JTextField identityCardField = new JTextField();
 
         JLabel fullNameValidationLabel = new JLabel("");
         JLabel usernameValidationLabel = new JLabel("");
         JLabel emailValidationLabel = new JLabel("");
         JLabel phoneNumberValidationLabel = new JLabel("");
-        JLabel drivingLicenseValidationLabel = new JLabel("");
+        JLabel icValidationLabel = new JLabel("");
 
         JPanel fullNamePanel = createEditProfileInputField("Full Name", fullNameField, fullNameValidationLabel);
         JPanel usernamePanel = createEditProfileInputField("Username", usernameField, usernameValidationLabel);
         JPanel emailPanel = createEditProfileInputField("Email Address", emailField, emailValidationLabel);
         JPanel phoneNumberPanel = createEditProfileInputField("Phone Number (+60)", phoneNumberField, phoneNumberValidationLabel);
-        JPanel drivingLicensePanel = createEditProfileInputField("Driving License", drivingLicenseField, drivingLicenseValidationLabel);
+        JPanel identityCardPanel = createEditProfileInputField("Identity Card", identityCardField, icValidationLabel);
 
         // Add panels to the edit panel
         editPanel.add(fullNamePanel, gbc2);
         editPanel.add(usernamePanel, gbc2);
         editPanel.add(emailPanel, gbc2);
         editPanel.add(phoneNumberPanel, gbc2);
-        editPanel.add(drivingLicensePanel, gbc2);
+        editPanel.add(identityCardPanel, gbc2);
 
         JPanel editPageButtonPanel = new JPanel(new GridBagLayout());
         editPageButtonPanel.setBackground(Theme.getBackground());
@@ -327,8 +327,8 @@ public class OverflowMenu extends JLayeredPane {
             );
             
             if(proceed) {
-                boolean isValidUpdateDetails = UserController.passUpdateProfileDetails(this.user, fullNameField.getText(), usernameField.getText(), emailField.getText(), phoneNumberField.getText(), drivingLicenseField.getText(),
-                    fullNameValidationLabel, usernameValidationLabel, emailValidationLabel, phoneNumberValidationLabel, drivingLicenseValidationLabel);
+                boolean isValidUpdateDetails = UserController.passUpdateProfileDetails(this.user, fullNameField.getText(), usernameField.getText(), emailField.getText(), phoneNumberField.getText(), identityCardField.getText(),
+                    fullNameValidationLabel, usernameValidationLabel, emailValidationLabel, phoneNumberValidationLabel, icValidationLabel);
                 if(isValidUpdateDetails) {
                     UserDAO userDAO = new UserDAO();
                     this.user = userDAO.getUserById(this.user.getUserId());
@@ -405,11 +405,12 @@ public class OverflowMenu extends JLayeredPane {
             case "Username" -> inputField.setText(this.user.getUsername());
             case "Email Address" -> inputField.setText(this.user.getUserEmail());
             case "Phone Number (+60)" -> inputField.setText(this.user.getPhoneNumber());
-            case "Driving License" -> {
+            case "Identity Card" -> {
                 if(this.user.getUserType().equals("Customer")) {
                     try {
                         Customer customer = new UserDAO().getCustomerById(this.user);
                         inputField.setText(customer.getLicense());
+                        inputField.setEditable(false);
                     } catch (Exception e) {
                         inputField.setText("");
                     }
@@ -627,6 +628,7 @@ public class OverflowMenu extends JLayeredPane {
                         gbc.weighty = 0;
                         accountsPanel.add(accountButton, gbc);                        
                     }
+                    editButton.setVisible(false);
                     themeButton.setVisible(false);
                     signOutButton.setVisible(false);
                     deleteAccountButton.setVisible(false);
@@ -643,6 +645,7 @@ public class OverflowMenu extends JLayeredPane {
                 button.setIcon(icon);
                 switchAccountPanel.add(button, BorderLayout.CENTER);
 
+                editButton.setVisible(true);
                 themeButton.setVisible(true);
                 signOutButton.setVisible(true);
                 deleteAccountButton.setVisible(true);

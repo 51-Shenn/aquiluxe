@@ -34,8 +34,8 @@ public class UserController {
         return UserService.signInUser(email, password);
     }
 
-    public static boolean passUpdateProfileDetails(User user, String fullName, String username, String  email, String  phoneNumber, String  drivingLicense, JLabel fullNameValidationLabel, JLabel usernameValidationLabel, JLabel emailValidationLabel, JLabel phoneNumberValidationLabel, JLabel drivingLicenseValidationLabel) {
-        return UserService.validateUpdateProfileDetails(user, fullName, username, email, phoneNumber, drivingLicense, fullNameValidationLabel, usernameValidationLabel, emailValidationLabel, phoneNumberValidationLabel, drivingLicenseValidationLabel);
+    public static boolean passUpdateProfileDetails(User user, String fullName, String username, String  email, String  phoneNumber, String  identityCard, JLabel fullNameValidationLabel, JLabel usernameValidationLabel, JLabel emailValidationLabel, JLabel phoneNumberValidationLabel, JLabel identityCardValidationLabel) {
+        return UserService.validateUpdateProfileDetails(user, fullName, username, email, phoneNumber, identityCard, fullNameValidationLabel, usernameValidationLabel, emailValidationLabel, phoneNumberValidationLabel, identityCardValidationLabel);
     }
 
     public static User loadCurrentUser(File accountsFile) {
