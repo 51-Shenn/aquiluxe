@@ -286,6 +286,42 @@ public class UserDAO {
         }
     }
 
+    // delete customer
+    public boolean deleteCustomer(User user) {
+        int userId = user.getUserId();
+        String sql = "DELETE FROM customers WHERE user_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+
+            int rowsDeleted = stmt.executeUpdate();
+            return rowsDeleted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO DELETE CUSTOMER\n");
+        }
+    }
+
+    // delete admin
+    public boolean deleteAdmin(User user) {
+        int userId = user.getUserId();
+        String sql = "DELETE FROM admins WHERE user_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+
+            int rowsDeleted = stmt.executeUpdate();
+            return rowsDeleted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO DELETE ADMIN\n");
+        }
+    }
+
     // get user by username and password
     public User authenticateUser(String username, String password) {
         String sql = "SELECT * FROM users WHERE (username = ? OR user_email = ?) AND password = ?";

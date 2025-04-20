@@ -331,7 +331,7 @@ public class SignUpPage extends AuthenticationPage {
         gbc.insets = new Insets(50, 0, 0, 350);
 
         container.add(createLinkButton(), gbc);
-        gbc.insets = new Insets(50, 0, 0, 0);
+        gbc.insets = new Insets(30, 0, 0, 0);
         container.add(createNextButton(panel), gbc);
         return container;
     }

@@ -61,6 +61,8 @@ public class UserService {
                 confirmPasswordValidationLabel);
 
         if (isValidFullName && isValidGender && isValidEmailAddress && isValidPhoneNumber && isValidPassword) {
+            phone = phone.replaceAll("[\\s-]", "");
+            
             fullName = capitalizeFullName(fullName);
             createNewUserAccount(fullName, gender, email, phone, password);
         }

@@ -882,6 +882,12 @@ public class OverflowMenu extends JLayeredPane {
 
                 if(proceed) {
                     UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
+
+                    if(this.user.getUserType().equals("Customer"))
+                        userDAO.deleteCustomer(this.user);
+                    else if(this.user.getUserType().equals("Admin"))
+                        userDAO.deleteAdmin(this.user);
+                        
                     userDAO.deleteUser(this.user.getUserId());
 
                     this.user = new User();
