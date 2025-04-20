@@ -3,20 +3,42 @@ package services;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
-import datamodels.Car;
-
+import datamodels.Vehicle;
+import database.VehicleDAO;
 public class VehicleService {
 //filters
 //methods that pass in cars and return them with filtered cars
-//check car.getbrand 
-    public static ArrayList<Car> filterCarBrand(ArrayList<Car> car, String filterBrand) {
-        ArrayList<Car> filteredCars = new ArrayList<Car>();
+//check car.getbrand
+    public static List<String> getBrands() {
+
+        List<String> brands = new ArrayList<>(VehicleDAO.getFiltersValues("brand"));
+
+        return brands;
+    }
+
+    public static List<String> getModels(String brand) {
+
+        List<String> models = new ArrayList<>(VehicleDAO.getModelsByBrand(brand));
+
+        return models;
+    }
+
+    public static List<Vehicle> passVehicles() {
+
+        List<Vehicle> vehicles = new ArrayList<>(VehicleDAO.getAllVehicles());
+
+        return vehicles;
+    }
+
+    public static List<Vehicle> filterCarBrand(List<Vehicle> car, String filterBrand) {
+        List<Vehicle> filteredCars = new ArrayList<>();
 
         if("ALL".equals(filterBrand)){
             return car;
         }
-        for (Car c : car){
+        for (Vehicle c : car){
             if (c.getBrand().equals(filterBrand)){
                 filteredCars.add(c);
             }
@@ -24,13 +46,13 @@ public class VehicleService {
         return filteredCars;
     }
 //check car.getmodel if got brand
-    public static ArrayList<Car> filterCarModel(ArrayList<Car> car, String filterModel) {
-        ArrayList<Car> filteredCars = new ArrayList<Car>();
+    public static List<Vehicle> filterCarModel(List<Vehicle> car, String filterModel) {
+        List<Vehicle> filteredCars = new ArrayList<>();
 
         if("ALL".equals(filterModel)){
             return car;
         }
-        for (Car c : car){
+        for (Vehicle c : car){
             if (c.getModel().equals(filterModel)){
                 filteredCars.add(c);
             }
@@ -38,12 +60,12 @@ public class VehicleService {
         return filteredCars;
     }
 //check car year
-    public static ArrayList<Car> filterCarYear(ArrayList<Car> car, Object filterYear) {
-        ArrayList<Car> filteredCars = new ArrayList<Car>();
+    public static List<Vehicle> filterCarYear(List<Vehicle> car, Object filterYear) {
+        List<Vehicle> filteredCars = new ArrayList<>();
         if("ALL".equals(filterYear)){
             return car;
         }
-        for (Car c : car){
+        for (Vehicle c : car){
             if (c.getYear() == Integer.parseInt(filterYear.toString())){
                 filteredCars.add(c);
             }
@@ -51,34 +73,34 @@ public class VehicleService {
         return filteredCars;
     }
 //check car transmission
-    public static ArrayList<Car> filterCarTransmission(ArrayList<Car> car, String filterTransmission) {
-        ArrayList<Car> filteredCars = new ArrayList<Car>();
+    public static List<Vehicle> filterCarTransmission(List<Vehicle> car, String filterTransmission) {
+        List<Vehicle> filteredCars = new ArrayList<>();
         if("ALL".equals(filterTransmission)){
             return car;
         }
-        for (Car c : car){
-            if (c.getTransmission().equals(filterTransmission)){
+        for (Vehicle c : car){
+            if (c.getTransmission().toUpperCase().contains(filterTransmission)){
                 filteredCars.add(c);
             }
         }
         return filteredCars;
     }
 //check car fuel type
-    public static ArrayList<Car> filterCarFuelType(ArrayList<Car> car, String filterFuelType) {
-        ArrayList<Car> filteredCars = new ArrayList<Car>();
+    public static List<Vehicle> filterCarFuelType(List<Vehicle> car, String filterFuelType) {
+        List<Vehicle> filteredCars = new ArrayList<>();
         if("ALL".equals(filterFuelType)){
             return car;
         }
-        for (Car c : car){
-            if (c.getFuelType().equals(filterFuelType)){
+        for (Vehicle c : car){
+            if (c.getFuelType().toUpperCase().equals(filterFuelType)){
                 filteredCars.add(c);
             }
         }
         return filteredCars;
     }
 //check availability
-    public static ArrayList<Car> filterCarAvailability(ArrayList<Car> car, String filterAvailability) {
-        ArrayList<Car> filteredCars = new ArrayList<Car>();
+    public static List<Vehicle> filterCarAvailability(List<Vehicle> car, String filterAvailability) {
+        List<Vehicle> filteredCars = new ArrayList<>();
         boolean availability;
         if(filterAvailability.equals("AVAILABLE")){
             availability = true;
@@ -89,7 +111,7 @@ public class VehicleService {
         else{
             return car;
         }
-        for (Car c : car){
+        for (Vehicle c : car){
             if (c.isAvailability() == availability){
                 filteredCars.add(c);
             }
@@ -97,25 +119,25 @@ public class VehicleService {
         return filteredCars;
     }
 // check car type
-    public static ArrayList<Car> filterCarType(ArrayList<Car> car, String filterCarType) {
-        ArrayList<Car> filteredCars = new ArrayList<Car>();
+    public static List<Vehicle> filterCarType(List<Vehicle> car, String filterCarType) {
+        List<Vehicle> filteredCars = new ArrayList<>();
         if("ALL".equals(filterCarType)){
             return car;
         }
-        for (Car c : car){
-            if (c.getCarType().equals(filterCarType)){
+        for (Vehicle c : car){
+            if (c.getVehicleType().toUpperCase().equals(filterCarType)){
                 filteredCars.add(c);
             }
         }
         return filteredCars;
     }
 //check car seats
-    public static ArrayList<Car> filterCarSeats(ArrayList<Car> car, int filterSeats) {
-        ArrayList<Car> filteredCars = new ArrayList<Car>();
+    public static List<Vehicle> filterCarSeats(List<Vehicle> car, int filterSeats) {
+        List<Vehicle> filteredCars = new ArrayList<>();
         if(filterSeats == 0){
             return car;
         }
-        for (Car c : car){
+        for (Vehicle c : car){
             if (c.getSeatingCapacity() == filterSeats){
                 filteredCars.add(c);
             }
@@ -123,8 +145,8 @@ public class VehicleService {
         return filteredCars;
     }
 //check price range
-    public static ArrayList<Car> filterCarPrice(ArrayList<Car> car, String filterMinPrice, String filterMaxPrice) {
-        ArrayList<Car> filteredCars = new ArrayList<Car>();
+    public static List<Vehicle> filterCarPrice(List<Vehicle> car, String filterMinPrice, String filterMaxPrice) {
+        List<Vehicle> filteredCars = new ArrayList<>();
         if (filterMaxPrice.equals("Max") && filterMinPrice.equals("Min")){
             return car;
         }
@@ -136,7 +158,7 @@ public class VehicleService {
         }
 
         try{
-            for (Car c : car){
+            for (Vehicle c : car){
                 if (c.getRentalPriceDay() <= Double.parseDouble(filterMaxPrice) && c.getRentalPriceDay() >= Double.parseDouble(filterMinPrice)){
                     filteredCars.add(c);
                 }
@@ -148,11 +170,11 @@ public class VehicleService {
         return filteredCars;
     }
 
-    public static ArrayList<Car> sortByYearNewestFirst(ArrayList<Car> cars) {
-        ArrayList<Car> sortedCars = new ArrayList<>(cars);
-        Collections.sort(sortedCars, new Comparator<Car>() {
+    public static List<Vehicle> sortByYearNewestFirst(List<Vehicle> cars) {
+        List<Vehicle> sortedCars = new ArrayList<>(cars);
+        Collections.sort(sortedCars, new Comparator<Vehicle>() {
             @Override
-            public int compare(Car c1, Car c2) {
+            public int compare(Vehicle c1, Vehicle c2) {
                 // Newest first (descending order)
                 return c2.getYear() - c1.getYear();
             }
@@ -160,11 +182,11 @@ public class VehicleService {
         return sortedCars;
     }
 
-    public static ArrayList<Car> sortByYearOldestFirst(ArrayList<Car> cars) {
-        ArrayList<Car> sortedCars = new ArrayList<>(cars);
-        Collections.sort(sortedCars, new Comparator<Car>() {
+    public static List<Vehicle> sortByYearOldestFirst(List<Vehicle> cars) {
+        List<Vehicle> sortedCars = new ArrayList<>(cars);
+        Collections.sort(sortedCars, new Comparator<Vehicle>() {
             @Override
-            public int compare(Car c1, Car c2) {
+            public int compare(Vehicle c1, Vehicle c2) {
                 // Oldest first (ascending order)
                 return c1.getYear() - c2.getYear();
             }
@@ -172,11 +194,11 @@ public class VehicleService {
         return sortedCars;
     }
 
-    public static ArrayList<Car> sortByPriceLowToHigh(ArrayList<Car> cars) {
-        ArrayList<Car> sortedCars = new ArrayList<>(cars);
-        Collections.sort(sortedCars, new Comparator<Car>() {
+    public static List<Vehicle> sortByPriceLowToHigh(List<Vehicle> cars) {
+        List<Vehicle> sortedCars = new ArrayList<>(cars);
+        Collections.sort(sortedCars, new Comparator<Vehicle>() {
             @Override
-            public int compare(Car c1, Car c2) {
+            public int compare(Vehicle c1, Vehicle c2) {
                 // Proper double comparison
                 return Double.compare(c1.getRentalPriceDay(), c2.getRentalPriceDay());
             }
@@ -184,15 +206,16 @@ public class VehicleService {
         return sortedCars;
     }
 
-    public static ArrayList<Car> sortByPriceHighToLow(ArrayList<Car> cars) {
-        ArrayList<Car> sortedCars = new ArrayList<>(cars);
-        Collections.sort(sortedCars, new Comparator<Car>() {
+    public static List<Vehicle> sortByPriceHighToLow(List<Vehicle> cars) {
+        List<Vehicle> sortedCars = new ArrayList<>(cars);
+        Collections.sort(sortedCars, new Comparator<Vehicle>() {
             @Override
-            public int compare(Car c1, Car c2) {
+            public int compare(Vehicle c1, Vehicle c2) {
                 // Reverse the comparison for descending order
                 return Double.compare(c2.getRentalPriceDay(), c1.getRentalPriceDay());
             }
         });
         return sortedCars;
     }
+
 }
