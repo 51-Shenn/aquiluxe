@@ -2,6 +2,7 @@ package gui;
 
 import controllers.UserController;
 import database.UserDAO;
+import datamodels.Admin;
 import datamodels.Customer;
 import datamodels.User;
 import java.awt.BorderLayout;
@@ -49,6 +50,9 @@ public class OverflowMenu extends JLayeredPane {
     private final File THEME_FILE = new File("files/settings/theme.txt");
     private final File ACCOUNTS_FILE = new File("files/settings/accounts.txt");
     private int[] userAccountsID = new int[4];
+    private static int invokeAdminPortalCounter = 0;
+    private static String generatedUUID;
+    private static String position;
 
     public OverflowMenu() {
         this.frame = new JFrame();
@@ -63,12 +67,36 @@ public class OverflowMenu extends JLayeredPane {
         this.panel = panel;
         this.user = user;
         MENU_WIDTH = 400;
-        if(this.user.getFullName().equals("Guest") && this.user.getUsername().equals("guest"))
+        if(this.user.getUserId() == 0)
             MENU_HEIGHT = 550;
         else
             MENU_HEIGHT = 800;
         setBackground(Theme.getBackground());
         add(createOverflowMenu(), JLayeredPane.POPUP_LAYER);
+    }
+
+    public static String getPosition() {
+        return position;
+    }
+
+    public static void setPosition(String position) {
+        OverflowMenu.position = position;
+    }
+
+    public static int getInvokeAdminPortalCounter() {
+        return invokeAdminPortalCounter;
+    }
+
+    public static void setInvokeAdminPortalCounter(int invokeAdminPortalCounter) {
+        OverflowMenu.invokeAdminPortalCounter = invokeAdminPortalCounter;
+    }
+
+    public static String getGeneratedUUID() {
+        return generatedUUID;
+    }
+
+    public static void setGeneratedUUID(String generatedUUID) {
+        OverflowMenu.generatedUUID = generatedUUID;
     }
 
     public JFrame getFrame() {
@@ -195,8 +223,8 @@ public class OverflowMenu extends JLayeredPane {
     private JPanel createMainCard() {
         JPanel mainCardPanel = new JPanel(new GridBagLayout());
         mainCardPanel.setBounds(0, 0, MENU_WIDTH, MENU_HEIGHT);
-        mainCardPanel.setBackground(new Color(0, 0, 0, 40));
-        mainCardPanel.setBorder(new LineBorder(new Color(0, 0, 0, 60), 1));
+        mainCardPanel.setBackground(Theme.getTransparencyColor());
+        mainCardPanel.setBorder(new LineBorder(Theme.getTransparencyColor(), 1));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx = 1;
@@ -208,7 +236,7 @@ public class OverflowMenu extends JLayeredPane {
 
         gbc.weighty = 1;
 
-        if (this.user.getFullName().equals("Guest") && this.user.getUsername().equals("guest")) {
+        if (this.user.getUserId() == 0) {
             mainCardPanel.add(createMenuCard("Sign Up", IconLoader.getSignInIcon()), gbc);
             mainCardPanel.add(createMenuCard("Sign In", IconLoader.getSignInIcon()), gbc);
         } else {
@@ -247,26 +275,26 @@ public class OverflowMenu extends JLayeredPane {
         JTextField usernameField = new JTextField();
         JTextField emailField = new JTextField();
         JTextField phoneNumberField = new JTextField();
-        JTextField drivingLicenseField = new JTextField();
+        JTextField identityCardField = new JTextField();
 
         JLabel fullNameValidationLabel = new JLabel("");
         JLabel usernameValidationLabel = new JLabel("");
         JLabel emailValidationLabel = new JLabel("");
         JLabel phoneNumberValidationLabel = new JLabel("");
-        JLabel drivingLicenseValidationLabel = new JLabel("");
+        JLabel icValidationLabel = new JLabel("");
 
         JPanel fullNamePanel = createEditProfileInputField("Full Name", fullNameField, fullNameValidationLabel);
         JPanel usernamePanel = createEditProfileInputField("Username", usernameField, usernameValidationLabel);
         JPanel emailPanel = createEditProfileInputField("Email Address", emailField, emailValidationLabel);
         JPanel phoneNumberPanel = createEditProfileInputField("Phone Number (+60)", phoneNumberField, phoneNumberValidationLabel);
-        JPanel drivingLicensePanel = createEditProfileInputField("Driving License", drivingLicenseField, drivingLicenseValidationLabel);
+        JPanel identityCardPanel = createEditProfileInputField("Identity Card", identityCardField, icValidationLabel);
 
         // Add panels to the edit panel
         editPanel.add(fullNamePanel, gbc2);
         editPanel.add(usernamePanel, gbc2);
         editPanel.add(emailPanel, gbc2);
         editPanel.add(phoneNumberPanel, gbc2);
-        editPanel.add(drivingLicensePanel, gbc2);
+        editPanel.add(identityCardPanel, gbc2);
 
         JPanel editPageButtonPanel = new JPanel(new GridBagLayout());
         editPageButtonPanel.setBackground(Theme.getBackground());
@@ -285,6 +313,11 @@ public class OverflowMenu extends JLayeredPane {
         updateButton.setPreferredSize(new Dimension(100, 50));
         updateButton.addActionListener(e -> {
             Dialog dialog = new Dialog(this.frame);
+
+            try {
+                Dialog.getAdminDialog().dispose();
+            } catch(Exception exception) {}
+
             boolean proceed = dialog.showDialog(
                 "HAZARD",
                 "Confirm Update",
@@ -294,8 +327,8 @@ public class OverflowMenu extends JLayeredPane {
             );
             
             if(proceed) {
-                boolean isValidUpdateDetails = UserController.passUpdateProfileDetails(this.user, fullNameField.getText(), usernameField.getText(), emailField.getText(), phoneNumberField.getText(), drivingLicenseField.getText(),
-                    fullNameValidationLabel, usernameValidationLabel, emailValidationLabel, phoneNumberValidationLabel, drivingLicenseValidationLabel);
+                boolean isValidUpdateDetails = UserController.passUpdateProfileDetails(this.user, fullNameField.getText(), usernameField.getText(), emailField.getText(), phoneNumberField.getText(), identityCardField.getText(),
+                    fullNameValidationLabel, usernameValidationLabel, emailValidationLabel, phoneNumberValidationLabel, icValidationLabel);
                 if(isValidUpdateDetails) {
                     UserDAO userDAO = new UserDAO();
                     this.user = userDAO.getUserById(this.user.getUserId());
@@ -351,8 +384,8 @@ public class OverflowMenu extends JLayeredPane {
     }
 
     private JPanel createEditProfileInputField(String text, JTextField inputField, JLabel validationLabel) {
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(Theme.getBackground());
+        JPanel editPanel = new JPanel(new GridBagLayout());
+        editPanel.setBackground(Theme.getBackground());
         GridBagConstraints gbc = new GridBagConstraints();
 
         JLabel label = new JLabel(text + ":");
@@ -372,12 +405,21 @@ public class OverflowMenu extends JLayeredPane {
             case "Username" -> inputField.setText(this.user.getUsername());
             case "Email Address" -> inputField.setText(this.user.getUserEmail());
             case "Phone Number (+60)" -> inputField.setText(this.user.getPhoneNumber());
-            case "Driving License" -> {
-                try {
-                    Customer customer = new UserDAO().getCustomerById(this.user);
-                    inputField.setText(customer.getLicense());
-                } catch (Exception e) {
-                    inputField.setText("");
+            case "Identity Card" -> {
+                if(this.user.getUserType().equals("Customer")) {
+                    try {
+                        Customer customer = new UserDAO().getCustomerById(this.user);
+                        inputField.setText(customer.getLicense());
+                        inputField.setEditable(false);
+                    } catch (Exception e) {
+                        inputField.setText("");
+                    }
+                }
+                else if(this.user.getUserType().equals("Admin")) {
+                    label.setText("Position:");
+                    Admin admin = new UserDAO().getAdminById(this.user);
+                    inputField.setText(admin.getAdminRole());
+                    inputField.setEditable(false);
                 }
             }
         }
@@ -387,20 +429,20 @@ public class OverflowMenu extends JLayeredPane {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.weightx = 1;
         gbc.weighty = 1;
-        panel.add(label, gbc);
+        editPanel.add(label, gbc);
 
         validationLabel.setText("‎");
         gbc.insets = new Insets(2, 30, 2, 30);
 
-        panel.add(inputField, gbc);
+        editPanel.add(inputField, gbc);
 
         validationLabel.setForeground(Theme.getError());
         validationLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(12f));
         gbc.gridx = 1;
         gbc.gridy = 2;
-        panel.add(validationLabel, gbc);
+        editPanel.add(validationLabel, gbc);
 
-        return panel;
+        return editPanel;
     }
 
     private JPanel createSwitchAccountPanel(ImageIcon icon) {
@@ -453,7 +495,7 @@ public class OverflowMenu extends JLayeredPane {
                 addAccountButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseEntered(MouseEvent evt) {
-                        addAccountButton.setBackground(new Color(223, 223, 223));
+                        addAccountButton.setBackground(Theme.getHoverBackground());
                         addAccountButton.repaint();
                     }
         
@@ -465,7 +507,7 @@ public class OverflowMenu extends JLayeredPane {
         
                     @Override
                     public void mousePressed(MouseEvent evt) {
-                        addAccountButton.setBackground(new Color(223, 223, 223));
+                        addAccountButton.setBackground(Theme.getPressedBackground());
                         addAccountButton.repaint();
                     }
         
@@ -493,7 +535,7 @@ public class OverflowMenu extends JLayeredPane {
                         accountButton.addMouseListener(new MouseAdapter() {
                             @Override
                             public void mouseEntered(MouseEvent evt) {
-                                accountButton.setBackground(new Color(223, 223, 223));
+                                accountButton.setBackground(Theme.getHoverBackground());
                                 accountButton.repaint();
                             }
                 
@@ -505,7 +547,7 @@ public class OverflowMenu extends JLayeredPane {
                 
                             @Override
                             public void mousePressed(MouseEvent evt) {
-                                accountButton.setBackground(new Color(223, 223, 223));
+                                accountButton.setBackground(Theme.getPressedBackground());
                                 accountButton.repaint();
                             }
                 
@@ -534,7 +576,10 @@ public class OverflowMenu extends JLayeredPane {
                         gbcButton.gridx = 0;
                         gbcButton.gridy = 0;
                         gbcButton.weightx = 0;
-                        accountButton.add(new JLabel(genderIcon), gbcButton);
+                        
+                        JLabel profilePicture = new JLabel(genderIcon);
+
+                        accountButton.add(profilePicture, gbcButton);
 
                         JPanel accountDetails = new JPanel(new GridBagLayout());
                         accountDetails.setBackground(new Color(255, 255, 255, 0));
@@ -542,8 +587,9 @@ public class OverflowMenu extends JLayeredPane {
                         JLabel fullNameLabel = new JLabel(everyUser.getFullName());
                         fullNameLabel.setForeground(Theme.getForeground());
                         fullNameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(18f));
+
                         JLabel usernameLabel = new JLabel("@" + everyUser.getUsername());
-                        usernameLabel.setForeground(Color.GRAY);
+                        usernameLabel.setForeground(Theme.getSecondaryForeground());
                         usernameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(14f));
 
                         GridBagConstraints gbcDetails = new GridBagConstraints();
@@ -582,6 +628,7 @@ public class OverflowMenu extends JLayeredPane {
                         gbc.weighty = 0;
                         accountsPanel.add(accountButton, gbc);                        
                     }
+                    editButton.setVisible(false);
                     themeButton.setVisible(false);
                     signOutButton.setVisible(false);
                     deleteAccountButton.setVisible(false);
@@ -598,6 +645,7 @@ public class OverflowMenu extends JLayeredPane {
                 button.setIcon(icon);
                 switchAccountPanel.add(button, BorderLayout.CENTER);
 
+                editButton.setVisible(true);
                 themeButton.setVisible(true);
                 signOutButton.setVisible(true);
                 deleteAccountButton.setVisible(true);
@@ -649,7 +697,22 @@ public class OverflowMenu extends JLayeredPane {
 
         JLabel usernameLabel = new JLabel("@" + this.user.getUsername());
         usernameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
-        usernameLabel.setForeground(Color.GRAY);
+        usernameLabel.setForeground(Theme.getSecondaryForeground());
+        if(this.user.getUserId() != 0) {
+            if(this.user.getUserType().equals("Customer") ) {
+                usernameLabel.addMouseListener(new MouseAdapter() {        
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        invokeAdminPortalCounter++;
+                        if (invokeAdminPortalCounter >= 7) {
+                            Dialog dialog = new Dialog();
+                            dialog.adminPortalDialog();
+                            invokeAdminPortalCounter = 0;
+                        }
+                    }
+                });
+            }
+        }
 
         editButton = createEditButton(IconLoader.getEditProfileIcon());
 
@@ -733,7 +796,7 @@ public class OverflowMenu extends JLayeredPane {
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
-                button.setBackground(new Color(223, 223, 223));
+                button.setBackground(Theme.getHoverBackground());
                 button.repaint();
             }
 
@@ -745,7 +808,7 @@ public class OverflowMenu extends JLayeredPane {
 
             @Override
             public void mousePressed(MouseEvent evt) {
-                button.setBackground(new Color(223, 223, 223));
+                button.setBackground(Theme.getPressedBackground());
                 button.repaint();
             }
 
@@ -819,6 +882,12 @@ public class OverflowMenu extends JLayeredPane {
 
                 if(proceed) {
                     UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
+
+                    if(this.user.getUserType().equals("Customer"))
+                        userDAO.deleteCustomer(this.user);
+                    else if(this.user.getUserType().equals("Admin"))
+                        userDAO.deleteAdmin(this.user);
+                        
                     userDAO.deleteUser(this.user.getUserId());
 
                     this.user = new User();

@@ -7,19 +7,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Window;
 import java.io.File;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
@@ -43,16 +37,7 @@ public class SignInPage extends AuthenticationPage {
         this.panel = panel;
         this.user = user;
 
-        UIManager.getDefaults().clear();  // Clear all cached UI properties
-        try {
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
-            for (Window window : Window.getWindows()) {
-                SwingUtilities.updateComponentTreeUI(window);
-                window.repaint();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Navigation.removeWindowsLookAndFeel();
     }
 
    public JFrame getFrame() {
@@ -103,14 +88,7 @@ public class SignInPage extends AuthenticationPage {
     protected JLabel createWallpaperLabel() {
         JLabel wallpaperLabel = new JLabel();
         wallpaperLabel.setOpaque(false);
-        File imageFile = new File("images/wallpapers/car-wallpaper-3.png");
-        if (!imageFile.exists()) {
-            JOptionPane.showMessageDialog(null, "Failed to load image: " + imageFile);
-        } else {
-            ImageIcon backgroundImage = new ImageIcon(imageFile.toString());
-            Image image = backgroundImage.getImage().getScaledInstance(960, 1080, Image.SCALE_SMOOTH);
-            wallpaperLabel.setIcon(new ImageIcon(image));
-        }
+        wallpaperLabel.setIcon(ImageLoader.getSignInWallpaper());
 
         wallpaperLabel.setLayout(new GridBagLayout());
 
@@ -131,7 +109,7 @@ public class SignInPage extends AuthenticationPage {
         titleContainer.setBackground(Color.WHITE);
 
         JLabel titleLabel = new JLabel("Sign In");
-        titleLabel.setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(60f));
+        titleLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(60f));
         titleLabel.setForeground(Color.BLACK);
 
         JButton closeButton = new JButton();

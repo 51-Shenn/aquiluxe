@@ -1,5 +1,6 @@
 package database;
 
+import datamodels.Admin;
 import datamodels.Customer;
 import datamodels.User;
 import java.sql.Connection;
@@ -171,6 +172,39 @@ public class UserDAO {
         return null;
     }
 
+        // get customer by specific id
+        public Admin getAdminById(User user) {
+            int userId = user.getUserId();
+    
+            String sql = "SELECT * FROM admins WHERE user_id = ?;";
+    
+            try (Connection conn = DatabaseConnection.getConnection();
+                    PreparedStatement stmt = conn.prepareStatement(sql)) {
+    
+                stmt.setInt(1, userId);
+    
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        Admin admin = new Admin(
+                            userId,
+                            user.getFullName(),
+                            user.getGender(),
+                            user.getPhoneNumber(),
+                            user.getUserEmail(),
+                            user.getUsername(),
+                            user.getPassword(),
+                            rs.getString("position")
+                        );
+                        return admin;
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException("\nFAILED TO GET ADMIN BY ID\n");
+            }
+            return null;
+        }
+
     // filter users with value of column
     public HashMap<Integer, User> filterUsersByColumn(String column, String value) {
         String sql = "SELECT * FROM users WHERE " + column + " = ?";
@@ -249,6 +283,42 @@ public class UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("\nFAILED TO DELETE USER\n");
+        }
+    }
+
+    // delete customer
+    public boolean deleteCustomer(User user) {
+        int userId = user.getUserId();
+        String sql = "DELETE FROM customers WHERE user_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+
+            int rowsDeleted = stmt.executeUpdate();
+            return rowsDeleted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO DELETE CUSTOMER\n");
+        }
+    }
+
+    // delete admin
+    public boolean deleteAdmin(User user) {
+        int userId = user.getUserId();
+        String sql = "DELETE FROM admins WHERE user_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+
+            int rowsDeleted = stmt.executeUpdate();
+            return rowsDeleted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO DELETE ADMIN\n");
         }
     }
 

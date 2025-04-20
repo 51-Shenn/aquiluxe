@@ -2,7 +2,6 @@ package gui;
 
 import datamodels.User;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,7 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 
 public class GUIComponents extends JPanel {
@@ -29,12 +27,7 @@ public class GUIComponents extends JPanel {
     }
 
     public GUIComponents(JFrame frame, JPanel panel, User user) {
-        try {
-            // Set the Windows Look and Feel
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Navigation.setWindowsLookAndFeel();
 
         this.frame = frame;
         this.panel = panel;
@@ -42,7 +35,7 @@ public class GUIComponents extends JPanel {
         setBackground(Theme.getBackground());
         setPreferredSize(new Dimension(frame.getWidth(), 80));
         setLayout(new BorderLayout());
-        setBorder(new LineBorder(new Color(0, 0, 0, 30), 1));
+        setBorder(new LineBorder(Theme.getTransparencyColor(), 1));
 
         add(createTopBar(), BorderLayout.WEST);
         add(menuButton(), BorderLayout.EAST);

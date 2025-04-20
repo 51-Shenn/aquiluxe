@@ -10,11 +10,9 @@ public class User {
     protected String password;
     protected String userType;
 
-    // private static HashMap<Integer, User> users = new HashMap<>();
-
     // Default Constructor : for subclassing
     public User() {
-        this(0, "Guest", "male", "", "", "guest", "");
+        this(0, "Guest", "Male", "", "", "guest", "", "Guest");
     }
 
     // Parameterized Constructor
@@ -28,20 +26,6 @@ public class User {
         this.userEmail = userEmail;
         this.password = password;
     }
-
-    // public User(String fullName, String gender, String phoneNumber, String
-    // userEmail, String username,
-    // String password, String usertype) {
-    // this.fullName = fullName;
-    // this.gender = gender;
-    // this.phoneNumber = phoneNumber;
-    // this.username = username;
-    // this.userEmail = userEmail;
-    // this.password = password;
-    // this.userType = usertype;
-
-    // users.put(userId, this);
-    // }
 
     public User(int userId, String fullName, String gender, String phoneNumber, String userEmail, String username,
             String password, String userType) {

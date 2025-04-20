@@ -5,17 +5,12 @@ import datamodels.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -116,19 +111,12 @@ public class HomePage extends JPanel {
 
         wallpaperPanel.add(createButtonPanel(), gbc);
 
-        try {
-            File whitePorsche = new File("images/wallpapers/porsche-white.png");
-            BufferedImage originalImage = ImageIO.read(whitePorsche);
-            BufferedImage resizedImage = resizeImage(originalImage, 1100, 609);
-            JLabel wallpaper = new JLabel(new ImageIcon(resizedImage));
-            wallpaperPanel.add(wallpaper, gbc);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        JLabel wallpaper = new JLabel(ImageLoader.getWhitePorscheImage());
+        wallpaperPanel.add(wallpaper, gbc);
 
         return wallpaperPanel;
     }
-
+    
     private JPanel createTitlePanel() {
         JPanel titlePanel = new JPanel(new GridBagLayout());
         titlePanel.setBackground(Theme.getBackground());
@@ -160,7 +148,7 @@ public class HomePage extends JPanel {
         for(String text : description) {
             JLabel descriptionLabel = new JLabel(text);
             descriptionLabel.setFont(CustomFonts.INSTRUMENT_SANS_MEDIUM.deriveFont(22f));
-            descriptionLabel.setForeground(new Color(0x595959));
+            descriptionLabel.setForeground(Theme.getSecondaryForeground());
             
             titlePanel.add(descriptionLabel, gbc);
         }        
@@ -177,7 +165,7 @@ public class HomePage extends JPanel {
         startButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
-                startButton.setBackground(Theme.getSpecial().brighter());
+                startButton.setBackground(Theme.getHoverSpecial());
                 startButton.repaint();
             }
 
@@ -189,7 +177,7 @@ public class HomePage extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent evt) {
-                startButton.setBackground(Theme.getSpecial().brighter());
+                startButton.setBackground(Theme.getPressedSpecial());
                 startButton.repaint();
             }
 
@@ -235,12 +223,62 @@ public class HomePage extends JPanel {
         JPanel packButtonPanel = new JPanel();
         packButtonPanel.setBackground(Theme.getBackground());
         
-        if(this.user.getPassword() == null) {
+        if(this.user.getUserId() == 0) {
             RoundedButton signInButton = createButton("Sign In", Theme.getBackground(), Theme.getForeground());
             signInButton.addActionListener(new Navigation().toSignInPage(this.frame, this.panel, this.user));
+            signInButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    signInButton.setBackground(Theme.getHoverBackground());
+                    signInButton.repaint();
+                }
+    
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    signInButton.setBackground(Theme.getBackground());
+                    signInButton.repaint();
+                }
+    
+                @Override
+                public void mousePressed(MouseEvent evt) {
+                    signInButton.setBackground(Theme.getPressedBackground());
+                    signInButton.repaint();
+                }
+    
+                @Override
+                public void mouseReleased(MouseEvent evt) {
+                    signInButton.setBackground(Theme.getBackground());
+                    signInButton.repaint();
+                }
+            });
 
             RoundedButton signUpButton = createButton("Sign Up", Theme.getSpecial(), Theme.getSpecialForeground());
             signUpButton.addActionListener(new Navigation().toSignUpPage(this.frame, this.panel, this.user));
+            signUpButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    signUpButton.setBackground(Theme.getHoverSpecial());
+                    signUpButton.repaint();
+                }
+    
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    signUpButton.setBackground(Theme.getSpecial());
+                    signUpButton.repaint();
+                }
+    
+                @Override
+                public void mousePressed(MouseEvent evt) {
+                    signUpButton.setBackground(Theme.getPressedSpecial());
+                    signUpButton.repaint();
+                }
+    
+                @Override
+                public void mouseReleased(MouseEvent evt) {
+                    signUpButton.setBackground(Theme.getSpecial());
+                    signUpButton.repaint();
+                }
+            });
         
             packButtonPanel.add(signInButton);
             packButtonPanel.add(signUpButton);
@@ -264,6 +302,31 @@ public class HomePage extends JPanel {
                     new Navigation().homePageNavigation(this.frame, this.panel, this.user);                    
                 }
             });
+            signOutButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    signOutButton.setBackground(Theme.getHoverError());
+                    signOutButton.repaint();
+                }
+    
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    signOutButton.setBackground(Theme.getError());
+                    signOutButton.repaint();
+                }
+    
+                @Override
+                public void mousePressed(MouseEvent evt) {
+                    signOutButton.setBackground(Theme.getPressedError());
+                    signOutButton.repaint();
+                }
+    
+                @Override
+                public void mouseReleased(MouseEvent evt) {
+                    signOutButton.setBackground(Theme.getError());
+                    signOutButton.repaint();
+                }
+            });
 
             packButtonPanel.add(signOutButton);
         }
@@ -283,49 +346,8 @@ public class HomePage extends JPanel {
         button.setMinimumSize(new Dimension(150, 70));
         button.setBorderPainted(false);
         button.setFocusPainted(false);
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent evt) {
-                button.setBackground(background.darker());
-                button.repaint();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent evt) {
-                button.setBackground(background);
-                button.repaint();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent evt) {
-                button.setBackground(background.darker());
-                button.repaint();
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent evt) {
-                button.setBackground(background);
-                button.repaint();
-            }
-        });
 
         return button;
-    }
-
-    public static BufferedImage resizeImage(BufferedImage originalImage, int width, int height) {
-        BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = resizedImage.createGraphics();
-
-        // rendering high quality
-        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        // draw image
-        g2d.drawImage(originalImage, 0, 0, width, height, null);
-        g2d.dispose();
-
-        return resizedImage;
     }
 
     public File getACCOUNTS_FILE() {

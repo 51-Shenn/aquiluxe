@@ -9,10 +9,10 @@ import javax.swing.JOptionPane;
 public class CustomFonts {
 
     // how to use the fonts?
-    // <label>.setFont(CustomFonts.<fontChoice>.deriveFont(<size>f))
+    // <component>.setFont(CustomFonts.<fontChoice>.deriveFont(<size>f))
 
     // Example:
-    // label.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(30f));
+    // <component>.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(30f));
 
     public static final Font CINZEL_DECORATIVE_REGULAR;
     public static final Font CINZEL_DECORATIVE_BOLD;

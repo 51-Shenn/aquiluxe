@@ -7,21 +7,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Window;
-import java.io.File;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -53,16 +46,7 @@ public class SignUpPage extends AuthenticationPage {
         this.panel = panel;
         this.user = user;
 
-        UIManager.getDefaults().clear();  // Clear all cached UI properties
-        try {
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName()); // Reset to default
-            for (Window window : Window.getWindows()) {
-                SwingUtilities.updateComponentTreeUI(window);
-                window.repaint();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Navigation.removeWindowsLookAndFeel();
     }
 
     public JFrame getFrame() {
@@ -165,14 +149,7 @@ public class SignUpPage extends AuthenticationPage {
     protected JLabel createWallpaperLabel() {
         JLabel wallpaperLabel = new JLabel();
         wallpaperLabel.setOpaque(false);
-        File imageFile = new File("images/wallpapers/car-wallpaper-2.png");
-        if (!imageFile.exists()) {
-            JOptionPane.showMessageDialog(null, "Failed to load image");
-        } else {
-            ImageIcon backgroundImage = new ImageIcon(imageFile.toString());
-            Image image = backgroundImage.getImage().getScaledInstance(960, 1080, Image.SCALE_SMOOTH);
-            wallpaperLabel.setIcon(new ImageIcon(image));
-        }
+        wallpaperLabel.setIcon(ImageLoader.getSignUpWallpaper());
 
         wallpaperLabel.setLayout(new GridBagLayout());
 
@@ -193,7 +170,7 @@ public class SignUpPage extends AuthenticationPage {
         titleContainer.setBackground(Color.WHITE);
 
         JLabel titleLabel = new JLabel("Sign Up");
-        titleLabel.setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(60f));
+        titleLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(60f));
         titleLabel.setForeground(Color.BLACK);
 
         JButton closeButton = new JButton();
@@ -354,7 +331,7 @@ public class SignUpPage extends AuthenticationPage {
         gbc.insets = new Insets(50, 0, 0, 350);
 
         container.add(createLinkButton(), gbc);
-        gbc.insets = new Insets(50, 0, 0, 0);
+        gbc.insets = new Insets(30, 0, 0, 0);
         container.add(createNextButton(panel), gbc);
         return container;
     }
