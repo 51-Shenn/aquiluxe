@@ -48,19 +48,19 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "v12"));
         this.cars.add(new Car(1, "images/cars/RRGhost.jpg", "ROLLS-ROYCE", "GHOST", 2021, 3996, 518, "black", 16.0,
                 "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "quiet"));
-        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
+        this.cars.add(new Car(1, "images/cars/Gemera.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
                 16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
-        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
+        this.cars.add(new Car(1, "images/cars/LM350H.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
                 16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
-        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
+        this.cars.add(new Car(1, "images/cars/Raptor.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
                 16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
-        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
+        this.cars.add(new Car(1, "images/cars/RS6.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
                 16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
-        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
+        this.cars.add(new Car(1, "images/cars/Urus Mansory.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
                 16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
-        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
+        this.cars.add(new Car(1, "images/cars/YARIS.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
                 16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
-        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
+        this.cars.add(new Car(1, "images/cars/HDX440.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
                 16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
 
         this.frame = frame;

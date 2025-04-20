@@ -1,15 +1,36 @@
 package services;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
+import javax.swing.JOptionPane;
+
+import datamodels.Vehicle;
 import datamodels.Car;
+import datamodels.Bike;
+import datamodels.User;
+import database.UserDAO;
+import database.VehicleDAO;
 
 public class VehicleService {
 //filters
 //methods that pass in cars and return them with filtered cars
 //check car.getbrand 
+
+    public static List<Vehicle> passAllVehicles() {
+        VehicleDAO vehicleDAO = new VehicleDAO();
+
+        List<Vehicle> vehicles = vehicleDAO.getAllVehicles();
+
+        return vehicles;
+    }
+
     public static ArrayList<Car> filterCarBrand(ArrayList<Car> car, String filterBrand) {
         ArrayList<Car> filteredCars = new ArrayList<Car>();
 
