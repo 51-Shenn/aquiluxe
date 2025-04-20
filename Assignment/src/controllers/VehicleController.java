@@ -82,6 +82,14 @@ public class VehicleController {
         return VehicleService.sortByPriceHighToLow(car);
     }
 
+    public static List<String> passAllBrands(){
+        return VehicleService.getBrands();
+    }
+
+    public static List<String> passAllModelsByBrand(String brand){
+        return VehicleService.getModels(brand);
+    }
+
     // and more
 
     // thoughts - when user use filter once then I NEED TO PASS THE Cars VALUE IN TO

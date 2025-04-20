@@ -1,25 +1,29 @@
 package services;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
-import datamodels.Vehicle;
-import datamodels.Car;
 import datamodels.Vehicle;
 import database.VehicleDAO;
-import java.util.List;
 public class VehicleService {
 //filters
 //methods that pass in cars and return them with filtered cars
-//check car.getbrand 
+//check car.getbrand
+    public static List<String> getBrands() {
+
+        List<String> brands = new ArrayList<>(VehicleDAO.getFiltersValues("brand"));
+
+        return brands;
+    }
+
+    public static List<String> getModels(String brand) {
+
+        List<String> models = new ArrayList<>(VehicleDAO.getModelsByBrand(brand));
+
+        return models;
+    }
 
     public static List<Vehicle> passVehicles() {
 
@@ -75,7 +79,7 @@ public class VehicleService {
             return car;
         }
         for (Vehicle c : car){
-            if (c.getTransmission().equals(filterTransmission)){
+            if (c.getTransmission().toUpperCase().contains(filterTransmission)){
                 filteredCars.add(c);
             }
         }
@@ -88,7 +92,7 @@ public class VehicleService {
             return car;
         }
         for (Vehicle c : car){
-            if (c.getFuelType().equals(filterFuelType)){
+            if (c.getFuelType().toUpperCase().equals(filterFuelType)){
                 filteredCars.add(c);
             }
         }
@@ -121,7 +125,7 @@ public class VehicleService {
             return car;
         }
         for (Vehicle c : car){
-            if (c.getVehicleType().equals(filterCarType)){
+            if (c.getVehicleType().toUpperCase().equals(filterCarType)){
                 filteredCars.add(c);
             }
         }
@@ -213,4 +217,5 @@ public class VehicleService {
         });
         return sortedCars;
     }
+
 }

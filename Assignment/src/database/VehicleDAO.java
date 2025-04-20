@@ -159,6 +159,48 @@ public class VehicleDAO {
         return vehicles;
     }
 
+    // return distinct values of a column
+    public static List<String> getFiltersValues(String column) {
+        String sql = "SELECT DISTINCT " + column + " FROM vehicles";
+        List<String> filters = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    filters.add(rs.getString(column));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO FILTER VEHICLES\n");
+        }
+        return filters;
+    }
+
+    public static List<String> getModelsByBrand(String brand) {
+        String sql = "SELECT DISTINCT model FROM vehicles WHERE brand = ?";
+        List<String> models = new ArrayList<>();
+    
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    
+            stmt.setString(1, brand);
+    
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    models.add(rs.getString("model"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO GET MODELS BY BRAND\n");
+        }
+    
+        return models;
+    }
+
     // search vehicle by keywords
     public static List<Vehicle> searchVehiclesByKeyword(String column, String keyword) {
         String sql = "SELECT * FROM vehicles WHERE " + column + " ILIKE ?";

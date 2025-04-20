@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -37,31 +38,6 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
     public VehiclesPage(JFrame frame, JPanel panel) {
 
-        // sample details just to show output
-        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
-                16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
-        this.cars.add(new Car(1, "images/cars/Supra.jpg", "TOYOTA", "SUPRA MK5", 2024, 2998, 382, "red", 16.0,
-                "WP0ZZZ99ZTS392124", "VMK 5", 499, "AUTO", "GAS", "COUPE", 2, true, "it's that a supra?"));
-        this.cars.add(new Car(1, "images/cars/F8.jpg", "FERRARI", "F8", 2023, 3996, 518, "black", 16.0,
-                "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "car"));
-        this.cars.add(new Car(1, "images/cars/SVJ.jpg", "LAMBORGHINI", "AVENTADOR SVJ", 2024, 3996, 518, "black", 16.0,
-                "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "v12"));
-        this.cars.add(new Car(1, "images/cars/RRGhost.jpg", "ROLLS-ROYCE", "GHOST", 2021, 3996, 518, "black", 16.0,
-                "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "quiet"));
-        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
-                16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
-        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
-                16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
-        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
-                16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
-        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
-                16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
-        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
-                16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
-        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
-                16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
-        this.cars.add(new Car(1, "images/cars/PorscheGT3.jpg", "PORSCHE", "GT3 RS WEISSACH", 2024, 3996, 518, "black",
-                16.0, "WP0ZZZ99ZTS392124", "GT3", 699, "AUTO", "GAS", "COUPE", 2, true, "weissach package :)"));
 
         this.frame = frame;
         this.panel = panel;
@@ -624,8 +600,15 @@ public class VehiclesPage extends JPanel implements ActionListener {
         // filter + "ALL"
         // when user pick a brand filter model will update and only show few models
         // follow the brand same as cartype
-        String[] brands = { "ALL", "NISSAN", "LAMBORGHINI", "FERRARI", "PORSCHE" };
-        String[] models = { "ALL", "AVENTADOR SVJ", "GT3 RS WEISSACH", "SUPRA MK5" };
+        List<String> brandsList = new ArrayList<>();
+        brandsList.add("ALL");
+        brandsList.addAll(VehicleController.passAllBrands());
+
+        List<String> modelsList = new ArrayList<>();
+        modelsList.add("ALL");
+
+        String[] brands = brandsList.toArray(new String[0]);
+        String[] models = modelsList.toArray(new String[0]);
         String[] transType = { "ALL", "MANUAL", "AUTO" };
         String[] fuelType = { "ALL", "GAS", "HYBRID", "ELECTRIC" };
         String[] availability = { "ALL", "AVAILABLE", "UNAVAILABLE" };
@@ -887,26 +870,14 @@ public class VehiclesPage extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == sortComboBox) {
-            if (sortComboBox.getSelectedItem() == " Best Match ") {
-                this.sortedVehicles = this.vehicles;
-            } else if (sortComboBox.getSelectedItem() == " Lowest Price ") {
-                this.sortedVehicles = VehicleController.passSortedByPriceLowToHigh(this.vehicles);
-            } else if (sortComboBox.getSelectedItem() == " Highest Price ") {
-                this.sortedVehicles = VehicleController.passSortedByPriceHighToLow(this.vehicles);
-            } else if (sortComboBox.getSelectedItem() == " Newest ") {
-                this.sortedVehicles = VehicleController.passSortedByYearNewestFirst(this.vehicles);
-            } else if (sortComboBox.getSelectedItem() == " Oldest ") {
-                this.sortedVehicles = VehicleController.passSortedByYearOldestFirst(this.vehicles);
-            }
-            refreshCards(VehicleController.allFilterCombination(this.sortedVehicles,
-                    (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
-                    yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(),
-                    (String) transTypeComboBox.getSelectedItem(),
-                    (String) availabilityComboBox.getSelectedItem(), (String) carTypeComboBox.getSelectedItem(),
-                    seatSlider.getValue(),
-                    (String) minPriceField.getText(), (String) maxPriceField.getText()));
+            handleSorting();
+            applyFilters();
         }
-        if (e.getSource() == brandComboBox || e.getSource() == modelComboBox ||
+        else if (e.getSource() == brandComboBox) {
+            handleBrandChange();
+            applyFilters();
+        }
+        else if (e.getSource() == modelComboBox || 
                 e.getSource() == yearComboBox ||
                 e.getSource() == carTypeComboBox ||
                 e.getSource() == transTypeComboBox ||
@@ -914,20 +885,62 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 e.getSource() == availabilityComboBox ||
                 e.getSource() == minPriceField ||
                 e.getSource() == maxPriceField) {
-            refreshCards(VehicleController.allFilterCombination(this.sortedVehicles,
-                    (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
-                    yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(),
-                    (String) transTypeComboBox.getSelectedItem(),
-                    (String) availabilityComboBox.getSelectedItem(), (String) carTypeComboBox.getSelectedItem(),
-                    seatSlider.getValue(),
-                    (String) minPriceField.getText(), (String) maxPriceField.getText()));
-            if (brandComboBox.getSelectedIndex() != 0) {
-                modelComboBox.setEnabled(true);
-            } else {
-                modelComboBox.setSelectedIndex(0);
-                modelComboBox.setEnabled(false);
-            }
+            applyFilters();
         }
+    }
+
+    private void handleSorting() {
+        if (" Best Match ".equals(sortComboBox.getSelectedItem())) {
+            this.sortedVehicles = this.vehicles;
+        } else if (" Lowest Price ".equals(sortComboBox.getSelectedItem())) {
+            this.sortedVehicles = VehicleController.passSortedByPriceLowToHigh(this.vehicles);
+        } else if (" Highest Price ".equals(sortComboBox.getSelectedItem())) {
+            this.sortedVehicles = VehicleController.passSortedByPriceHighToLow(this.vehicles);
+        } else if (" Newest ".equals(sortComboBox.getSelectedItem())) {
+            this.sortedVehicles = VehicleController.passSortedByYearNewestFirst(this.vehicles);
+        } else if (" Oldest ".equals(sortComboBox.getSelectedItem())) {
+            this.sortedVehicles = VehicleController.passSortedByYearOldestFirst(this.vehicles);
+        }
+    }
+
+    private void handleBrandChange() {
+        if (brandComboBox.getSelectedIndex() != 0) {
+            List<String> modelsList = new ArrayList<>();
+            modelsList.add("ALL");
+            modelsList.addAll(VehicleController.passAllModelsByBrand(brandComboBox.getSelectedItem().toString()));
+            String[] models = modelsList.toArray(new String[0]);
+            
+            // Store current selection if any
+            String previouslySelectedModel = modelComboBox.isEnabled() ? 
+                (String) modelComboBox.getSelectedItem() : null;
+            
+            modelComboBox.setModel(new DefaultComboBoxModel<>(models));
+            modelComboBox.setEnabled(true);
+            
+            // Restore previous selection if it exists in the new model list
+            if (previouslySelectedModel != null && modelsList.contains(previouslySelectedModel)) {
+                modelComboBox.setSelectedItem(previouslySelectedModel);
+            }
+        } else {
+            modelComboBox.setModel(new DefaultComboBoxModel<>(new String[]{"ALL"}));
+            modelComboBox.setEnabled(false);
+        }
+    }
+
+    private void applyFilters() {
+        refreshCards(VehicleController.allFilterCombination(
+            this.sortedVehicles,
+            (String) brandComboBox.getSelectedItem(),
+            (String) modelComboBox.getSelectedItem(),
+            yearComboBox.getSelectedItem(),
+            (String) fuelTypeComboBox.getSelectedItem(),
+            (String) transTypeComboBox.getSelectedItem(),
+            (String) availabilityComboBox.getSelectedItem(),
+            (String) carTypeComboBox.getSelectedItem(),
+            seatSlider.getValue(),
+            minPriceField.getText(),
+            maxPriceField.getText()
+        ));
     }
 
     private void refreshCards(List<Vehicle> filteredvehicles) {
