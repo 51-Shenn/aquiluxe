@@ -171,7 +171,7 @@ public class GUIComponents extends JPanel {
         topBarButtons[2].addActionListener(e -> {
             pageIndicator(2);
             this.panel.removeAll();
-
+            this.panel.add(new AboutUsPage(this.frame, this.panel), BorderLayout.CENTER);
             this.panel.revalidate();
             this.panel.repaint();
         });
@@ -179,6 +179,7 @@ public class GUIComponents extends JPanel {
         topBarButtons[3].addActionListener(e -> {
             pageIndicator(3);
             this.panel.removeAll();
+            this.panel.add(new ContactUsPage(this.frame, this.panel), BorderLayout.CENTER);
             this.panel.revalidate();
             this.panel.repaint();
         });
