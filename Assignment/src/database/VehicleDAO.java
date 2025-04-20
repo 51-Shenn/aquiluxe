@@ -56,7 +56,7 @@ public class VehicleDAO {
     }
 
     // Mapping Result of SQL to vehicle object : reduce redundant code
-    private static final String[] CAR_TYPES = { "suv", "sedan", "coupe", "convertible", "hatchback", "wagon" };
+    private static final String[] CAR_TYPES = { "mpv", "suv", "sedan", "coupe", "convertible", "hatchback", "wagon", "pickup truck" };
 
     private static final String[] BIKE_TYPES = { "superbike", "touring", "cruiser" };
 
