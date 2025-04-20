@@ -375,7 +375,22 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
     private JComboBox<String> sortComboBox;
 
-    private JPanel createCarTopBar() {        
+    private JPanel createCarTopBar() {
+
+        ImageIcon searchIcon = null;
+        ImageIcon carIcon = null;
+        ImageIcon bikeIcon = null;
+        try {
+            searchIcon = new ImageIcon("images/vehiclepageicons/search-interface-symbol.png");
+            carIcon = new ImageIcon("images/vehiclepageicons/car.png");
+            bikeIcon = new ImageIcon("images/vehiclepageicons/bike.png");
+            if (searchIcon.getIconWidth() == -1 || carIcon.getIconWidth() == -1 || bikeIcon.getIconWidth() == -1) {
+                throw new Exception("Image file not found or invalid.");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error loading image: " + e.getMessage());
+        }
+
         JPanel topBar = new JPanel();
         topBar.setLayout(null);
         topBar.setBackground(Theme.getBackground());
@@ -386,90 +401,93 @@ public class VehiclesPage extends JPanel implements ActionListener {
         filters.setBounds(50, 25, 200, 50);
         filters.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
 
-        // if car then array of cars if bike then array of bikes else array of vehicles
-        RoundedButton carButton = new RoundedButton(10, Theme.getPressedBackground());
-        carButton.setIcon(IconLoader.getCarIcon());
+        // if car then array of vehicles if bike then array of bikes else array of vehicles
+        RoundedButton carButton = new RoundedButton(10, Theme.getSpecial());
+        carButton.setIcon(carIcon);
         carButton.setBorderPainted(false);
         carButton.setBounds(375, 25, 65, 50);
         carButton.setFocusable(false);
+        carButton.setBackground(Theme.getSpecial());
         carButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(12.5f));
         carButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
-                carButton.setBackground(Theme.getHoverBackground());
+                carButton.setBackground(Theme.getHoverSpecial());
             }
 
             @Override
             public void mouseExited(MouseEvent evt) {
-                carButton.setBackground(Theme.getPressedBackground());
+                carButton.setBackground(Theme.getSpecial());
             }
 
             @Override
             public void mousePressed(MouseEvent evt) {
-                carButton.setBackground(Theme.getBackground());
+                carButton.setBackground(Theme.getPressedSpecial());
             }
 
             @Override
             public void mouseReleased(MouseEvent evt) {
-                carButton.setBackground(Theme.getPressedBackground());
+                carButton.setBackground(Theme.getSpecial());
             }
         });
 
-        RoundedButton bikeButton = new RoundedButton(10, Theme.getPressedBackground());
-        bikeButton.setIcon(IconLoader.getBikeIcon());
+        RoundedButton bikeButton = new RoundedButton(10, Theme.getSpecial());
+        bikeButton.setIcon(bikeIcon);
         bikeButton.setBorderPainted(false);
         bikeButton.setBounds(450, 25, 65, 50);
         bikeButton.setFocusable(false);
+        bikeButton.setBackground(Theme.getSpecial());
         bikeButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(12.5f));
         bikeButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
-                bikeButton.setBackground(Theme.getHoverBackground());
+                bikeButton.setBackground(Theme.getHoverSpecial());
             }
 
             @Override
             public void mouseExited(MouseEvent evt) {
-                bikeButton.setBackground(Theme.getPressedBackground());
+                bikeButton.setBackground(Theme.getSpecial());
             }
 
             @Override
             public void mousePressed(MouseEvent evt) {
-                bikeButton.setBackground(Theme.getBackground());
+                bikeButton.setBackground(Theme.getPressedSpecial());
             }
 
             @Override
             public void mouseReleased(MouseEvent evt) {
-                bikeButton.setBackground(Theme.getPressedBackground());
+                bikeButton.setBackground(Theme.getSpecial());
             }
         });
 
-        RoundedButton allButton = new RoundedButton(10, Theme.getPressedBackground());
+        RoundedButton allButton = new RoundedButton(10, Theme.getSpecial());
         allButton.setText("ALL");
         allButton.setOpaque(true);
         allButton.setBorderPainted(false);
         allButton.setBounds(300, 25, 65, 50);
         allButton.setFocusable(false);
-        allButton.setForeground(Theme.getForeground());
+        allButton.setBackground(Theme.getSpecial());
+        allButton.setForeground(Color.BLACK);
         allButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
         allButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
-                allButton.setBackground(Theme.getHoverBackground());
+                allButton.setBackground(Theme.getHoverSpecial());
             }
 
             @Override
             public void mouseExited(MouseEvent evt) {
-                allButton.setBackground(Theme.getPressedBackground());
+                allButton.setBackground(Theme.getSpecial());
             }
 
             @Override
             public void mousePressed(MouseEvent evt) {
-                allButton.setBackground(Theme.getBackground());
+                allButton.setBackground(Theme.getPressedSpecial());
             }
 
             @Override
             public void mouseReleased(MouseEvent evt) {
-                allButton.setBackground(Theme.getPressedBackground());
+                allButton.setBackground(Theme.getSpecial());
             }
         });
 
@@ -498,7 +516,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         });
 
         JButton searchButton = new JButton();
-        searchButton.setIcon(IconLoader.getSearchIcon());
+        searchButton.setIcon(searchIcon);
         searchButton.setBounds(1200, 25, 85, 50);
         searchButton.setFocusable(false);
         searchButton.setBackground(Color.WHITE);
