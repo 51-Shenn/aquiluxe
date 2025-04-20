@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,48 +19,41 @@ import datamodels.Rental.RentalStatus;
 public class RentalDAO {
 
     // add new rental
-    public static int addRental(Customer customer, Vehicle vehicle, LocalDate startDate, LocalDate endDate,
-            LocalTime pickupTime, LocalTime dropoffTime, double totalCost, RentalStatus rentalStatus,
-            PaymentStatus paymentStatus) {
+    public static int addRental(Rental rental) {
         String sql = "INSERT INTO rentals (customer_id, vehicle_id, start_date, end_date, pickup_time, dropoff_time, total_cost, rental_status, payment_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        Connection conn = null;
-        conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.setAutoCommit(false);
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                stmt.setInt(1, rental.getRentCustomer().getUserId());
+                stmt.setInt(2, rental.getRentVehicle().getVehicleId());
+                stmt.setDate(3, Date.valueOf(rental.getRentStartDate()));
+                stmt.setDate(4, Date.valueOf(rental.getRentEndDate()));
+                stmt.setTime(5, Time.valueOf(rental.getPickUpTime()));
+                stmt.setTime(6, Time.valueOf(rental.getDropoffTime()));
+                stmt.setDouble(7, rental.getRentTotalCost());
+                stmt.setString(8, rental.getRentalStatus().toString());
+                stmt.setString(9, rental.getPaymentStatus().toString());
 
-            stmt.setInt(1, customer.getUserId());
-            stmt.setInt(2, vehicle.getVehicleId());
-            stmt.setDate(3, Date.valueOf(startDate));
-            stmt.setDate(4, Date.valueOf(endDate));
-            stmt.setTime(5, Time.valueOf(pickupTime));
-            stmt.setTime(6, Time.valueOf(dropoffTime));
-            stmt.setDouble(7, totalCost);
-            stmt.setString(8, rentalStatus.toString());
-            stmt.setString(9, paymentStatus.toString());
+                stmt.executeUpdate();
 
-            stmt.executeUpdate();
-
-            // get auto increment id
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    // update vehicle availability if rented
-                    updateVehicleAvailability(vehicle, false);
-                    return generatedKeys.getInt(1);
-                } else {
-                    throw new SQLException("Creating rental failed, no ID obtained.");
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int rentalId = generatedKeys.getInt(1);
+                        updateVehicleAvailability(rental.getRentVehicle(), false);
+                        conn.commit();
+                        return rentalId;
+                    } else {
+                        throw new SQLException("Creating rental failed, no ID obtained.");
+                    }
                 }
+            } catch (SQLException e) {
+                conn.rollback();
+                throw new RuntimeException("Failed to add rental", e);
             }
         } catch (SQLException e) {
-            if (conn != null) {
-                try {
-                    conn.rollback(); // Rollback transaction on error
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
-            e.printStackTrace();
-            throw new RuntimeException("\nFAILED TO ADD RENTAL\n");
+            throw new RuntimeException("DB connection failed", e);
         }
     }
 
@@ -82,8 +74,8 @@ public class RentalDAO {
         Vehicle vehicle = VehicleDAO.getVehicleById(vehicleId);
 
         // convert string status to enum
-        RentalStatus rentalStatus = RentalStatus.valueOf(rs.getString("rental_status"));
-        PaymentStatus paymentStatus = PaymentStatus.valueOf(rs.getString("payment_status"));
+        RentalStatus rentalStatus = RentalStatus.valueOf(rs.getString("rental_status").toUpperCase());
+        PaymentStatus paymentStatus = PaymentStatus.valueOf(rs.getString("payment_status").toUpperCase());
 
         // seperate because getting class instead of normal data type
         return new Rental(

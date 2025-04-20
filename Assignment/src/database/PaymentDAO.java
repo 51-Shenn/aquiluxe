@@ -15,16 +15,17 @@ import datamodels.Rental;
 public class PaymentDAO {
 
     // add new payment
-    public static int addPayment(Rental rental, double amount, String paymentMethod, LocalDate paymentDate) {
-        String sql = "INSERT INTO payments (rental_id, amount, payment_method, payment_date) VALUES (?, ?, ?, ?)";
+    public static int addPayment(Payment payment) {
+        String sql = "INSERT INTO payments (rental_id, amount, payment_method, payment_token, payment_date) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setInt(1, rental.getRentalId());
-            stmt.setDouble(2, amount);
-            stmt.setString(3, paymentMethod);
-            stmt.setDate(4, Date.valueOf(paymentDate));
+            stmt.setInt(1, payment.getRental().getRentalId());
+            stmt.setDouble(2, payment.getAmount());
+            stmt.setString(3, payment.getPaymentMethod());
+            stmt.setString(4, payment.getPaymentToken());
+            stmt.setDate(4, Date.valueOf(payment.getPaymentDate()));
 
             stmt.executeUpdate();
 
@@ -53,6 +54,7 @@ public class PaymentDAO {
                 rental,
                 rs.getDouble("amount"),
                 rs.getString("payment_method"),
+                rs.getString("payment_token"),
                 rs.getDate("payment_date").toLocalDate());
     }
 

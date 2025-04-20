@@ -7,20 +7,22 @@ public class Payment {
     private Rental rental;
     private double amount;
     private String paymentMethod;
+    private String paymentToken;
     private LocalDate paymentDate;
 
     // Default Constructor
     public Payment() {
-        this(0, new Rental(), 0.0, "", LocalDate.now()); // Default values
+        this(0, new Rental(), 0.0, "", "", LocalDate.now()); // Default values
     }
 
     // Constructor
     public Payment(int paymentId, Rental rental, double amount, String paymentMethod,
-            LocalDate paymentDate) {
+            String paymentToken, LocalDate paymentDate) {
         this.paymentId = paymentId;
         this.rental = rental;
         this.amount = amount;
         this.paymentMethod = paymentMethod;
+        this.paymentToken = paymentToken;
         this.paymentDate = paymentDate;
     }
 
@@ -55,6 +57,14 @@ public class Payment {
 
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public String getPaymentToken() {
+        return paymentToken;
+    }
+
+    public void setPaymentToken(String paymentToken) {
+        this.paymentToken = paymentToken;
     }
 
     public LocalDate getPaymentDate() {
