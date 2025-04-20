@@ -18,8 +18,15 @@ public class IconLoader extends Theme {
     private static final File BIG_FEMALE_PROFILE_ICON;
     private static final File SMALL_MALE_PROFILE_ICON;
     private static final File SMALL_FEMALE_PROFILE_ICON;
+    private static final File AVATAR_1_ICON;
+    private static final File AVATAR_2_ICON;
+    private static final File AVATAR_3_ICON;
+    private static final File INSTAGRAM_ICON;
+    private static final File GITHUB_ICON;
+    private static final File CONTACT_ICON;
+    private static final File EMAIL_ICON;
     private static final File SEARCH_ICON;
-
+    
     // light theme icons
     private static final File BLACK_CLOSE_ICON;
     private static final File BLACK_EDIT_PROFILE_ICON;
@@ -68,6 +75,7 @@ public class IconLoader extends Theme {
         String vehicleDarkThemePath = "images/icons/vehicle/dark-theme/";
 
         APP_ICON = new File(String.format("%s" + "car-logo.png", mainPath));
+
         X_ICON = new File(String.format("%s" + "x.png", lightThemePath));
         EYE_ON_ICON = new File(String.format("%s" + "eye-on.png", lightThemePath));
         EYE_OFF_ICON = new File(String.format("%s" + "eye-off.png", lightThemePath));
@@ -81,6 +89,13 @@ public class IconLoader extends Theme {
         BIG_FEMALE_PROFILE_ICON = new File(String.format("%s" + "female.png", profilePath));
         SMALL_MALE_PROFILE_ICON = new File(String.format("%s" + "small-male.png", profilePath));
         SMALL_FEMALE_PROFILE_ICON = new File(String.format("%s" + "small-female.png", profilePath));
+        AVATAR_1_ICON = new File(String.format("%s" + "avatar-1.png", profilePath));
+        AVATAR_2_ICON = new File(String.format("%s" + "avatar-2.png", profilePath));
+        AVATAR_3_ICON = new File(String.format("%s" + "avatar-3.png", profilePath));
+        INSTAGRAM_ICON = new File(String.format("%s" + "instagram.png", profilePath));
+        GITHUB_ICON = new File(String.format("%s" + "github1.png", profilePath));
+        CONTACT_ICON = new File(String.format("%s" + "contact.png", profilePath));
+        EMAIL_ICON = new File(String.format("%s" + "email.png", profilePath));
 
         File[] generalIcons = {
             X_ICON,
@@ -92,7 +107,14 @@ public class IconLoader extends Theme {
             BIG_MALE_PROFILE_ICON,
             BIG_FEMALE_PROFILE_ICON,
             SMALL_MALE_PROFILE_ICON,
-            SMALL_MALE_PROFILE_ICON
+            SMALL_MALE_PROFILE_ICON,
+            AVATAR_1_ICON,
+            AVATAR_2_ICON,
+            AVATAR_3_ICON,
+            INSTAGRAM_ICON,
+            GITHUB_ICON,
+            CONTACT_ICON,
+            EMAIL_ICON
         };
 
         // light theme icons
@@ -188,6 +210,14 @@ public class IconLoader extends Theme {
         return new ImageIcon(APP_ICON.toString());
     }
 
+    public static ImageIcon getInstagramIcon() {
+        return new ImageIcon(INSTAGRAM_ICON.toString());
+    }
+
+    public static ImageIcon getGitHubIcon() {
+        return new ImageIcon(GITHUB_ICON.toString());
+    }
+
     public static ImageIcon getXIcon() {
         return new ImageIcon(X_ICON.toString());
     }
@@ -229,6 +259,26 @@ public class IconLoader extends Theme {
 
     public static ImageIcon getSmallFemaleProfileIcon() {
         return new ImageIcon(SMALL_FEMALE_PROFILE_ICON.toString());
+    }
+
+    public static ImageIcon getAvatar1Icon() {
+        return new ImageIcon(AVATAR_1_ICON.toString());
+    }
+
+    public static ImageIcon getAvatar2Icon() {
+        return new ImageIcon(AVATAR_2_ICON.toString());
+    }
+
+    public static ImageIcon getAvatar3Icon() {
+        return new ImageIcon(AVATAR_3_ICON.toString());
+    }
+
+    public static ImageIcon getContactIcon() {
+        return new ImageIcon(CONTACT_ICON.toString());
+    }
+
+    public static ImageIcon getEmailIcon() {
+        return new ImageIcon(EMAIL_ICON.toString());
     }
 
     public static ImageIcon getCloseIcon() {
