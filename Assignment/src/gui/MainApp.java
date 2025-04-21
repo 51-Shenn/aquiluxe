@@ -1,13 +1,9 @@
 package gui;
 
 import controllers.UserController;
-import database.VehicleDAO;
 import datamodels.User;
-import datamodels.Vehicle;
 import java.awt.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.*;
 
 public class MainApp extends JFrame {
