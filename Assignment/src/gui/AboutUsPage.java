@@ -26,5 +26,13 @@ public class AboutUsPage extends JPanel {
         gbc.weightx = 1;
         gbc.weighty = 1;
         gbc.anchor = GridBagConstraints.NORTH;
+        add(createAboutUsPage());
+    }
+
+    private JPanel createAboutUsPage() {
+        JPanel aboutUsPanel = new JPanel();
+        aboutUsPanel.setBackground(Theme.getBackground());
+
+        return new JPanel();
     }
 }
