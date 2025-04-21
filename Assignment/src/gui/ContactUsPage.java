@@ -1,15 +1,17 @@
 package gui;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -82,10 +84,36 @@ public class ContactUsPage extends JPanel {
         JPanel linkPanel = new JPanel(new GridBagLayout());
         linkPanel.setBackground(Theme.getHoverBackground());
 
-        JLabel instragramLink = createLink(igUsername, IconLoader.getInstagramIcon());
-        JLabel githubLink = createLink(githubUsername, IconLoader.getGitHubIcon());
-        JLabel emailLink = createLink(emailAddress, IconLoader.getEmailIcon());
-        JLabel contactLink = createLink(phoneNumber, IconLoader.getContactIcon());
+        JLabel label = new JLabel("Where to Find Me:");
+        label.setForeground(Theme.getForeground());
+        label.setFont(CustomFonts.INSTRUMENT_SANS_MEDIUM.deriveFont(18f));
+
+        String instagramLink;
+        String githubLink;
+
+        switch (name) {
+            case "Eason" -> {
+                instagramLink = "https://www.instagram.com/_51shenn_/";
+                githubLink = "https://github.com/51-Shenn";
+            }
+            case "Brian" -> {
+                instagramLink = "https://www.instagram.com/briankam_/";
+                githubLink = "https://github.com/briankdxtarumt06";
+            }
+            case "Jason" -> {
+                instagramLink = "https://www.instagram.com/jason___178/";
+                githubLink = "https://github.com/season1ng";
+            }
+            default -> {
+                instagramLink = "";
+                githubLink = "";
+            }
+        }
+
+        JLabel instragramLinkLabel = createLink(igUsername, IconLoader.getInstagramIcon(), instagramLink);
+        JLabel githubLinkLabel = createLink(githubUsername, IconLoader.getGitHubIcon(), githubLink);
+        JLabel emailLinkLabel = createLink(emailAddress, IconLoader.getEmailIcon());
+        JLabel contactLinkLabel = createLink(phoneNumber, IconLoader.getContactIcon());
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx = 1;
@@ -104,63 +132,56 @@ public class ContactUsPage extends JPanel {
 
         profileCard.add(profileName, gbc);
 
-        // gbc.weighty = 0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = new Insets(15, 0, 0, 0);
 
-        linkPanel.add(instragramLink, gbc);
-        linkPanel.add(githubLink, gbc);
-        linkPanel.add(emailLink, gbc);
-        linkPanel.add(contactLink, gbc);
+        linkPanel.add(label, gbc);
+        linkPanel.add(instragramLinkLabel, gbc);
+        linkPanel.add(githubLinkLabel, gbc);
+        linkPanel.add(emailLinkLabel, gbc);
+        linkPanel.add(contactLinkLabel, gbc);
 
-        gbc.insets = new Insets(10, 50, 0, 0);
+        gbc.insets = new Insets(10, 50, 30, 0);
         profileCard.add(linkPanel, gbc);
 
         return profileCard;
     }
 
-    private JLabel createLink(String string, ImageIcon icon) {
+    private JLabel createLink(String string, ImageIcon icon, String link) {
         JLabel linkLabel = new JLabel();
         linkLabel.setIcon(icon);
         linkLabel.setText(string);
         linkLabel.setFont(CustomFonts.INSTRUMENT_SANS_MEDIUM.deriveFont(20f));
         linkLabel.setIconTextGap(30);
         linkLabel.setForeground(Theme.getSpecial());
+        linkLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        linkLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                openLink(link);
+            }
+        });
 
         return linkLabel;
     }
 
-    // Custom JPanel with rounded corners
-    private class RoundedPanel extends JPanel {
-        private Color backgroundColor;
-        private int cornerRadius;
+    private JLabel createLink(String string, ImageIcon icon) {
+        JLabel linkLabel = new JLabel();
+        linkLabel.setIcon(icon);
+        linkLabel.setText(string);
+        linkLabel.setFont(CustomFonts.INSTRUMENT_SANS_REGULAR.deriveFont(20f));
+        linkLabel.setIconTextGap(30);
+        linkLabel.setForeground(Theme.getForeground());
 
-        public RoundedPanel(int radius, Color bgColor) {
-            this.cornerRadius = radius;
-            this.backgroundColor = bgColor;
-            setOpaque(false);
-        }
+        return linkLabel;
+    }
 
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2d = (Graphics2D) g.create();
-
-            // Enable anti-aliasing for smooth rendering
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            int width = getWidth();
-            int height = getHeight();
-            int arcSize = cornerRadius * 2;
-
-            // Make panel transparent
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-            g2d.setColor(backgroundColor != null ? backgroundColor : getBackground());
-
-            // Fill rounded rectangle
-            g2d.fillRoundRect(0, 0, width - 1, height - 1, arcSize, arcSize);
-
-            g2d.dispose();
+    private void openLink(String link) {
+        try {
+            Desktop desktop = Desktop.getDesktop();
+            desktop.browse(new URI(link));
+        } catch (URISyntaxException | IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
