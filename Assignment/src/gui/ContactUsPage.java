@@ -169,9 +169,9 @@ public class ContactUsPage extends JPanel {
         JLabel linkLabel = new JLabel();
         linkLabel.setIcon(icon);
         linkLabel.setText(string);
-        linkLabel.setFont(CustomFonts.INSTRUMENT_SANS_REGULAR.deriveFont(20f));
+        linkLabel.setFont(CustomFonts.INSTRUMENT_SANS_MEDIUM.deriveFont(20f));
         linkLabel.setIconTextGap(30);
-        linkLabel.setForeground(Theme.getForeground());
+        linkLabel.setForeground(Theme.getSecondaryForeground());
 
         return linkLabel;
     }
