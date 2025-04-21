@@ -14,7 +14,7 @@ public class MainApp extends JFrame {
 
     public MainApp() {
         Navigation.setWindowsLookAndFeel();
-        
+
         setTitle("AQUILUXE");
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(1280, 720));
@@ -35,15 +35,6 @@ public class MainApp extends JFrame {
             add(new GUIComponents(this, contentPanel, null), BorderLayout.NORTH);
 
         add(contentPanel, BorderLayout.CENTER);
-
-        // Testing VehicleDAO
-        List<Vehicle> vehicles = new ArrayList<>();
-        vehicles = VehicleDAO.getAllVehicles();
-        System.out.println("Available Vehicles: " + vehicles);
-        for (Vehicle vehicle : vehicles) {
-            System.out.println(vehicle.getClass() + " " + vehicle.getBrand() + " " +
-                    vehicle.getModel() + " " + vehicle.getVehicleType());
-        }
 
         setVisible(true);
     }
