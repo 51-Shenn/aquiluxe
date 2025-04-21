@@ -28,15 +28,15 @@ public class RentalPage extends JPanel {
 
     private GridBagConstraints gbc = new GridBagConstraints();
 
-    private Car carSelected;
+    private Vehicle vehicleSelected;
 
-    public RentalPage(JFrame frame, JPanel panel, Car selectedCar) {
+    public RentalPage(JFrame frame, JPanel panel, Vehicle selectedVehicle) {
         this.frame = frame;
         this.panel = panel;
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
-        carSelected = selectedCar;
+        vehicleSelected = selectedVehicle;
 
         // scrollable rental page container
         JSplitPane rentalPage = createRentalPage();
@@ -102,7 +102,7 @@ public class RentalPage extends JPanel {
         // car image -> get image path from car object
         ImageIcon image = null;
         try {
-            image = new ImageIcon(carSelected.getImagePath());
+            image = new ImageIcon(vehicleSelected.getImagePath());
 
             // Check if any image failed to load
             if (image.getIconWidth() == -1) {
@@ -130,19 +130,19 @@ public class RentalPage extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5);
 
         // car details text labels
-        JLabel carNameLabel = createLabel(carSelected.getBrand() + " " + carSelected.getModel(),
-                40f, Color.BLACK, Color.WHITE, 50, -1);
+        JLabel carNameLabel = createLabel(vehicleSelected.getBrand() + " " + vehicleSelected.getModel(),
+                30f, Color.BLACK, Color.WHITE, 50, -1);
         carNameLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel carTransmissionLabel = createLabel(carSelected.getTransmission() + " Transmission",
+        JLabel carTransmissionLabel = createLabel(vehicleSelected.getTransmission() + " Transmission",
                 20f, Color.BLACK, Color.WHITE, 50, -1);
         carTransmissionLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel carFuelLabel = createLabel(carSelected.getFuelType(),
+        JLabel carFuelLabel = createLabel(vehicleSelected.getFuelType(),
                 20f, Color.BLACK, Color.WHITE, 50, -1);
         carFuelLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel carRentalPricLabel = createLabel("RM " + carSelected.getRentalPriceDay() + "/day",
+        JLabel carRentalPricLabel = createLabel("RM " + vehicleSelected.getRentalPriceDay() + "/day",
                 20f, Color.BLACK, Color.WHITE, 50, -1);
         carRentalPricLabel.setHorizontalAlignment(JLabel.LEFT);
 
@@ -175,7 +175,7 @@ public class RentalPage extends JPanel {
         rentalPriceTextLabel.setOpaque(false);
         rentalPriceTextLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel rentalPriceLabel = createLabel("RM " + carSelected.getRentalPriceDay(), 20f,
+        JLabel rentalPriceLabel = createLabel("RM " + vehicleSelected.getRentalPriceDay(), 20f,
                 Color.BLACK, Color.WHITE, 30, -1);
         rentalPriceLabel.setOpaque(false);
         rentalPriceLabel.setHorizontalAlignment(JLabel.RIGHT);
@@ -186,7 +186,7 @@ public class RentalPage extends JPanel {
         insuranceTextLabel.setHorizontalAlignment(JLabel.LEFT);
 
         JLabel insurancePriceLabel = createLabel(
-                "RM " + String.format("%.2f", (carSelected.getRentalPriceDay() * 0.1)), 20f,
+                "RM " + String.format("%.2f", (vehicleSelected.getRentalPriceDay() * 0.1)), 20f,
                 Color.BLACK, Color.WHITE, 30, -1);
         insurancePriceLabel.setOpaque(false);
         insurancePriceLabel.setHorizontalAlignment(JLabel.RIGHT);
@@ -223,7 +223,7 @@ public class RentalPage extends JPanel {
         totalPriceTextLabel.setOpaque(false);
         totalPriceTextLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        totalPriceLabel = createLabel("RM " + carSelected.getRentalPriceDay(), 20f,
+        totalPriceLabel = createLabel("RM " + vehicleSelected.getRentalPriceDay(), 20f,
                 Color.BLACK, Color.WHITE, 30, -1);
         totalPriceLabel.setOpaque(false);
         totalPriceLabel.setHorizontalAlignment(JLabel.RIGHT);

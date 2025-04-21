@@ -242,6 +242,23 @@ public class VehicleDAO {
         }
     }
 
+    // update vehicle availability
+    public static void updateVehicleAvailability(Vehicle vehicle, boolean availability) {
+        String sql = "UPDATE vehicles SET availability = ? WHERE vehicle_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setBoolean(1, availability);
+            stmt.setInt(2, vehicle.getVehicleId());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO UPDATE VEHICLE AVAILABILITY\n");
+        }
+    }
+
     // delete vehicle
     public static boolean deleteVehicle(Vehicle vehicle) {
         String sql = "DELETE FROM vehicles WHERE vehicle_id = ?";
