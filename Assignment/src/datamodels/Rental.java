@@ -22,6 +22,20 @@ public class Rental {
     }
 
     // Parameterized Constructor
+    public Rental(Customer customer, Vehicle vehicle, LocalDate startDate, LocalDate endDate,
+            LocalTime pickupTime, LocalTime dropoffTime, double totalCost, RentalStatus rentalStatus,
+            PaymentStatus paymentStatus) {
+        this.customer = customer;
+        this.vehicle = vehicle;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.pickupTime = pickupTime;
+        this.dropoffTime = dropoffTime;
+        this.totalCost = totalCost;
+        this.rentalStatus = rentalStatus;
+        this.paymentStatus = paymentStatus;
+    }
+
     public Rental(int rentalId, Customer customer, Vehicle vehicle, LocalDate startDate, LocalDate endDate,
             LocalTime pickupTime, LocalTime dropoffTime, double totalCost, RentalStatus rentalStatus,
             PaymentStatus paymentStatus) {

@@ -304,9 +304,6 @@ public class VehiclesPageDetails extends JPanel {
                 Car carSample = new Car(1001, "images/cars/Supra.jpg", "Toyota", "Supra", 2023, 3000, 800, "Red", 13.2,
                         "12345678901234567", "REGISID123456", 999.99, "Automatic", "Hybrid", "Coupe", 2, true,
                         "Aerodynamic Body");
-
-                VehicleController vehicleController = new VehicleController(frame, panel);
-                vehicleController.gotoRentalPage(carSample);
             }
         });
         rentPanel.add(rentButton);
