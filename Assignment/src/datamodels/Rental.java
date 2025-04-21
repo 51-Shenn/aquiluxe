@@ -18,10 +18,24 @@ public class Rental {
     // Default Constructor
     public Rental() {
         this(0, new Customer(), new Vehicle(), LocalDate.now(), LocalDate.now(), LocalTime.now(), LocalTime.now(), 0.0,
-                RentalStatus.PENDING, PaymentStatus.FAILED); // Default values
+                RentalStatus.PENDING, PaymentStatus.PENDING); // Default values
     }
 
     // Parameterized Constructor
+    public Rental(Customer customer, Vehicle vehicle, LocalDate startDate, LocalDate endDate,
+            LocalTime pickupTime, LocalTime dropoffTime, double totalCost, RentalStatus rentalStatus,
+            PaymentStatus paymentStatus) {
+        this.customer = customer;
+        this.vehicle = vehicle;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.pickupTime = pickupTime;
+        this.dropoffTime = dropoffTime;
+        this.totalCost = totalCost;
+        this.rentalStatus = rentalStatus;
+        this.paymentStatus = paymentStatus;
+    }
+
     public Rental(int rentalId, Customer customer, Vehicle vehicle, LocalDate startDate, LocalDate endDate,
             LocalTime pickupTime, LocalTime dropoffTime, double totalCost, RentalStatus rentalStatus,
             PaymentStatus paymentStatus) {
@@ -39,11 +53,11 @@ public class Rental {
 
     // Restrict Status Variations
     public enum RentalStatus {
-        PENDING, COMPLETED, CANCELLED, OVERDUE
+        PENDING, APPROVED, ACTIVE, COMPLETED, CANCELLED, OVERDUE
     }
 
     public enum PaymentStatus {
-        PAID, FAILED
+        PENDING, PAID, FAILED
     }
 
     // Getters and Setters
@@ -142,5 +156,21 @@ public class Rental {
         this.totalCost = totalCost;
         this.rentalStatus = rentalStatus;
         this.paymentStatus = paymentStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "Rental{" +
+                "rentalId=" + rentalId +
+                ", customer=" + customer.getFullName() +
+                ", vehicle=" + vehicle.getBrand() + vehicle.getModel() +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", pickupTime=" + pickupTime +
+                ", dropoffTime=" + dropoffTime +
+                ", totalCost=" + totalCost +
+                ", rentalStatus=" + rentalStatus +
+                ", paymentStatus=" + paymentStatus +
+                '}';
     }
 }

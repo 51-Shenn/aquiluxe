@@ -13,6 +13,7 @@ import java.util.List;
 
 import datamodels.Customer;
 import datamodels.Rental;
+import datamodels.User;
 import datamodels.Vehicle;
 import datamodels.Rental.PaymentStatus;
 import datamodels.Rental.RentalStatus;
@@ -20,54 +21,112 @@ import datamodels.Rental.RentalStatus;
 public class RentalDAO {
 
     // add new rental
-    public static int addRental(Customer customer, Vehicle vehicle, LocalDate startDate, LocalDate endDate,
-            LocalTime pickupTime, LocalTime dropoffTime, double totalCost, RentalStatus rentalStatus,
-            PaymentStatus paymentStatus) {
+    public static int addRental(Rental rental) {
         String sql = "INSERT INTO rentals (customer_id, vehicle_id, start_date, end_date, pickup_time, dropoff_time, total_cost, rental_status, payment_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        Connection conn = null;
-        conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            conn.setAutoCommit(false);
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+                stmt.setInt(1, getCustomerIdbyUserId(rental));
+                stmt.setInt(2, rental.getRentVehicle().getVehicleId());
+                stmt.setDate(3, Date.valueOf(rental.getRentStartDate()));
+                stmt.setDate(4, Date.valueOf(rental.getRentEndDate()));
+                stmt.setTime(5, Time.valueOf(rental.getPickUpTime()));
+                stmt.setTime(6, Time.valueOf(rental.getDropoffTime()));
+                stmt.setDouble(7, rental.getRentTotalCost());
+                stmt.setString(8, rental.getRentalStatus().toString());
+                stmt.setString(9, rental.getPaymentStatus().toString());
 
-            stmt.setInt(1, customer.getUserId());
-            stmt.setInt(2, vehicle.getVehicleId());
-            stmt.setDate(3, Date.valueOf(startDate));
-            stmt.setDate(4, Date.valueOf(endDate));
-            stmt.setTime(5, Time.valueOf(pickupTime));
-            stmt.setTime(6, Time.valueOf(dropoffTime));
-            stmt.setDouble(7, totalCost);
-            stmt.setString(8, rentalStatus.toString());
-            stmt.setString(9, paymentStatus.toString());
+                stmt.executeUpdate();
 
-            stmt.executeUpdate();
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int rentalId = generatedKeys.getInt(1);
+                        updateVehicleAvailability(rental.getRentVehicle(), false);
+                        conn.commit();
+                        return rentalId;
+                    } else {
+                        throw new SQLException("Creating rental failed, no ID obtained.");
+                    }
+                }
+            } catch (SQLException e) {
+                conn.rollback();
+                throw new RuntimeException("Failed to add rental", e);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("DB connection failed", e);
+        }
+    }
 
-            // get auto increment id
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    // update vehicle availability if rented
-                    updateVehicleAvailability(vehicle, false);
-                    return generatedKeys.getInt(1);
-                } else {
-                    throw new SQLException("Creating rental failed, no ID obtained.");
+    public static int getCustomerIdbyUserId(Rental rental) {
+        String sql = "SELECT customer_id FROM customers WHERE user_id = ? ORDER BY created_at DESC LIMIT 1;";
+        int customerId = -1;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, rental.getRentCustomer().getUserId());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    customerId = rs.getInt("customer_id");
                 }
             }
         } catch (SQLException e) {
-            if (conn != null) {
-                try {
-                    conn.rollback(); // Rollback transaction on error
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO GET CUSTOMER ID\n");
+        }
+        return customerId;
+    }
+
+    // overloaded method to get customer ID by user ID
+    private static int getCustomerIdbyUserId(User user) {
+        String sql = "SELECT customer_id FROM customers WHERE user_id = ? ORDER BY created_at DESC LIMIT 1;";
+        int customerId = -1;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, user.getUserId());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    customerId = rs.getInt("customer_id");
                 }
             }
+        } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("\nFAILED TO ADD RENTAL\n");
+            throw new RuntimeException("\nFAILED TO GET CUSTOMER ID\n");
         }
+        return customerId;
+    }
+
+    // get user ID by rental
+    public static int getUserbyRental(Rental rental) {
+        String sql = "SELECT user_id FROM customers WHERE customer_id = ? ORDER BY created_at DESC LIMIT 1;";
+        int userId = -1;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, rental.getRentCustomer().getUserId());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    userId = rs.getInt("user_id");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO GET USER ID\n");
+        }
+        return userId;
     }
 
     // update vehicle availability
     private static void updateVehicleAvailability(Vehicle vehicle, boolean availability) {
-        VehicleDAO.updateVehicleColumnValue(vehicle, "availability", String.valueOf(availability));
+        VehicleDAO.updateVehicleAvailability(vehicle, availability);
     }
 
     // Mapping Result of SQL to rental object : reduce redundant code
@@ -82,8 +141,8 @@ public class RentalDAO {
         Vehicle vehicle = VehicleDAO.getVehicleById(vehicleId);
 
         // convert string status to enum
-        RentalStatus rentalStatus = RentalStatus.valueOf(rs.getString("rental_status"));
-        PaymentStatus paymentStatus = PaymentStatus.valueOf(rs.getString("payment_status"));
+        RentalStatus rentalStatus = RentalStatus.valueOf(rs.getString("rental_status").toUpperCase());
+        PaymentStatus paymentStatus = PaymentStatus.valueOf(rs.getString("payment_status").toUpperCase());
 
         // seperate because getting class instead of normal data type
         return new Rental(
@@ -140,15 +199,15 @@ public class RentalDAO {
         return rentals;
     }
 
-    // get rentals by customer ID
-    public static List<Rental> getRentalsByCustomer(Customer customer) {
+    // get rentals by user ID
+    public static List<Rental> getRentalsByUser(User user) {
         String sql = "SELECT * FROM rentals WHERE customer_id = ?";
         List<Rental> rentals = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, customer.getUserId());
+            stmt.setInt(1, getCustomerIdbyUserId(user));
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -256,26 +315,6 @@ public class RentalDAO {
         return rentals;
     }
 
-    // get active rentals (PENDING / OVERDUE)
-    public static List<Rental> getActiveRentals() {
-        String sql = "SELECT * FROM rentals WHERE rental_status = 'PENDING' OR rental_status = 'OVERDUE'";
-        List<Rental> rentals = new ArrayList<>();
-
-        try (Connection conn = DatabaseConnection.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Rental rental = mapResultRental(rs);
-                rentals.add(rental);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("\nFAILED TO GET ACTIVE RENTALS\n");
-        }
-        return rentals;
-    }
-
     // update rental status
     public static boolean updateRentalStatus(Rental rental, RentalStatus status) {
         String sql = "UPDATE rentals SET rental_status = ? WHERE rental_id = ?";
@@ -338,6 +377,42 @@ public class RentalDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("\nFAILED TO UPDATE RENTAL TOTAL COST\n");
+        }
+    }
+
+    // update rental date values
+    public static boolean updateRentalDates(Rental rental, String column, LocalDate date) {
+        String sql = "UPDATE rentals SET " + column + " = ? WHERE rental_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setDate(1, Date.valueOf(date));
+            stmt.setInt(2, rental.getRentalId());
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO UPDATE RENTAL DATES\n");
+        }
+    }
+
+    // update rental time values
+    public static boolean updateRentalTimes(Rental rental, String column, LocalTime time) {
+        String sql = "UPDATE rentals SET " + column + " = ? WHERE rental_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setTime(1, Time.valueOf(time));
+            stmt.setInt(2, rental.getRentalId());
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO UPDATE RENTAL TIMES\n");
         }
     }
 
