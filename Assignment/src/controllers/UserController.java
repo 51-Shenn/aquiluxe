@@ -1,5 +1,7 @@
 package controllers;
 
+import datamodels.Admin;
+import datamodels.Customer;
 import datamodels.User;
 import java.io.File;
 import javax.swing.JLabel;
@@ -54,6 +56,10 @@ public class UserController {
         UserService.removeUserFromAccountsFile(id, accountsFile);
     }
 
+    public static void removeUserFromDatabase(User user) {
+        UserService.deleteUser(user);
+    }
+
     public static String loadTheme(File themeFile) {
         return UserService.loadThemeFromFile(themeFile);
     }
@@ -64,5 +70,21 @@ public class UserController {
 
     public static String passAdminPassword(String password, JTextField uuidField) {
         return UserService.adminPasswordValidation(password, uuidField);
+    }
+
+    public static User getUserFromDatabase(User user) {
+        return UserService.getUserByObject(user);
+    }
+
+    public static User getUserFromDatabase(int userId) {
+        return UserService.getUserByObject(userId);
+    }
+
+    public static Customer getCustomerFromDatabase(User user) {
+        return UserService.getCustomerByObject(user);
+    }
+
+    public static Admin getAdminFromDatabase(User user) {
+        return UserService.getAdminByObject(user);
     }
 }

@@ -116,6 +116,30 @@ public class UserDAO {
         return users;
     }
 
+    // get user by object
+    public static User getUserById(User user) {
+        int userId = user.getUserId();
+
+        String sql = "SELECT * FROM users WHERE user_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, userId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    user = mapResultUser(rs);
+                    return user;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO GET USER BY ID\n");
+        }
+        return null;
+    }
+
     // get user by specific id
     public static User getUserById(int userId) {
         String sql = "SELECT * FROM users WHERE user_id = ?";

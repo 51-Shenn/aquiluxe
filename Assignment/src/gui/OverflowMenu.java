@@ -1,7 +1,6 @@
 package gui;
 
 import controllers.UserController;
-import database.UserDAO;
 import datamodels.Admin;
 import datamodels.Customer;
 import datamodels.User;
@@ -335,7 +334,7 @@ public class OverflowMenu extends JLayeredPane {
                         fullNameValidationLabel, usernameValidationLabel, emailValidationLabel,
                         phoneNumberValidationLabel, icValidationLabel);
                 if (isValidUpdateDetails) {
-                    this.user = UserDAO.getUserById(this.user.getUserId());
+                    this.user = UserController.getUserFromDatabase(this.user);
 
                     this.frame.getLayeredPane().remove(this);
                     new Navigation().homePageNavigation(this.frame, this.panel, this.user);
@@ -412,7 +411,7 @@ public class OverflowMenu extends JLayeredPane {
             case "Identity Card" -> {
                 if (this.user.getUserType().equals("Customer")) {
                     try {
-                        Customer customer = UserDAO.getCustomerById(this.user);
+                        Customer customer = UserController.getCustomerFromDatabase(this.user);
                         inputField.setText(customer.getLicense());
                         inputField.setEditable(false);
                     } catch (Exception e) {
@@ -420,7 +419,7 @@ public class OverflowMenu extends JLayeredPane {
                     }
                 } else if (this.user.getUserType().equals("Admin")) {
                     label.setText("Position:");
-                    Admin admin = UserDAO.getAdminById(this.user);
+                    Admin admin = UserController.getAdminFromDatabase(this.user);
                     inputField.setText(admin.getAdminRole());
                     inputField.setEditable(false);
                 }
@@ -531,7 +530,7 @@ public class OverflowMenu extends JLayeredPane {
 
                 for (int userID : userAccountsID) {
                     if (userID != 0 && userID != this.user.getUserId()) {
-                        User everyUser = UserDAO.getUserById(userID);
+                        User everyUser = UserController.getUserFromDatabase(userID);
 
                         RoundedButton accountButton = new RoundedButton(20, Theme.getBackground());
                         accountButton.setBackground(Theme.getBackground());
@@ -880,13 +879,7 @@ public class OverflowMenu extends JLayeredPane {
 
                 if (proceed) {
                     UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
-
-                    if (this.user.getUserType().equals("Customer"))
-                        UserDAO.deleteCustomer(this.user);
-                    else if (this.user.getUserType().equals("Admin"))
-                        UserDAO.deleteAdmin(this.user);
-
-                    UserDAO.deleteUser(this.user);
+                    UserController.removeUserFromDatabase(this.user);
 
                     this.user = new User();
 

@@ -1,6 +1,8 @@
 package services;
 
 import database.UserDAO;
+import datamodels.Admin;
+import datamodels.Customer;
 import datamodels.User;
 import gui.OverflowMenu;
 import java.io.BufferedReader;
@@ -644,6 +646,15 @@ public class UserService {
         }
     }
 
+    public static void deleteUser(User user) {
+        if (user.getUserType().equals("Customer"))
+            UserDAO.deleteCustomer(user);
+        else if (user.getUserType().equals("Admin"))
+            UserDAO.deleteAdmin(user);
+
+        UserDAO.deleteUser(user);
+    }
+
     public static String loadThemeFromFile(File themeFile) {
         String theme = "Light";
 
@@ -692,5 +703,21 @@ public class UserService {
         }
 
         return "";
+    }
+
+    public static User getUserByObject(User user) {
+        return UserDAO.getUserById(user);
+    }
+
+    public static User getUserByObject(int userId) {
+        return UserDAO.getUserById(userId);
+    }
+
+    public static Customer getCustomerByObject(User user) {
+        return UserDAO.getCustomerById(user);
+    }
+
+    public static Admin getAdminByObject(User user) {
+        return UserDAO.getAdminById(user);
     }
 }
