@@ -1,6 +1,5 @@
 package controllers;
 
-import datamodels.Car;
 import datamodels.Vehicle;
 import gui.RentalPage;
 import java.util.ArrayList;
@@ -18,9 +17,9 @@ public class VehicleController {
         this.panel = panel;
     }
 
-    public void gotoRentalPage(Car selectedCar) {
+    public void gotoRentalPage(Vehicle selectedVehicle) {
         panel.removeAll();
-        panel.add(new RentalPage(frame, panel, selectedCar)); // pass selected car
+        panel.add(new RentalPage(frame, panel, selectedVehicle)); // pass selected car
         panel.revalidate();
         panel.repaint();
     }

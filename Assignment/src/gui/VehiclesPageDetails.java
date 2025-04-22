@@ -303,6 +303,8 @@ public class VehiclesPageDetails extends JPanel {
             @Override
             public void mouseReleased(MouseEvent evt) {
                 rentButton.setBackground(Theme.getSpecial());
+                VehicleController vehicleController = new VehicleController(frame, panel);
+                vehicleController.gotoRentalPage(vehicle);
             }
         });
         rentPanel.add(rentButton);
