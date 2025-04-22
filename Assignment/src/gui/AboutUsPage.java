@@ -141,8 +141,8 @@ public class AboutUsPage extends JPanel {
             "Aquiluxe provide a wide array of luxury vehicles which designed for those who demand quality, class, and performance.",
             "Our collection includes iconic models from automotive brands such as Porsche, Rolls-Royce, Koenigsegg, Lamborghini,",
             "and many others. Regardless of whether it is for a special occasion, or a business event, Aquiluxe provides a seamless",
-            "experience rental experience. Every vehicle is carefully serviced to ensure perfect condition before every rent,",
-            "delivering both comfort and performance to our customers. Elevate your journey by choosing Aquiluxe."
+            "rental experience. Every vehicle is carefully serviced to ensure perfect condition before every rent, delivering both",
+            "comfort and performance to our customers. Elevate your journey by choosing Aquiluxe."
         };
 
         for(String text : description) {
@@ -184,7 +184,7 @@ public class AboutUsPage extends JPanel {
 
         locationPanel.add(locationTitle, gbc);
 
-        String[] description = {
+        String[] address = {
             "AQUILUXE HQ",
             "Jalan Malinja, Taman Bunga Raya",
             "53000 Kuala Lumpur, Wilayah Persekutuan Kuala Lumpur",
@@ -194,7 +194,7 @@ public class AboutUsPage extends JPanel {
         gbc.gridy = 1;
         gbc.insets = new Insets(0, 0, 5, 0);
 
-        for(String text : description) {
+        for(String text : address) {
             JLabel addressLabel = new JLabel(text);
             addressLabel.setFont(CustomFonts.INSTRUMENT_SANS_MEDIUM.deriveFont(20f));
             addressLabel.setForeground(Theme.getSpecial());
