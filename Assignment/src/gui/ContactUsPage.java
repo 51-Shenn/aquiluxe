@@ -43,7 +43,8 @@ public class ContactUsPage extends JPanel {
         titleLabel.setForeground(Theme.getForeground());
         titleLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(45f));
 
-        JLabel label = new JLabel("Have a question, feedback, or just want to say hello? We're always happy to hear from you.");
+        JLabel label = new JLabel(
+                "Have a question, feedback, or just want to say hello? We're always happy to hear from you.");
         label.setForeground(Theme.getSecondaryForeground());
         label.setFont(CustomFonts.INSTRUMENT_SANS_MEDIUM.deriveFont(20f));
 
@@ -61,16 +62,20 @@ public class ContactUsPage extends JPanel {
         gbc.insets = new Insets(20, 0, 50, 0);
         contactUsPanel.add(label, gbc);
 
-        gridPanel.add(createProfileCard("Eason", "_51shenn_", "51-Shenn", "yshen0505@gmail.com", "+60 11-7315 2116", IconLoader.getAvatar1Icon()));
-        gridPanel.add(createProfileCard("Brian", "briankam_", "briankdxtarumt06", "brian060623@gmail.com", "+60 12-913 8362", IconLoader.getAvatar2Icon()));
-        gridPanel.add(createProfileCard("Jason", "jason___178", "season1ng", "jason@gmail.com", "+60 18-221 2339", IconLoader.getAvatar3Icon()));
+        gridPanel.add(createProfileCard("Eason", "_51shenn_", "51-Shenn", "yshen0505@gmail.com", "+60 11-7315 2116",
+                IconLoader.getAvatar1Icon()));
+        gridPanel.add(createProfileCard("Brian", "briankam_", "briankdxtarumt06", "brian060623@gmail.com",
+                "+60 12-913 8362", IconLoader.getAvatar2Icon()));
+        gridPanel.add(createProfileCard("Jason", "jason___178", "season1ng", "jasontankseng@gmail.com",
+                "+60 18-221 2339", IconLoader.getAvatar3Icon()));
 
         contactUsPanel.add(gridPanel);
 
         return contactUsPanel;
     }
- 
-    private RoundedPanel createProfileCard(String name, String igUsername, String githubUsername, String emailAddress, String phoneNumber, ImageIcon icon) {
+
+    private RoundedPanel createProfileCard(String name, String igUsername, String githubUsername, String emailAddress,
+            String phoneNumber, ImageIcon icon) {
         RoundedPanel profileCard = new RoundedPanel(20, Theme.getHoverBackground());
         profileCard.setLayout(new GridBagLayout());
         profileCard.setPreferredSize(new Dimension(400, 550));

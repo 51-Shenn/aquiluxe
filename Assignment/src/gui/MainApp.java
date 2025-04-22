@@ -20,6 +20,12 @@ public class MainApp extends JFrame {
 
         setIconImage(IconLoader.getAppIcon().getImage()); // Window Icon
 
+        // get vehicle list from database
+        // load imageicons list from vehicle list
+        // pass to vehicle controller
+        // pass to vehicle page
+        // iterate vehicle list and imageicons list
+
         JPanel contentPanel;
         contentPanel = new JPanel(new BorderLayout());
 
