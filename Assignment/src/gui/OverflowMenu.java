@@ -886,7 +886,7 @@ public class OverflowMenu extends JLayeredPane {
                     else if (this.user.getUserType().equals("Admin"))
                         UserDAO.deleteAdmin(this.user);
 
-                    UserDAO.deleteUser(this.user.getUserId());
+                    UserDAO.deleteUser(this.user);
 
                     this.user = new User();
 

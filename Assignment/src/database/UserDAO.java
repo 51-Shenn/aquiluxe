@@ -48,13 +48,13 @@ public class UserDAO {
     }
 
     // add customer details
-    public static void addCustomerDetails(int userId, String address, String license) {
+    public static void addCustomerDetails(User user, String address, String license) {
         String sql = "INSERT INTO customers (user_id, address, license) VALUES (?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, userId);
+            stmt.setInt(1, user.getUserId());
             stmt.setString(2, address);
             stmt.setString(3, license);
 
@@ -67,13 +67,13 @@ public class UserDAO {
     }
 
     // add admin position
-    public static void addAdminPosition(int userId, String position) {
+    public static void addAdminPosition(User user, String position) {
         String sql = "INSERT INTO admins (user_id, position) VALUES (?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, userId);
+            stmt.setInt(1, user.getUserId());
             stmt.setString(2, position);
 
             stmt.executeUpdate();
@@ -268,13 +268,13 @@ public class UserDAO {
     }
 
     // delete user
-    public static boolean deleteUser(int userId) {
+    public static boolean deleteUser(User user) {
         String sql = "DELETE FROM users WHERE user_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, userId);
+            stmt.setInt(1, user.getUserId());
 
             int rowsDeleted = stmt.executeUpdate();
             return rowsDeleted > 0;

@@ -391,14 +391,14 @@ public class UserService {
         if (identityCard.equals(OverflowMenu.getGeneratedUUID())) {
             UserDAO.updateUserColumnValue(user.getUserId(), "usertype", "Admin");
             String position = capitalizeFullName(OverflowMenu.getPosition());
-            UserDAO.addAdminPosition(user.getUserId(), position);
+            UserDAO.addAdminPosition(user, position);
             return true;
         } else if (!identityCard.isEmpty()) {
             identityCard = identityCard.replaceAll("-", "").trim();
 
             boolean isValidIdentityCard = identityCardValidator(user, identityCard);
             if (isValidIdentityCard) {
-                UserDAO.addCustomerDetails(user.getUserId(), "", identityCard);
+                UserDAO.addCustomerDetails(user, "", identityCard);
                 return true;
             } else {
                 identityCardValidationLabel.setText("Invalid identity card");
