@@ -25,3 +25,5 @@ replay_pid*
 
 # ignore files
 *.txt
+files/settings/theme.txt
+files/settings/accounts.txt
