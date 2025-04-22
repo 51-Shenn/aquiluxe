@@ -24,8 +24,8 @@ public class VehicleController {
         panel.repaint();
     }
 
-    public static List<Vehicle> passVehicles() {
-        return VehicleService.passVehicles();
+    public static List<Vehicle> getAllVehicles() {
+        return VehicleService.getAllVehiclesfromDAO();
     }
 
     public static List<Vehicle> passFilteredCarBrand(List<Vehicle> car, String filterBrand) {
@@ -81,12 +81,12 @@ public class VehicleController {
         return VehicleService.sortByPriceHighToLow(car);
     }
 
-    public static List<String> passAllBrands() {
-        return VehicleService.getBrands();
+    public static List<String> passAllBrands(List<Vehicle> vehicles) {
+        return VehicleService.getDistinctBrands(vehicles);
     }
 
-    public static List<String> passAllModelsByBrand(String brand) {
-        return VehicleService.getModels(brand);
+    public static List<String> passAllModelsByBrand(List<Vehicle> vehicles, String brand) {
+        return VehicleService.getDistinctModelsByBrand(vehicles, brand);
     }
 
     // and more

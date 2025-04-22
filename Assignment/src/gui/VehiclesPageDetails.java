@@ -384,7 +384,7 @@ public class VehiclesPageDetails extends JPanel {
 
         ImageIcon rightArrowIcon = IconLoader.getRightIcon();
         Vehicle[] vehicless = new Vehicle[4];
-        List<Vehicle> vehicles = VehicleController.passVehicles();
+        List<Vehicle> vehicles = Vehicle.getVehicles();
 
         for (int i = 0; i < 4; i++) {
             vehicless[i] = vehicles.get(i);
