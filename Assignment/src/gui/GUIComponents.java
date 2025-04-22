@@ -2,6 +2,7 @@ package gui;
 
 import datamodels.User;
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -16,6 +17,12 @@ public class GUIComponents extends JPanel {
 
     private JFrame frame;
     private JPanel panel;
+    private JPanel homePanel;
+    private JPanel vehiclesPanel;
+    private JPanel aboutUsPanel;
+    private JPanel contactUsPanel;
+    private CardLayout cardLayout;
+    private JPanel cardPanel;
     private User user;
     public static OverflowMenu overflowMenu;
     private JButton[] topBarButtons = new JButton[4];
@@ -37,9 +44,24 @@ public class GUIComponents extends JPanel {
         setLayout(new BorderLayout());
         setBorder(new LineBorder(Theme.getTransparencyColor(), 1));
 
+        cardLayout = new CardLayout();
+        cardPanel = new JPanel(cardLayout);
+        cardPanel.setBackground(Theme.getBackground());
+
+        homePanel = new HomePage(this.frame, this.panel, this.user, this);
+        vehiclesPanel = new VehiclesPage(this.frame, this.panel);
+        aboutUsPanel = new AboutUsPage(this.frame, this.panel);
+        contactUsPanel = new ContactUsPage(this.frame, this.panel);
+
+        cardPanel.add(homePanel, "HomePage");
+        cardPanel.add(vehiclesPanel, "VehiclesPage");
+        cardPanel.add(aboutUsPanel, "AboutUsPage");
+        cardPanel.add(contactUsPanel, "ContactUsPage");
+
         add(createTopBar(), BorderLayout.WEST);
         add(menuButton(), BorderLayout.EAST);
-        this.panel.add(new HomePage(this.frame, this.panel, this.user, this), BorderLayout.CENTER);
+        this.panel.add(cardPanel, BorderLayout.CENTER);
+        cardLayout.show(cardPanel, "HomePage");
     }
 
     public JFrame getFrame() {
@@ -104,10 +126,7 @@ public class GUIComponents extends JPanel {
             }
             topBarButtons[0].setForeground(Theme.getSpecial());
             topBarButtons[0].setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
-            this.panel.removeAll();
-            this.panel.add(new HomePage(this.frame, this.panel, this.user, this), BorderLayout.CENTER);
-            this.panel.revalidate();
-            this.panel.repaint();
+            cardLayout.show(cardPanel, "HomePage");
         });
 
         return logo;
@@ -154,34 +173,22 @@ public class GUIComponents extends JPanel {
 
         topBarButtons[0].addActionListener(e -> {
             pageIndicator(0);
-            this.panel.removeAll();
-            this.panel.add(new HomePage(this.frame, this.panel, this.user, this), BorderLayout.CENTER);
-            this.panel.revalidate();
-            this.panel.repaint();
+            cardLayout.show(cardPanel, "HomePage");
         });
 
         topBarButtons[1].addActionListener(e -> {
             pageIndicator(1);
-            this.panel.removeAll();
-            this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
-            this.panel.revalidate();
-            this.panel.repaint();
+            cardLayout.show(cardPanel, "VehiclesPage");
         });
 
         topBarButtons[2].addActionListener(e -> {
             pageIndicator(2);
-            this.panel.removeAll();
-            this.panel.add(new AboutUsPage(this.frame, this.panel), BorderLayout.CENTER);
-            this.panel.revalidate();
-            this.panel.repaint();
+            cardLayout.show(cardPanel, "AboutUsPage");
         });
 
         topBarButtons[3].addActionListener(e -> {
             pageIndicator(3);
-            this.panel.removeAll();
-            this.panel.add(new ContactUsPage(this.frame, this.panel), BorderLayout.CENTER);
-            this.panel.revalidate();
-            this.panel.repaint();
+            cardLayout.show(cardPanel, "ContactUsPage");
         });
 
         return topBarButtons;

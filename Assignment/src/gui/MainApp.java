@@ -16,6 +16,8 @@ public class MainApp extends JFrame {
     public MainApp() {
         Navigation.setWindowsLookAndFeel();
 
+        loadDataAndCacheImages();
+
         setTitle("AQUILUXE");
         setLayout(new BorderLayout());
         setMinimumSize(new Dimension(1280, 720));
@@ -32,12 +34,10 @@ public class MainApp extends JFrame {
         if (accountsFile.exists()) {
             User currentUser = UserController.loadCurrentUser(accountsFile);
             add(new GUIComponents(this, contentPanel, currentUser), BorderLayout.NORTH);
-        } else
+        } else {
             add(new GUIComponents(this, contentPanel, null), BorderLayout.NORTH);
-
+        }
         add(contentPanel, BorderLayout.CENTER);
-
-        loadDataAndCacheImages();
 
         setVisible(true);
     }
