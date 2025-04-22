@@ -4,6 +4,9 @@ import java.awt.Image;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import java.util.HashMap;
+import java.util.List;
+import datamodels.Vehicle;
 
 public class ImageLoader {
 
@@ -13,6 +16,8 @@ public class ImageLoader {
     private static final File SIGN_UP_WALLPAPER;
     private static final File FORGOT_PASSWORD_WALLPAPER;
 
+    private static HashMap<String, ImageIcon> vehicleImageCache = new HashMap<>();
+
     static {
         WHITE_PORSCHE = new File("images/wallpapers/porsche-white.png");
         KOENIGSEGG = new File("images/wallpapers/koenigsegg.jpg");
@@ -21,17 +26,33 @@ public class ImageLoader {
         FORGOT_PASSWORD_WALLPAPER = new File("images/wallpapers/car-wallpaper-1.png");
 
         File[] images = {
-            WHITE_PORSCHE,
-            SIGN_IN_WALLPAPER,
-            SIGN_UP_WALLPAPER,
-            FORGOT_PASSWORD_WALLPAPER
+                WHITE_PORSCHE,
+                SIGN_IN_WALLPAPER,
+                SIGN_UP_WALLPAPER,
+                FORGOT_PASSWORD_WALLPAPER
         };
 
         checkEachImageExistence(images);
     }
 
+    public static void loadImages(List<Vehicle> vehicles) {
+        new Thread(() -> {
+            for (Vehicle vehicle : vehicles) {
+                ImageIcon image = new ImageIcon(vehicle.getImagePath());
+                Image rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
+                image = new ImageIcon(rImage);
+
+                vehicleImageCache.put(vehicle.getImagePath(), image);
+            }
+        }).start();
+    }
+
+    public static HashMap<String, ImageIcon> getImageCache() {
+        return vehicleImageCache;
+    }
+
     private static void checkEachImageExistence(File[] images) {
-        for(File image : images) {
+        for (File image : images) {
             if (!image.exists()) {
                 JOptionPane.showMessageDialog(null, "Failed to load image:\n" + image + "\n");
                 break;
@@ -60,7 +81,8 @@ public class ImageLoader {
     }
 
     private static ImageIcon scaleImage(File imageFile, int width, int height) {
-        Image image = new ImageIcon(imageFile.toString()).getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        Image image = new ImageIcon(imageFile.toString()).getImage().getScaledInstance(width, height,
+                Image.SCALE_SMOOTH);
 
         return new ImageIcon(image);
     }

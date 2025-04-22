@@ -1,12 +1,17 @@
 package gui;
 
 import controllers.UserController;
+import controllers.VehicleController;
 import datamodels.User;
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
+import java.util.List;
+import datamodels.Vehicle;
 
 public class MainApp extends JFrame {
+
+    private List<Vehicle> vehicles;
 
     public MainApp() {
         Navigation.setWindowsLookAndFeel();
@@ -20,12 +25,6 @@ public class MainApp extends JFrame {
 
         setIconImage(IconLoader.getAppIcon().getImage()); // Window Icon
 
-        // get vehicle list from database
-        // load imageicons list from vehicle list
-        // pass to vehicle controller
-        // pass to vehicle page
-        // iterate vehicle list and imageicons list
-
         JPanel contentPanel;
         contentPanel = new JPanel(new BorderLayout());
 
@@ -38,10 +37,18 @@ public class MainApp extends JFrame {
 
         add(contentPanel, BorderLayout.CENTER);
 
+        loadDataAndCacheImages();
+
         setVisible(true);
     }
 
+    private void loadDataAndCacheImages() {
+        vehicles = VehicleController.getAllVehicles(); // Get all vehicles
+        Vehicle.setVehicles(vehicles); // Store in Vehicle class
+        ImageLoader.loadImages(vehicles); // Preload images
+    }
+
     public static void main(String[] args) {
-        new MainApp();
+        SwingUtilities.invokeLater(() -> new MainApp());
     }
 }
