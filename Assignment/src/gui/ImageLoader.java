@@ -15,7 +15,7 @@ public class ImageLoader {
 
     static {
         WHITE_PORSCHE = new File("images/wallpapers/porsche-white.png");
-        KOENIGSEGG = new File("images/wallpapers/koenigsegg2.jpg");
+        KOENIGSEGG = new File("images/wallpapers/koenigsegg.jpg");
         SIGN_IN_WALLPAPER = new File("images/wallpapers/car-wallpaper-3.png");
         SIGN_UP_WALLPAPER = new File("images/wallpapers/car-wallpaper-2.png");
         FORGOT_PASSWORD_WALLPAPER = new File("images/wallpapers/car-wallpaper-1.png");
