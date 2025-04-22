@@ -26,6 +26,7 @@ public class IconLoader extends Theme {
     private static final File CONTACT_ICON;
     private static final File EMAIL_ICON;
     private static final File SEARCH_ICON;
+    private static final File LOCATION_ICON;
     
     // light theme icons
     private static final File BLACK_CLOSE_ICON;
@@ -96,6 +97,7 @@ public class IconLoader extends Theme {
         GITHUB_ICON = new File(String.format("%s" + "github1.png", profilePath));
         CONTACT_ICON = new File(String.format("%s" + "contact.png", profilePath));
         EMAIL_ICON = new File(String.format("%s" + "email.png", profilePath));
+        LOCATION_ICON = new File(String.format("%s" + "location.png", profilePath));
 
         File[] generalIcons = {
             X_ICON,
@@ -279,6 +281,10 @@ public class IconLoader extends Theme {
 
     public static ImageIcon getEmailIcon() {
         return new ImageIcon(EMAIL_ICON.toString());
+    }
+
+    public static ImageIcon getLocationIcon() {
+        return new ImageIcon(LOCATION_ICON.toString());
     }
 
     public static ImageIcon getCloseIcon() {
