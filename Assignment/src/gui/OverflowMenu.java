@@ -42,7 +42,7 @@ public class OverflowMenu extends JLayeredPane {
     private JPanel themeButton;
     private JPanel switchAccountButton;
     private JPanel signOutButton;
-    
+
     private JPanel deleteAccountButton;
     private JPanel closeButton;
     private JPanel editPanel;
@@ -67,7 +67,7 @@ public class OverflowMenu extends JLayeredPane {
         this.panel = panel;
         this.user = user;
         MENU_WIDTH = 400;
-        if(this.user.getUserId() == 0)
+        if (this.user.getUserId() == 0)
             MENU_HEIGHT = 550;
         else
             MENU_HEIGHT = 800;
@@ -240,12 +240,13 @@ public class OverflowMenu extends JLayeredPane {
             mainCardPanel.add(createMenuCard("Sign Up", IconLoader.getSignInIcon()), gbc);
             mainCardPanel.add(createMenuCard("Sign In", IconLoader.getSignInIcon()), gbc);
         } else {
-            try(BufferedReader reader = new BufferedReader(new FileReader(THEME_FILE))) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(THEME_FILE))) {
                 String line = reader.readLine();
-                themeButton = line.equals("Dark")? createMenuCard("Dark Theme", IconLoader.getMoonIcon()) : createMenuCard("Light Theme", IconLoader.getSunIcon());
-            } catch(FileNotFoundException exception) {
+                themeButton = line.equals("Dark") ? createMenuCard("Dark Theme", IconLoader.getMoonIcon())
+                        : createMenuCard("Light Theme", IconLoader.getSunIcon());
+            } catch (FileNotFoundException exception) {
                 JOptionPane.showMessageDialog(null, "Could not locate file location: " + THEME_FILE);
-            } catch(IOException exception) {
+            } catch (IOException exception) {
                 JOptionPane.showMessageDialog(null, "Could not write file: " + THEME_FILE);
             }
 
@@ -286,7 +287,8 @@ public class OverflowMenu extends JLayeredPane {
         JPanel fullNamePanel = createEditProfileInputField("Full Name", fullNameField, fullNameValidationLabel);
         JPanel usernamePanel = createEditProfileInputField("Username", usernameField, usernameValidationLabel);
         JPanel emailPanel = createEditProfileInputField("Email Address", emailField, emailValidationLabel);
-        JPanel phoneNumberPanel = createEditProfileInputField("Phone Number (+60)", phoneNumberField, phoneNumberValidationLabel);
+        JPanel phoneNumberPanel = createEditProfileInputField("Phone Number (+60)", phoneNumberField,
+                phoneNumberValidationLabel);
         JPanel identityCardPanel = createEditProfileInputField("Identity Card", identityCardField, icValidationLabel);
 
         // Add panels to the edit panel
@@ -316,33 +318,34 @@ public class OverflowMenu extends JLayeredPane {
 
             try {
                 Dialog.getAdminDialog().dispose();
-            } catch(Exception exception) {}
+            } catch (Exception exception) {
+            }
 
             boolean proceed = dialog.showDialog(
-                "HAZARD",
-                "Confirm Update",
-                "Warning: Changes Ahead",
-                "Your existing information will be overwritten.",
-                true
-            );
-            
-            if(proceed) {
-                boolean isValidUpdateDetails = UserController.passUpdateProfileDetails(this.user, fullNameField.getText(), usernameField.getText(), emailField.getText(), phoneNumberField.getText(), identityCardField.getText(),
-                    fullNameValidationLabel, usernameValidationLabel, emailValidationLabel, phoneNumberValidationLabel, icValidationLabel);
-                if(isValidUpdateDetails) {
-                    UserDAO userDAO = new UserDAO();
-                    this.user = userDAO.getUserById(this.user.getUserId());
+                    "HAZARD",
+                    "Confirm Update",
+                    "Warning: Changes Ahead",
+                    "Your existing information will be overwritten.",
+                    true);
 
-                    this.frame.getLayeredPane().remove(this);                    
+            if (proceed) {
+                boolean isValidUpdateDetails = UserController.passUpdateProfileDetails(this.user,
+                        fullNameField.getText(), usernameField.getText(), emailField.getText(),
+                        phoneNumberField.getText(), identityCardField.getText(),
+                        fullNameValidationLabel, usernameValidationLabel, emailValidationLabel,
+                        phoneNumberValidationLabel, icValidationLabel);
+                if (isValidUpdateDetails) {
+                    this.user = UserDAO.getUserById(this.user.getUserId());
+
+                    this.frame.getLayeredPane().remove(this);
                     new Navigation().homePageNavigation(this.frame, this.panel, this.user);
 
                     dialog.showDialog(
-                        "SUCCESS",
-                        "Update Profile",
-                        "Profile Updated",
-                        "Your information has been saved.",
-                        false
-                    );
+                            "SUCCESS",
+                            "Update Profile",
+                            "Profile Updated",
+                            "Your information has been saved.",
+                            false);
                 }
             }
         });
@@ -398,7 +401,8 @@ public class OverflowMenu extends JLayeredPane {
         inputField.setBackground(Theme.getBackground());
         inputField.setForeground(Theme.getForeground());
         inputField.setCaretColor(Theme.getForeground());
-        inputField.setBorder(new CompoundBorder(new LineBorder(Theme.getForeground(), 1), new EmptyBorder(5, 10, 5, 10)));
+        inputField
+                .setBorder(new CompoundBorder(new LineBorder(Theme.getForeground(), 1), new EmptyBorder(5, 10, 5, 10)));
 
         switch (text) {
             case "Full Name" -> inputField.setText(this.user.getFullName());
@@ -406,18 +410,17 @@ public class OverflowMenu extends JLayeredPane {
             case "Email Address" -> inputField.setText(this.user.getUserEmail());
             case "Phone Number (+60)" -> inputField.setText(this.user.getPhoneNumber());
             case "Identity Card" -> {
-                if(this.user.getUserType().equals("Customer")) {
+                if (this.user.getUserType().equals("Customer")) {
                     try {
-                        Customer customer = new UserDAO().getCustomerById(this.user);
+                        Customer customer = UserDAO.getCustomerById(this.user);
                         inputField.setText(customer.getLicense());
                         inputField.setEditable(false);
                     } catch (Exception e) {
                         inputField.setText("");
                     }
-                }
-                else if(this.user.getUserType().equals("Admin")) {
+                } else if (this.user.getUserType().equals("Admin")) {
                     label.setText("Position:");
-                    Admin admin = new UserDAO().getAdminById(this.user);
+                    Admin admin = UserDAO.getAdminById(this.user);
                     inputField.setText(admin.getAdminRole());
                     inputField.setEditable(false);
                 }
@@ -491,26 +494,27 @@ public class OverflowMenu extends JLayeredPane {
                 addAccountButton.setMargin(new Insets(15, 25, 15, 25));
                 addAccountButton.setBorderPainted(false);
                 addAccountButton.setPreferredSize(new Dimension(MENU_WIDTH, 40));
-                addAccountButton.addActionListener(new Navigation().toSignInPage(this.frame, this.panel, this, this.user));
+                addAccountButton
+                        .addActionListener(new Navigation().toSignInPage(this.frame, this.panel, this, this.user));
                 addAccountButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseEntered(MouseEvent evt) {
                         addAccountButton.setBackground(Theme.getHoverBackground());
                         addAccountButton.repaint();
                     }
-        
+
                     @Override
                     public void mouseExited(MouseEvent evt) {
                         addAccountButton.setBackground(Theme.getBackground());
                         addAccountButton.repaint();
                     }
-        
+
                     @Override
                     public void mousePressed(MouseEvent evt) {
                         addAccountButton.setBackground(Theme.getPressedBackground());
                         addAccountButton.repaint();
                     }
-        
+
                     @Override
                     public void mouseReleased(MouseEvent evt) {
                         addAccountButton.setBackground(Theme.getBackground());
@@ -521,14 +525,13 @@ public class OverflowMenu extends JLayeredPane {
 
                 gbc.weighty = 1;
 
-                if(ACCOUNTS_FILE.exists()) {
+                if (ACCOUNTS_FILE.exists()) {
                     userAccountsID = UserController.loadExistingUserInFile(userAccountsID, ACCOUNTS_FILE);
                 }
 
                 for (int userID : userAccountsID) {
-                    if(userID != 0 && userID != this.user.getUserId()) {
-                        UserDAO userDAO = new UserDAO();
-                        User everyUser = userDAO.getUserById(userID);
+                    if (userID != 0 && userID != this.user.getUserId()) {
+                        User everyUser = UserDAO.getUserById(userID);
 
                         RoundedButton accountButton = new RoundedButton(20, Theme.getBackground());
                         accountButton.setBackground(Theme.getBackground());
@@ -538,19 +541,19 @@ public class OverflowMenu extends JLayeredPane {
                                 accountButton.setBackground(Theme.getHoverBackground());
                                 accountButton.repaint();
                             }
-                
+
                             @Override
                             public void mouseExited(MouseEvent evt) {
                                 accountButton.setBackground(Theme.getBackground());
                                 accountButton.repaint();
                             }
-                
+
                             @Override
                             public void mousePressed(MouseEvent evt) {
                                 accountButton.setBackground(Theme.getPressedBackground());
                                 accountButton.repaint();
                             }
-                
+
                             @Override
                             public void mouseReleased(MouseEvent evt) {
                                 accountButton.setBackground(Theme.getBackground());
@@ -559,7 +562,7 @@ public class OverflowMenu extends JLayeredPane {
                         });
 
                         ImageIcon genderIcon;
-                        if(everyUser.getGender().equals("Male"))
+                        if (everyUser.getGender().equals("Male"))
                             genderIcon = IconLoader.getSmallMaleProfileIcon();
                         else
                             genderIcon = IconLoader.getSmallFemaleProfileIcon();
@@ -576,7 +579,7 @@ public class OverflowMenu extends JLayeredPane {
                         gbcButton.gridx = 0;
                         gbcButton.gridy = 0;
                         gbcButton.weightx = 0;
-                        
+
                         JLabel profilePicture = new JLabel(genderIcon);
 
                         accountButton.add(profilePicture, gbcButton);
@@ -611,22 +614,21 @@ public class OverflowMenu extends JLayeredPane {
 
                             frame.getLayeredPane().remove(this);
                             new Navigation().homePageNavigation(this.frame, this.panel, this.user);
-                            
+
                             Dialog dialog = new Dialog(this.frame);
                             dialog.showDialog(
-                                "SUCCESS",
-                                "Switch Account",
-                                "Switched to " + this.user.getUsername(),
-                                "All switched! You're logged in as " + this.user.getUsername(),
-                                false
-                            );
-                            
+                                    "SUCCESS",
+                                    "Switch Account",
+                                    "Switched to " + this.user.getUsername(),
+                                    "All switched! You're logged in as " + this.user.getUsername(),
+                                    false);
+
                             UserController.switchToAccount(this.user, ACCOUNTS_FILE);
                         });
 
                         gbc.insets = new Insets(5, 30, 5, 30);
                         gbc.weighty = 0;
-                        accountsPanel.add(accountButton, gbc);                        
+                        accountsPanel.add(accountButton, gbc);
                     }
                     editButton.setVisible(false);
                     themeButton.setVisible(false);
@@ -677,7 +679,7 @@ public class OverflowMenu extends JLayeredPane {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
 
         ImageIcon genderIcon;
-        if(this.user.getGender().equals("Male"))
+        if (this.user.getGender().equals("Male"))
             genderIcon = IconLoader.getBigMaleProfileIcon();
         else
             genderIcon = IconLoader.getBigFemaleProfileIcon();
@@ -686,7 +688,7 @@ public class OverflowMenu extends JLayeredPane {
         profileIcon.setIcon(genderIcon);
 
         float baseFontSize = 24f; // max size (shorter name)
-        float minFontSize = 10f;  // min size (longer name)
+        float minFontSize = 10f; // min size (longer name)
         float scaleFactor = 30f;
 
         float fontSize = baseFontSize + (scaleFactor / this.user.getFullName().length());
@@ -698,9 +700,9 @@ public class OverflowMenu extends JLayeredPane {
         JLabel usernameLabel = new JLabel("@" + this.user.getUsername());
         usernameLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(15f));
         usernameLabel.setForeground(Theme.getSecondaryForeground());
-        if(this.user.getUserId() != 0) {
-            if(this.user.getUserType().equals("Customer") ) {
-                usernameLabel.addMouseListener(new MouseAdapter() {        
+        if (this.user.getUserId() != 0) {
+            if (this.user.getUserType().equals("Customer")) {
+                usernameLabel.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         invokeAdminPortalCounter++;
@@ -724,7 +726,7 @@ public class OverflowMenu extends JLayeredPane {
         profileCard.add(usernameLabel, gbc);
 
         gbc.insets = new Insets(10, 0, 10, 0);
-        if(!this.user.getFullName().equals("Guest") && !this.user.getUsername().equals("guest"))
+        if (!this.user.getFullName().equals("Guest") && !this.user.getUsername().equals("guest"))
             profileCard.add(editButton, gbc);
 
         gbc.weightx = 1;
@@ -819,17 +821,16 @@ public class OverflowMenu extends JLayeredPane {
             }
         });
 
-        if(text.equals("Theme") || text.equals("Dark Theme") || text.equals("Light Theme")) {
+        if (text.equals("Theme") || text.equals("Dark Theme") || text.equals("Light Theme")) {
             button.addActionListener(e -> {
                 String theme = UserController.loadTheme(THEME_FILE);
                 String newTheme;
 
-                if(theme.equals("Dark")) {
+                if (theme.equals("Dark")) {
                     newTheme = "Light";
                     button.setIcon(IconLoader.getSunIcon());
                     button.setText("Light Theme");
-                }
-                else {
+                } else {
                     newTheme = "Dark";
                     button.setIcon(IconLoader.getMoonIcon());
                     button.setText("Dark Theme");
@@ -841,74 +842,72 @@ public class OverflowMenu extends JLayeredPane {
                 new Navigation().homePageNavigation(this.frame, this.panel, this.user);
             });
         }
-        if(text.equals("Sign Up")) {
+        if (text.equals("Sign Up")) {
             button.addActionListener(new Navigation().toSignUpPage(this.frame, this.panel, this, this.user));
         }
-        if(text.equals("Sign In")) {
+        if (text.equals("Sign In")) {
             button.addActionListener(new Navigation().toSignInPage(this.frame, this.panel, this, this.user));
         }
-        if(text.equals("Sign Out")) {
+        if (text.equals("Sign Out")) {
             button.addActionListener(e -> {
                 Dialog dialog = new Dialog(this.frame);
                 boolean proceed = dialog.showDialog(
-                    "HAZARD",
-                    "Sign Out",
-                    "Sign Out?",
-                    "Logging out will end your session.",
-                    true
-                );  
+                        "HAZARD",
+                        "Sign Out",
+                        "Sign Out?",
+                        "Logging out will end your session.",
+                        true);
 
-                if(proceed) {
+                if (proceed) {
                     frame.getLayeredPane().remove(this);
                     UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
-                    
+
                     this.user = new User();
-                    new Navigation().homePageNavigation(this.frame, this.panel, this.user);                    
+                    new Navigation().homePageNavigation(this.frame, this.panel, this.user);
                 }
             });
         }
-        if(text.equals("Delete Account")) {
-            UserDAO userDAO = new UserDAO();
-            
+        if (text.equals("Delete Account")) {
+
             button.addActionListener(e -> {
                 Dialog dialog = new Dialog(this.frame);
                 boolean proceed = dialog.showDialog(
-                    "HAZARD",
-                    "Delete Account",
-                    "Delete Your Account?",
-                    "This action cannot be undone. Proceed with deletion?",
-                    true
-                );                
+                        "HAZARD",
+                        "Delete Account",
+                        "Delete Your Account?",
+                        "This action cannot be undone. Proceed with deletion?",
+                        true);
 
-                if(proceed) {
+                if (proceed) {
                     UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
 
-                    if(this.user.getUserType().equals("Customer"))
-                        userDAO.deleteCustomer(this.user);
-                    else if(this.user.getUserType().equals("Admin"))
-                        userDAO.deleteAdmin(this.user);
-                        
-                    userDAO.deleteUser(this.user.getUserId());
+                    if (this.user.getUserType().equals("Customer"))
+                        UserDAO.deleteCustomer(this.user);
+                    else if (this.user.getUserType().equals("Admin"))
+                        UserDAO.deleteAdmin(this.user);
+
+                    UserDAO.deleteUser(this.user.getUserId());
 
                     this.user = new User();
-                    
+
                     frame.getLayeredPane().remove(this);
-                    new Navigation().homePageNavigation(this.frame, this.panel, this.user); 
+                    new Navigation().homePageNavigation(this.frame, this.panel, this.user);
                 }
             });
         }
-        if(text.equals("Close / Exit")) {
-            if(isExpanded) button.setVisible(false);
+        if (text.equals("Close / Exit")) {
+            if (isExpanded)
+                button.setVisible(false);
             button.addActionListener(e -> {
                 Dialog dialog = new Dialog(this.frame);
                 boolean proceed = dialog.showDialog(
-                    "HAZARD",
-                    "Exit",
-                    "Close App?",
-                    "Are you sure you want to exit?",
-                    true
-                );
-                if(proceed) this.frame.dispose();
+                        "HAZARD",
+                        "Exit",
+                        "Close App?",
+                        "Are you sure you want to exit?",
+                        true);
+                if (proceed)
+                    this.frame.dispose();
             });
         }
 

@@ -62,7 +62,7 @@ public class UserService {
 
         if (isValidFullName && isValidGender && isValidEmailAddress && isValidPhoneNumber && isValidPassword) {
             phone = phone.replaceAll("[\\s-]", "");
-            
+
             fullName = capitalizeFullName(fullName);
             createNewUserAccount(fullName, gender, email, phone, password);
         }
@@ -70,18 +70,18 @@ public class UserService {
         return isValidFullName && isValidGender && isValidEmailAddress && isValidPhoneNumber && isValidPassword;
     }
 
-    public static boolean validateForgotPasswordDetails(String email, String phone, JLabel emailValidationLabel, JLabel phoneValidationLabel) {
+    public static boolean validateForgotPasswordDetails(String email, String phone, JLabel emailValidationLabel,
+            JLabel phoneValidationLabel) {
         if (email.isEmpty()) {
             emailValidationLabel.setText("Username / Email Address cannot be blank");
             return false;
         } else if (phone.isEmpty()) {
             phoneValidationLabel.setText("Please enter your phone number.");
             return false;
-        } 
+        }
 
-        UserDAO userDAO = new UserDAO();
-        User userAttempt = userDAO.authenticateUserForgotPassword(email, phone);
-        if (userAttempt != null) 
+        User userAttempt = UserDAO.authenticateUserForgotPassword(email, phone);
+        if (userAttempt != null)
             return true;
 
         emailValidationLabel.setText("Wrong email address or phone number.");
@@ -91,14 +91,14 @@ public class UserService {
 
     public static boolean validateForgotPasswordDetails(String email, String phone, char[] password,
             char[] confirmPassword, JLabel passwordValidationLabel, JLabel confirmPasswordValidationLabel) {
-        boolean isValidPassword = passwordValidation(password, confirmPassword, passwordValidationLabel, confirmPasswordValidationLabel);
+        boolean isValidPassword = passwordValidation(password, confirmPassword, passwordValidationLabel,
+                confirmPasswordValidationLabel);
         String userPassword = new String(password);
 
         if (isValidPassword) {
-            UserDAO userDAO = new UserDAO();
-            User userAttempt = userDAO.authenticateUserForgotPassword(email, phone);
+            User userAttempt = UserDAO.authenticateUserForgotPassword(email, phone);
             if (userAttempt != null) {
-                userDAO.updateUserColumnValue(userAttempt.getUserId(), "password", userPassword);
+                UserDAO.updateUserColumnValue(userAttempt.getUserId(), "password", userPassword);
 
                 return true;
             }
@@ -124,9 +124,8 @@ public class UserService {
             passwordValidationLabel.setText("‎");
         }
 
-        UserDAO userDAO = new UserDAO();
-        User userAttempt = userDAO.authenticateUser(email, userPassword);
-        if (userAttempt != null) 
+        User userAttempt = UserDAO.authenticateUser(email, userPassword);
+        if (userAttempt != null)
             return true;
 
         emailValidationLabel.setText("Wrong email address or password.");
@@ -134,39 +133,38 @@ public class UserService {
         return false;
     }
 
-    public static boolean validateUpdateProfileDetails(User user, String fullName, String username, String email, String phoneNumber, String identityCard,
-            JLabel fullNameValidationLabel, JLabel usernameValidationLabel, JLabel emailValidationLabel, JLabel phoneNumberValidationLabel, JLabel icValidationLabel) {
+    public static boolean validateUpdateProfileDetails(User user, String fullName, String username, String email,
+            String phoneNumber, String identityCard,
+            JLabel fullNameValidationLabel, JLabel usernameValidationLabel, JLabel emailValidationLabel,
+            JLabel phoneNumberValidationLabel, JLabel icValidationLabel) {
 
         boolean isValidFullName = fullNameValidator(user, fullName, fullNameValidationLabel);
         boolean isValidUsername = usernameValidator(user, username, usernameValidationLabel);
         boolean isValidEmailAddress = emailAddressValidator(user, email, emailValidationLabel);
         boolean isValidPhoneNumber = phoneNumberValidator(user, phoneNumber, phoneNumberValidationLabel);
 
-        if(user.getUserType().equals("Customer")) {
+        if (user.getUserType().equals("Customer")) {
             boolean isValidLicense = identityCardValidator(user, identityCard, icValidationLabel);
 
             if (isValidFullName && isValidUsername && isValidEmailAddress && isValidPhoneNumber && isValidLicense) {
-                UserDAO userDAO = new UserDAO();
                 fullName = capitalizeFullName(fullName);
-                userDAO.updateUserColumnValue(user.getUserId(), "full_name", fullName);
-                userDAO.updateUserColumnValue(user.getUserId(), "username", username);
-                userDAO.updateUserColumnValue(user.getUserId(), "user_email", email);
-                userDAO.updateUserColumnValue(user.getUserId(), "phone_number", phoneNumber);
-                
+                UserDAO.updateUserColumnValue(user.getUserId(), "full_name", fullName);
+                UserDAO.updateUserColumnValue(user.getUserId(), "username", username);
+                UserDAO.updateUserColumnValue(user.getUserId(), "user_email", email);
+                UserDAO.updateUserColumnValue(user.getUserId(), "phone_number", phoneNumber);
+
                 return true;
-            } 
-        }
-        else if(user.getUserType().equals("Admin")) {
+            }
+        } else if (user.getUserType().equals("Admin")) {
             if (isValidFullName && isValidUsername && isValidEmailAddress && isValidPhoneNumber) {
-                UserDAO userDAO = new UserDAO();
                 fullName = capitalizeFullName(fullName);
-                userDAO.updateUserColumnValue(user.getUserId(), "full_name", fullName);
-                userDAO.updateUserColumnValue(user.getUserId(), "username", username);
-                userDAO.updateUserColumnValue(user.getUserId(), "user_email", email);
-                userDAO.updateUserColumnValue(user.getUserId(), "phone_number", phoneNumber);
-                
+                UserDAO.updateUserColumnValue(user.getUserId(), "full_name", fullName);
+                UserDAO.updateUserColumnValue(user.getUserId(), "username", username);
+                UserDAO.updateUserColumnValue(user.getUserId(), "user_email", email);
+                UserDAO.updateUserColumnValue(user.getUserId(), "phone_number", phoneNumber);
+
                 return true;
-            } 
+            }
         }
 
         return false;
@@ -175,7 +173,7 @@ public class UserService {
     public static User signInUser(String email, char[] password) {
         String userPassword = new String(password);
 
-        return new UserDAO().authenticateUser(email, userPassword);
+        return UserDAO.authenticateUser(email, userPassword);
     }
 
     private static String capitalizeFullName(String fullName) {
@@ -263,7 +261,7 @@ public class UserService {
     }
 
     private static boolean isUsernameTaken(String username) {
-        return new UserDAO().usernameExists(username);
+        return UserDAO.usernameExists(username);
     }
 
     private static boolean genderValidator(String gender, JLabel label) {
@@ -287,15 +285,14 @@ public class UserService {
         Matcher matcher = pattern.matcher(email);
 
         if (matcher.matches()) {
-            if(isEmailAddressTaken(email)) {
+            if (isEmailAddressTaken(email)) {
                 label.setText("This email address has been taken!");
                 return false;
             }
 
             label.setText("‎");
             return true;
-        } 
-        else {
+        } else {
             label.setText("Invalid email format");
             return false;
         }
@@ -314,24 +311,22 @@ public class UserService {
         if (currentUser.getUserEmail().equals(email) && matcher.matches()) {
             label.setText("‎");
             return true;
-        } 
-        else if (matcher.matches()) {
-            if(isEmailAddressTaken(email)) {
+        } else if (matcher.matches()) {
+            if (isEmailAddressTaken(email)) {
                 label.setText("This email address has been taken!");
                 return false;
             }
-            
+
             label.setText("‎");
             return true;
-        } 
-        else {
+        } else {
             label.setText("Invalid email format");
             return false;
         }
     }
 
     private static boolean isEmailAddressTaken(String email) {
-        return new UserDAO().emailExists(email);
+        return UserDAO.emailExists(email);
     }
 
     private static boolean phoneNumberValidator(String phone, JLabel label) {
@@ -373,8 +368,7 @@ public class UserService {
         if (currentUser.getPhoneNumber().equals(phone) && matcher.matches()) {
             label.setText("‎");
             return true;
-        } 
-        else if (matcher.matches()) {
+        } else if (matcher.matches()) {
             if (isPhoneNumberTaken(phone)) {
                 label.setText("This phone number has been taken!");
                 return false;
@@ -382,43 +376,37 @@ public class UserService {
 
             label.setText("‎");
             return true;
-        } 
-        else {
+        } else {
             label.setText("Invalid phone number");
             return false;
         }
     }
 
     private static boolean isPhoneNumberTaken(String phoneNumber) {
-        return new UserDAO().phoneNumberExists(phoneNumber);
+        return UserDAO.phoneNumberExists(phoneNumber);
     }
 
     private static boolean identityCardValidator(User user, String identityCard, JLabel identityCardValidationLabel) {
-        UserDAO userDAO = new UserDAO();
 
-        if(identityCard.equals(OverflowMenu.getGeneratedUUID())) {
-            userDAO.updateUserColumnValue(user.getUserId(), "usertype", "Admin");
+        if (identityCard.equals(OverflowMenu.getGeneratedUUID())) {
+            UserDAO.updateUserColumnValue(user.getUserId(), "usertype", "Admin");
             String position = capitalizeFullName(OverflowMenu.getPosition());
-            userDAO.addAdminPosition(user.getUserId(), position);
+            UserDAO.addAdminPosition(user.getUserId(), position);
             return true;
-        }
-        else if(!identityCard.isEmpty()) {
+        } else if (!identityCard.isEmpty()) {
             identityCard = identityCard.replaceAll("-", "").trim();
 
             boolean isValidIdentityCard = identityCardValidator(user, identityCard);
-            if(isValidIdentityCard) {
-                userDAO.addCustomerDetails(user.getUserId(), "", identityCard);
+            if (isValidIdentityCard) {
+                UserDAO.addCustomerDetails(user.getUserId(), "", identityCard);
                 return true;
-            }
-            else {
+            } else {
                 identityCardValidationLabel.setText("Invalid identity card");
                 return false;
             }
-        }
-        else if(identityCard.isEmpty()) {
+        } else if (identityCard.isEmpty()) {
             return true;
-        }
-        else {
+        } else {
             identityCardValidationLabel.setText("Invalid identity card number");
             return false;
         }
@@ -434,10 +422,13 @@ public class UserService {
         String birthPlace;
         String serialNumber; // odd for male, even for female
 
-        if(identityCard.length() != 12) return false;
+        if (identityCard.length() != 12)
+            return false;
 
         // check every character is digit
-        for(int i = 0; i < identityCard.length(); i++) if(!Character.isDigit(identityCard.charAt(i))) return false;
+        for (int i = 0; i < identityCard.length(); i++)
+            if (!Character.isDigit(identityCard.charAt(i)))
+                return false;
 
         birthDay = identityCard.substring(0, 6);
         birthPlace = identityCard.substring(6, 8);
@@ -448,53 +439,61 @@ public class UserService {
         birthDate = birthDay.substring(4, 6);
 
         /*
-            convert birthYear to int, then calculate
-            example:
-            2025 % 100 = 25
-            06 <= 25 -> 2006
-            98 >= 25 -> 1998
-        */
+         * convert birthYear to int, then calculate
+         * example:
+         * 2025 % 100 = 25
+         * 06 <= 25 -> 2006
+         * 98 >= 25 -> 1998
+         */
 
         int yearInt = Integer.parseInt(birthYear);
         int monthInt = Integer.parseInt(birthMonth);
         int dateInt = Integer.parseInt(birthDate); // for checking month date
 
-        if(monthInt < 1 || monthInt > 12) return false;
+        if (monthInt < 1 || monthInt > 12)
+            return false;
 
         switch (monthInt) {
             case 2 -> {
-                if(yearInt % 4 == 0) {
-                    if(dateInt < 1 || dateInt > 29) return false;
-                }
-                else {
-                    if(dateInt < 1 || dateInt > 28) return false;
+                if (yearInt % 4 == 0) {
+                    if (dateInt < 1 || dateInt > 29)
+                        return false;
+                } else {
+                    if (dateInt < 1 || dateInt > 28)
+                        return false;
                 }
             }
 
             case 1, 3, 5, 7, 8, 10, 12 -> {
-                if(dateInt < 1 || dateInt > 31) return false;
+                if (dateInt < 1 || dateInt > 31)
+                    return false;
             }
 
             case 4, 6, 9, 11 -> {
-                if(dateInt < 1 || dateInt > 30) return false;
+                if (dateInt < 1 || dateInt > 30)
+                    return false;
             }
         }
 
         int placeInt = Integer.parseInt(birthPlace);
-        if(placeInt < 1 || placeInt > 59 || (placeInt >= 17 && placeInt <= 20)) return false;
+        if (placeInt < 1 || placeInt > 59 || (placeInt >= 17 && placeInt <= 20))
+            return false;
 
-        String year = yearInt <= date.getYear() % 100 ? String.format("20" + birthYear) : String.format("19" + birthYear);
+        String year = yearInt <= date.getYear() % 100 ? String.format("20" + birthYear)
+                : String.format("19" + birthYear);
 
         // check if more than 17 years old
         int age = date.getYear() - Integer.parseInt(year);
-        if(age <= 17) return false;
+        if (age <= 17)
+            return false;
 
         int genderIndicator = Character.getNumericValue(serialNumber.charAt(serialNumber.length() - 1));
-        if(genderIndicator % 2 == 0){
-            if(!user.getGender().equals("Female")) return false;
-        }
-        else {
-            if(!user.getGender().equals("Male")) return false;
+        if (genderIndicator % 2 == 0) {
+            if (!user.getGender().equals("Female"))
+                return false;
+        } else {
+            if (!user.getGender().equals("Male"))
+                return false;
         }
 
         return true;
@@ -529,17 +528,15 @@ public class UserService {
         String userPassword = new String(password);
         String username = generateUsername(fullName);
 
-        UserDAO userDAO = new UserDAO();
-        userDAO.addUser(fullName, gender, phone, email, username, userPassword, "Customer");
+        UserDAO.addUser(fullName, gender, phone, email, username, userPassword, "Customer");
     }
 
     public static User loadCurrentUserFromFile(File accountsFile) {
-        UserDAO userDAO = new UserDAO();
-
         try (BufferedReader reader = new BufferedReader(new FileReader(accountsFile))) {
             String line = reader.readLine();
-            if(line == null) return new User();
-            return userDAO.getUserById(Integer.parseInt(line.trim()));
+            if (line == null)
+                return new User();
+            return UserDAO.getUserById(Integer.parseInt(line.trim()));
         } catch (IOException exception) {
             JOptionPane.showMessageDialog(null, "Error reading file: " + accountsFile);
         }

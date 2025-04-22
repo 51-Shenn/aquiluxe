@@ -131,13 +131,11 @@ public class RentalDAO {
 
     // Mapping Result of SQL to rental object : reduce redundant code
     private static Rental mapResultRental(ResultSet rs) throws SQLException {
-        UserDAO userDAO = new UserDAO();
-
         // get the customer and vehicle
         int customerId = rs.getInt("customer_id");
         int vehicleId = rs.getInt("vehicle_id");
 
-        Customer customer = (Customer) userDAO.getUserById(customerId);
+        Customer customer = (Customer) UserDAO.getUserById(customerId);
         Vehicle vehicle = VehicleDAO.getVehicleById(vehicleId);
 
         // convert string status to enum

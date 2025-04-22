@@ -1,7 +1,6 @@
 package gui;
 
 import controllers.VehicleController;
-import datamodels.Car;
 import datamodels.Vehicle;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -90,7 +89,8 @@ public class VehiclesPageDetails extends JPanel {
         carDetailsPanel.add(carPicture, BorderLayout.CENTER);
 
         // Panel on top to hold the name and price of vehicle
-        JLabel brandModelYearLabel = new JLabel(vehicle.getBrand() + " " + vehicle.getModel() + " " + vehicle.getYear());
+        JLabel brandModelYearLabel = new JLabel(
+                vehicle.getBrand() + " " + vehicle.getModel() + " " + vehicle.getYear());
         brandModelYearLabel.setForeground(Theme.getForeground());
         brandModelYearLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(35f));
 
@@ -303,9 +303,6 @@ public class VehiclesPageDetails extends JPanel {
             @Override
             public void mouseReleased(MouseEvent evt) {
                 rentButton.setBackground(Theme.getSpecial());
-                Car carSample = new Car(1001, "images/cars/Supra.jpg", "Toyota", "Supra", 2023, 3000, 800, "Red", 13.2,
-                        "12345678901234567", "REGISID123456", 999.99, "Automatic", "Hybrid", "Coupe", 2, true,
-                        "Aerodynamic Body");
             }
         });
         rentPanel.add(rentButton);
@@ -387,7 +384,7 @@ public class VehiclesPageDetails extends JPanel {
         Vehicle[] vehicless = new Vehicle[4];
         List<Vehicle> vehicles = VehicleController.passVehicles();
 
-        for (int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             vehicless[i] = vehicles.get(i);
         }
 

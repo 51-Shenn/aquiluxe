@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class UserDAO {
 
     // add user by parameter
-    public int addUser(String fullName, String gender, String phoneNumber, String userEmail, String username,
+    public static int addUser(String fullName, String gender, String phoneNumber, String userEmail, String username,
             String password, String userType) {
         String sql = "INSERT INTO users (full_name, gender, phone_number, user_email, username, password, usertype) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -48,7 +48,7 @@ public class UserDAO {
     }
 
     // add customer details
-    public void addCustomerDetails(int userId, String address, String license) {
+    public static void addCustomerDetails(int userId, String address, String license) {
         String sql = "INSERT INTO customers (user_id, address, license) VALUES (?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -67,7 +67,7 @@ public class UserDAO {
     }
 
     // add admin position
-    public void addAdminPosition(int userId, String position) {
+    public static void addAdminPosition(int userId, String position) {
         String sql = "INSERT INTO admins (user_id, position) VALUES (?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -85,7 +85,7 @@ public class UserDAO {
     }
 
     // Mapping Result of SQL to user object : reduce redundant code
-    private User mapResultUser(ResultSet rs) throws SQLException {
+    private static User mapResultUser(ResultSet rs) throws SQLException {
         return new User(rs.getInt("user_id"),
                 rs.getString("full_name"),
                 rs.getString("gender"),
@@ -97,7 +97,7 @@ public class UserDAO {
     }
 
     // get all users
-    public HashMap<Integer, User> getAllUsers() {
+    public static HashMap<Integer, User> getAllUsers() {
         String sql = "SELECT * FROM users";
         HashMap<Integer, User> users = new HashMap<>();
 
@@ -117,7 +117,7 @@ public class UserDAO {
     }
 
     // get user by specific id
-    public User getUserById(int userId) {
+    public static User getUserById(int userId) {
         String sql = "SELECT * FROM users WHERE user_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -139,7 +139,7 @@ public class UserDAO {
     }
 
     // get customer by specific id
-    public Customer getCustomerById(User user) {
+    public static Customer getCustomerById(User user) {
         int userId = user.getUserId();
 
         String sql = "SELECT * FROM customers WHERE user_id = ? ORDER BY created_at DESC LIMIT 1;";
@@ -172,7 +172,7 @@ public class UserDAO {
     }
 
     // get customer by specific id
-    public Admin getAdminById(User user) {
+    public static Admin getAdminById(User user) {
         int userId = user.getUserId();
 
         String sql = "SELECT * FROM admins WHERE user_id = ?;";
@@ -204,7 +204,7 @@ public class UserDAO {
     }
 
     // filter users with value of column
-    public HashMap<Integer, User> filterUsersByColumn(String column, String value) {
+    public static HashMap<Integer, User> filterUsersByColumn(String column, String value) {
         String sql = "SELECT * FROM users WHERE " + column + " = ?";
         HashMap<Integer, User> users = new HashMap<>();
 
@@ -227,7 +227,7 @@ public class UserDAO {
     }
 
     // search user by keywords
-    public HashMap<Integer, User> searchUsersByKeyword(String column, String keyword) {
+    public static HashMap<Integer, User> searchUsersByKeyword(String column, String keyword) {
         String sql = "SELECT * FROM users WHERE " + column + " LIKE ?";
         HashMap<Integer, User> users = new HashMap<>();
 
@@ -250,7 +250,7 @@ public class UserDAO {
     }
 
     // update user profile values
-    public boolean updateUserColumnValue(int userId, String column, String value) {
+    public static boolean updateUserColumnValue(int userId, String column, String value) {
         String sql = "UPDATE users SET " + column + " = ? WHERE user_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -268,7 +268,7 @@ public class UserDAO {
     }
 
     // delete user
-    public boolean deleteUser(int userId) {
+    public static boolean deleteUser(int userId) {
         String sql = "DELETE FROM users WHERE user_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -285,7 +285,7 @@ public class UserDAO {
     }
 
     // delete customer
-    public boolean deleteCustomer(User user) {
+    public static boolean deleteCustomer(User user) {
         int userId = user.getUserId();
         String sql = "DELETE FROM customers WHERE user_id = ?";
 
@@ -303,7 +303,7 @@ public class UserDAO {
     }
 
     // delete admin
-    public boolean deleteAdmin(User user) {
+    public static boolean deleteAdmin(User user) {
         int userId = user.getUserId();
         String sql = "DELETE FROM admins WHERE user_id = ?";
 
@@ -321,7 +321,7 @@ public class UserDAO {
     }
 
     // get user by username and password
-    public User authenticateUser(String username, String password) {
+    public static User authenticateUser(String username, String password) {
         String sql = "SELECT * FROM users WHERE (username = ? OR user_email = ?) AND password = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -345,7 +345,7 @@ public class UserDAO {
     }
 
     // get user by username and password
-    public User authenticateUserForgotPassword(String username, String phoneNumber) {
+    public static User authenticateUserForgotPassword(String username, String phoneNumber) {
         String sql = "SELECT * FROM users WHERE (username = ? OR user_email = ?) AND phone_number = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -368,10 +368,8 @@ public class UserDAO {
         return null;
     }
 
-    // get user by email and password
-
     // check if username exist : return boolean value
-    public boolean usernameExists(String username) {
+    public static boolean usernameExists(String username) {
         String sql = "SELECT COUNT(*) FROM users WHERE username = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -392,7 +390,7 @@ public class UserDAO {
     }
 
     // check if email exist : return boolean value
-    public boolean emailExists(String email) {
+    public static boolean emailExists(String email) {
         String sql = "SELECT COUNT(*) FROM users WHERE user_email = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -413,7 +411,7 @@ public class UserDAO {
     }
 
     // check if phone number exist : return boolean value
-    public boolean phoneNumberExists(String phoneNumber) {
+    public static boolean phoneNumberExists(String phoneNumber) {
         String sql = "SELECT COUNT(*) FROM users WHERE phone_number = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
