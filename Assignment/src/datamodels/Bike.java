@@ -1,7 +1,9 @@
 package datamodels;
 
-public class Bike extends Vehicle {
+import java.util.ArrayList;
 
+public class Bike extends Vehicle {
+    private static ArrayList<Bike> allBikes = new ArrayList<>();
     private String bikeType;
 
     // Default Constructor
@@ -18,6 +20,7 @@ public class Bike extends Vehicle {
         super(vehicleId, imagePath, brand, model, year, capacity, horsepower, color, mpg, vinNumber, registrationNumber,
                 rentalPriceDay, transmission, fuelType, bikeType, seatingCapacity, availability, features);
         this.bikeType = bikeType;
+        allBikes.add(this);
     }
 
     // Getter and Setters
@@ -27,5 +30,9 @@ public class Bike extends Vehicle {
 
     public void setBikeType(String bikeType) {
         this.bikeType = bikeType;
+    }
+
+    public static ArrayList<Bike> getAllBikew1s() {
+        return allBikes;
     }
 }
