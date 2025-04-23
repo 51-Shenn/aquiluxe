@@ -1,6 +1,5 @@
 package gui;
 
-import controllers.VehicleController;
 import datamodels.Vehicle;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -17,6 +16,8 @@ public class VehiclesPageDetails extends JPanel {
     private JPanel carFeaturesContainer;
     private boolean isFeaturesVisible = false;
     private JPanel emptyBottomPanel = new JPanel();
+
+    public static JPanel rentalPanel;
 
     public VehiclesPageDetails(JFrame frame, JPanel panel, Vehicle vehicle) {
         this.frame = frame;
@@ -303,8 +304,9 @@ public class VehiclesPageDetails extends JPanel {
             @Override
             public void mouseReleased(MouseEvent evt) {
                 rentButton.setBackground(Theme.getSpecial());
-                VehicleController vehicleController = new VehicleController(frame, panel);
-                vehicleController.gotoRentalPage(vehicle);
+                rentalPanel = new RentalPage(frame, panel, vehicle);
+                GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
+                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
             }
         });
         rentPanel.add(rentButton);
@@ -384,7 +386,7 @@ public class VehiclesPageDetails extends JPanel {
 
         ImageIcon rightArrowIcon = IconLoader.getRightIcon();
         Vehicle[] vehicless = new Vehicle[4];
-        List<Vehicle> vehicles = VehicleController.passVehicles();
+        List<Vehicle> vehicles = Vehicle.getVehicles();
 
         for (int i = 0; i < 4; i++) {
             vehicless[i] = vehicles.get(i);

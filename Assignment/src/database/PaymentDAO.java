@@ -11,6 +11,7 @@ import java.util.List;
 
 import datamodels.Payment;
 import datamodels.Rental;
+import datamodels.User;
 
 public class PaymentDAO {
 
@@ -79,7 +80,7 @@ public class PaymentDAO {
         return null;
     }
 
-    // get payment by rental ID
+    // get payment by rental
     public static Payment getPaymentByRental(Rental rental) {
         String sql = "SELECT * FROM payments WHERE rental_id = ?";
 
@@ -98,6 +99,29 @@ public class PaymentDAO {
             throw new RuntimeException("\nFAILED TO GET PAYMENT BY RENTAL ID\n");
         }
         return null;
+    }
+
+    // get payment by user
+    public static List<Payment> getPaymentHistoryByUser(User user) {
+        String sql = "SELECT * FROM payments WHERE rental_id IN (SELECT rental_id FROM rentals WHERE user_id = ?)";
+        List<Payment> payments = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, user.getUserId());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Payment payment = mapResultPayment(rs);
+                    payments.add(payment);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO GET PAYMENT HISTORY BY USER\n");
+        }
+        return payments;
     }
 
     // get all payments
@@ -200,6 +224,24 @@ public class PaymentDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("\nFAILED TO UPDATE PAYMENT METHOD\n");
+        }
+    }
+
+    // update payment date
+    public static boolean updatePaymentDate(Payment payment, LocalDate paymentDate) {
+        String sql = "UPDATE payments SET payment_date = ? WHERE payment_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setDate(1, Date.valueOf(paymentDate));
+            stmt.setInt(2, payment.getPaymentId());
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO UPDATE PAYMENT DATE\n");
         }
     }
 
