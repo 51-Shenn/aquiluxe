@@ -21,8 +21,8 @@ public class GUIComponents extends JPanel {
     private JPanel vehiclesPanel;
     private JPanel aboutUsPanel;
     private JPanel contactUsPanel;
-    private CardLayout cardLayout;
-    private JPanel cardPanel;
+    public static CardLayout cardLayout;
+    public static JPanel cardPanel;
     private User user;
     public static OverflowMenu overflowMenu;
     private JButton[] topBarButtons = new JButton[4];

@@ -140,7 +140,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
             @Override
             public void mouseReleased(MouseEvent evt) {
                 carRent.setBackground(Theme.getSpecial());
-                // pass selected car to rental controller
+                JPanel rentalPanel = new RentalPage(frame, panel, vehicle);
+                GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
+                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
             }
         });
 
@@ -288,6 +290,10 @@ public class VehiclesPage extends JPanel implements ActionListener {
                     transLabel.setIcon(transmissionIcon);
                     fuelTypeLabel.setIcon(fuelIcon);
                     seatsLabel.setIcon(seatsIcon);
+
+                    JPanel vehicleDetailsPanel = new VehiclesPageDetails(frame, panel, vehicle);
+                    GUIComponents.cardPanel.add(vehicleDetailsPanel, "VehicleDetailsPage");
+                    GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
                 }
             }
         });
