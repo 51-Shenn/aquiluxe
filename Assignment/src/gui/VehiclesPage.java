@@ -593,7 +593,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         String[] brands = brandsList.toArray(new String[0]);
         String[] models = modelsList.toArray(new String[0]);
         String[] transType = { "ALL", "MANUAL", "AUTO" };
-        String[] fuelType = { "ALL", "GAS", "HYBRID", "ELECTRIC" };
+        String[] fuelType = { "ALL", "PETROL", "HYBRID", "ELECTRIC" };
         String[] availability = { "ALL", "AVAILABLE", "UNAVAILABLE" };
         String[] carType = { "ALL", "SUV", "MPV", "SEDAN", "CONVERTIBLE", "COUPE", "PICKUP TRUCK", "HATCHBACK",
                 "WAGON" };
