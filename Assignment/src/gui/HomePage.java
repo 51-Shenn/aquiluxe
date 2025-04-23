@@ -45,6 +45,21 @@ public class HomePage extends JPanel {
         add(createHomePage(), gbc);
     }
 
+    HomePage(JFrame frame, JPanel panel, User user) {
+        this.frame = frame;
+        this.panel = panel;
+        this.user = user;
+
+        setBackground(Theme.getBackground());
+        setLayout(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.anchor = GridBagConstraints.NORTH;
+        add(createHomePage(), gbc);
+    }
+
     public User getUser() {
         return user;
     }

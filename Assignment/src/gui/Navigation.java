@@ -38,11 +38,11 @@ public class Navigation {
 
         removeWindowsLookAndFeel();
 
-        switch(pageToNavigate) {
+        switch (pageToNavigate) {
             case "SIGN_IN" -> frame.add(new SignInPage(frame, panel, user));
             case "SIGN_UP" -> frame.add(new SignUpPage(frame, panel, user));
         }
-    
+
         frame.revalidate();
         frame.repaint();
     }
@@ -55,10 +55,14 @@ public class Navigation {
         GUIComponents newGuiComponents = new GUIComponents(frame, panel, user);
         frame.add(newGuiComponents, BorderLayout.NORTH);
         frame.add(panel, BorderLayout.CENTER);
-        panel.removeAll();
-        panel.add(new HomePage(frame, panel, user, newGuiComponents), BorderLayout.CENTER);
-        frame.revalidate();
-        frame.repaint();
+
+        GUIComponents.homePanel = new HomePage(frame, panel, user, newGuiComponents);
+        GUIComponents.cardLayout.show(GUIComponents.cardPanel, "HomePage");
+        // panel.removeAll();
+        // panel.add(new HomePage(frame, panel, user, newGuiComponents),
+        // BorderLayout.CENTER);
+        // frame.revalidate();
+        // frame.repaint();
     }
 
     // from home page

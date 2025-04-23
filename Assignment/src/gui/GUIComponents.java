@@ -22,10 +22,10 @@ public class GUIComponents extends JPanel {
     private JButton[] topBarButtons = new JButton[4];
     private String[] topBarButtonsLabels = { "Home", "Vehicles", "About", "Contact" };
 
-    public JPanel homePanel;
-    public JPanel vehiclesPanel;
-    public JPanel aboutUsPanel;
-    public JPanel contactUsPanel;
+    public static JPanel homePanel;
+    public static JPanel vehiclesPanel;
+    public static JPanel aboutUsPanel;
+    public static JPanel contactUsPanel;
     public static CardLayout cardLayout;
     public static JPanel cardPanel;
 
