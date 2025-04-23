@@ -1,7 +1,6 @@
 package gui;
 
 import datamodels.User;
-import java.awt.BorderLayout;
 import java.awt.Window;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
@@ -43,26 +42,6 @@ public class Navigation {
             case "SIGN_UP" -> frame.add(new SignUpPage(frame, panel, user));
         }
 
-        frame.revalidate();
-        frame.repaint();
-    }
-
-    // use this if already inside the lambda
-    public void homePageNavigation(JFrame frame, JPanel panel, User user) {
-        frame.getContentPane().removeAll();
-        frame.setLayout(new BorderLayout());
-        GUIComponents.overflowMenu = null;
-        GUIComponents newGuiComponents = new GUIComponents(frame, panel, user);
-        frame.add(newGuiComponents, BorderLayout.NORTH);
-        frame.add(panel, BorderLayout.CENTER);
-
-        GUIComponents.cardPanel.remove(GUIComponents.homePanel);
-        GUIComponents.homePanel = new HomePage(frame, panel, user, newGuiComponents);
-        GUIComponents.cardPanel.add(GUIComponents.homePanel, "HomePage");
-        GUIComponents.cardLayout.show(GUIComponents.cardPanel, "HomePage");
-        // panel.removeAll();
-        // panel.add(new HomePage(frame, panel, user, newGuiComponents),
-        // BorderLayout.CENTER);
         frame.revalidate();
         frame.repaint();
     }

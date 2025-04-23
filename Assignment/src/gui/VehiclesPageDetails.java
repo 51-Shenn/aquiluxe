@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 public class VehiclesPageDetails extends JPanel {
 
@@ -305,6 +306,7 @@ public class VehiclesPageDetails extends JPanel {
             public void mouseReleased(MouseEvent evt) {
                 rentButton.setBackground(Theme.getSpecial());
                 rentalPanel = new RentalPage(frame, panel, vehicle);
+                rentalPanel.setBorder(new LineBorder(Color.CYAN, 3));
                 GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
                 GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
             }
@@ -412,10 +414,7 @@ public class VehiclesPageDetails extends JPanel {
         viewAllButton.setVerticalAlignment(JButton.CENTER);
         viewAllButton.addActionListener(e -> {
             if (e.getActionCommand().equals("View All")) {
-                panel.removeAll();
-                panel.add(new VehiclesPage(frame, panel), BorderLayout.CENTER);
-                panel.revalidate();
-                panel.repaint();
+                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
             }
         });
 

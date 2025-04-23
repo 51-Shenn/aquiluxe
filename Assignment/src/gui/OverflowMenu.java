@@ -337,7 +337,7 @@ public class OverflowMenu extends JLayeredPane {
                     this.user = UserController.getUserFromDatabase(this.user);
 
                     this.frame.getLayeredPane().remove(this);
-                    new Navigation().homePageNavigation(this.frame, this.panel, this.user);
+                    GUIComponents.refreshPanels(this.frame, this.panel, this.user);
 
                     dialog.showDialog(
                             "SUCCESS",
@@ -612,7 +612,7 @@ public class OverflowMenu extends JLayeredPane {
                             this.user = everyUser;
 
                             frame.getLayeredPane().remove(this);
-                            new Navigation().homePageNavigation(this.frame, this.panel, this.user);
+                            GUIComponents.refreshPanels(this.frame, this.panel, this.user);
 
                             Dialog dialog = new Dialog(this.frame);
                             dialog.showDialog(
@@ -838,7 +838,7 @@ public class OverflowMenu extends JLayeredPane {
                 UserController.useTheme(newTheme, THEME_FILE);
 
                 frame.getLayeredPane().remove(this);
-                new Navigation().homePageNavigation(this.frame, this.panel, this.user);
+                GUIComponents.refreshPanels(this.frame, this.panel, this.user);
             });
         }
         if (text.equals("Sign Up")) {
@@ -862,7 +862,7 @@ public class OverflowMenu extends JLayeredPane {
                     UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
 
                     this.user = new User();
-                    new Navigation().homePageNavigation(this.frame, this.panel, this.user);
+                    GUIComponents.refreshPanels(this.frame, this.panel, this.user);
                 }
             });
         }
@@ -884,7 +884,7 @@ public class OverflowMenu extends JLayeredPane {
                     this.user = new User();
 
                     frame.getLayeredPane().remove(this);
-                    new Navigation().homePageNavigation(this.frame, this.panel, this.user);
+                    GUIComponents.refreshPanels(this.frame, this.panel, this.user);
                 }
             });
         }

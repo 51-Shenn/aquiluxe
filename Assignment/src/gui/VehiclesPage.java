@@ -28,6 +28,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
     public static final ImageIcon SEATS;
 
     public static JPanel vehicleDetailsPanel;
+    public static JPanel rentalPanel;
 
     static {
         TRANSMISSION = new ImageIcon("images/vehiclepageicons/manual-transmission.png");
@@ -142,7 +143,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
             @Override
             public void mouseReleased(MouseEvent evt) {
                 carRent.setBackground(Theme.getSpecial());
-                JPanel rentalPanel = new RentalPage(frame, panel, vehicle);
+                rentalPanel = new RentalPage(frame, panel, vehicle);
+                rentalPanel.setBorder(new LineBorder(Color.GREEN, 3));
                 GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
                 GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
             }
@@ -269,10 +271,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
             public void mouseClicked(MouseEvent e) {
                 // Check if the click is on the image
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                    panel.removeAll();
-                    panel.add(new VehiclesPageDetails(frame, panel, vehicle), BorderLayout.CENTER);
-                    panel.revalidate();
-                    panel.repaint();
+                    vehicleDetailsPanel = new VehiclesPageDetails(frame, panel, vehicle);
+                    GUIComponents.cardPanel.add(vehicleDetailsPanel, "VehicleDetailsPage");
+                    GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
                 }
             }
 
@@ -305,10 +306,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
             public void mouseClicked(MouseEvent e) {
                 // Check if the click is on the image
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                    panel.removeAll();
-                    panel.add(new VehiclesPageDetails(frame, panel, vehicle), BorderLayout.CENTER);
-                    panel.revalidate();
-                    panel.repaint();
+                    vehicleDetailsPanel = new VehiclesPageDetails(frame, panel, vehicle);
+                    GUIComponents.cardPanel.add(vehicleDetailsPanel, "VehicleDetailsPage");
+                    GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
                 }
             }
 

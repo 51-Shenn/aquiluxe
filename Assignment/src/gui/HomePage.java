@@ -308,7 +308,7 @@ public class HomePage extends JPanel {
                     UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
 
                     this.user = new User();
-                    new Navigation().homePageNavigation(this.frame, this.panel, this.user);
+                    GUIComponents.cardLayout.show(GUIComponents.cardPanel, "HomePage");
                 }
             });
             signOutButton.addMouseListener(new MouseAdapter() {

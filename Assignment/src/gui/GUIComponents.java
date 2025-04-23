@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
+import java.awt.Color;
 
 public class GUIComponents extends JPanel {
 
@@ -48,8 +49,12 @@ public class GUIComponents extends JPanel {
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         cardPanel.setBackground(Theme.getBackground());
+        cardPanel.setBorder(new LineBorder(Color.RED, 3));
+
+        setBorder(new LineBorder(Color.YELLOW, 3));
 
         homePanel = new HomePage(this.frame, this.panel, this.user, this);
+        homePanel.setBorder(new LineBorder(Color.GREEN, 3));
         vehiclesPanel = new VehiclesPage(this.frame, this.panel);
         aboutUsPanel = new AboutUsPage(this.frame, this.panel);
         contactUsPanel = new ContactUsPage(this.frame, this.panel);
@@ -63,6 +68,37 @@ public class GUIComponents extends JPanel {
         add(menuButton(), BorderLayout.EAST);
         this.panel.add(cardPanel, BorderLayout.CENTER);
         cardLayout.show(cardPanel, "HomePage");
+    }
+
+    public static void updateThemeAndRefresh() {
+        // Create a data structure array to hold all panels
+        JPanel[] panels = { homePanel, vehiclesPanel, aboutUsPanel, contactUsPanel, cardPanel };
+
+        // Iterate through the array and update backgrounds, revalidate, and repaint
+        for (JPanel panel : panels) {
+            if (panel != null) {
+                panel.setBackground(Theme.getBackground());
+                panel.revalidate();
+                panel.repaint();
+            }
+        }
+
+        // Update background for GUIComponents
+        GUIComponents guiComponents = (GUIComponents) cardPanel.getParent();
+        if (guiComponents != null) {
+            guiComponents.setBackground(Theme.getBackground());
+            guiComponents.revalidate();
+            guiComponents.repaint();
+        }
+    }
+
+    // refreshes the panels and updates the theme
+    public static void refreshPanels(JFrame frame, JPanel panel, User user) {
+        GUIComponents.updateThemeAndRefresh();
+        GUIComponents.overflowMenu = null;
+
+        frame.revalidate();
+        frame.repaint();
     }
 
     public JFrame getFrame() {
