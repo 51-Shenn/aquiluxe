@@ -1,9 +1,10 @@
 package datamodels;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Car extends Vehicle {
-    private static ArrayList<Car> allCars = new ArrayList<>();
+    private static List<Car> allCars = new ArrayList<Car>();
     private String carType;
 
     // Default Constructor
@@ -32,7 +33,7 @@ public class Car extends Vehicle {
         this.carType = carType;
     }
 
-    public static ArrayList<Car> getCars() {
+    public static List<Car> getCars() {
         return allCars;
     }
 }
