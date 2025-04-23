@@ -56,13 +56,15 @@ public class Navigation {
         frame.add(newGuiComponents, BorderLayout.NORTH);
         frame.add(panel, BorderLayout.CENTER);
 
+        GUIComponents.cardPanel.remove(GUIComponents.homePanel);
         GUIComponents.homePanel = new HomePage(frame, panel, user, newGuiComponents);
+        GUIComponents.cardPanel.add(GUIComponents.homePanel, "HomePage");
         GUIComponents.cardLayout.show(GUIComponents.cardPanel, "HomePage");
         // panel.removeAll();
         // panel.add(new HomePage(frame, panel, user, newGuiComponents),
         // BorderLayout.CENTER);
-        // frame.revalidate();
-        // frame.repaint();
+        frame.revalidate();
+        frame.repaint();
     }
 
     // from home page
