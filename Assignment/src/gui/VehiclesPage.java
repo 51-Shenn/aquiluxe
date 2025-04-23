@@ -20,8 +20,8 @@ import javax.swing.border.LineBorder;
 
 public class VehiclesPage extends JPanel implements ActionListener {
 
-    private List<Vehicle> vehicles = new ArrayList<>(VehicleController.processVehicles());
-    private List<Vehicle> sortedVehicles = vehicles;
+    private List<Vehicle> vehicles;
+    private List<Vehicle> sortedVehicles;
     public static final ImageIcon TRANSMISSION;
     public static final ImageIcon FUEL;
     public static final ImageIcon SEATS;
@@ -40,6 +40,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
         this.frame = frame;
         this.panel = panel;
+        this.vehicles = Vehicle.getVehicles();
         this.sortedVehicles = this.vehicles;
         this.setLayout(new BorderLayout());
 
