@@ -394,7 +394,7 @@ public class VehiclesPageDetails extends JPanel {
         JPanel otherCarsTitlePanel = new JPanel(new BorderLayout());
         otherCarsTitlePanel.setPreferredSize(new Dimension(800, 100));
         otherCarsTitlePanel.setBackground(Theme.getBackground());
-        JLabel otherCarsLabel = new JLabel("Other Cars");
+        JLabel otherCarsLabel = new JLabel("Other Vehicles");
         otherCarsLabel.setForeground(Theme.getForeground());
         otherCarsLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(35f));
         JButton viewAllButton = new JButton("View All");
@@ -445,8 +445,8 @@ public class VehiclesPageDetails extends JPanel {
             Image rImage = image.getImage().getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH);
             image = new ImageIcon(rImage);
 
-            String availability = vehicle.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
-            String rentPrice = "RM" + vehicle.getRentalPriceDay() + "/per day";
+            String availability = v.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
+            String rentPrice = "RM" + v.getRentalPriceDay() + "/per day";
 
             carsContainer.add(VehiclesPage.createCarCard(v, image, v.getBrand(), v.getModel(),
                     v.getTransmission(), v.getFuelType(), v.getVehicleType(),
@@ -497,7 +497,13 @@ public class VehiclesPageDetails extends JPanel {
         featuresLabel.setForeground(Theme.getForeground());
         featuresLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(30f));
 
-        JLabel featuresContent = new JLabel(this.vehicle.getFeatures());
+        String[] features = this.vehicle.getFeatures().split(",");
+        StringBuilder result = new StringBuilder("<html>");
+        for (String feature : features) {
+            result.append("- ").append(feature).append("<br>");
+        }
+        result.append("<html>");
+        JLabel featuresContent = new JLabel(result.toString());
         featuresContent.setForeground(Theme.getSecondaryForeground());
         featuresContent.setFont(CustomFonts.INSTRUMENT_SANS_SEMI_BOLD.deriveFont(20f));
 
