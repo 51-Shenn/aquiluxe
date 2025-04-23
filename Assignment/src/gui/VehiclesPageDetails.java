@@ -17,6 +17,8 @@ public class VehiclesPageDetails extends JPanel {
     private boolean isFeaturesVisible = false;
     private JPanel emptyBottomPanel = new JPanel();
 
+    public static JPanel rentalPanel;
+
     public VehiclesPageDetails(JFrame frame, JPanel panel, Vehicle vehicle) {
         this.frame = frame;
         this.panel = panel;
@@ -302,7 +304,7 @@ public class VehiclesPageDetails extends JPanel {
             @Override
             public void mouseReleased(MouseEvent evt) {
                 rentButton.setBackground(Theme.getSpecial());
-                JPanel rentalPanel = new RentalPage(frame, panel, vehicle);
+                rentalPanel = new RentalPage(frame, panel, vehicle);
                 GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
                 GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
             }

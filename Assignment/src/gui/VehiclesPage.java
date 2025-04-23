@@ -27,6 +27,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
     public static final ImageIcon FUEL;
     public static final ImageIcon SEATS;
 
+    public static JPanel vehicleDetailsPanel;
+
     static {
         TRANSMISSION = new ImageIcon("images/vehiclepageicons/manual-transmission.png");
         FUEL = new ImageIcon("images/vehiclepageicons/gas-station.png");
@@ -291,7 +293,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                     fuelTypeLabel.setIcon(fuelIcon);
                     seatsLabel.setIcon(seatsIcon);
 
-                    JPanel vehicleDetailsPanel = new VehiclesPageDetails(frame, panel, vehicle);
+                    vehicleDetailsPanel = new VehiclesPageDetails(frame, panel, vehicle);
                     GUIComponents.cardPanel.add(vehicleDetailsPanel, "VehicleDetailsPage");
                     GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
                 }

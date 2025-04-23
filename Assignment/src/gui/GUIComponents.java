@@ -17,16 +17,17 @@ public class GUIComponents extends JPanel {
 
     private JFrame frame;
     private JPanel panel;
-    private JPanel homePanel;
-    private JPanel vehiclesPanel;
-    private JPanel aboutUsPanel;
-    private JPanel contactUsPanel;
-    public static CardLayout cardLayout;
-    public static JPanel cardPanel;
     private User user;
     public static OverflowMenu overflowMenu;
     private JButton[] topBarButtons = new JButton[4];
     private String[] topBarButtonsLabels = { "Home", "Vehicles", "About", "Contact" };
+
+    public JPanel homePanel;
+    public JPanel vehiclesPanel;
+    public JPanel aboutUsPanel;
+    public JPanel contactUsPanel;
+    public static CardLayout cardLayout;
+    public static JPanel cardPanel;
 
     public GUIComponents() {
         this.frame = new JFrame();
