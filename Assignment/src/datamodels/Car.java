@@ -32,7 +32,7 @@ public class Car extends Vehicle {
         this.carType = carType;
     }
 
-    public static ArrayList<Car> getAllCars() {
+    public static ArrayList<Car> getCars() {
         return allCars;
     }
 }

@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import datamodels.Vehicle;
+import datamodels.Bike;
+import datamodels.Car;
 import database.VehicleDAO;
 public class VehicleService {
 //filters
@@ -14,6 +16,34 @@ public class VehicleService {
     public static List<String> getBrands() {
 
         List<String> brands = new ArrayList<>(VehicleDAO.getFiltersValues("brand"));
+
+        return brands;
+    }
+
+    public static List<String> getCarBrands() {
+
+        List<Car> cars = new ArrayList<>(VehicleDAO.getAllCars());
+        List<String> brands = new ArrayList<>();
+
+        for (Car car : cars){
+            if (!(brands.contains(car.getBrand()))){
+                brands.add(car.getBrand());
+            }
+        }
+
+        return brands;
+    }
+
+    public static List<String> getBikeBrands() {
+
+        List<Bike> bikes = new ArrayList<>(VehicleDAO.getAllBikes());
+        List<String> brands = new ArrayList<>();
+
+        for (Bike bike : bikes){
+            if (!(brands.contains(bike.getBrand()))){
+                brands.add(bike.getBrand());
+            }
+        }
 
         return brands;
     }
@@ -28,6 +58,20 @@ public class VehicleService {
     public static List<Vehicle> passVehicles() {
 
         List<Vehicle> vehicles = new ArrayList<>(VehicleDAO.getAllVehicles());
+
+        return vehicles;
+    }
+
+    public static List<Car> passCars() {
+
+        List<Car> vehicles = new ArrayList<>(VehicleDAO.getAllCars());
+
+        return vehicles;
+    }
+
+    public static List<Bike> passBikes() {
+
+        List<Bike> vehicles = new ArrayList<>(VehicleDAO.getAllBikes());
 
         return vehicles;
     }

@@ -20,7 +20,7 @@ import javax.swing.border.LineBorder;
 
 public class VehiclesPage extends JPanel implements ActionListener {
 
-    private List<Vehicle> vehicles = VehicleController.passVehicles();
+    private List<Vehicle> vehicles = new ArrayList<>(VehicleController.processVehicles());
     private List<Vehicle> sortedVehicles = vehicles;
     public static final ImageIcon TRANSMISSION;
     public static final ImageIcon FUEL;
@@ -38,7 +38,6 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
     public VehiclesPage(JFrame frame, JPanel panel) {
 
-
         this.frame = frame;
         this.panel = panel;
         this.sortedVehicles = this.vehicles;
@@ -51,10 +50,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
     private JPanel createCarCards(List<Vehicle> vehicles) {
         // images in the future will change this to loop to check all car images
-
         vehicleCards = new JPanel(new GridLayout(0, 3, 50, 30));
         vehicleCards.setBackground(Theme.getBackground());
-
 
         for (Vehicle v : vehicles) {
             ImageIcon image = null;
@@ -374,6 +371,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
     }
 
     private JComboBox<String> sortComboBox;
+    private RoundedButton carButton;
+    private RoundedButton bikeButton;
+    private RoundedButton allButton;
 
     private JPanel createCarTopBar() {
 
@@ -388,12 +388,13 @@ public class VehiclesPage extends JPanel implements ActionListener {
         filters.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
 
         // if car then array of vehicles if bike then array of bikes else array of vehicles
-        RoundedButton carButton = new RoundedButton(10, Theme.getHoverBackground());
+        carButton = new RoundedButton(10, Theme.getHoverBackground());
         carButton.setIcon(IconLoader.getCarIcon());
         carButton.setBorderPainted(false);
         carButton.setBounds(375, 25, 65, 50);
         carButton.setFocusable(false);
         carButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(12.5f));
+        carButton.addActionListener(this);
         carButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
@@ -416,12 +417,13 @@ public class VehiclesPage extends JPanel implements ActionListener {
             }
         });
 
-        RoundedButton bikeButton = new RoundedButton(10, Theme.getHoverBackground());
+        bikeButton = new RoundedButton(10, Theme.getHoverBackground());
         bikeButton.setIcon(IconLoader.getBikeIcon());
         bikeButton.setBorderPainted(false);
         bikeButton.setBounds(450, 25, 65, 50);
         bikeButton.setFocusable(false);
         bikeButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(12.5f));
+        bikeButton.addActionListener(this);
         bikeButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
@@ -444,7 +446,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             }
         });
 
-        RoundedButton allButton = new RoundedButton(10, Theme.getHoverBackground());
+        allButton = new RoundedButton(10, Theme.getHoverBackground());
         allButton.setText("ALL");
         allButton.setOpaque(true);
         allButton.setBorderPainted(false);
@@ -452,6 +454,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         allButton.setFocusable(false);
         allButton.setForeground(Theme.getForeground());
         allButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
+        allButton.addActionListener(this);
         allButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
@@ -570,6 +573,10 @@ public class VehiclesPage extends JPanel implements ActionListener {
     private JComboBox<String> modelComboBox;
     private JComboBox<String> yearComboBox;
     private JComboBox<String> carTypeComboBox;
+    private JLabel carTypeLabel;
+    private String[] carType  = { "ALL", "SUV", "MPV", "SEDAN", "CONVERTIBLE", "COUPE", "PICKUP TRUCK", "HATCHBACK", "WAGON", "TOURING", "CRUISER", "SUPERBIKE" };
+    private List<String> brandsList = new ArrayList<>();;
+    private String[] brands;
     private JComboBox<String> transTypeComboBox;
     private JComboBox<String> fuelTypeComboBox;
     private JComboBox<String> availabilityComboBox;
@@ -583,20 +590,17 @@ public class VehiclesPage extends JPanel implements ActionListener {
         // filter + "ALL"
         // when user pick a brand filter model will update and only show few models
         // follow the brand same as cartype
-        List<String> brandsList = new ArrayList<>();
         brandsList.add("ALL");
-        brandsList.addAll(VehicleController.passAllBrands());
+        brandsList.addAll(VehicleController.processAllBrands());
 
         List<String> modelsList = new ArrayList<>();
         modelsList.add("ALL");
 
-        String[] brands = brandsList.toArray(new String[0]);
+        brands = brandsList.toArray(new String[0]);
         String[] models = modelsList.toArray(new String[0]);
         String[] transType = { "ALL", "MANUAL", "AUTO" };
         String[] fuelType = { "ALL", "PETROL", "HYBRID", "ELECTRIC" };
         String[] availability = { "ALL", "AVAILABLE", "UNAVAILABLE" };
-        String[] carType = { "ALL", "SUV", "MPV", "SEDAN", "CONVERTIBLE", "COUPE", "PICKUP TRUCK", "HATCHBACK",
-                "WAGON" };
 
         String[] year = new String[76];
         int newestYear = 2025;
@@ -709,7 +713,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         availabilityFilterPanel.add(availabilityLabel);
         availabilityFilterPanel.add(availabilityComboBox);
 
-        JLabel carTypeLabel = new JLabel("Select Car Type");
+        carTypeLabel = new JLabel("Select Car or Bike Type");
         carTypeLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
         carTypeLabel.setForeground(Theme.getForeground());
 
@@ -787,14 +791,14 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 }
             }
         });
-        minPriceField.addActionListener(e -> refreshCards(VehicleController.allFilterCombination(this.sortedVehicles,
+        minPriceField.addActionListener(e -> refreshCards(VehicleController.processAllFilterCombination(this.sortedVehicles,
                 (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
                 yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(),
                 (String) transTypeComboBox.getSelectedItem(),
                 (String) availabilityComboBox.getSelectedItem(), (String) carTypeComboBox.getSelectedItem(),
                 seatSlider.getValue(),
                 (String) minPriceField.getText(), (String) maxPriceField.getText())));
-        maxPriceField.addActionListener(e -> refreshCards(VehicleController.allFilterCombination(this.sortedVehicles,
+        maxPriceField.addActionListener(e -> refreshCards(VehicleController.processAllFilterCombination(this.sortedVehicles,
                 (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
                 yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(),
                 (String) transTypeComboBox.getSelectedItem(),
@@ -809,7 +813,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             } else {
                 seatLabel.setText("Seats: " + value);
             }
-            refreshCards(VehicleController.allFilterCombination(this.sortedVehicles,
+            refreshCards(VehicleController.processAllFilterCombination(this.sortedVehicles,
                     (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
                     yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(),
                     (String) transTypeComboBox.getSelectedItem(),
@@ -852,6 +856,36 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == bikeButton) {
+            this.vehicles = new ArrayList<>(VehicleController.processBikes());
+            this.sortedVehicles = this.vehicles;
+            carTypeLabel.setText("Select A Bike Type: ");
+            carType = new String[] { "ALL", "TOURING", "CRUISER" , "SUPERBIKE" };
+            carTypeComboBox.removeAllItems();
+            for (String type : carType){
+                carTypeComboBox.addItem(type);
+            }
+        }
+        else if (e.getSource() == carButton) {
+            this.vehicles = new ArrayList<>(VehicleController.processCars());
+            this.sortedVehicles = this.vehicles;
+            carTypeLabel.setText("Select A Car Type: ");
+            carType = new String[] { "ALL", "SUV", "MPV", "SEDAN", "CONVERTIBLE", "COUPE", "PICKUP TRUCK", "HATCHBACK", "WAGON" };
+            carTypeComboBox.removeAllItems();
+            for (String type : carType){
+                carTypeComboBox.addItem(type);
+            }
+        }
+        else if (e.getSource() == allButton) {
+            this.vehicles = new ArrayList<>(VehicleController.processVehicles());
+            this.sortedVehicles = this.vehicles;
+            carTypeLabel.setText("Select A Car or Bike Type: ");
+            carType = new String[] { "ALL", "SUV", "MPV", "SEDAN", "CONVERTIBLE", "COUPE", "PICKUP TRUCK", "HATCHBACK", "WAGON", "TOURING", "CRUISER", "SUPERBIKE" };
+            carTypeComboBox.removeAllItems();
+            for (String type : carType){
+                carTypeComboBox.addItem(type);
+            }
+        }
         if (e.getSource() == sortComboBox) {
             handleSorting();
             applyFilters();
@@ -876,13 +910,13 @@ public class VehiclesPage extends JPanel implements ActionListener {
         if (" Best Match ".equals(sortComboBox.getSelectedItem())) {
             this.sortedVehicles = this.vehicles;
         } else if (" Lowest Price ".equals(sortComboBox.getSelectedItem())) {
-            this.sortedVehicles = VehicleController.passSortedByPriceLowToHigh(this.vehicles);
+            this.sortedVehicles = VehicleController.processSortedByPriceLowToHigh(this.vehicles);
         } else if (" Highest Price ".equals(sortComboBox.getSelectedItem())) {
-            this.sortedVehicles = VehicleController.passSortedByPriceHighToLow(this.vehicles);
+            this.sortedVehicles = VehicleController.processSortedByPriceHighToLow(this.vehicles);
         } else if (" Newest ".equals(sortComboBox.getSelectedItem())) {
-            this.sortedVehicles = VehicleController.passSortedByYearNewestFirst(this.vehicles);
+            this.sortedVehicles = VehicleController.processSortedByYearNewestFirst(this.vehicles);
         } else if (" Oldest ".equals(sortComboBox.getSelectedItem())) {
-            this.sortedVehicles = VehicleController.passSortedByYearOldestFirst(this.vehicles);
+            this.sortedVehicles = VehicleController.processSortedByYearOldestFirst(this.vehicles);
         }
     }
 
@@ -890,7 +924,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         if (brandComboBox.getSelectedIndex() != 0) {
             List<String> modelsList = new ArrayList<>();
             modelsList.add("ALL");
-            modelsList.addAll(VehicleController.passAllModelsByBrand(brandComboBox.getSelectedItem().toString()));
+            modelsList.addAll(VehicleController.processAllModelsByBrand(brandComboBox.getSelectedItem().toString()));
             String[] models = modelsList.toArray(new String[0]);
             
             // Store current selection if any
@@ -911,7 +945,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
     }
 
     private void applyFilters() {
-        refreshCards(VehicleController.allFilterCombination(
+        refreshCards(VehicleController.processAllFilterCombination(
             this.sortedVehicles,
             (String) brandComboBox.getSelectedItem(),
             (String) modelComboBox.getSelectedItem(),
