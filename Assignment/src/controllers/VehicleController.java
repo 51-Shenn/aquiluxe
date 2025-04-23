@@ -1,7 +1,6 @@
 package controllers;
 
 import datamodels.Vehicle;
-import gui.RentalPage;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
@@ -15,13 +14,6 @@ public class VehicleController {
     public VehicleController(JFrame frame, JPanel panel) {
         this.frame = frame;
         this.panel = panel;
-    }
-
-    public void gotoRentalPage(Vehicle selectedVehicle) {
-        panel.removeAll();
-        panel.add(new RentalPage(frame, panel, selectedVehicle)); // pass selected car
-        panel.revalidate();
-        panel.repaint();
     }
 
     public static List<Vehicle> getAllVehicles() {
