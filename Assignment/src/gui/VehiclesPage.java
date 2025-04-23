@@ -40,7 +40,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
         this.frame = frame;
         this.panel = panel;
-        this.vehicles = Vehicle.getVehicles();
+        //probrably will change later for loader by using vehicle.getvehicles() and maybe car.getcars() and bike.getbikes()?
+        this.vehicles = VehicleController.processVehicles();
         this.sortedVehicles = this.vehicles;
         this.setLayout(new BorderLayout());
 

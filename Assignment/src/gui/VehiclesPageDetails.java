@@ -432,7 +432,7 @@ public class VehiclesPageDetails extends JPanel {
             }
             ImageIcon image = null;
             try {
-                image = new ImageIcon(vehicle.getImagePath());
+                image = new ImageIcon(v.getImagePath());
 
                 // Check if any image failed to load
                 if (image.getIconWidth() == -1) {
@@ -448,9 +448,9 @@ public class VehiclesPageDetails extends JPanel {
             String availability = vehicle.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
             String rentPrice = "RM" + vehicle.getRentalPriceDay() + "/per day";
 
-            carsContainer.add(VehiclesPage.createCarCard(vehicle, image, vehicle.getBrand(), vehicle.getModel(),
-                    vehicle.getTransmission(), vehicle.getFuelType(), vehicle.getVehicleType(),
-                    vehicle.getSeatingCapacity(), rentPrice, availability, frame, panel));
+            carsContainer.add(VehiclesPage.createCarCard(v, image, v.getBrand(), v.getModel(),
+                    v.getTransmission(), v.getFuelType(), v.getVehicleType(),
+                    v.getSeatingCapacity(), rentPrice, availability, frame, panel));
             count++;
         }
 
