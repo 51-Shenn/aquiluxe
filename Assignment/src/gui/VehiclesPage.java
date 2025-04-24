@@ -22,15 +22,6 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
     private List<Vehicle> vehicles;
     private List<Vehicle> sortedVehicles;
-    public static final ImageIcon TRANSMISSION;
-    public static final ImageIcon FUEL;
-    public static final ImageIcon SEATS;
-
-    static {
-        TRANSMISSION = new ImageIcon("images/vehiclepageicons/manual-transmission.png");
-        FUEL = new ImageIcon("images/vehiclepageicons/gas-station.png");
-        SEATS = new ImageIcon("images/vehiclepageicons/car-seat.png");
-    }
 
     private final JFrame frame;
     private final JPanel panel;
@@ -85,10 +76,6 @@ public class VehiclesPage extends JPanel implements ActionListener {
     public static JPanel createCarCard(Vehicle vehicle, ImageIcon image, String brand, String model, String transmission,
             String fuelType,
             String vehicleType, int seats, String price, String availability, JFrame frame, JPanel panel) {
-
-        ImageIcon transmissionIcon = TRANSMISSION;
-        ImageIcon fuelIcon = FUEL;
-        ImageIcon seatsIcon = SEATS;
 
         JPanel carCard = new JPanel();
         carCard.setLayout(new BorderLayout());
@@ -207,7 +194,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
         // minor details of the car at the bottom but the top of the buttons
         JLabel seatsLabel = new JLabel(Integer.toString(seats));
-        seatsLabel.setIcon(seatsIcon);
+        seatsLabel.setIcon(IconLoader.getSeatIcon());
         seatsLabel.setHorizontalTextPosition(JLabel.RIGHT);
         seatsLabel.setOpaque(true);
         seatsLabel.setBackground(Theme.getBackground());
@@ -216,7 +203,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         seatsLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(12.5f));
         seatsLabel.setHorizontalAlignment(JLabel.CENTER);
         JLabel fuelTypeLabel = new JLabel(fuelType);
-        fuelTypeLabel.setIcon(fuelIcon);
+        fuelTypeLabel.setIcon(IconLoader.getGasIcon());
         fuelTypeLabel.setHorizontalTextPosition(JLabel.RIGHT);
         fuelTypeLabel.setBackground(Theme.getBackground());
         fuelTypeLabel.setOpaque(true);
@@ -225,7 +212,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         fuelTypeLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(12.5f));
         fuelTypeLabel.setHorizontalAlignment(JLabel.CENTER);
         JLabel transLabel = new JLabel(transmission);
-        transLabel.setIcon(transmissionIcon);
+        transLabel.setIcon(IconLoader.getTransmissionIcon());
         transLabel.setHorizontalTextPosition(JLabel.RIGHT);
         transLabel.setBackground(Theme.getBackground());
         transLabel.setOpaque(true);
@@ -279,9 +266,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 if (SwingUtilities.isLeftMouseButton(evt)) {
                     carPicture.setIcon(image); // Restore original image
                     carAvailability.setBackground(Theme.getPressedSpecial());
-                    transLabel.setIcon(transmissionIcon);
-                    fuelTypeLabel.setIcon(fuelIcon);
-                    seatsLabel.setIcon(seatsIcon);
+                    transLabel.setIcon(IconLoader.getTransmissionIcon());
+                    fuelTypeLabel.setIcon(IconLoader.getGasIcon());
+                    seatsLabel.setIcon(IconLoader.getSeatIcon());
                 }
             }
         });
@@ -311,9 +298,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 if (SwingUtilities.isLeftMouseButton(evt)) {
                     carPicture.setIcon(image); // Restore original image
                     carAvailability.setBackground(Theme.getPressedSpecial());
-                    transLabel.setIcon(transmissionIcon);
-                    fuelTypeLabel.setIcon(fuelIcon);
-                    seatsLabel.setIcon(seatsIcon);
+                    transLabel.setIcon(IconLoader.getTransmissionIcon());
+                    fuelTypeLabel.setIcon(IconLoader.getGasIcon());
+                    seatsLabel.setIcon(IconLoader.getSeatIcon());
                 }
             }
         });
@@ -525,7 +512,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         sortComboBox.setBounds(1450, 25, 150, 50);
         sortComboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(17.5f));
         sortComboBox.addActionListener(this);
-        ImageIcon addIcon = new ImageIcon("images/vehiclepageicons/add.png");
+        ImageIcon addIcon = IconLoader.getAddIcon();
 
         RoundedButton addButton = new RoundedButton(10, Theme.getBackground());
         addButton.setIcon(addIcon);
