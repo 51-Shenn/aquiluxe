@@ -59,25 +59,38 @@ public class VehiclesPage extends JPanel implements ActionListener {
         vehicleCards = new JPanel(new GridLayout(0, 3, 50, 30));
         vehicleCards.setBackground(Theme.getBackground());
 
+        HashMap<String, ImageIcon> imageMap = ImageLoader.getImageCache();
+
         for (Vehicle v : vehicles) {
             ImageIcon image = null;
-            HashMap<String, ImageIcon> imageMap = ImageLoader.getImageCache();
             try {
-                for (ImageIcon imageicon : imageMap.values()) {
-                    image = imageicon;
-                    break;
-                }
+                // check if the image is already in the cache
+                image = imageMap.get(v.getImagePath());
 
-                // Check if any image failed to load
-                if (image == null || image.getIconWidth() == -1) {
-                    throw new Exception("One or more images failed to load.");
+                // error checking if image is null or failed to load
+                if (image == null) {
+                    throw new Exception("Image not found in cache for path: " + v.getImagePath());
                 }
-
+                if (image.getIconWidth() == -1) {
+                    throw new Exception("Image failed to load for path: " + v.getImagePath());
+                }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Error loading images: " + e.getMessage());
+                System.err.println("Error loading vehicle image for vehicle: " + v.getBrand() + " " + v.getModel() +
+                        " | Path: " + v.getImagePath() + " | Error: " + e.getMessage());
+                JOptionPane.showMessageDialog(null, "Error loading image for " + v.getBrand() + " " + v.getModel() +
+                        ":\n" + e.getMessage());
+                // Use a placeholder image if available
+                image = new ImageIcon(new BufferedImage(400, 400, BufferedImage.TYPE_INT_RGB));
             }
-            Image rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
-            image = new ImageIcon(rImage);
+
+            try {
+                Image rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
+                image = new ImageIcon(rImage);
+            } catch (Exception e) {
+                System.err.println("Error scaling image for vehicle: " + v.getBrand() + " " + v.getModel() +
+                        " | Path: " + v.getImagePath() + " | Error: " + e.getMessage());
+                image = new ImageIcon(new BufferedImage(400, 400, BufferedImage.TYPE_INT_RGB));
+            }
 
             String availability = v.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
             String rentPrice = "RM" + v.getRentalPriceDay() + "/per day";
@@ -370,18 +383,16 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
     private JScrollPane createCarCardsContainer(List<Vehicle> vehicles) {
 
-        // JPanel vehicleCards = new JPanel(new GridLayout(0,3,20,15));
-
         JPanel carCardsPanel = new JPanel(new BorderLayout());
         carCardsPanel.add(createCarCards(vehicles), BorderLayout.CENTER);
         carCardsPanel.add(createCarRightPanel(), BorderLayout.EAST);
         carCardsPanel.add(createBottomBar(), BorderLayout.SOUTH);
         carCardsPanel.add(createCarLeftPanel(), BorderLayout.WEST);
 
-        JScrollPane container = new JScrollPane(carCardsPanel);
+        JScrollPane container = new JScrollPane(carCardsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         container.getVerticalScrollBar().setUnitIncrement(30);
         container.setBorder(BorderFactory.createEmptyBorder());
-        container.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         return container;
     }
