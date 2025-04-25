@@ -158,7 +158,7 @@ public class VehiclesPageDetails extends JPanel {
         // detailsIcons[4] = capacityIcon;
         // detailsIcons[5] = mpgIcon;
         // detailsIcons[6] = horsepowerIcon;
-        ImageIcon[] detailsIcons = {transmissionIcon, fuelIcon, seatsIcon, carTypeIcon, capacityIcon, mpgIcon, horsepowerIcon};
+        // ImageIcon[] detailsIcons = {transmissionIcon, fuelIcon, seatsIcon, carTypeIcon, capacityIcon, mpgIcon, horsepowerIcon};
 
         JPanel transmissionPanel = new JPanel(new BorderLayout());
         transmissionPanel.setBackground(Theme.getBackground());
