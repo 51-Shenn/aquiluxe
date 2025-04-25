@@ -1,17 +1,28 @@
 package gui;
 
 import datamodels.User;
+import datamodels.Vehicle;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.List;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.border.LineBorder;
+
+import controllers.VehicleController;
+
 import java.awt.Color;
 
 public class GUIComponents extends JPanel {
@@ -19,8 +30,9 @@ public class GUIComponents extends JPanel {
     private JFrame frame;
     private JPanel panel;
     private User user;
+    private static JButton[] buttons;
     public static OverflowMenu overflowMenu;
-    private JButton[] topBarButtons = new JButton[4];
+    private static JButton[] topBarButtons = new JButton[4];
     private String[] topBarButtonsLabels = { "Home", "Vehicles", "About", "Contact" };
 
     public static JPanel homePanel;
@@ -29,6 +41,7 @@ public class GUIComponents extends JPanel {
     public static JPanel contactUsPanel;
     public static CardLayout cardLayout;
     public static JPanel cardPanel;
+    public static boolean vehiclesPageLoaded = false;
 
     public GUIComponents() {
         this.frame = new JFrame();
@@ -70,35 +83,130 @@ public class GUIComponents extends JPanel {
         cardLayout.show(cardPanel, "HomePage");
     }
 
-    public static void updateThemeAndRefresh() {
+    public static void showPage(String pageName) {
+        if (cardLayout != null && cardPanel != null) {
+            cardLayout.show(cardPanel, pageName);
+            cardPanel.revalidate();
+            cardPanel.repaint();
+        }
+    }
+
+    public static void loadVehiclesPageAsync(JFrame frame, JPanel contentPanel) {
+        vehiclesPageLoaded = true;
+
+        // vehiclesPanel = new VehiclesPage(frame, contentPanel);
+        // vehiclesPanel.setBorder(new LineBorder(Color.MAGENTA, 3));
+        // cardPanel.add(vehiclesPanel, "VehiclesPage");
+        // cardLayout.show(cardPanel, "VehiclesPage");
+
+        new SwingWorker<List<Vehicle>, Void>() {
+            private List<Vehicle> vehicles;
+
+            @Override
+            protected List<Vehicle> doInBackground() {
+                vehicles = VehicleController.getAllVehicles();
+                Vehicle.setVehicles(vehicles);
+                ImageLoader.loadImages(vehicles);
+
+                return vehicles;
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    get();
+
+                    vehiclesPageLoaded = true;
+                    System.out.println("Loading vehicles: " + vehicles.size() + " vehicles loaded.");
+
+                    // SwingUtilities.invokeLater(() -> {
+                    ((VehiclesPage) vehiclesPanel).refreshCards(Vehicle.getVehicles());
+                    // vehiclesPanel.revalidate();
+                    // vehiclesPanel.repaint();
+                    // cardLayout.show(cardPanel, "VehiclesPage");
+
+                    // });
+                } catch (Exception e) {
+                    System.out.println("Error loading vehicles: " + e.getMessage());
+                    // loadVehiclesPageAsync(frame, cardPanel);
+                }
+            }
+        }.execute();
+    }
+
+    // not using
+    public static void updateTheme() {
+        // Update the background of all buttons
+        if (buttons != null) {
+            for (JButton button : buttons) {
+                button.setBackground(Theme.getBackground());
+                button.setForeground(Theme.getForeground());
+                button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
+            }
+        }
+
+        // Update the background of the top bar buttons
+        if (topBarButtons != null) {
+            for (JButton button : topBarButtons) {
+                button.setBackground(Theme.getBackground());
+                button.setForeground(Theme.getForeground());
+                if (button.getForeground().equals(Theme.getSpecial())) {
+                    button.setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
+                } else
+                    button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
+            }
+        }
+
         // Create a data structure array to hold all panels
         JPanel[] panels = { homePanel, vehiclesPanel, aboutUsPanel, contactUsPanel, cardPanel };
 
         // Iterate through the array and update backgrounds, revalidate, and repaint
         for (JPanel panel : panels) {
             if (panel != null) {
-                panel.setBackground(Theme.getBackground());
+                updatePanelComponents(panel);
                 panel.revalidate();
                 panel.repaint();
             }
         }
-
-        // Update background for GUIComponents
-        GUIComponents guiComponents = (GUIComponents) cardPanel.getParent();
-        if (guiComponents != null) {
-            guiComponents.setBackground(Theme.getBackground());
-            guiComponents.revalidate();
-            guiComponents.repaint();
-        }
     }
 
-    // refreshes the panels and updates the theme
+    // Refreshes the panels and updates the theme
     public static void refreshPanels(JFrame frame, JPanel panel, User user) {
-        GUIComponents.updateThemeAndRefresh();
+        // updateTheme();
+        createNewThemedPanels(frame, (JPanel) panel.getParent(), user);
         GUIComponents.overflowMenu = null;
 
         frame.revalidate();
         frame.repaint();
+    }
+
+    private static void createNewThemedPanels(JFrame frame, JPanel panel, User user) {
+        overflowMenu = null;
+
+        panel.removeAll();
+        panel.add(new GUIComponents(frame, panel, user), BorderLayout.NORTH);
+        panel.revalidate();
+        panel.repaint();
+    }
+
+    // not using
+    private static void updatePanelComponents(java.awt.Container container) {
+
+        // check which panel is being updated and update the theme accordingly
+        // create a method for each panel to update the theme
+
+        for (java.awt.Component component : container.getComponents()) {
+            component.setBackground(Theme.getBackground());
+            component.setForeground(Theme.getForeground());
+
+            if (component instanceof JLabel) {
+                component.setFont(CustomFonts.INSTRUMENT_SANS_MEDIUM.deriveFont(22f));
+            } else if (component instanceof JButton) {
+                component.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(24f));
+            } else if (component instanceof java.awt.Container) {
+                updatePanelComponents((java.awt.Container) component);
+            }
+        }
     }
 
     public JFrame getFrame() {
@@ -138,7 +246,7 @@ public class GUIComponents extends JPanel {
     }
 
     public void setTopBarButtons(JButton[] topBarButtons) {
-        this.topBarButtons = topBarButtons;
+        GUIComponents.topBarButtons = topBarButtons;
     }
 
     public String[] getTopBarButtonsLabels() {
@@ -163,7 +271,7 @@ public class GUIComponents extends JPanel {
             }
             topBarButtons[0].setForeground(Theme.getSpecial());
             topBarButtons[0].setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
-            cardLayout.show(cardPanel, "HomePage");
+            showPage("HomePage");
         });
 
         return logo;
@@ -183,7 +291,7 @@ public class GUIComponents extends JPanel {
         topBarContainer.add(logo(), gbc);
 
         gbc.insets = new Insets(0, 5, 0, 0);
-        JButton[] buttons = createButtons();
+        buttons = createButtons();
         for (JButton button : buttons) {
             topBarContainer.add(button, gbc);
         }
@@ -210,22 +318,27 @@ public class GUIComponents extends JPanel {
 
         topBarButtons[0].addActionListener(e -> {
             pageIndicator(0);
-            cardLayout.show(cardPanel, "HomePage");
+            showPage("HomePage");
         });
 
         topBarButtons[1].addActionListener(e -> {
             pageIndicator(1);
-            cardLayout.show(cardPanel, "VehiclesPage");
+            if (!vehiclesPageLoaded) {
+                JOptionPane.showMessageDialog(frame, "Vehicles are still loading, please wait...");
+                loadVehiclesPageAsync(frame, panel);
+                return;
+            }
+            showPage("VehiclesPage");
         });
 
         topBarButtons[2].addActionListener(e -> {
             pageIndicator(2);
-            cardLayout.show(cardPanel, "AboutUsPage");
+            showPage("AboutUsPage");
         });
 
         topBarButtons[3].addActionListener(e -> {
             pageIndicator(3);
-            cardLayout.show(cardPanel, "ContactUsPage");
+            showPage("ContactUsPage");
         });
 
         return topBarButtons;

@@ -36,6 +36,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
         SEATS = new ImageIcon("images/vehiclepageicons/car-seat.png");
     }
 
+    private static final ImageIcon PLACEHOLDER_IMAGE = new ImageIcon(
+            new BufferedImage(400, 400, BufferedImage.TYPE_INT_RGB));
+
     private final JFrame frame;
     private final JPanel panel;
     private JPanel vehicleCards;
@@ -62,34 +65,37 @@ public class VehiclesPage extends JPanel implements ActionListener {
         HashMap<String, ImageIcon> imageMap = ImageLoader.getImageCache();
 
         for (Vehicle v : vehicles) {
-            ImageIcon image = null;
+            ImageIcon image = new ImageIcon("images/cars/Vellfire.jpg");
+            Image rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
+            image = new ImageIcon(rImage); // fallback image
             try {
                 // check if the image is already in the cache
                 image = imageMap.get(v.getImagePath());
 
-                // error checking if image is null or failed to load
                 if (image == null) {
-                    throw new Exception("Image not found in cache for path: " + v.getImagePath());
+                    System.err.println("Error loading vehicle image for vehicle: " + v.getBrand() + " " + v.getModel() +
+                            " | Path: " + v.getImagePath() + " | Error: image is null");
+                    image = new ImageIcon("images/cars/Vellfire.jpg");
+                    rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
+                    image = new ImageIcon(rImage); // fallback image
                 }
+
+                // error checking if image is null or failed to load
                 if (image.getIconWidth() == -1) {
+                    System.err.println("Error loading vehicle image for vehicle: " + v.getBrand() + " " + v.getModel() +
+                            " | Path: " + v.getImagePath() + " | Error: image failed to load");
+                    image = new ImageIcon("images/cars/Vellfire.jpg");
+                    rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
+                    image = new ImageIcon(rImage); // fallback image
                     throw new Exception("Image failed to load for path: " + v.getImagePath());
                 }
+
             } catch (Exception e) {
                 System.err.println("Error loading vehicle image for vehicle: " + v.getBrand() + " " + v.getModel() +
                         " | Path: " + v.getImagePath() + " | Error: " + e.getMessage());
-                JOptionPane.showMessageDialog(null, "Error loading image for " + v.getBrand() + " " + v.getModel() +
-                        ":\n" + e.getMessage());
-                // Use a placeholder image if available
-                image = new ImageIcon(new BufferedImage(400, 400, BufferedImage.TYPE_INT_RGB));
-            }
-
-            try {
-                Image rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
-                image = new ImageIcon(rImage);
-            } catch (Exception e) {
-                System.err.println("Error scaling image for vehicle: " + v.getBrand() + " " + v.getModel() +
-                        " | Path: " + v.getImagePath() + " | Error: " + e.getMessage());
-                image = new ImageIcon(new BufferedImage(400, 400, BufferedImage.TYPE_INT_RGB));
+                image = new ImageIcon("images/cars/Vellfire.jpg");
+                rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
+                image = new ImageIcon(rImage); // fallback image
             }
 
             String availability = v.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
@@ -101,6 +107,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         }
 
         return vehicleCards;
+
     }
 
     public static JPanel createCarCard(Vehicle vehicle, ImageIcon image, String brand, String model,
@@ -950,7 +957,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 maxPriceField.getText()));
     }
 
-    private void refreshCards(List<Vehicle> filteredvehicles) {
+    public void refreshCards(List<Vehicle> filteredvehicles) {
         // Clear existing cards but preserve layout
         vehicleCards.removeAll();
         vehicleCards.setLayout(new GridLayout(0, 3, 50, 30));

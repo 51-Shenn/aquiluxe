@@ -1,22 +1,15 @@
 package gui;
 
 import controllers.UserController;
-import controllers.VehicleController;
 import datamodels.User;
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
-import java.util.List;
-import datamodels.Vehicle;
 
 public class MainApp extends JFrame {
 
-    private List<Vehicle> vehicles;
-
     public MainApp() {
         Navigation.setWindowsLookAndFeel();
-
-        loadDataAndCacheImages();
 
         setTitle("AQUILUXE");
         setLayout(new BorderLayout());
@@ -24,31 +17,24 @@ public class MainApp extends JFrame {
         setMaximumSize(new Dimension(1920, 1080));
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        setAlwaysOnTop(false);
         setIconImage(IconLoader.getAppIcon().getImage()); // Window Icon
-
-        JPanel contentPanel;
-        contentPanel = new JPanel(new BorderLayout());
+        JPanel contentPanel = new JPanel(new BorderLayout());
 
         File accountsFile = new File("files/settings/accounts.txt");
-        if (accountsFile.exists()) {
-            User currentUser = UserController.loadCurrentUser(accountsFile);
-            add(new GUIComponents(this, contentPanel, currentUser), BorderLayout.NORTH);
-        } else {
-            add(new GUIComponents(this, contentPanel, null), BorderLayout.NORTH);
-        }
+        User currentUser = accountsFile.exists() ? UserController.loadCurrentUser(accountsFile) : null;
+        add(new GUIComponents(this, contentPanel, currentUser), BorderLayout.NORTH);
         add(contentPanel, BorderLayout.CENTER);
 
-        setVisible(true);
-    }
+        GUIComponents.showPage("HomePage");
 
-    private void loadDataAndCacheImages() {
-        vehicles = VehicleController.getAllVehicles(); // Get all vehicles
-        Vehicle.setVehicles(vehicles); // Store in Vehicle class
-        ImageLoader.loadImages(vehicles); // Preload images
+        setVisible(true);
+        setAlwaysOnTop(false);
+
+        GUIComponents.loadVehiclesPageAsync(this, contentPanel);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MainApp());
+        SwingUtilities.invokeLater(MainApp::new);
     }
 }
