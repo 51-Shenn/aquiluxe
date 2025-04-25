@@ -142,22 +142,23 @@ public class VehiclesPageDetails extends JPanel {
         String color = vehicle.getColor();
 
         // loop through every details of the vehicle and show
-        ImageIcon[] detailsIcons = new ImageIcon[8];
-        ImageIcon transmissionIcon = new ImageIcon("images/vehiclepageicons/manual-transmission.png");
-        ImageIcon fuelIcon = new ImageIcon("images/vehiclepageicons/gas-station.png");
-        ImageIcon seatsIcon = new ImageIcon("images/vehiclepageicons/car-seat.png");
-        ImageIcon carTypeIcon = new ImageIcon("images/vehiclepageicons/chassis.png");
-        ImageIcon capacityIcon = new ImageIcon("images/vehiclepageicons/engine.png");
-        ImageIcon mpgIcon = new ImageIcon("images/vehiclepageicons/fuel-gauge.png");
-        ImageIcon horsepowerIcon = new ImageIcon("images/vehiclepageicons/horse.png");
+        ImageIcon transmissionIcon = IconLoader.getTransmissionIcon();
+        ImageIcon fuelIcon = IconLoader.getGasIcon();
+        ImageIcon seatsIcon = IconLoader.getSeatIcon();
+        ImageIcon carTypeIcon = IconLoader.getChassisIcon();
+        ImageIcon capacityIcon = IconLoader.getEngineIcon();
+        ImageIcon mpgIcon = IconLoader.getFuelGaugeIcon();
+        ImageIcon horsepowerIcon = IconLoader.getHorseIcon();
         ImageIcon colorIcon = new ImageIcon("images/vehiclepageicons/circle.png");
-        detailsIcons[0] = transmissionIcon;
-        detailsIcons[1] = fuelIcon;
-        detailsIcons[2] = seatsIcon;
-        detailsIcons[3] = carTypeIcon;
-        detailsIcons[4] = capacityIcon;
-        detailsIcons[5] = mpgIcon;
-        detailsIcons[6] = horsepowerIcon;
+        // ImageIcon[] detailsIcons = new ImageIcon[8];
+        // detailsIcons[0] = transmissionIcon;
+        // detailsIcons[1] = fuelIcon;
+        // detailsIcons[2] = seatsIcon;
+        // detailsIcons[3] = carTypeIcon;
+        // detailsIcons[4] = capacityIcon;
+        // detailsIcons[5] = mpgIcon;
+        // detailsIcons[6] = horsepowerIcon;
+        ImageIcon[] detailsIcons = {transmissionIcon, fuelIcon, seatsIcon, carTypeIcon, capacityIcon, mpgIcon, horsepowerIcon};
 
         JPanel transmissionPanel = new JPanel(new BorderLayout());
         transmissionPanel.setBackground(Theme.getBackground());
