@@ -12,8 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -22,6 +22,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
     private List<Vehicle> vehicles;
     private List<Vehicle> sortedVehicles;
+    protected final Border BORDER = new LineBorder(Color.BLACK, 2);
+    protected final Border PADDING = new EmptyBorder(10, 15, 10, 15);
     public static final ImageIcon TRANSMISSION;
     public static final ImageIcon FUEL;
     public static final ImageIcon SEATS;
@@ -572,16 +574,21 @@ public class VehiclesPage extends JPanel implements ActionListener {
     }
 
     private JComboBox<String> brandComboBox;
+    private List<String> brandsList = new ArrayList<>();;
+    private String[] brands;
     private JComboBox<String> modelComboBox;
+    private String[] models;
+    private String[] year;
     private JComboBox<String> yearComboBox;
     private JComboBox<String> carTypeComboBox;
     private JLabel carTypeLabel;
-    private String[] carType  = { "ALL", "SUV", "MPV", "SEDAN", "CONVERTIBLE", "COUPE", "PICKUP TRUCK", "HATCHBACK", "WAGON", "TOURING", "CRUISER", "SUPERBIKE" };
-    private List<String> brandsList = new ArrayList<>();;
-    private String[] brands;
+    private String[] vehicleType  = { "ALL", "SUV", "MPV", "SEDAN", "CONVERTIBLE", "COUPE", "PICKUP TRUCK", "HATCHBACK", "WAGON", "TOURING", "CRUISER", "SUPERBIKE" };
     private JComboBox<String> transTypeComboBox;
     private JComboBox<String> fuelTypeComboBox;
     private JComboBox<String> availabilityComboBox;
+    String[] transType = { "ALL", "MANUAL", "AUTO" };
+    String[] fuelType = { "ALL", "PETROL", "HYBRID", "ELECTRIC" };
+    String[] availability = { "ALL", "AVAILABLE", "UNAVAILABLE" };
     private JSlider seatSlider;
     private JTextField minPriceField;
     private JTextField maxPriceField;
@@ -599,12 +606,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
         modelsList.add("ALL");
 
         brands = brandsList.toArray(new String[0]);
-        String[] models = modelsList.toArray(new String[0]);
-        String[] transType = { "ALL", "MANUAL", "AUTO" };
-        String[] fuelType = { "ALL", "PETROL", "HYBRID", "ELECTRIC" };
-        String[] availability = { "ALL", "AVAILABLE", "UNAVAILABLE" };
+        models = modelsList.toArray(new String[0]);
 
-        String[] year = new String[76];
+        year = new String[76];
         int newestYear = 2025;
         for (int i = 75; i >= 0; i--) {
             year[i] = Integer.toString(newestYear - i);
@@ -719,7 +723,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         carTypeLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
         carTypeLabel.setForeground(Theme.getForeground());
 
-        carTypeComboBox = new JComboBox<>(carType);
+        carTypeComboBox = new JComboBox<>(vehicleType);
         carTypeComboBox.setForeground(Color.BLACK);
         carTypeComboBox.setFocusable(false);
         carTypeComboBox.addActionListener(this);
@@ -862,9 +866,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
             this.vehicles = new ArrayList<>(VehicleController.processBikes());
             this.sortedVehicles = this.vehicles;
             carTypeLabel.setText("Select A Bike Type: ");
-            carType = new String[] { "ALL", "TOURING", "CRUISER" , "SUPERBIKE" };
+            vehicleType = new String[] { "ALL", "TOURING", "CRUISER" , "SUPERBIKE" };
             carTypeComboBox.removeAllItems();
-            for (String type : carType){
+            for (String type : vehicleType){
                 carTypeComboBox.addItem(type);
             }
         }
@@ -872,9 +876,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
             this.vehicles = new ArrayList<>(VehicleController.processCars());
             this.sortedVehicles = this.vehicles;
             carTypeLabel.setText("Select A Car Type: ");
-            carType = new String[] { "ALL", "SUV", "MPV", "SEDAN", "CONVERTIBLE", "COUPE", "PICKUP TRUCK", "HATCHBACK", "WAGON" };
+            vehicleType = new String[] { "ALL", "SUV", "MPV", "SEDAN", "CONVERTIBLE", "COUPE", "PICKUP TRUCK", "HATCHBACK", "WAGON" };
             carTypeComboBox.removeAllItems();
-            for (String type : carType){
+            for (String type : vehicleType){
                 carTypeComboBox.addItem(type);
             }
         }
@@ -882,9 +886,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
             this.vehicles = new ArrayList<>(VehicleController.processVehicles());
             this.sortedVehicles = this.vehicles;
             carTypeLabel.setText("Select A Car or Bike Type: ");
-            carType = new String[] { "ALL", "SUV", "MPV", "SEDAN", "CONVERTIBLE", "COUPE", "PICKUP TRUCK", "HATCHBACK", "WAGON", "TOURING", "CRUISER", "SUPERBIKE" };
+            vehicleType = new String[] { "ALL", "SUV", "MPV", "SEDAN", "CONVERTIBLE", "COUPE", "PICKUP TRUCK", "HATCHBACK", "WAGON", "TOURING", "CRUISER", "SUPERBIKE" };
             carTypeComboBox.removeAllItems();
-            for (String type : carType){
+            for (String type : vehicleType){
                 carTypeComboBox.addItem(type);
             }
         }
@@ -1253,6 +1257,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
         }
     }
 
+
+    private JScrollPane informationPanel;
     private void showAddCarPopup() {
         // Create the dialog
         JDialog dialog = new JDialog(frame, "Add New Car", true); // true for modal
@@ -1263,6 +1269,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
         JLabel title = new JLabel("Add New Car", JLabel.CENTER);
         title.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
         title.setBackground(Theme.getBackground());
+        title.setForeground(Theme.getForeground());
+        title.setOpaque(true);
         dialog.add(title, BorderLayout.NORTH);
 
         // Add form components
@@ -1270,85 +1278,90 @@ public class VehiclesPage extends JPanel implements ActionListener {
         JPanel formPanel = new JPanel(new GridLayout(1, 2, 1, 1));
         formPanel.setBackground(Theme.getBackground());
 
+        //left side
         JPanel picturePanel = new JPanel(new BorderLayout());
         JLabel carUploadImage = new JLabel("Car Image: ");
         picturePanel.add(carUploadImage);
         picturePanel.add(initImageUploader());
         formPanel.add(picturePanel);
 
-        JScrollPane informationPanel = new JScrollPane();
+        //right side
+        JPanel rightContainer = new JPanel(new GridBagLayout());
+        rightContainer.setPreferredSize(new Dimension(600 ,900));
+
+        informationPanel = new JScrollPane(rightContainer);
+        informationPanel.setBorder(BorderFactory.createEmptyBorder());
+        informationPanel.getVerticalScrollBar().setUnitIncrement(30);
+        informationPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         informationPanel.setBackground(Theme.getBackground());
         informationPanel.getViewport().setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridwidth = rightContainer.getWidth();
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(10, 5, 10, 5);
+
+        rightContainer.setBackground(Theme.getBackground());
+        rightContainer.setBorder(BorderFactory.createEmptyBorder(10, 40, 40, 40));
+
+        rightContainer.setPreferredSize(null);
+        rightContainer.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+        rightContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 3; 
+        rightContainer.add(createBrandInputContainer(),gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        rightContainer.add(createModelInputContainer(),gbc);
+
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1; 
+        rightContainer.add(createYearInputContainer(),gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 3; 
+        rightContainer.add(createPriceInputContainer(),gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.weightx = 1.0;
+        gbc.gridwidth = 1;
+        rightContainer.add(createTransmissionInputContainer(),gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.weightx = 1.0;
+        gbc.gridwidth = 1;
+        rightContainer.add(createFuelTypeInputContainer(),gbc);
+
+        gbc.gridx = 2;
+        gbc.gridy = 3;
+        gbc.weightx = 1.0;
+        gbc.gridwidth = 1;
+        rightContainer.add(createVehicleTypeInputContainer(),gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.weightx = 1.0;
+        gbc.gridwidth = 3;
+        rightContainer.add(createSeatInputContainer(),gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.weightx = 1.0;
+        gbc.gridwidth = 3;
+        rightContainer.add(createInputContainer("Features", 2, true),gbc);
+
         formPanel.add(informationPanel);
-        // gbc.gridy = 0;
-        // gbc.gridx = 1;
-        // gbc.weightx = 2;
-        // gbc.weighty = 1;
-        // gbc.fill = GridBagConstraints.HORIZONTAL;
-        // formPanel.add(new JLabel("Brand:"), gbc);
-
-        // gbc.gridy = 1;
-        // gbc.weighty = 1;
-        // gbc.weightx = 5;
-        // JTextField brandInput = new JTextField();
-        // formPanel.add(brandInput, gbc);
-
-        // gbc.gridy = 2;
-        // gbc.weightx = 2;
-        // gbc.weighty = 1;
-        // gbc.fill = GridBagConstraints.HORIZONTAL;
-        // formPanel.add(new JLabel("Model:"), gbc);
-
-        // gbc.gridy = 3;
-        // gbc.weighty = 1;
-        // gbc.weightx = 5;
-        // JTextField modelInput = new JTextField();
-        // formPanel.add(modelInput, gbc);
-
-        // gbc.gridy = 4;
-        // gbc.weightx = 2;
-        // gbc.weighty = 1;
-        // gbc.fill = GridBagConstraints.HORIZONTAL;
-        // formPanel.add(new JLabel("Year:"), gbc);
-
-        // gbc.gridy = 5;
-        // gbc.weighty = 1;
-        // gbc.weightx = 5;
-        // JComboBox yearInput = new JComboBox<>();
-        // formPanel.add(yearInput, gbc);
-
-        // formPanel.add(new JLabel("Brand:"));
-        // formPanel.add(new JTextField());
-        // formPanel.add(new JLabel("Model:"));
-        // formPanel.add(new JTextField());
-        // formPanel.add(new JLabel("Year:"));
-        // formPanel.add(new JTextField());
-        // formPanel.add(new JLabel("Engine Capacity:"));
-        // formPanel.add(new JTextField());
-        // formPanel.add(new JLabel("Horsepower:"));
-        // formPanel.add(new JTextField());
-        // formPanel.add(new JLabel("Color:"));
-        // formPanel.add(new JTextField());
-        // formPanel.add(new JLabel("Fuel Consumption (mpg):"));
-        // formPanel.add(new JTextField());
-        // formPanel.add(new JLabel("VIN Number:"));
-        // formPanel.add(new JTextField());
-        // formPanel.add(new JLabel("Registration Number:"));
-        // formPanel.add(new JTextField());
-        // formPanel.add(new JLabel("Rental Price Per Day:"));
-        // formPanel.add(new JTextField());
-        // formPanel.add(new JLabel("Transmission:"));
-        // formPanel.add(new JTextField());
-        // formPanel.add(new JLabel("Fuel Type:"));
-        // formPanel.add(new JTextField());
-        // formPanel.add(new JLabel("Car Type:"));
-        // formPanel.add(new JTextField());
-        // formPanel.add(new JLabel("Seating Capacity:"));
-        // formPanel.add(new JTextField());
-        // formPanel.add(new JLabel("Availability:"));
-        // formPanel.add(new JTextField());
-        // formPanel.add(new JLabel("Features:"));
-        // formPanel.add(new JTextField());
 
         dialog.add(formPanel, BorderLayout.CENTER);
 
@@ -1357,6 +1370,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         submitButton.setText("Submit");
         submitButton.setForeground(Theme.getSpecialForeground());
         submitButton.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
+        submitButton.setFocusable(false);
         submitButton.setPreferredSize(new Dimension(1600, 100));
         submitButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -1390,6 +1404,325 @@ public class VehiclesPage extends JPanel implements ActionListener {
         dialog.pack();
         dialog.setLocationRelativeTo(frame); // Center relative to parent frame
         dialog.setVisible(true);
+    }
+
+    private JTextField vinNumberInput, registrationNumberInput,brandInput, modelInput, priceInput, capacityInput, horsepowerInput, mpgInput;
+    private JComboBox<String> yearInput,transmissionInput,fuelTypeInput,vehicleTypeInput;
+    private JSlider seatInput;
+    private JPanel createBrandInputContainer() {
+        JPanel brandInputPanel = new JPanel(new GridBagLayout());
+        brandInputPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = brandInputPanel.getWidth();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        JLabel brandLabel = new JLabel("Brand");
+        brandLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        brandLabel.setForeground(Theme.getForeground());
+
+        brandInput = new JTextField();
+        brandInput.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        brandInput.setPreferredSize(new Dimension(600, 50));
+        brandInput.setMinimumSize(new Dimension(600, 50));
+        brandInput.setForeground(Color.BLACK);
+        brandInput.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(10, 15, 10, 15)));
+
+        brandInputPanel.add(brandLabel, gbc);
+        brandInputPanel.add(brandInput, gbc);
+
+        return brandInputPanel;
+    }
+
+    private JPanel createModelInputContainer() {
+        JPanel modelInputPanel = new JPanel(new GridBagLayout());
+        modelInputPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = modelInputPanel.getWidth();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        JLabel modelLabel = new JLabel("Model");
+        modelLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        modelLabel.setForeground(Theme.getForeground());
+
+        modelInput = new JTextField();
+        modelInput.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        modelInput.setPreferredSize(new Dimension(400, 50));
+        modelInput.setMinimumSize(new Dimension(400, 50));
+        modelInput.setForeground(Color.BLACK);
+        modelInput.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(10, 15, 10, 15)));
+
+        modelInputPanel.add(modelLabel, gbc);
+        modelInputPanel.add(modelInput, gbc);
+
+        return modelInputPanel;
+    }
+
+    private JPanel createYearInputContainer() {
+        JPanel yearInputPanel = new JPanel(new GridBagLayout());
+        yearInputPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = yearInputPanel.getWidth();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        JLabel yearLabel = new JLabel("Year");
+        yearLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        yearLabel.setForeground(Theme.getForeground());
+
+        yearInput = new JComboBox<String>(year);
+        yearInput.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        yearInput.insertItemAt("Select Year", 0);
+        yearInput.setPreferredSize(new Dimension(200, 50));
+        yearInput.setMinimumSize(new Dimension(200, 50));
+        yearInput.setForeground(Color.BLACK);
+        yearInput.setBorder(new LineBorder(Color.BLACK, 2));
+
+        yearInputPanel.add(yearLabel, gbc);
+        yearInputPanel.add(yearInput, gbc);
+
+        return yearInputPanel;
+    }
+
+    private JPanel createPriceInputContainer() {
+        JPanel priceInputPanel = new JPanel(new GridBagLayout());
+        priceInputPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = priceInputPanel.getWidth();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        JLabel priceLabel = new JLabel("Price");
+        priceLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        priceLabel.setForeground(Theme.getForeground());
+
+        priceInput = new JTextField();
+        priceInput.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        priceInput.setPreferredSize(new Dimension(600, 50));
+        priceInput.setMinimumSize(new Dimension(600, 50));
+        priceInput.setForeground(Color.BLACK);
+        priceInput.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(10, 15, 10, 15)));
+
+        priceInputPanel.add(priceLabel, gbc);
+        priceInputPanel.add(priceInput, gbc);
+
+        return priceInputPanel;
+    }
+
+    private JPanel createTransmissionInputContainer() {
+        JPanel transmissionInputPanel = new JPanel(new GridBagLayout());
+        transmissionInputPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = transmissionInputPanel.getWidth();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        JLabel transmissionLabel = new JLabel("Transmission");
+        transmissionLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        transmissionLabel.setForeground(Theme.getForeground());
+
+        transmissionInput = new JComboBox<String>(transType);
+        transmissionInput.removeItem("ALL");
+        transmissionInput.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        transmissionInput.insertItemAt("Select Transmission", 0);
+        transmissionInput.setPreferredSize(new Dimension(200, 50));
+        transmissionInput.setMinimumSize(new Dimension(200, 50));
+        transmissionInput.setForeground(Color.BLACK);
+        transmissionInput.setBorder(new LineBorder(Color.BLACK, 2));
+        transmissionInput.setSelectedIndex(0);
+
+        transmissionInputPanel.add(transmissionLabel, gbc);
+        transmissionInputPanel.add(transmissionInput, gbc);
+
+        return transmissionInputPanel;
+    }
+
+    private JPanel createFuelTypeInputContainer() {
+        JPanel fuelTypeInputPanel = new JPanel(new GridBagLayout());
+        fuelTypeInputPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = fuelTypeInputPanel.getWidth();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        JLabel fuelTypeLabel = new JLabel("Fuel Type");
+        fuelTypeLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        fuelTypeLabel.setForeground(Theme.getForeground());
+
+        fuelTypeInput = new JComboBox<String>(fuelType);
+        fuelTypeInput.removeItem("ALL");
+        fuelTypeInput.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        fuelTypeInput.insertItemAt("Select Fuel Type", 0);
+        fuelTypeInput.setPreferredSize(new Dimension(200, 50));
+        fuelTypeInput.setMinimumSize(new Dimension(200, 50));
+        fuelTypeInput.setForeground(Color.BLACK);
+        fuelTypeInput.setBorder(new LineBorder(Color.BLACK, 2));
+        fuelTypeInput.setSelectedIndex(0);
+
+        fuelTypeInputPanel.add(fuelTypeLabel, gbc);
+        fuelTypeInputPanel.add(fuelTypeInput, gbc);
+
+        return fuelTypeInputPanel;
+    }
+
+    private JPanel createVehicleTypeInputContainer() {
+        JPanel vehicleTypeInputPanel = new JPanel(new GridBagLayout());
+        vehicleTypeInputPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = vehicleTypeInputPanel.getWidth();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        JLabel vehicleTypeLabel = new JLabel("Vehicle Type");
+        vehicleTypeLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        vehicleTypeLabel.setForeground(Theme.getForeground());
+
+        vehicleTypeInput = new JComboBox<String>(vehicleType);
+        vehicleTypeInput.removeItem("ALL");
+        vehicleTypeInput.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        vehicleTypeInput.insertItemAt("Select Vehicle Type", 0);
+        vehicleTypeInput.setPreferredSize(new Dimension(200, 50));
+        vehicleTypeInput.setMinimumSize(new Dimension(200, 50));
+        vehicleTypeInput.setForeground(Color.BLACK);
+        vehicleTypeInput.setBorder(new LineBorder(Color.BLACK, 2));
+        vehicleTypeInput.setSelectedIndex(0);
+
+        vehicleTypeInputPanel.add(vehicleTypeLabel, gbc);
+        vehicleTypeInputPanel.add(vehicleTypeInput, gbc);
+
+        return vehicleTypeInputPanel;
+    }
+
+    private JPanel createSeatInputContainer() {
+        JPanel seatInputPanel = new JPanel(new GridBagLayout());
+        seatInputPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = seatInputPanel.getWidth();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        JLabel seatLabel = new JLabel("Seating Capacity");
+        seatLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        seatLabel.setForeground(Theme.getForeground());
+
+        seatInput = new JSlider(1,7,1);
+        seatInput.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        seatInput.setPreferredSize(new Dimension(600, 100));
+        seatInput.setMinimumSize(new Dimension(600, 100));
+        seatInput.setForeground(Theme.getForeground());
+        seatInput.setBackground(Theme.getBackground());
+        seatInput.setMajorTickSpacing(1);
+        seatInput.setPaintTicks(true);
+        seatInput.setPaintLabels(true);
+        seatInput.setFocusable(false);
+
+        seatInputPanel.add(seatLabel, gbc);
+        seatInputPanel.add(seatInput, gbc);
+
+        return seatInputPanel;
+    }
+
+    // create input container (from AuthenticationPage / RentalPage)
+    protected JPanel createInputContainer(String title, int initialRows, boolean scrollable) {
+        JPanel inputPanel = new JPanel(new GridBagLayout());
+        inputPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = inputPanel.getWidth();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 0, 5, 0);
+
+        // input title label
+        JLabel titleLabel = new JLabel(title);
+        titleLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        titleLabel.setForeground(Theme.getForeground());
+        inputPanel.add(titleLabel, gbc);
+
+        gbc.gridy++;
+
+        // input text field
+        JTextField inputLineField = new JTextField();
+        inputLineField.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        inputLineField.setPreferredSize(new Dimension(600, 50));
+        inputLineField.setMinimumSize(new Dimension(600, 50));
+        inputLineField.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+        inputLineField.setBorder(new CompoundBorder(BORDER, PADDING));
+
+        // input text area
+        JTextArea inputField = new JTextArea(initialRows, 20);
+        inputField.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        inputField.setForeground(Color.BLACK);
+        inputField.setLineWrap(true);
+        inputField.setWrapStyleWord(true);
+        inputField.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+
+        JComponent inputComponent;
+        if (scrollable) {
+            // create scroll pane for text area
+            JScrollPane scrollPane = new JScrollPane(inputField);
+            scrollPane.setBorder(new LineBorder(Color.BLACK, 2));
+            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+            // calculate height
+            int rowHeight = inputField.getFontMetrics(inputField.getFont()).getHeight();
+            int borderHeight = 4;
+            int paddingHeight = 20;
+
+            int fixedHeight = (initialRows * rowHeight) + borderHeight + paddingHeight;
+            scrollPane.setPreferredSize(new Dimension(0, fixedHeight));
+
+            // mouse wheel scroll listen
+            scrollPane.addMouseWheelListener(new MouseWheelListener() {
+                @Override
+                public void mouseWheelMoved(MouseWheelEvent e) {
+                    // dispatch the event to the main scroll pane
+                    informationPanel.dispatchEvent(e);
+                }
+            });
+
+            // enable vertical scroll bar on focus, lose focus to hide
+            inputField.addFocusListener(new FocusListener() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+                }
+            });
+
+            inputComponent = scrollPane;
+        } else {
+            // use text field for single line input
+            inputComponent = inputLineField;
+        }
+
+        inputPanel.add(inputComponent, gbc);
+        return inputPanel;
     }
 
     private JLabel imageLabel;
@@ -1443,8 +1776,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             selectedImageFile = fileChooser.getSelectedFile();
 
             try {
-                BufferedImage img = ImageIO.read(selectedImageFile);
-                if (img.getWidth() == 900 && img.getHeight() == 900) {
+                //if (img.getWidth() == 900 && img.getHeight() == 900) {
                     // Create target directory if needed
                     new File(IMAGE_DIR).mkdirs();
 
@@ -1461,11 +1793,11 @@ public class VehiclesPage extends JPanel implements ActionListener {
                     imageLabel.setIcon(icon);
                     imageLabel.setText("");
                     removeButton.setEnabled(true);
-                } else {
+                /* } else {
                     JOptionPane.showMessageDialog(this,
                             "Image must be 900×900 pixels!",
                             "Invalid Size", JOptionPane.ERROR_MESSAGE);
-                }
+                }*/
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this,
                         "Error loading image",

@@ -145,7 +145,7 @@ public class VehiclesPageDetails extends JPanel {
         ImageIcon[] detailsIcons = new ImageIcon[8];
         ImageIcon transmissionIcon = new ImageIcon("images/vehiclepageicons/manual-transmission.png");
         ImageIcon fuelIcon = new ImageIcon("images/vehiclepageicons/gas-station.png");
-        ImageIcon seatsIcon = new ImageIcon("images/vehiclepageicons/vehicle-seat.png");
+        ImageIcon seatsIcon = new ImageIcon("images/vehiclepageicons/car-seat.png");
         ImageIcon carTypeIcon = new ImageIcon("images/vehiclepageicons/chassis.png");
         ImageIcon capacityIcon = new ImageIcon("images/vehiclepageicons/engine.png");
         ImageIcon mpgIcon = new ImageIcon("images/vehiclepageicons/fuel-gauge.png");
