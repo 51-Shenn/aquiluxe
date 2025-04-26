@@ -15,9 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.border.LineBorder;
 
@@ -92,13 +90,6 @@ public class GUIComponents extends JPanel {
     }
 
     public static void loadVehiclesPageAsync(JFrame frame, JPanel contentPanel) {
-        vehiclesPageLoaded = true;
-
-        // vehiclesPanel = new VehiclesPage(frame, contentPanel);
-        // vehiclesPanel.setBorder(new LineBorder(Color.MAGENTA, 3));
-        // cardPanel.add(vehiclesPanel, "VehiclesPage");
-        // cardLayout.show(cardPanel, "VehiclesPage");
-
         new SwingWorker<List<Vehicle>, Void>() {
             private List<Vehicle> vehicles;
 
@@ -116,7 +107,6 @@ public class GUIComponents extends JPanel {
                 try {
                     get();
 
-                    vehiclesPageLoaded = true;
                     System.out.println("Loading vehicles: " + vehicles.size() + " vehicles loaded.");
 
                     // SwingUtilities.invokeLater(() -> {
@@ -322,12 +312,12 @@ public class GUIComponents extends JPanel {
         });
 
         topBarButtons[1].addActionListener(e -> {
+            // if (!vehiclesPageLoaded) {
+            // JOptionPane.showMessageDialog(frame, "Vehicles are still loading, please
+            // wait...");
+            // return;
+            // }
             pageIndicator(1);
-            if (!vehiclesPageLoaded) {
-                JOptionPane.showMessageDialog(frame, "Vehicles are still loading, please wait...");
-                loadVehiclesPageAsync(frame, panel);
-                return;
-            }
             showPage("VehiclesPage");
         });
 

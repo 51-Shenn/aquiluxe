@@ -243,7 +243,7 @@ public class RentalPage extends JPanel {
     // rental page right container
     private JPanel createRightContainer() {
         // create container for inputs
-        RoundedPanel rightContainer = new RoundedPanel(30, Theme.getBackground());
+        RoundedPanel rightContainer = new RoundedPanel(30, Theme.getSpecial());
 
         rightContainer.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

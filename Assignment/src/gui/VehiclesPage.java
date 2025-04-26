@@ -36,8 +36,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
         SEATS = new ImageIcon("images/vehiclepageicons/car-seat.png");
     }
 
-    private static final ImageIcon PLACEHOLDER_IMAGE = new ImageIcon(
-            new BufferedImage(400, 400, BufferedImage.TYPE_INT_RGB));
+    private static ImageIcon image = new ImageIcon("images/cars/Vellfire.jpg");
+    private static Image rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
+    private static final ImageIcon PLACEHOLDER_IMAGE = new ImageIcon(rImage);
 
     private final JFrame frame;
     private final JPanel panel;
@@ -61,53 +62,78 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
         vehicleCards = new JPanel(new GridLayout(0, 3, 50, 30));
         vehicleCards.setBackground(Theme.getBackground());
-
-        HashMap<String, ImageIcon> imageMap = ImageLoader.getImageCache();
+        // HashMap<String, ImageIcon> imageMap = ImageLoader.getImageCache();
 
         for (Vehicle v : vehicles) {
-            ImageIcon image = new ImageIcon("images/cars/Vellfire.jpg");
-            Image rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
-            image = new ImageIcon(rImage); // fallback image
+            image = PLACEHOLDER_IMAGE;
+
             try {
-                // check if the image is already in the cache
-                image = imageMap.get(v.getImagePath());
+                String availability = v.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
+                String rentPrice = "RM" + v.getRentalPriceDay() + "/per day";
 
-                if (image == null) {
-                    System.err.println("Error loading vehicle image for vehicle: " + v.getBrand() + " " + v.getModel() +
-                            " | Path: " + v.getImagePath() + " | Error: image is null");
-                    image = new ImageIcon("images/cars/Vellfire.jpg");
-                    rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
-                    image = new ImageIcon(rImage); // fallback image
-                }
-
-                // error checking if image is null or failed to load
-                if (image.getIconWidth() == -1) {
-                    System.err.println("Error loading vehicle image for vehicle: " + v.getBrand() + " " + v.getModel() +
-                            " | Path: " + v.getImagePath() + " | Error: image failed to load");
-                    image = new ImageIcon("images/cars/Vellfire.jpg");
-                    rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
-                    image = new ImageIcon(rImage); // fallback image
-                    throw new Exception("Image failed to load for path: " + v.getImagePath());
-                }
-
+                vehicleCards
+                        .add(createCarCard(v, image, v.getBrand(), v.getModel(), v.getTransmission(),
+                                v.getFuelType(),
+                                v.getVehicleType(),
+                                v.getSeatingCapacity(), rentPrice, availability, frame, panel));
             } catch (Exception e) {
                 System.err.println("Error loading vehicle image for vehicle: " + v.getBrand() + " " + v.getModel() +
                         " | Path: " + v.getImagePath() + " | Error: " + e.getMessage());
-                image = new ImageIcon("images/cars/Vellfire.jpg");
-                rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
-                image = new ImageIcon(rImage); // fallback image
             }
 
-            String availability = v.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
-            String rentPrice = "RM" + v.getRentalPriceDay() + "/per day";
+            // Start loading the real image in the background
+            new SwingWorker<ImageIcon, Void>() {
+                @Override
+                protected ImageIcon doInBackground() {
+                    try {
+                        try {
 
-            vehicleCards.add(createCarCard(v, image, v.getBrand(), v.getModel(), v.getTransmission(), v.getFuelType(),
-                    v.getVehicleType(),
-                    v.getSeatingCapacity(), rentPrice, availability, frame, panel));
+                            // check if the image is already in the cache
+                            // image = imageMap.get(v.getImagePath());
+
+                            if (image == null) {
+                                System.err.println("Error loading vehicle image for vehicle: " + v.getBrand() + " "
+                                        + v.getModel() +
+                                        " | Path: " + v.getImagePath() + " | Error: image is null");
+                                image = PLACEHOLDER_IMAGE;
+                            }
+
+                            // error checking if image is null or failed to load
+                            if (image.getIconWidth() == -1) {
+                                System.err.println("Error loading vehicle image for vehicle: " + v.getBrand() + " "
+                                        + v.getModel() +
+                                        " | Path: " + v.getImagePath() + " | Error: image failed to load");
+                                image = PLACEHOLDER_IMAGE;
+                                throw new Exception("Image failed to load for path: " + v.getImagePath());
+                            }
+                        } catch (Exception e) {
+                            System.err.println(
+                                    "Error loading vehicle image for vehicle: " + v.getBrand() + " " + v.getModel() +
+                                            " | Path: " + v.getImagePath() + " | Error: " + e.getMessage());
+                            image = PLACEHOLDER_IMAGE;
+                        }
+
+                    } catch (Exception e) {
+                        System.err.println(
+                                "Error loading image for " + v.getBrand() + " " + v.getModel() + ": " + e.getMessage());
+                        return image = PLACEHOLDER_IMAGE;
+                    }
+                    return image;
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        // ImageIcon loadedImage = get();
+
+                    } catch (Exception e) {
+                        // Ignore, already logged
+                    }
+                }
+            }.execute();
         }
-
+        System.out.println("CREATE vehicles cards DONE");
         return vehicleCards;
-
     }
 
     public static JPanel createCarCard(Vehicle vehicle, ImageIcon image, String brand, String model,
@@ -232,6 +258,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
         // container for picture at the top
         JLabel carPicture = new JLabel(image);
+        carPicture.putClientProperty("imagePath", vehicle.getImagePath());
         carPicture.setPreferredSize(new Dimension(225, 225));
 
         JPanel carPicturePanel = new JPanel(new BorderLayout());
@@ -955,6 +982,34 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 seatSlider.getValue(),
                 minPriceField.getText(),
                 maxPriceField.getText()));
+    }
+
+    public void refreshCardImages() {
+        System.out.println("Refreshing vehicle cards");
+        HashMap<String, ImageIcon> imageMap = ImageLoader.getImageCache();
+        for (Component comp : vehicleCards.getComponents()) {
+            if (comp instanceof JPanel cardPanel) {
+                // Find the Vehicle object for this card (you may need to store it as a client
+                // property or in a map)
+                // For this example, let's assume you store the image path as a client property:
+                JLabel carPicture = null;
+                for (Component sub : cardPanel.getComponents()) {
+                    if (sub instanceof JLabel label && label.getIcon() != null) {
+                        carPicture = label;
+                        break;
+                    }
+                }
+                if (carPicture != null) {
+                    // Suppose you stored the image path as a client property:
+                    String imagePath = (String) carPicture.getClientProperty("imagePath");
+                    if (imagePath != null && imageMap.containsKey(imagePath)) {
+                        carPicture.setIcon(imageMap.get(imagePath));
+                    }
+                }
+            }
+        }
+        vehicleCards.revalidate();
+        vehicleCards.repaint();
     }
 
     public void refreshCards(List<Vehicle> filteredvehicles) {
