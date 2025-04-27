@@ -23,8 +23,7 @@ public class ContactUsPage extends JPanel {
     private JPanel panel;
 
     ContactUsPage() {
-        this.frame = new JFrame();
-        this.panel = new JPanel();
+        this(new JFrame(), new JPanel());
     }
 
     ContactUsPage(JFrame frame, JPanel panel) {

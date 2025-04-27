@@ -24,9 +24,7 @@ public class HomePage extends JPanel {
     private final File ACCOUNTS_FILE = new File("files/settings/accounts.txt");
 
     HomePage() {
-        this.frame = new JFrame();
-        this.panel = new JPanel();
-        this.user = new User();
+        this(new JFrame(), new JPanel(), new User());
     }
 
     HomePage(JFrame frame, JPanel panel, User user, GUIComponents guiComponents) {

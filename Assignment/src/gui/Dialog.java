@@ -22,7 +22,7 @@ public class Dialog extends JDialog {
     private static JDialog adminDialog;
 
     public Dialog() {
-        this.frame = new JFrame();
+        this(new JFrame());
     }
 
     public Dialog(JFrame frame) {

@@ -54,11 +54,7 @@ public class OverflowMenu extends JLayeredPane {
     private static String position;
 
     public OverflowMenu() {
-        this.frame = new JFrame();
-        this.panel = new JPanel();
-        this.user = new User();
-        this.MENU_WIDTH = 0;
-        this.MENU_HEIGHT = 0;
+        this(new JFrame(), new JPanel(), new User());
     }
 
     public OverflowMenu(JFrame frame, JPanel panel, User user) {

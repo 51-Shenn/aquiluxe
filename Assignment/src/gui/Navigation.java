@@ -50,6 +50,7 @@ public class Navigation {
     // use this if already inside the lambda
     public void homePageNavigation(JFrame frame, JPanel panel, User user) {
         frame.getContentPane().removeAll();
+        panel.removeAll();
         frame.setLayout(new BorderLayout());
         GUIComponents.overflowMenu = null;
         GUIComponents newGuiComponents = new GUIComponents(frame, panel, user);

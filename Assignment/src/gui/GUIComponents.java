@@ -30,8 +30,7 @@ public class GUIComponents extends JPanel {
     public static JPanel cardPanel;
 
     public GUIComponents() {
-        this.frame = new JFrame();
-        this.panel = new JPanel();
+        this(new JFrame(), new JPanel(), new User());
     }
 
     public GUIComponents(JFrame frame, JPanel panel, User user) {
