@@ -1300,53 +1300,78 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.gridwidth = 2; 
+        rightContainer.add(createVinNumberInputContainer(),gbc);
+
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1; 
+        rightContainer.add(createRegistrationNumberInputContainer(),gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         gbc.gridwidth = 3; 
         rightContainer.add(createBrandInputContainer(),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.gridwidth = 2;
         rightContainer.add(createModelInputContainer(),gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.gridwidth = 1; 
         rightContainer.add(createYearInputContainer(),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 3; 
+        gbc.gridy = 3;
+        gbc.gridwidth = 2; 
         rightContainer.add(createPriceInputContainer(),gbc);
 
-        gbc.gridx = 0;
+        gbc.gridx = 2;
         gbc.gridy = 3;
-        gbc.weightx = 1.0;
+        gbc.gridwidth = 1; 
+        rightContainer.add(createColorInputContainer(),gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        rightContainer.add(createCapacityInputContainer(),gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        rightContainer.add(createHorsepowerInputContainer(),gbc);
+
+        gbc.gridx = 2;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        rightContainer.add(createMpgInputContainer(),gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 5;
         gbc.gridwidth = 1;
         rightContainer.add(createTransmissionInputContainer(),gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 3;
-        gbc.weightx = 1.0;
+        gbc.gridy = 5;
         gbc.gridwidth = 1;
         rightContainer.add(createFuelTypeInputContainer(),gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 3;
-        gbc.weightx = 1.0;
+        gbc.gridy = 5;
         gbc.gridwidth = 1;
         rightContainer.add(createVehicleTypeInputContainer(),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.weightx = 1.0;
+        gbc.gridy = 6;
         gbc.gridwidth = 3;
         rightContainer.add(createSeatInputContainer(),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 5;
-        gbc.weightx = 1.0;
+        gbc.gridy = 7;
         gbc.gridwidth = 3;
-        rightContainer.add(createInputContainer("Features", 2, true),gbc);
+        rightContainer.add(createInputContainer("Features", 3),gbc);
 
         formPanel.add(informationPanel);
 
@@ -1396,6 +1421,65 @@ public class VehiclesPage extends JPanel implements ActionListener {
     private JTextField vinNumberInput, registrationNumberInput,brandInput, modelInput, priceInput, capacityInput, horsepowerInput, mpgInput;
     private JComboBox<String> yearInput,transmissionInput,fuelTypeInput,vehicleTypeInput;
     private JSlider seatInput;
+    private JComponent inputComponent;
+    private RoundedButton colorInput;
+
+    private JPanel createVinNumberInputContainer() {
+        JPanel vinNumberInputPanel = new JPanel(new GridBagLayout());
+        vinNumberInputPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = vinNumberInputPanel.getWidth();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        JLabel vinNumberLabel = new JLabel("VIN Number");
+        vinNumberLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        vinNumberLabel.setForeground(Theme.getForeground());
+
+        vinNumberInput = new JTextField();
+        vinNumberInput.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        vinNumberInput.setPreferredSize(new Dimension(400, 50));
+        vinNumberInput.setMinimumSize(new Dimension(400, 50));
+        vinNumberInput.setForeground(Color.BLACK);
+        vinNumberInput.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(10, 15, 10, 15)));
+
+        vinNumberInputPanel.add(vinNumberLabel, gbc);
+        vinNumberInputPanel.add(vinNumberInput, gbc);
+
+        return vinNumberInputPanel;
+    }
+
+    private JPanel createRegistrationNumberInputContainer() {
+        JPanel registrationNumberInputPanel = new JPanel(new GridBagLayout());
+        registrationNumberInputPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = registrationNumberInputPanel.getWidth();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        JLabel registrationNumberLabel = new JLabel("Registration Number");
+        registrationNumberLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        registrationNumberLabel.setForeground(Theme.getForeground());
+
+        registrationNumberInput = new JTextField();
+        registrationNumberInput.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        registrationNumberInput.setPreferredSize(new Dimension(200, 50));
+        registrationNumberInput.setMinimumSize(new Dimension(200, 50));
+        registrationNumberInput.setForeground(Color.BLACK);
+        registrationNumberInput.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(10, 15, 10, 15)));
+
+        registrationNumberInputPanel.add(registrationNumberLabel, gbc);
+        registrationNumberInputPanel.add(registrationNumberInput, gbc);
+
+        return registrationNumberInputPanel;
+    }
+
     private JPanel createBrandInputContainer() {
         JPanel brandInputPanel = new JPanel(new GridBagLayout());
         brandInputPanel.setBackground(Theme.getBackground());
@@ -1495,8 +1579,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
         priceInput = new JTextField();
         priceInput.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
-        priceInput.setPreferredSize(new Dimension(600, 50));
-        priceInput.setMinimumSize(new Dimension(600, 50));
+        priceInput.setPreferredSize(new Dimension(400, 50));
+        priceInput.setMinimumSize(new Dimension(400, 50));
         priceInput.setForeground(Color.BLACK);
         priceInput.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(10, 15, 10, 15)));
 
@@ -1504,6 +1588,45 @@ public class VehiclesPage extends JPanel implements ActionListener {
         priceInputPanel.add(priceInput, gbc);
 
         return priceInputPanel;
+    }
+
+    private JPanel createColorInputContainer() {
+        JPanel colorInputPanel = new JPanel(new GridBagLayout());
+        colorInputPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = colorInputPanel.getWidth();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        JLabel colorLabel = new JLabel("Color");
+        colorLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        colorLabel.setForeground(Theme.getForeground());
+
+        colorInput = new RoundedButton(10,Color.WHITE);
+        colorInput.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        colorInput.setPreferredSize(new Dimension(200, 50));
+        colorInput.setMinimumSize(new Dimension(200, 50));
+        colorInput.setForeground(Color.BLACK);
+        colorInput.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(10, 15, 10, 15)));
+        colorInput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Open color picker
+                if (e.getSource() == colorInput) {
+
+                    Color selectedColor = JColorChooser.showDialog(null, "Choose A Color", Color.BLACK);
+                    colorInput.setBackground(selectedColor);
+                }
+            }
+        });
+
+        colorInputPanel.add(colorLabel, gbc);
+        colorInputPanel.add(colorInput, gbc);
+
+        return colorInputPanel;
     }
 
     private JPanel createTransmissionInputContainer() {
@@ -1596,6 +1719,87 @@ public class VehiclesPage extends JPanel implements ActionListener {
         return vehicleTypeInputPanel;
     }
 
+    private JPanel createCapacityInputContainer() {
+        JPanel capacityInputPanel = new JPanel(new GridBagLayout());
+        capacityInputPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = capacityInputPanel.getWidth();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        JLabel capacityLabel = new JLabel("Capacity");
+        capacityLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        capacityLabel.setForeground(Theme.getForeground());
+
+        capacityInput = new JTextField();
+        capacityInput.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        capacityInput.setPreferredSize(new Dimension(200, 50));
+        capacityInput.setMinimumSize(new Dimension(200, 50));
+        capacityInput.setForeground(Color.BLACK);
+        capacityInput.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(10, 15, 10, 15)));
+
+        capacityInputPanel.add(capacityLabel, gbc);
+        capacityInputPanel.add(capacityInput, gbc);
+
+        return capacityInputPanel;
+    }
+
+    private JPanel createHorsepowerInputContainer() {
+        JPanel horsepowerInputPanel = new JPanel(new GridBagLayout());
+        horsepowerInputPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = horsepowerInputPanel.getWidth();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        JLabel horsepowerLabel = new JLabel("Horsepower");
+        horsepowerLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        horsepowerLabel.setForeground(Theme.getForeground());
+
+        horsepowerInput = new JTextField();
+        horsepowerInput.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        horsepowerInput.setPreferredSize(new Dimension(200, 50));
+        horsepowerInput.setMinimumSize(new Dimension(200, 50));
+        horsepowerInput.setForeground(Color.BLACK);
+        horsepowerInput.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(10, 15, 10, 15)));
+
+        horsepowerInputPanel.add(horsepowerLabel, gbc);
+        horsepowerInputPanel.add(horsepowerInput, gbc);
+
+        return horsepowerInputPanel;
+    }
+
+    private JPanel createMpgInputContainer() {
+        JPanel mpgInputPanel = new JPanel(new GridBagLayout());
+        mpgInputPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = mpgInputPanel.getWidth();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        JLabel mpgLabel = new JLabel("Mpg");
+        mpgLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        mpgLabel.setForeground(Theme.getForeground());
+
+        mpgInput = new JTextField();
+        mpgInput.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        mpgInput.setPreferredSize(new Dimension(200, 50));
+        mpgInput.setMinimumSize(new Dimension(200, 50));
+        mpgInput.setForeground(Color.BLACK);
+        mpgInput.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(10, 15, 10, 15)));
+
+        mpgInputPanel.add(mpgLabel, gbc);
+        mpgInputPanel.add(mpgInput, gbc);
+
+        return mpgInputPanel;
+    }
+
     private JPanel createSeatInputContainer() {
         JPanel seatInputPanel = new JPanel(new GridBagLayout());
         seatInputPanel.setBackground(Theme.getBackground());
@@ -1628,7 +1832,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
     }
 
     // create input container (from AuthenticationPage / RentalPage)
-    protected JPanel createInputContainer(String title, int initialRows, boolean scrollable) {
+    protected JPanel createInputContainer(String title, int initialRows) {
         JPanel inputPanel = new JPanel(new GridBagLayout());
         inputPanel.setBackground(Theme.getBackground());
 
@@ -1648,14 +1852,6 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
         gbc.gridy++;
 
-        // input text field
-        JTextField inputLineField = new JTextField();
-        inputLineField.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
-        inputLineField.setPreferredSize(new Dimension(600, 50));
-        inputLineField.setMinimumSize(new Dimension(600, 50));
-        inputLineField.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
-        inputLineField.setBorder(new CompoundBorder(BORDER, PADDING));
-
         // input text area
         JTextArea inputField = new JTextArea(initialRows, 20);
         inputField.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
@@ -1664,49 +1860,43 @@ public class VehiclesPage extends JPanel implements ActionListener {
         inputField.setWrapStyleWord(true);
         inputField.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
 
-        JComponent inputComponent;
-        if (scrollable) {
-            // create scroll pane for text area
-            JScrollPane scrollPane = new JScrollPane(inputField);
-            scrollPane.setBorder(new LineBorder(Color.BLACK, 2));
-            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        // create scroll pane for text area
+        JScrollPane scrollPane = new JScrollPane(inputField);
+        scrollPane.setBorder(new LineBorder(Color.BLACK, 2));
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-            // calculate height
-            int rowHeight = inputField.getFontMetrics(inputField.getFont()).getHeight();
-            int borderHeight = 4;
-            int paddingHeight = 20;
+        // calculate height
+        int rowHeight = inputField.getFontMetrics(inputField.getFont()).getHeight();
+        int borderHeight = 4;
+        int paddingHeight = 20;
 
-            int fixedHeight = (initialRows * rowHeight) + borderHeight + paddingHeight;
-            scrollPane.setPreferredSize(new Dimension(0, fixedHeight));
+        int fixedHeight = (initialRows * rowHeight) + borderHeight + paddingHeight;
+        scrollPane.setPreferredSize(new Dimension(0, fixedHeight));
 
-            // mouse wheel scroll listen
-            scrollPane.addMouseWheelListener(new MouseWheelListener() {
-                @Override
-                public void mouseWheelMoved(MouseWheelEvent e) {
-                    // dispatch the event to the main scroll pane
-                    informationPanel.dispatchEvent(e);
-                }
-            });
+        // mouse wheel scroll listen
+        scrollPane.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                // dispatch the event to the main scroll pane
+                informationPanel.dispatchEvent(e);
+            }
+        });
 
-            // enable vertical scroll bar on focus, lose focus to hide
-            inputField.addFocusListener(new FocusListener() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-                }
+        // enable vertical scroll bar on focus, lose focus to hide
+        inputField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+            }
 
-                @Override
-                public void focusLost(FocusEvent e) {
-                    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-                }
-            });
+            @Override
+            public void focusLost(FocusEvent e) {
+                scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+            }
+        });
+        inputComponent = scrollPane;
 
-            inputComponent = scrollPane;
-        } else {
-            // use text field for single line input
-            inputComponent = inputLineField;
-        }
 
         inputPanel.add(inputComponent, gbc);
         return inputPanel;
@@ -1715,7 +1905,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
     private JLabel imageLabel;
     private JButton selectButton, removeButton;
     private File selectedImageFile;
-    private final String IMAGE_DIR = "images/vehicles/";
+    private final String IMAGE_DIR = "images/cars/";
 
     // In your form initialization method:
     private JPanel initImageUploader() {
