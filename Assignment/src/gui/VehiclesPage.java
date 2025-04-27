@@ -12,6 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -33,6 +35,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
         this.frame = frame;
         this.panel = panel;
+        this.vehicles = Vehicle.getVehicles();
         //probrably will change later for loader by using vehicle.getvehicles() and maybe car.getcars() and bike.getbikes()?
         this.vehicles = VehicleController.processVehicles();
         this.sortedVehicles = this.vehicles;
@@ -50,11 +53,15 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
         for (Vehicle v : vehicles) {
             ImageIcon image = null;
+            HashMap<String, ImageIcon> imageMap = ImageLoader.getImageCache();
             try {
-                image = new ImageIcon(v.getImagePath());
+                for (ImageIcon imageicon : imageMap.values()) {
+                    image = imageicon;
+                    break;
+                }
 
                 // Check if any image failed to load
-                if (image.getIconWidth() == -1) {
+                if (image == null || image.getIconWidth() == -1) {
                     throw new Exception("One or more images failed to load.");
                 }
 
@@ -75,7 +82,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
         return vehicleCards;
     }
 
-    public static JPanel createCarCard(Vehicle vehicle, ImageIcon image, String brand, String model, String transmission,
+    public static JPanel createCarCard(Vehicle vehicle, ImageIcon image, String brand, String model,
+            String transmission,
             String fuelType,
             String vehicleType, int seats, String price, String availability, JFrame frame, JPanel panel) {
 
@@ -123,7 +131,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
             @Override
             public void mouseReleased(MouseEvent evt) {
                 carRent.setBackground(Theme.getSpecial());
-                // pass selected car to rental controller
+                JPanel rentalPanel = new RentalPage(frame, panel, vehicle);
+                GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
+                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
             }
         });
 
@@ -472,7 +482,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
         searchBar.setText("Search for vehicles");
         searchBar.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(20f));
         searchBar.setForeground(Theme.getSecondaryForeground());
-        searchBar.setBorder(new CompoundBorder(new LineBorder(Theme.getForeground(), 1), new EmptyBorder(10, 15, 10, 5)));
+        searchBar.setBorder(
+                new CompoundBorder(new LineBorder(Theme.getForeground(), 1), new EmptyBorder(10, 15, 10, 5)));
         searchBar.setBounds(600, 25, 600, 50);
         searchBar.addFocusListener(new FocusListener() {
             @Override
@@ -587,7 +598,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         // when user pick a brand filter model will update and only show few models
         // follow the brand same as cartype
         brandsList.add("ALL");
-        brandsList.addAll(VehicleController.processAllBrands());
+        brandsList.addAll(VehicleController.passAllBrands(vehicles));
 
         List<String> modelsList = new ArrayList<>();
         modelsList.add("ALL");
@@ -882,12 +893,10 @@ public class VehiclesPage extends JPanel implements ActionListener {
         if (e.getSource() == sortComboBox) {
             handleSorting();
             applyFilters();
-        }
-        else if (e.getSource() == brandComboBox) {
+        } else if (e.getSource() == brandComboBox) {
             handleBrandChange();
             applyFilters();
-        }
-        else if (e.getSource() == modelComboBox || 
+        } else if (e.getSource() == modelComboBox ||
                 e.getSource() == yearComboBox ||
                 e.getSource() == carTypeComboBox ||
                 e.getSource() == transTypeComboBox ||
@@ -917,22 +926,24 @@ public class VehiclesPage extends JPanel implements ActionListener {
         if (brandComboBox.getSelectedIndex() != 0) {
             List<String> modelsList = new ArrayList<>();
             modelsList.add("ALL");
+            modelsList.addAll(
+                    VehicleController.passAllModelsByBrand(vehicles, brandComboBox.getSelectedItem().toString()));
             modelsList.addAll(VehicleController.processAllModelsByBrand(brandComboBox.getSelectedItem().toString()));
             String[] models = modelsList.toArray(new String[0]);
-            
+
             // Store current selection if any
-            String previouslySelectedModel = modelComboBox.isEnabled() ? 
-                (String) modelComboBox.getSelectedItem() : null;
-            
+            String previouslySelectedModel = modelComboBox.isEnabled() ? (String) modelComboBox.getSelectedItem()
+                    : null;
+
             modelComboBox.setModel(new DefaultComboBoxModel<>(models));
             modelComboBox.setEnabled(true);
-            
+
             // Restore previous selection if it exists in the new model list
             if (previouslySelectedModel != null && modelsList.contains(previouslySelectedModel)) {
                 modelComboBox.setSelectedItem(previouslySelectedModel);
             }
         } else {
-            modelComboBox.setModel(new DefaultComboBoxModel<>(new String[]{"ALL"}));
+            modelComboBox.setModel(new DefaultComboBoxModel<>(new String[] { "ALL" }));
             modelComboBox.setEnabled(false);
         }
     }

@@ -28,7 +28,7 @@ public class RentalPage extends JPanel {
 
     private GridBagConstraints gbc = new GridBagConstraints();
 
-    private Vehicle vehicleSelected;
+    private static Vehicle vehicleSelected;
 
     public RentalPage(JFrame frame, JPanel panel, Vehicle selectedVehicle) {
         this.frame = frame;
@@ -41,6 +41,10 @@ public class RentalPage extends JPanel {
         // scrollable rental page container
         JSplitPane rentalPage = createRentalPage();
         this.add(rentalPage, BorderLayout.CENTER);
+    }
+
+    public static void setVehicleSelected(Vehicle vehicleSelected) {
+        RentalPage.vehicleSelected = vehicleSelected;
     }
 
     // create scrollable container (from VehiclesPage)

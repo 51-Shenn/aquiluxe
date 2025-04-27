@@ -1,12 +1,13 @@
 package gui;
 
-import controllers.VehicleController;
 import datamodels.Vehicle;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.*;
+
+import controllers.VehicleController;
 
 public class VehiclesPageDetails extends JPanel {
 
@@ -17,6 +18,8 @@ public class VehiclesPageDetails extends JPanel {
     private JPanel carFeaturesContainer;
     private boolean isFeaturesVisible = false;
     private JPanel emptyBottomPanel = new JPanel();
+
+    public static JPanel rentalPanel;
 
     public VehiclesPageDetails(JFrame frame, JPanel panel, Vehicle vehicle) {
         this.frame = frame;
@@ -304,8 +307,9 @@ public class VehiclesPageDetails extends JPanel {
             @Override
             public void mouseReleased(MouseEvent evt) {
                 rentButton.setBackground(Theme.getSpecial());
-                VehicleController vehicleController = new VehicleController(frame, panel);
-                vehicleController.gotoRentalPage(vehicle);
+                rentalPanel = new RentalPage(frame, panel, vehicle);
+                GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
+                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
             }
         });
         rentPanel.add(rentButton);

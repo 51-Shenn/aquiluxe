@@ -2,7 +2,6 @@ package gui;
 
 import controllers.UserController;
 import datamodels.User;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -35,6 +34,21 @@ public class HomePage extends JPanel {
         this.panel = panel;
         this.user = user;
         this.guiComponents = guiComponents;
+
+        setBackground(Theme.getBackground());
+        setLayout(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.anchor = GridBagConstraints.NORTH;
+        add(createHomePage(), gbc);
+    }
+
+    HomePage(JFrame frame, JPanel panel, User user) {
+        this.frame = frame;
+        this.panel = panel;
+        this.user = user;
 
         setBackground(Theme.getBackground());
         setLayout(new GridBagLayout());
@@ -116,7 +130,7 @@ public class HomePage extends JPanel {
 
         return wallpaperPanel;
     }
-    
+
     private JPanel createTitlePanel() {
         JPanel titlePanel = new JPanel(new GridBagLayout());
         titlePanel.setBackground(Theme.getBackground());
@@ -125,33 +139,33 @@ public class HomePage extends JPanel {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        String[] title = {"Every Drive Should Feel", "Like a Privilege."};
-        for(int i = 0; i < title.length; i++) {
+        String[] title = { "Every Drive Should Feel", "Like a Privilege." };
+        for (int i = 0; i < title.length; i++) {
             JLabel titleLabel = new JLabel(title[i]);
             titleLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(70f));
             titleLabel.setForeground(Theme.getForeground());
 
-            if(i == title.length - 1) {
+            if (i == title.length - 1) {
                 gbc.insets = new Insets(0, 0, 50, 0);
             }
             titlePanel.add(titleLabel, gbc);
         }
 
         String[] description = {
-            "Discover a seamless car rental experience designed for discerning drivers.",
-            "Choose from our exclusive fleet of luxury vehicles - Each meticulously",
-            "maintained for comfort, performance, and style. Whether for business,",
-            "leisure, or a special occasion, we deliver the keys to excellence.",
+                "Discover a seamless car rental experience designed for discerning drivers.",
+                "Choose from our exclusive fleet of luxury vehicles - Each meticulously",
+                "maintained for comfort, performance, and style. Whether for business,",
+                "leisure, or a special occasion, we deliver the keys to excellence.",
         };
 
         gbc.insets = new Insets(0, 0, 5, 0);
-        for(String text : description) {
+        for (String text : description) {
             JLabel descriptionLabel = new JLabel(text);
             descriptionLabel.setFont(CustomFonts.INSTRUMENT_SANS_MEDIUM.deriveFont(22f));
             descriptionLabel.setForeground(Theme.getSecondaryForeground());
-            
+
             titlePanel.add(descriptionLabel, gbc);
-        }        
+        }
 
         RoundedButton startButton = new RoundedButton(20, Theme.getSpecial());
         startButton.setText("Start Browsing");
@@ -189,17 +203,14 @@ public class HomePage extends JPanel {
         });
         startButton.addActionListener(e -> {
             JButton[] topBarButtons = this.guiComponents.getTopBarButtons();
-            for(JButton button : topBarButtons) {
+            for (JButton button : topBarButtons) {
                 button.setForeground(Theme.getForeground());
                 button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
             }
             topBarButtons[1].setForeground(Theme.getSpecial());
             topBarButtons[1].setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
 
-            this.panel.removeAll();
-            this.panel.add(new VehiclesPage(this.frame, this.panel), BorderLayout.CENTER);
-            this.panel.revalidate();
-            this.panel.repaint();
+            GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
         });
 
         gbc.insets = new Insets(70, 0, 0, 0);
@@ -216,14 +227,14 @@ public class HomePage extends JPanel {
         buttonPanel.setBackground(Theme.getBackground());
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(50, 0, 100,80);
+        gbc.insets = new Insets(50, 0, 100, 80);
         gbc.weightx = 1;
         gbc.anchor = GridBagConstraints.NORTHEAST;
-        
+
         JPanel packButtonPanel = new JPanel();
         packButtonPanel.setBackground(Theme.getBackground());
-        
-        if(this.user.getUserId() == 0) {
+
+        if (this.user.getUserId() == 0) {
             RoundedButton signInButton = createButton("Sign In", Theme.getBackground(), Theme.getForeground());
             signInButton.addActionListener(new Navigation().toSignInPage(this.frame, this.panel, this.user));
             signInButton.addMouseListener(new MouseAdapter() {
@@ -232,19 +243,19 @@ public class HomePage extends JPanel {
                     signInButton.setBackground(Theme.getHoverBackground());
                     signInButton.repaint();
                 }
-    
+
                 @Override
                 public void mouseExited(MouseEvent evt) {
                     signInButton.setBackground(Theme.getBackground());
                     signInButton.repaint();
                 }
-    
+
                 @Override
                 public void mousePressed(MouseEvent evt) {
                     signInButton.setBackground(Theme.getPressedBackground());
                     signInButton.repaint();
                 }
-    
+
                 @Override
                 public void mouseReleased(MouseEvent evt) {
                     signInButton.setBackground(Theme.getBackground());
@@ -260,46 +271,44 @@ public class HomePage extends JPanel {
                     signUpButton.setBackground(Theme.getHoverSpecial());
                     signUpButton.repaint();
                 }
-    
+
                 @Override
                 public void mouseExited(MouseEvent evt) {
                     signUpButton.setBackground(Theme.getSpecial());
                     signUpButton.repaint();
                 }
-    
+
                 @Override
                 public void mousePressed(MouseEvent evt) {
                     signUpButton.setBackground(Theme.getPressedSpecial());
                     signUpButton.repaint();
                 }
-    
+
                 @Override
                 public void mouseReleased(MouseEvent evt) {
                     signUpButton.setBackground(Theme.getSpecial());
                     signUpButton.repaint();
                 }
             });
-        
+
             packButtonPanel.add(signInButton);
             packButtonPanel.add(signUpButton);
-        }
-        else {
+        } else {
             RoundedButton signOutButton = createButton("Sign Out", Theme.getError(), Theme.getErrorForeground());
             signOutButton.addActionListener(e -> {
                 Dialog dialog = new Dialog(this.frame);
                 boolean proceed = dialog.showDialog(
-                    "HAZARD",
-                    "Sign Out",
-                    "Sign Out?",
-                    "Logging out will end your session.",
-                    true
-                );  
+                        "HAZARD",
+                        "Sign Out",
+                        "Sign Out?",
+                        "Logging out will end your session.",
+                        true);
 
-                if(proceed) {
+                if (proceed) {
                     UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
-                    
+
                     this.user = new User();
-                    new Navigation().homePageNavigation(this.frame, this.panel, this.user);                    
+                    new Navigation().homePageNavigation(this.frame, this.panel, this.user);
                 }
             });
             signOutButton.addMouseListener(new MouseAdapter() {
@@ -308,19 +317,19 @@ public class HomePage extends JPanel {
                     signOutButton.setBackground(Theme.getHoverError());
                     signOutButton.repaint();
                 }
-    
+
                 @Override
                 public void mouseExited(MouseEvent evt) {
                     signOutButton.setBackground(Theme.getError());
                     signOutButton.repaint();
                 }
-    
+
                 @Override
                 public void mousePressed(MouseEvent evt) {
                     signOutButton.setBackground(Theme.getPressedError());
                     signOutButton.repaint();
                 }
-    
+
                 @Override
                 public void mouseReleased(MouseEvent evt) {
                     signOutButton.setBackground(Theme.getError());
@@ -332,10 +341,10 @@ public class HomePage extends JPanel {
         }
 
         buttonPanel.add(packButtonPanel, gbc);
-    
+
         return buttonPanel;
     }
-    
+
     private RoundedButton createButton(String text, Color background, Color foreground) {
         RoundedButton button = new RoundedButton(15, background);
         button.setText(text);

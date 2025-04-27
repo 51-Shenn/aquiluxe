@@ -50,7 +50,13 @@ public class RentalService {
 
     // change total cost ( rental : Rental, newCost : double )
     public static void changeTotalCost(Rental rental, double newCost) {
+        rental.setRentTotalCost(newCost);
         RentalDAO.updateRentalTotalCost(rental, newCost);
+    }
+
+    // deleteRental ( rental : Rental )
+    public static void deleteRental(Rental rental) {
+        RentalDAO.deleteRental(rental);
     }
 
     // getRentalHistory ( customer : Customer ) # overloaded

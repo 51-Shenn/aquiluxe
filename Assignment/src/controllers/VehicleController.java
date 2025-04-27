@@ -3,7 +3,6 @@ package controllers;
 import datamodels.Vehicle;
 import datamodels.Car;
 import datamodels.Bike;
-import gui.RentalPage;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
@@ -19,15 +18,8 @@ public class VehicleController {
         this.panel = panel;
     }
 
-    public void gotoRentalPage(Vehicle selectedVehicle) {
-        panel.removeAll();
-        panel.add(new RentalPage(frame, panel, selectedVehicle)); // pass selected car
-        panel.revalidate();
-        panel.repaint();
-    }
-
-    public static List<Vehicle> processVehicles() {
-        return VehicleService.passVehicles();
+    public static List<Vehicle> getAllVehicles() {
+        return VehicleService.getAllVehiclesfromDAO();
     }
 
     public static List<Car> processCars() {
@@ -91,20 +83,12 @@ public class VehicleController {
         return VehicleService.sortByPriceHighToLow(car);
     }
 
-    public static List<String> processAllBrands() {
-        return VehicleService.getBrands();
+    public static List<String> passAllBrands(List<Vehicle> vehicles) {
+        return VehicleService.getDistinctBrands(vehicles);
     }
 
-    public static List<String> processAllCarBrands() {
-        return VehicleService.getCarBrands();
-    }
-
-    public static List<String> processAllBikeBrands() {
-        return VehicleService.getBikeBrands();
-    }
-
-    public static List<String> processAllModelsByBrand(String brand) {
-        return VehicleService.getModels(brand);
+    public static List<String> passAllModelsByBrand(List<Vehicle> vehicles, String brand) {
+        return VehicleService.getDistinctModelsByBrand(vehicles, brand);
     }
 
     // and more
