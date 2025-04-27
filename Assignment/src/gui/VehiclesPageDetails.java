@@ -153,15 +153,6 @@ public class VehiclesPageDetails extends JPanel {
         ImageIcon mpgIcon = IconLoader.getFuelGaugeIcon();
         ImageIcon horsepowerIcon = IconLoader.getHorseIcon();
         ImageIcon colorIcon = new ImageIcon("images/vehiclepageicons/circle.png");
-        // ImageIcon[] detailsIcons = new ImageIcon[8];
-        // detailsIcons[0] = transmissionIcon;
-        // detailsIcons[1] = fuelIcon;
-        // detailsIcons[2] = seatsIcon;
-        // detailsIcons[3] = carTypeIcon;
-        // detailsIcons[4] = capacityIcon;
-        // detailsIcons[5] = mpgIcon;
-        // detailsIcons[6] = horsepowerIcon;
-        // ImageIcon[] detailsIcons = {transmissionIcon, fuelIcon, seatsIcon, carTypeIcon, capacityIcon, mpgIcon, horsepowerIcon};
 
         JPanel transmissionPanel = new JPanel(new BorderLayout());
         transmissionPanel.setBackground(Theme.getBackground());
@@ -244,9 +235,9 @@ public class VehiclesPageDetails extends JPanel {
         colorPanel.setBackground(Theme.getBackground());
         JLabel colorIconLabel = new JLabel(colorIcon);
         JPanel colorIconPanel = new JPanel(new BorderLayout());
-        colorIconPanel.setBackground(Theme.getBackground());
+        colorIconPanel.setBackground(Color.decode(color));
         colorIconPanel.add(colorIconLabel, BorderLayout.CENTER);
-        JLabel colorLabel = new JLabel(color);
+        JLabel colorLabel = new JLabel(VehicleController.processClosestColorName(Color.decode(color)));
         colorLabel.setBackground(Theme.getBackground());
         colorLabel.setForeground(Theme.getForeground());
         colorLabel.setPreferredSize(new Dimension(0, 25));

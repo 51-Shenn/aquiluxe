@@ -3,19 +3,38 @@ package services;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.awt.Color;
 
 import datamodels.Vehicle;
-import datamodels.Bike;
-import datamodels.Car;
 import database.VehicleDAO;
 
 public class VehicleService {
     // filters
     // methods that pass in cars and return them with filtered cars
     // check car.getbrand
+    private static final Map<String, Color> standardColors = new HashMap<>();
+
+    static {
+        // Add standard colors
+        standardColors.put("Black", Color.BLACK);
+        standardColors.put("Blue", Color.BLUE);
+        standardColors.put("Cyan", Color.CYAN);
+        standardColors.put("Dark Gray", Color.DARK_GRAY);
+        standardColors.put("Gray", Color.GRAY);
+        standardColors.put("Green", Color.GREEN);
+        standardColors.put("Light Gray", Color.LIGHT_GRAY);
+        standardColors.put("Magenta", Color.MAGENTA);
+        standardColors.put("Orange", Color.ORANGE);
+        standardColors.put("Pink", Color.PINK);
+        standardColors.put("Red", Color.RED);
+        standardColors.put("White", Color.WHITE);
+        standardColors.put("Yellow", Color.YELLOW);
+    }
 
     public static List<String> getDistinctBrands(List<Vehicle> vehicles) {
         Set<String> distinctBrands = new HashSet<>();
@@ -52,16 +71,16 @@ public class VehicleService {
         return vehicles;
     }
 
-    public static List<Car> passCars() {
+    public static List<Vehicle> getAllCarsfromDAO() {
 
-        List<Car> vehicles = new ArrayList<>(VehicleDAO.getAllCars());
+        List<Vehicle> vehicles = new ArrayList<>(VehicleDAO.getAllCars());
 
         return vehicles;
     }
 
-    public static List<Bike> passBikes() {
+    public static List<Vehicle> getAllBikesfromDAO() {
 
-        List<Bike> vehicles = new ArrayList<>(VehicleDAO.getAllBikes());
+        List<Vehicle> vehicles = new ArrayList<>(VehicleDAO.getAllBikes());
 
         return vehicles;
     }
@@ -256,6 +275,48 @@ public class VehicleService {
             }
         });
         return sortedCars;
+    }
+
+    public static String getClosestColorName(Color color) {
+        try {
+            if (color.equals(Color.BLACK)) return "Black";
+            if (color.equals(Color.BLUE)) return "Blue";
+            if (color.equals(Color.CYAN)) return "Cyan";
+            if (color.equals(Color.DARK_GRAY)) return "Dark Gray";
+            if (color.equals(Color.GRAY)) return "Gray";
+            if (color.equals(Color.GREEN)) return "Green";
+            if (color.equals(Color.LIGHT_GRAY)) return "Light Gray";
+            if (color.equals(Color.MAGENTA)) return "Magenta";
+            if (color.equals(Color.ORANGE)) return "Orange";
+            if (color.equals(Color.PINK)) return "Pink";
+            if (color.equals(Color.RED)) return "Red";
+            if (color.equals(Color.WHITE)) return "White";
+            if (color.equals(Color.YELLOW)) return "Yellow";
+            
+            String customName = "Custom ";
+            String colorName = "";
+            double closestDistance = Double.MAX_VALUE;
+
+            for (Map.Entry<String, Color> entry : standardColors.entrySet()) {
+                double distance = colorDistance(color, entry.getValue());
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    colorName = entry.getKey();
+                }
+            }
+
+            return customName.concat(colorName);
+        }
+        catch(NullPointerException e) {
+            return "Pick A Color";
+        }
+    }
+
+    private static double colorDistance(Color c1, Color c2) {
+        int rDiff = c1.getRed() - c2.getRed();
+        int gDiff = c1.getGreen() - c2.getGreen();
+        int bDiff = c1.getBlue() - c2.getBlue();
+        return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
     }
 
 }

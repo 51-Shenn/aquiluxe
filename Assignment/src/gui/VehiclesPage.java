@@ -13,7 +13,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -598,7 +597,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         // when user pick a brand filter model will update and only show few models
         // follow the brand same as cartype
         brandsList.add("ALL");
-        brandsList.addAll(VehicleController.passAllBrands(vehicles));
+        brandsList.addAll(VehicleController.processAllBrands(vehicles));
 
         List<String> modelsList = new ArrayList<>();
         modelsList.add("ALL");
@@ -926,9 +925,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         if (brandComboBox.getSelectedIndex() != 0) {
             List<String> modelsList = new ArrayList<>();
             modelsList.add("ALL");
-            modelsList.addAll(
-                    VehicleController.passAllModelsByBrand(vehicles, brandComboBox.getSelectedItem().toString()));
-            modelsList.addAll(VehicleController.processAllModelsByBrand(brandComboBox.getSelectedItem().toString()));
+            modelsList.addAll(VehicleController.processAllModelsByBrand(vehicles, brandComboBox.getSelectedItem().toString()));
             String[] models = modelsList.toArray(new String[0]);
 
             // Store current selection if any
@@ -1616,12 +1613,13 @@ public class VehiclesPage extends JPanel implements ActionListener {
         colorLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
         colorLabel.setForeground(Theme.getForeground());
 
-        colorInput = new RoundedButton(10,Color.WHITE);
-        colorInput.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        colorInput = new RoundedButton(0,Color.WHITE);
+        colorInput.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
         colorInput.setPreferredSize(new Dimension(200, 50));
         colorInput.setMinimumSize(new Dimension(200, 50));
         colorInput.setForeground(Color.BLACK);
         colorInput.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(10, 15, 10, 15)));
+        colorInput.setText("Pick A Color");
         colorInput.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -1630,6 +1628,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
                     Color selectedColor = JColorChooser.showDialog(null, "Choose A Color", Color.BLACK);
                     colorInput.setBackground(selectedColor);
+                    colorInput.setText(VehicleController.processClosestColorName(selectedColor));
                 }
             }
         });
