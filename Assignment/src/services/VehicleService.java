@@ -229,6 +229,27 @@ public class VehicleService {
         return filteredCars;
     }
 
+    // check search bar
+    public static List<Vehicle> searchCar(List<Vehicle> car, String searchInput) {
+        List<Vehicle> filteredCars = new ArrayList<>();
+
+        searchInput = searchInput.toUpperCase();
+
+        if (searchInput.equals("SEARCH FOR VEHICLES") || searchInput.equals("")) {
+            return car;
+        }
+        else {
+            for (Vehicle c : car) {
+                if (c.getBrand().toUpperCase().contains(searchInput) || c.getModel().toUpperCase().contains(searchInput) || Integer.toString(c.getYear()).contains(searchInput) || c.getTransmission().toUpperCase().contains(searchInput) || 
+                c.getFuelType().toUpperCase().contains(searchInput) || c.getVehicleType().toUpperCase().contains(searchInput) || c.getFeatures().toUpperCase().contains(searchInput)) {
+                        filteredCars.add(c);
+                }
+            }
+            return filteredCars;
+        }
+
+    }
+
     public static List<Vehicle> sortByYearNewestFirst(List<Vehicle> cars) {
         List<Vehicle> sortedCars = new ArrayList<>(cars);
         Collections.sort(sortedCars, new Comparator<Vehicle>() {

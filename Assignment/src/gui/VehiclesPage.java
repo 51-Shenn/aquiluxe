@@ -13,11 +13,14 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class VehiclesPage extends JPanel implements ActionListener {
 
@@ -374,6 +377,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
     private RoundedButton carButton;
     private RoundedButton bikeButton;
     private RoundedButton allButton;
+    private JTextField  searchBar = new JTextField("Search for vehicles");
 
     private JPanel createCarTopBar() {
 
@@ -477,8 +481,6 @@ public class VehiclesPage extends JPanel implements ActionListener {
             }
         });
 
-        JTextField searchBar = new JTextField();
-        searchBar.setText("Search for vehicles");
         searchBar.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(20f));
         searchBar.setForeground(Theme.getSecondaryForeground());
         searchBar.setBorder(
@@ -501,6 +503,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 }
             }
         });
+        searchBar.addActionListener(e -> applyFilters());
 
         JButton searchButton = new JButton();
         searchButton.setIcon(IconLoader.getSearchIcon());
@@ -510,6 +513,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         searchButton.setOpaque(true);
         searchButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(12.5f));
         searchButton.setBorder(BorderFactory.createLineBorder(Theme.getTransparencyColor(), 1));
+        searchButton.addActionListener(e -> applyFilters());
 
         JLabel sortByLabel = new JLabel("Sort By:");
         sortByLabel.setBounds(1350, 25, 75, 50);
@@ -794,20 +798,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 }
             }
         });
-        minPriceField.addActionListener(e -> refreshCards(VehicleController.processAllFilterCombination(this.sortedVehicles,
-                (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
-                yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(),
-                (String) transTypeComboBox.getSelectedItem(),
-                (String) availabilityComboBox.getSelectedItem(), (String) carTypeComboBox.getSelectedItem(),
-                seatSlider.getValue(),
-                (String) minPriceField.getText(), (String) maxPriceField.getText())));
-        maxPriceField.addActionListener(e -> refreshCards(VehicleController.processAllFilterCombination(this.sortedVehicles,
-                (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
-                yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(),
-                (String) transTypeComboBox.getSelectedItem(),
-                (String) availabilityComboBox.getSelectedItem(), (String) carTypeComboBox.getSelectedItem(),
-                seatSlider.getValue(),
-                (String) minPriceField.getText(), (String) maxPriceField.getText())));
+        minPriceField.addActionListener(e -> applyFilters());
+        maxPriceField.addActionListener(e -> applyFilters());
 
         seatSlider.addChangeListener(e -> {
             int value = seatSlider.getValue();
@@ -816,13 +808,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             } else {
                 seatLabel.setText("Seats: " + value);
             }
-            refreshCards(VehicleController.processAllFilterCombination(this.sortedVehicles,
-                    (String) brandComboBox.getSelectedItem(), (String) modelComboBox.getSelectedItem(),
-                    yearComboBox.getSelectedItem(), (String) fuelTypeComboBox.getSelectedItem(),
-                    (String) transTypeComboBox.getSelectedItem(),
-                    (String) availabilityComboBox.getSelectedItem(), (String) carTypeComboBox.getSelectedItem(),
-                    seatSlider.getValue(),
-                    (String) minPriceField.getText(), (String) maxPriceField.getText()));
+            applyFilters();
         });
 
         JPanel pricePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 7, 0));
@@ -902,7 +888,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 e.getSource() == fuelTypeComboBox ||
                 e.getSource() == availabilityComboBox ||
                 e.getSource() == minPriceField ||
-                e.getSource() == maxPriceField) {
+                e.getSource() == maxPriceField || 
+                e.getSource() == searchBar) {
             applyFilters();
         }
     }
@@ -957,7 +944,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
             (String) carTypeComboBox.getSelectedItem(),
             seatSlider.getValue(),
             minPriceField.getText(),
-            maxPriceField.getText()
+            maxPriceField.getText(),
+            (String) searchBar.getText()
         ));
     }
 
@@ -1959,11 +1947,15 @@ public class VehiclesPage extends JPanel implements ActionListener {
     // Handle image selection
     private void handleImageSelect(ActionEvent e) {
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Images", "jpg", "jpeg", "png"));
+        
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             selectedImageFile = fileChooser.getSelectedFile();
 
             try {
-                //if (img.getWidth() == 900 && img.getHeight() == 900) {
+
+                BufferedImage img = ImageIO.read(selectedImageFile);
+                if (img.getWidth() == img.getHeight()) {
                     // Create target directory if needed
                     new File(IMAGE_DIR).mkdirs();
 
@@ -1975,16 +1967,14 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
                     // Display preview
                     ImageIcon icon = new ImageIcon(
-                            new ImageIcon(targetFile.getAbsolutePath())
-                                    .getImage().getScaledInstance(500, 500, Image.SCALE_SMOOTH));
+                            new ImageIcon(targetFile.getAbsolutePath()).getImage().getScaledInstance(500, 500, Image.SCALE_SMOOTH));
                     imageLabel.setIcon(icon);
-                    imageLabel.setText("");
                     removeButton.setEnabled(true);
-                /* } else {
+                } else {
                     JOptionPane.showMessageDialog(this,
-                            "Image must be 900×900 pixels!",
+                            "Image must be a square!",
                             "Invalid Size", JOptionPane.ERROR_MESSAGE);
-                }*/
+                }
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this,
                         "Error loading image",

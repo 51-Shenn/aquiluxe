@@ -83,6 +83,10 @@ public class VehicleController {
         return VehicleService.sortByPriceHighToLow(car);
     }
 
+    public static List<Vehicle> processSearchCars(List<Vehicle> vehicles, String searchInput) {
+        return VehicleService.searchCar(vehicles, searchInput);
+    }
+
     public static List<String> processAllBrands(List<Vehicle> vehicles) {
         return VehicleService.getDistinctBrands(vehicles);
     }
@@ -103,7 +107,7 @@ public class VehicleController {
 
     public static List<Vehicle> processAllFilterCombination(List<Vehicle> cars, String filterBrand, String filterModel,
             Object filterYear, String filterFuelType, String filterTransmission, String filterAvailability,
-            String filterCarType, int filterSeats, String filterMinPrice, String filterMaxPrice) {
+            String filterCarType, int filterSeats, String filterMinPrice, String filterMaxPrice, String searchInput) {
         // , String filterTransmission, String filterFuelType, String
         // filterAvailability, String filterCarType, Object filterSeats, String
         // filterMinPrice, String filterMaxPrice
@@ -113,7 +117,8 @@ public class VehicleController {
                         processFilteredCarYear(processFilteredCarTransmission(
                                 processFilteredCarFuelType(
                                         processFilteredCarAvailability(processFilteredCarType(
-                                                processFilteredCarSeats(processFilteredCarPrice(filteredCars,
+                                                processFilteredCarSeats(processFilteredCarPrice(
+                                                    processSearchCars(filteredCars, searchInput),
                                                         filterMinPrice.trim(), filterMaxPrice.trim()), filterSeats),
                                                 filterCarType), filterAvailability),
                                         filterFuelType),
@@ -128,4 +133,14 @@ public class VehicleController {
         return VehicleService.getClosestColorName(color);
 
     }
+
+    //submit add car (get all values)
+
+    //validate vinNumber (18digit)
+
+    //validate color (color cannot be null)
+
+    //all cannot be null except features
+
+    //validate picture (must be square and image naming must be distinct)
 }
