@@ -1,13 +1,40 @@
 package gui;
 
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-
-import java.awt.*;
-import java.awt.event.*;
 
 import datamodels.*;
 
@@ -17,14 +44,15 @@ public class RentalPage extends JPanel {
     private final JPanel panel;
     private JScrollPane mainScrollPane;
     private JLabel totalPriceLabel;
+    private final Map<String, JComponent> inputFieldsMap = new HashMap<>();
 
-    protected final float TITLE_TEXT_SIZE = 20f;
-    protected final float NORMAL_TEXT_SIZE = 28f;
-    protected final float BUTTON_TEXT_SIZE = 30f;
-    protected final Border BORDER = new LineBorder(Color.BLACK, 2);
-    protected final Border PADDING = new EmptyBorder(10, 15, 10, 15);
-    protected final Font TITLE_FONT = CustomFonts.ROBOTO_SEMI_BOLD;
-    protected final Font INPUT_FONT = CustomFonts.OPEN_SANS_REGULAR;
+    private final float TITLE_TEXT_SIZE = 20f;
+    private final float NORMAL_TEXT_SIZE = 28f;
+    private final float BUTTON_TEXT_SIZE = 30f;
+    private final Border BORDER = new LineBorder(Color.BLACK, 2);
+    private final Border PADDING = new EmptyBorder(10, 15, 10, 15);
+    private final Font TITLE_FONT = CustomFonts.ROBOTO_SEMI_BOLD;
+    private final Font INPUT_FONT = CustomFonts.OPEN_SANS_REGULAR;
 
     private GridBagConstraints gbc = new GridBagConstraints();
 
@@ -47,7 +75,6 @@ public class RentalPage extends JPanel {
         RentalPage.vehicleSelected = vehicleSelected;
     }
 
-    // create scrollable container (from VehiclesPage)
     private JSplitPane createRentalPage() {
         // create left and right containers
         JPanel leftContainer = createLeftContainer();
@@ -66,7 +93,7 @@ public class RentalPage extends JPanel {
 
         // create split pane
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftContainer, mainScrollPane);
-        splitPane.setDividerLocation(800);
+        splitPane.setDividerLocation(960);
         splitPane.setBorder(BorderFactory.createEmptyBorder());
         splitPane.setDividerSize(5);
 
@@ -78,13 +105,14 @@ public class RentalPage extends JPanel {
         return splitPane;
     }
 
+    // rental page left container
     private JPanel createLeftContainer() {
         // create container for left panel
-        RoundedPanel leftContainer = new RoundedPanel(30, Theme.getSpecial());
+        RoundedPanel leftContainer = new RoundedPanel(30, Theme.getBackground());
         leftContainer.setLayout(new BorderLayout(0, 5));
-        leftContainer.setBorder(BorderFactory.createEmptyBorder(10, 40, 40, 40));
+        leftContainer.setBorder(BorderFactory.createEmptyBorder(60, 100, 100, 100));
 
-        leftContainer.add(createTitlePanel("Rental Summary"), BorderLayout.NORTH);
+        leftContainer.add(createTitlePanel("Rental Summary", 50f), BorderLayout.NORTH);
         leftContainer.add(createRentalSummary(), BorderLayout.CENTER);
 
         leftContainer.setPreferredSize(leftContainer.getPreferredSize());
@@ -96,7 +124,7 @@ public class RentalPage extends JPanel {
         // rental car summary panel
         JPanel summaryPanel = new JPanel();
         summaryPanel.setLayout(new BorderLayout(0, 10));
-        summaryPanel.setBackground(Theme.getSpecial());
+        summaryPanel.setBackground(Theme.getBackground());
 
         // rental car summary container
         RoundedPanel carPanel = new RoundedPanel(20, Color.WHITE);
@@ -146,9 +174,9 @@ public class RentalPage extends JPanel {
                 20f, Color.BLACK, Color.WHITE, 50, -1);
         carFuelLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel carRentalPricLabel = createLabel("RM " + vehicleSelected.getRentalPriceDay() + "/day",
+        JLabel carRentalPriceLabel = createLabel("RM " + vehicleSelected.getRentalPriceDay() + "/day",
                 20f, Color.BLACK, Color.WHITE, 50, -1);
-        carRentalPricLabel.setHorizontalAlignment(JLabel.LEFT);
+        carRentalPriceLabel.setHorizontalAlignment(JLabel.LEFT);
 
         // gblayout gridy position
         gbc.gridy = 0;
@@ -159,7 +187,7 @@ public class RentalPage extends JPanel {
         gbc.gridy = 2;
         carDetailsPanel.add(carFuelLabel, gbc);
         gbc.gridy = 3;
-        carDetailsPanel.add(carRentalPricLabel, gbc);
+        carDetailsPanel.add(carRentalPriceLabel, gbc);
         gbc.insets.left = 0; // reset indent
 
         // add label in panel
@@ -171,7 +199,7 @@ public class RentalPage extends JPanel {
         // add pricing details
         RoundedPanel pricingPanel = new RoundedPanel(20, Color.WHITE);
         pricingPanel.setLayout(new GridBagLayout());
-        pricingPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        pricingPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 100));
 
         // pricing details text labels
         JLabel rentalPriceTextLabel = createLabel("Rental Price : ", 20f,
@@ -220,14 +248,14 @@ public class RentalPage extends JPanel {
         // total price
         RoundedPanel totalPanel = new RoundedPanel(20, Color.WHITE);
         totalPanel.setLayout(new BorderLayout());
-        totalPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        totalPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 100));
 
         JLabel totalPriceTextLabel = createLabel("Total Price : ", 20f,
                 Color.BLACK, Color.WHITE, 30, -1);
         totalPriceTextLabel.setOpaque(false);
         totalPriceTextLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        totalPriceLabel = createLabel("RM " + vehicleSelected.getRentalPriceDay(), 20f,
+        totalPriceLabel = createLabel("RM " + vehicleSelected.getRentalPriceDay(), 40f,
                 Color.BLACK, Color.WHITE, 30, -1);
         totalPriceLabel.setOpaque(false);
         totalPriceLabel.setHorizontalAlignment(JLabel.RIGHT);
@@ -241,7 +269,7 @@ public class RentalPage extends JPanel {
     // rental page right container
     private JPanel createRightContainer() {
         // create container for inputs
-        RoundedPanel rightContainer = new RoundedPanel(30, Theme.getSpecial());
+        RoundedPanel rightContainer = new RoundedPanel(30, Theme.getBackground());
 
         rightContainer.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -256,16 +284,21 @@ public class RentalPage extends JPanel {
         rightContainer.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
         rightContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+        // input panel initialization
         JPanel billingContainer = createBillingInfoPanel();
         JPanel rentalContainer = createRentalDetailsPanel();
         JPanel paymentContainer = createPaymentMethodContainer();
+        JButton confirmButton = createButton("Confirm", Theme.getSpecial(), Theme.getForeground(), 200, 50);
 
+        // add input panels to right container
         gbc.gridy = 0;
         rightContainer.add(billingContainer, gbc);
         gbc.gridy = 1;
         rightContainer.add(rentalContainer, gbc);
         gbc.gridy = 2;
         rightContainer.add(paymentContainer, gbc);
+        gbc.gridy = 3;
+        rightContainer.add(confirmButton, gbc);
 
         return rightContainer;
     }
@@ -273,7 +306,7 @@ public class RentalPage extends JPanel {
     // demo
     private JPanel createBillingInfoPanel() {
         JPanel billingContainer = new JPanel(new BorderLayout());
-        billingContainer.setBackground(Theme.getSpecial());
+        billingContainer.setBackground(Theme.getBackground());
         billingContainer.add(createTitlePanel("Billing Info"), BorderLayout.NORTH);
 
         RoundedPanel billingInfoPanel = new RoundedPanel(20, Color.WHITE);
@@ -282,15 +315,15 @@ public class RentalPage extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        billingInfoPanel.add(createInputContainer("Billing Address: ", 4, true), gbc);
+        billingInfoPanel.add(createInputContainer("B_Address", "Billing Address: ", 4, true), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        billingInfoPanel.add(createInputContainer("Billing Name: ", false), gbc);
+        billingInfoPanel.add(createInputContainer("B_Name", "Billing Name: ", false), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        billingInfoPanel.add(createInputContainer("Billing Contact: ", 1, false), gbc);
+        billingInfoPanel.add(createInputContainer("B_Contact", "Billing Contact: ", 1, false), gbc);
 
         billingContainer.add(billingInfoPanel, BorderLayout.CENTER);
 
@@ -300,7 +333,7 @@ public class RentalPage extends JPanel {
     // demo
     private JPanel createRentalDetailsPanel() {
         JPanel rentalContainer = new JPanel(new BorderLayout());
-        rentalContainer.setBackground(Theme.getSpecial());
+        rentalContainer.setBackground(Theme.getBackground());
         rentalContainer.add(createTitlePanel("Rental Details"), BorderLayout.NORTH);
 
         RoundedPanel rentalDetailsPanel = new RoundedPanel(20, Color.WHITE);
@@ -309,25 +342,25 @@ public class RentalPage extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        rentalDetailsPanel.add(createInputContainer("Rental Details 1: ", false), gbc);
+        rentalDetailsPanel.add(createInputContainer("R_Details1", "Rental Details 1: ", false), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        rentalDetailsPanel.add(createInputContainer("Rental Details 2: ", 2, true), gbc);
+        rentalDetailsPanel.add(createInputContainer("R_Details2", "Rental Details 2: ", 2, true), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        rentalDetailsPanel.add(createInputContainer("Rental Details 3: ", 4, true), gbc);
+        rentalDetailsPanel.add(createInputContainer("R_Details3", "Rental Details 3: ", 4, true), gbc);
 
         rentalContainer.add(rentalDetailsPanel, BorderLayout.CENTER);
 
         return rentalContainer;
     }
 
-    // demo
+    // Payment Method
     private JPanel createPaymentMethodContainer() {
         JPanel paymentContainer = new JPanel(new BorderLayout());
-        paymentContainer.setBackground(Theme.getSpecial());
+        paymentContainer.setBackground(Theme.getBackground());
         paymentContainer.add(createTitlePanel("Payment Method"), BorderLayout.NORTH);
 
         RoundedPanel paymentMethodPanel = new RoundedPanel(20, Color.WHITE);
@@ -336,15 +369,15 @@ public class RentalPage extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        paymentMethodPanel.add(createInputContainer("Payment Method: ", false), gbc);
+        paymentMethodPanel.add(createInputContainer("P_Method", "Payment Method: ", false), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        paymentMethodPanel.add(createInputContainer("Credit / Debit Card: ", false), gbc);
+        paymentMethodPanel.add(createInputContainer("C_D_Card", "Credit / Debit Card: ", false), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        paymentMethodPanel.add(createInputContainer("Expiry Date: ", 1, true), gbc);
+        paymentMethodPanel.add(createInputContainer("E_Date", "Expiry Date: ", 1, true), gbc);
 
         paymentContainer.add(paymentMethodPanel, BorderLayout.CENTER);
 
@@ -352,7 +385,7 @@ public class RentalPage extends JPanel {
     }
 
     // create input container (from AuthenticationPage)
-    protected JPanel createInputContainer(String title, int initialRows, boolean scrollable) {
+    private JPanel createInputContainer(String fieldname, String title, int initialRows, boolean scrollable) {
         JPanel inputPanel = new JPanel(new GridBagLayout());
         inputPanel.setBackground(Color.WHITE);
 
@@ -426,27 +459,63 @@ public class RentalPage extends JPanel {
             });
 
             inputComponent = scrollPane;
+            inputFieldsMap.put(fieldname, inputField); // store input field in map
         } else {
             // use text field for single line input
             inputComponent = inputLineField;
+            inputFieldsMap.put(fieldname, inputLineField); // store input field in map
         }
 
         inputPanel.add(inputComponent, gbc);
         return inputPanel;
     }
 
-    protected JPanel createInputContainer(String title, boolean scrollable) {
-        return createInputContainer(title, 1, scrollable);
+    private JPanel createInputContainer(String fieldname, String title, boolean scrollable) {
+        return createInputContainer(fieldname, title, 1, scrollable);
+    }
+
+    // getter and setter for input fields
+    public String getInputValue(String fieldName) {
+        JComponent comp = inputFieldsMap.get(fieldName);
+        if (comp instanceof JTextField) {
+            return ((JTextField) comp).getText();
+        } else if (comp instanceof JTextArea) {
+            return ((JTextArea) comp).getText();
+        }
+        return null;
+    }
+
+    public void setInputValue(String fieldName, String value) {
+        JComponent comp = inputFieldsMap.get(fieldName);
+        if (comp instanceof JTextField) {
+            ((JTextField) comp).setText(value);
+        } else if (comp instanceof JTextArea) {
+            ((JTextArea) comp).setText(value);
+        }
     }
 
     // create title panel
     private JPanel createTitlePanel(String title) {
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
-        titlePanel.setBackground(Theme.getSpecial());
+        titlePanel.setBackground(Theme.getBackground());
         titlePanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 5, 0));
 
-        JLabel titleLabel = createLabel(title, 30f, Color.WHITE, Theme.getSpecial(), 50, -1);
+        JLabel titleLabel = createLabel(title, 30f, Theme.getSpecial(), Theme.getBackground(), 50, -1);
+        titleLabel.setHorizontalAlignment(JLabel.LEFT);
+
+        titlePanel.add(titleLabel);
+
+        return titlePanel;
+    }
+
+    private JPanel createTitlePanel(String title, float size) {
+        JPanel titlePanel = new JPanel();
+        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
+        titlePanel.setBackground(Theme.getBackground());
+        titlePanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 5, 0));
+
+        JLabel titleLabel = createLabel(title, size, Theme.getSpecial(), Theme.getBackground(), 50, -1);
         titleLabel.setHorizontalAlignment(JLabel.LEFT);
 
         titlePanel.add(titleLabel);
@@ -465,5 +534,18 @@ public class RentalPage extends JPanel {
         label.setMinimumSize(new Dimension(width, height));
 
         return label;
+    }
+
+    // create button instance
+    private JButton createButton(String text, Color bgColor, Color textColor, int width, int height) {
+        JButton button = new JButton(text);
+        button.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(BUTTON_TEXT_SIZE));
+        button.setBackground(bgColor);
+        button.setForeground(textColor);
+        button.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+        button.setPreferredSize(new Dimension(width, height));
+        button.setFocusPainted(false);
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        return button;
     }
 }

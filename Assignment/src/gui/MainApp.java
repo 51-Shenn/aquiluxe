@@ -39,7 +39,9 @@ public class MainApp extends JFrame {
         }
         add(contentPanel, BorderLayout.CENTER);
 
+        setAlwaysOnTop(true);
         setVisible(true);
+        setAlwaysOnTop(false);
     }
 
     private void loadDataAndCacheImages() {
