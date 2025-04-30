@@ -50,7 +50,7 @@ public class GUIComponents extends JPanel {
         cardPanel.setBackground(Theme.getBackground());
 
         homePanel = new HomePage(this.frame, this.panel, this.user, this);
-        vehiclesPanel = new VehiclesPage(this.frame, this.panel);
+        vehiclesPanel = new VehiclesPage(this.frame, this.panel, this.user);
         aboutUsPanel = new AboutUsPage(this.frame, this.panel);
         contactUsPanel = new ContactUsPage(this.frame, this.panel);
 

@@ -3,12 +3,19 @@ package services;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.imageio.ImageIO;
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import datamodels.Vehicle;
 import database.VehicleDAO;
@@ -18,6 +25,7 @@ public class VehicleService {
     // methods that pass in cars and return them with filtered cars
     // check car.getbrand
     private static final Map<String, Color> standardColors = new HashMap<>();
+    private final static String IMAGE_DIR = "images/cars/";
 
     static {
         // Add standard colors
@@ -338,6 +346,113 @@ public class VehicleService {
         int gDiff = c1.getGreen() - c2.getGreen();
         int bDiff = c1.getBlue() - c2.getBlue();
         return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
+    }
+
+    //validate vinNumber (18digit)
+    public static boolean validateVinNumber(String vinNumber) {
+        return vinNumber.length() == 17 && vinNumber.matches("[A-HJ-NPR-Z0-9]+");
+    }
+
+    //validate color (color cannot be null)
+    public static boolean validateColor(Color color) {
+        return color != null;
+    }
+
+    //all cannot be null except features
+    public static boolean validateStrings(String registrationNumber, String brand, String model) {
+        return registrationNumber != null && !registrationNumber.isEmpty()
+        && brand != null && !brand.isEmpty()
+        && model != null && !model.isEmpty();
+    }
+
+    public static boolean validateRentalPriceDay(String rentalPriceDay) {
+        try {
+            double value = Double.parseDouble(rentalPriceDay);
+            return value > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public static boolean validateYear(String year) {
+        return !year.equals("Select Year");
+    }
+
+    public static boolean validateMpg(String mpg) {
+        try {
+            double value = Double.parseDouble(mpg);
+            return value > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public static boolean validateCapacity(String capacity) {
+        try {
+            int value = Integer.parseInt(capacity);
+            return value > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public static boolean validateHorsepower(String horsepower) {
+        try {
+            int value = Integer.parseInt(horsepower);
+            return value > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public static boolean validateTransmission(String transmission) {
+        return !transmission.equals("Select Transmission");
+    }
+
+    public static boolean validateFuelType(String fuelType) {
+        return !fuelType.equals("Select Fuel Type");
+    }
+
+    public static boolean validateVehicleType(String vehicleType) {
+        return !vehicleType.equals("Select Vehicle Type");
+    }
+
+    public static boolean validateImage(File selectedImageFile, BufferedImage selectedImagePreview) {
+        return selectedImageFile != null || selectedImagePreview != null;
+    }
+
+    public static boolean imageSaving(File selectedImageFile, BufferedImage selectedImagePreview){
+        File imagesDir = new File(IMAGE_DIR);
+        imagesDir.mkdirs();
+
+        String newFileName = VehicleService.getImage_Path(selectedImageFile);
+        File targetFile = new File(imagesDir, newFileName);
+
+        try {
+            ImageIO.write(selectedImagePreview, "jpg", targetFile); //save
+            return true;
+        } catch (IOException e) {
+            return false;
+        } 
+    }
+
+    public static String getImage_Path(File selectedImageFile) {
+        String fileName = selectedImageFile.getName();
+        String baseName = fileName.substring(0, fileName.lastIndexOf('.'));
+        String uniqueID = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+
+        String newFileName = baseName + uniqueID + ".jpg";
+        return newFileName;
+    }
+
+    public static void addVehiclestoDAO(Vehicle vehicle) {
+
+        VehicleDAO.addVehicle(vehicle);
+    }
+
+    public static void deleteVehiclefromDAO(Vehicle vehicle) {
+
+        VehicleDAO.deleteVehicle(vehicle);
     }
 
 }

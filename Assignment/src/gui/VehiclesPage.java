@@ -1,15 +1,15 @@
 package gui;
 
 import controllers.VehicleController;
+import datamodels.User;
 import datamodels.Vehicle;
+
 import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
@@ -32,15 +32,17 @@ public class VehiclesPage extends JPanel implements ActionListener {
     private final JFrame frame;
     private final JPanel panel;
     private JPanel vehicleCards;
+    private static User user;
+    private Dialog dialog = new Dialog();
 
-    public VehiclesPage(JFrame frame, JPanel panel) {
+    public VehiclesPage(JFrame frame, JPanel panel, User user) {
 
         this.frame = frame;
         this.panel = panel;
         this.vehicles = Vehicle.getVehicles();
         //probrably will change later for loader by using vehicle.getvehicles() and maybe car.getcars() and bike.getbikes()?
-        this.vehicles = VehicleController.processVehicles();
         this.sortedVehicles = this.vehicles;
+        VehiclesPage.user = user;
         this.setLayout(new BorderLayout());
 
         this.add(createCarCardsContainer(this.vehicles), BorderLayout.CENTER);
@@ -68,7 +70,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 }
 
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Error loading images: " + e.getMessage());
+                dialog.showDialog("ERROR","Input Error", "Image Input Error", e.getMessage(),true);
             }
             Image rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
             image = new ImageIcon(rImage);
@@ -84,7 +86,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         return vehicleCards;
     }
 
-    public static JPanel createCarCard(Vehicle vehicle, ImageIcon image, String brand, String model,
+    public JPanel createCarCard(Vehicle vehicle, ImageIcon image, String brand, String model,
             String transmission,
             String fuelType,
             String vehicleType, int seats, String price, String availability, JFrame frame, JPanel panel) {
@@ -96,7 +98,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         carCard.setBorder(BorderFactory.createLineBorder(Theme.getBackground(), 3, true));
 
         // create buttons on the bottom
-        RoundedButton carDetails = new RoundedButton(0, Theme.getBackground());
+        RoundedButton carDetails = new RoundedButton(10, Theme.getBackground());
         carDetails.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
         carDetails.setFocusable(false);
         carDetails.setBackground(Theme.getBackground());
@@ -260,10 +262,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
             public void mouseClicked(MouseEvent e) {
                 // Check if the click is on the image
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                    panel.removeAll();
-                    panel.add(new VehiclesPageDetails(frame, panel, vehicle), BorderLayout.CENTER);
-                    panel.revalidate();
-                    panel.repaint();
+                    JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle);
+                    GUIComponents.cardPanel.add(detailsPanel, "VehicleDetailsPage");
+                    GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
                 }
             }
 
@@ -286,69 +287,72 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 }
             }
         });
-        // if is customer
-        carDetails.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // Check if the click is on the image
-                if (SwingUtilities.isLeftMouseButton(e)) {
-                    panel.removeAll();
-                    panel.add(new VehiclesPageDetails(frame, panel, vehicle), BorderLayout.CENTER);
-                    panel.revalidate();
-                    panel.repaint();
+        // if is admin
+        if (!user.getUserType().equals("Admin")) {
+            carDetails.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    // Check if the click is on the image
+                    if (SwingUtilities.isLeftMouseButton(e)) {
+                        JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle);
+                        GUIComponents.cardPanel.add(detailsPanel, "VehicleDetailsPage");
+                        GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
+                    }
                 }
+
+                @Override
+                public void mousePressed(MouseEvent evt) {
+                    if (SwingUtilities.isLeftMouseButton(evt)) {
+                        carPicture.setIcon(toGreyScale(image)); // Set greyscale image
+                        carAvailability.setBackground(Theme.getPressedSpecial());
+                    }
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent evt) {
+                    if (SwingUtilities.isLeftMouseButton(evt)) {
+                        carPicture.setIcon(image); // Restore original image
+                        carAvailability.setBackground(Theme.getPressedSpecial());
+                        transLabel.setIcon(IconLoader.getTransmissionIcon());
+                        fuelTypeLabel.setIcon(IconLoader.getGasIcon());
+                        seatsLabel.setIcon(IconLoader.getSeatIcon());
+                    }
+                }
+            });
+        }
+
+        else {
+            carDetails.setText("DELETE");
+            carDetails.setForeground(Theme.getErrorForeground());
+            carDetails.setBackground(Theme.getError());
+            carDetails.setOpaque(true);
+
+            carDetails.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent evt) {
+            carDetails.setBackground(Theme.getHoverError());
+            }
+
+            @Override
+            public void mouseExited(MouseEvent evt) {
+            carDetails.setBackground(Theme.getError());
             }
 
             @Override
             public void mousePressed(MouseEvent evt) {
-                if (SwingUtilities.isLeftMouseButton(evt)) {
-                    carPicture.setIcon(toGreyScale(image)); // Set greyscale image
-                    carAvailability.setBackground(Theme.getPressedSpecial());
-                }
+            carDetails.setBackground(Theme.getPressedError());
             }
 
             @Override
             public void mouseReleased(MouseEvent evt) {
-                if (SwingUtilities.isLeftMouseButton(evt)) {
-                    carPicture.setIcon(image); // Restore original image
-                    carAvailability.setBackground(Theme.getPressedSpecial());
-                    transLabel.setIcon(IconLoader.getTransmissionIcon());
-                    fuelTypeLabel.setIcon(IconLoader.getGasIcon());
-                    seatsLabel.setIcon(IconLoader.getSeatIcon());
-                }
+            carDetails.setBackground(Theme.getError());
+            VehicleController.processDeleteVehiclefromDAO(vehicle);
+            refreshCards(sortedVehicles);
             }
-        });
-
-        // if its admin
-        // carDetails.setText("EDIT");
-        // carDetails.setForeground(Theme.getBackground());
-        // carDetails.setBackground(Theme.getError());
-        // carDetails.setOpaque(true);
-
-        // carDetails.addMouseListener(new MouseAdapter() {
-        // @Override
-        // public void mouseEntered(MouseEvent evt) {
-        // carDetails.setBackground(Theme.getHoverError());
-        // }
-
-        // @Override
-        // public void mouseExited(MouseEvent evt) {
-        // carDetails.setBackground(Theme.getError());
-        // }
-
-        // @Override
-        // public void mousePressed(MouseEvent evt) {
-        // carDetails.setBackground(Theme.getPressedError());
-        // }
-
-        // @Override
-        // public void mouseReleased(MouseEvent evt) {
-        // carDetails.setBackground(Theme.getError());
-        // }
-        // });
-
-        // add the bottom buttons panel and the container for all specific car infos
-        // into the main card container
+            });
+        }
+            //add the bottom buttons panel and the container for all specific car infos
+            //into the main card container
         carCard.add(buttonPanel, BorderLayout.SOUTH);
         carCard.add(carEverythingPanel, BorderLayout.CENTER);
 
@@ -560,6 +564,12 @@ public class VehiclesPage extends JPanel implements ActionListener {
             }
         });
         addButton.addActionListener(e -> showAddCarPopup());
+        if (!user.getUserType().equals("Admin")) {
+            addButton.setVisible(false);
+        }
+        else {
+            addButton.setVisible(true);
+        }
 
         topBar.add(allButton);
         topBar.add(carButton);
@@ -1020,18 +1030,23 @@ public class VehiclesPage extends JPanel implements ActionListener {
         }
 
         // Get the image from the ImageIcon
-        Image image = icon.getImage();
+        int width = icon.getIconWidth();
+        int height = icon.getIconHeight();
+
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException("Invalid image dimensions: " + width + "x" + height);
+        }
 
         // Convert the Image to a BufferedImage
+        Image image = icon.getImage();
         BufferedImage bufferedImage = new BufferedImage(
-                icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+                width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = bufferedImage.createGraphics();
         g2d.drawImage(image, 0, 0, null);
         g2d.dispose();
 
         // Convert the BufferedImage to greyscale
-        BufferedImageOp op = new ColorConvertOp(
-                ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+        BufferedImageOp op = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
         BufferedImage greyImage = op.filter(bufferedImage, null);
 
         RescaleOp rescaleOp = new RescaleOp(1.0f, 20, null); // Adjust brightness (offset = 20)
@@ -1043,6 +1058,10 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
     public List<Vehicle> getVehicles() {
         return vehicles;
+    }
+
+    public static User getUser() {
+        return user;
     }
 
     public void setVehicles(List<Vehicle> vehicles) {
@@ -1185,76 +1204,20 @@ public class VehiclesPage extends JPanel implements ActionListener {
         this.selectedImageFile = selectedImageFile;
     }
 
-    private static class RoundedButton extends JButton {
-        private Color backgroundColor;
-        private final int cornerRadius;
-
-        public RoundedButton(int radius, Color bgColor) {
-            this.cornerRadius = radius;
-            this.backgroundColor = bgColor;
-            setOpaque(false);
-        }
-
-        @Override
-        public void setBackground(Color bgColor) {
-            this.backgroundColor = bgColor;
-            repaint();
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2d = (Graphics2D) g.create();
-
-            // Enable anti-aliasing for smooth rendering
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            int width = getWidth();
-            int height = getHeight();
-            int arcSize = cornerRadius * 2;
-
-            // Make panel transparent
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-            g2d.setColor(backgroundColor != null ? backgroundColor : getBackground());
-            g2d.fillRoundRect(0, 0, width - 1, height - 1, arcSize, arcSize);
-
-            // Draw the icon (if set)
-            Icon icon = getIcon();
-            if (icon != null) {
-                int iconWidth = icon.getIconWidth();
-                int iconHeight = icon.getIconHeight();
-                int iconX = (width - iconWidth - getText().length() * 5) / 2; // Adjust spacing
-                int iconY = (height - iconHeight) / 2;
-                icon.paintIcon(this, g2d, iconX, iconY);
-            }
-
-            FontMetrics fm = g2d.getFontMetrics();
-            int textX = (width - fm.stringWidth(getText())) / 2;
-            int textY = (height + fm.getAscent()) / 2 - 2;
-
-            // Fill rounded rectangle
-            g2d.setColor(getForeground());
-            g2d.drawString(getText(), textX, textY);
-
-            g2d.dispose();
-        }
-    }
-
-
     private JScrollPane informationPanel;
     private void showAddCarPopup() {
         // Create the dialog
-        JDialog dialog = new JDialog(frame, "Add New Car", true); // true for modal
-        dialog.setPreferredSize(new Dimension(1600, 900));
-        dialog.setLayout(new BorderLayout());
-        dialog.setBackground(Theme.getBackground());
+        JDialog addCar = new JDialog(frame, "Add New Car", true); // true for modal
+        addCar.setPreferredSize(new Dimension(1600, 900));
+        addCar.setLayout(new BorderLayout());
+        addCar.setBackground(Theme.getBackground());
 
         JLabel title = new JLabel("Add New Car", JLabel.CENTER);
         title.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
         title.setBackground(Theme.getBackground());
         title.setForeground(Theme.getForeground());
         title.setOpaque(true);
-        dialog.add(title, BorderLayout.NORTH);
+        addCar.add(title, BorderLayout.NORTH);
 
         // Add form components
         // need to use jscrollpane
@@ -1371,7 +1334,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
         formPanel.add(informationPanel);
 
-        dialog.add(formPanel, BorderLayout.CENTER);
+        addCar.add(formPanel, BorderLayout.CENTER);
 
         // Add submit button
         RoundedButton submitButton = new RoundedButton(20, Theme.getSpecial());
@@ -1401,24 +1364,21 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 submitButton.setBackground(Theme.getSpecial());
             }
         });
-        submitButton.addActionListener(e -> {
-            // Handle form submission here
-            JOptionPane.showMessageDialog(dialog, "Car added successfully!");
-            dialog.dispose();
-        });
-        dialog.add(submitButton, BorderLayout.SOUTH);
+        submitButton.addActionListener(this::handleSubmit);
+        addCar.add(submitButton, BorderLayout.SOUTH);
 
         // Finalize and show the dialog
-        dialog.pack();
-        dialog.setLocationRelativeTo(frame); // Center relative to parent frame
-        dialog.setVisible(true);
+        addCar.pack();
+        addCar.setLocationRelativeTo(frame); // Center relative to parent frame
+        addCar.setVisible(true);
     }
 
     private JTextField vinNumberInput, registrationNumberInput,brandInput, modelInput, priceInput, capacityInput, horsepowerInput, mpgInput;
     private JComboBox<String> yearInput,transmissionInput,fuelTypeInput,vehicleTypeInput;
     private JSlider seatInput;
-    private JComponent inputComponent;
+    private JTextArea inputField;
     private RoundedButton colorInput;
+    private Color selectedColor;
 
     private JPanel createVinNumberInputContainer() {
         JPanel vinNumberInputPanel = new JPanel(new GridBagLayout());
@@ -1552,6 +1512,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         yearInput.setMinimumSize(new Dimension(200, 50));
         yearInput.setForeground(Color.BLACK);
         yearInput.setBorder(new LineBorder(Color.BLACK, 2));
+        yearInput.setSelectedIndex(0);
 
         yearInputPanel.add(yearLabel, gbc);
         yearInputPanel.add(yearInput, gbc);
@@ -1614,7 +1575,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 // Open color picker
                 if (e.getSource() == colorInput) {
 
-                    Color selectedColor = JColorChooser.showDialog(null, "Choose A Color", Color.BLACK);
+                    selectedColor = JColorChooser.showDialog(null, "Choose A Color", Color.BLACK);
                     colorInput.setBackground(selectedColor);
                     colorInput.setText(VehicleController.processClosestColorName(selectedColor));
                 }
@@ -1851,7 +1812,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         gbc.gridy++;
 
         // input text area
-        JTextArea inputField = new JTextArea(initialRows, 20);
+        inputField = new JTextArea(initialRows, 20);
         inputField.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
         inputField.setForeground(Color.BLACK);
         inputField.setLineWrap(true);
@@ -1893,7 +1854,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
             }
         });
-        inputComponent = scrollPane;
+        JComponent inputComponent = scrollPane;
 
 
         inputPanel.add(inputComponent, gbc);
@@ -1903,7 +1864,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
     private JLabel imageLabel;
     private JButton selectButton, removeButton;
     private File selectedImageFile;
-    private final String IMAGE_DIR = "images/cars/";
+    private BufferedImage selectedImagePreview = null; // Buffered image for preview
 
     // In your form initialization method:
     private JPanel initImageUploader() {
@@ -1954,47 +1915,125 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
             try {
 
-                BufferedImage img = ImageIO.read(selectedImageFile);
-                if (img.getWidth() == img.getHeight()) {
-                    // Create target directory if needed
-                    new File(IMAGE_DIR).mkdirs();
-
-                    // Copy file
-                    String filename = selectedImageFile.getName();
-                    File targetFile = new File(IMAGE_DIR + filename);
-                    Files.copy(selectedImageFile.toPath(), targetFile.toPath(),
-                            StandardCopyOption.REPLACE_EXISTING);
-
-                    // Display preview
-                    ImageIcon icon = new ImageIcon(
-                            new ImageIcon(targetFile.getAbsolutePath()).getImage().getScaledInstance(500, 500, Image.SCALE_SMOOTH));
-                    imageLabel.setIcon(icon);
-                    removeButton.setEnabled(true);
-                } else {
-                    JOptionPane.showMessageDialog(this,
-                            "Image must be a square!",
-                            "Invalid Size", JOptionPane.ERROR_MESSAGE);
+                selectedImagePreview = ImageIO.read(selectedImageFile);
+                if (selectedImagePreview == null) {
+                    dialog.showDialog("ERROR","Input Error", "Image Selection Error", "Please select a valid image for the vehicle",true);
+                    return;
+                } else if (selectedImagePreview.getWidth() != selectedImagePreview.getHeight()){
+                    dialog.showDialog("ERROR","Input Error", "Image Selection Error", "Image must be square",true);
+                    return;
                 }
+                ImageIcon icon = new ImageIcon(
+                selectedImagePreview.getScaledInstance(500, 500, Image.SCALE_SMOOTH));
+                imageLabel.setIcon(icon);
+                imageLabel.setText("");
+                removeButton.setEnabled(true);
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this,
-                        "Error loading image",
-                        "Error", JOptionPane.ERROR_MESSAGE);
+                dialog.showDialog("ERROR","Input Error", "Image Loading Error", "Failed to load image",true);
             }
         }
     }
 
     // Handle image removal
     private void handleImageRemove(ActionEvent e) {
-        if (selectedImageFile != null) {
-            String filename = selectedImageFile.getName();
-            File targetFile = new File(IMAGE_DIR + filename);
+        selectedImageFile = null;
+        selectedImagePreview = null;
+        imageLabel.setIcon(null);
+        removeButton.setEnabled(false);
+    }
 
-            if (targetFile.exists() && targetFile.delete()) {
-                imageLabel.setIcon(null);
-                imageLabel.setText("No Image Selected");
-                removeButton.setEnabled(false);
-                selectedImageFile = null;
-            }
+    private void handleSubmit(ActionEvent e) {
+        // 1. Validate form fields here (your own logic)
+        //boolean valid = true; // pretend we check all form fields
+        if (!validateFormFields()){
+            return;
         }
+        boolean imageSaved = VehicleController.processImageSaving(selectedImageFile, selectedImagePreview);
+            if (!imageSaved) {
+                dialog.showDialog("ERROR","Image Saving Error", "Image Saving Error", "Failed to save image",true);
+                return;
+            }
+    
+        Vehicle newVehicle = new Vehicle("images/cars/" + VehicleController.processGetImagePath(selectedImageFile), brandInput.getText(), modelInput.getText(), Integer.parseInt((String)yearInput.getSelectedItem()),
+                        Integer.parseInt(capacityInput.getText()), Integer.parseInt(horsepowerInput.getText()), String.format("#%02x%02x%02x", selectedColor.getRed(), selectedColor.getGreen(), selectedColor.getBlue()), Double.parseDouble(mpgInput.getText()), vinNumberInput.getText(), registrationNumberInput.getText(), Double.parseDouble(priceInput.getText()), (String) transmissionInput.getSelectedItem(), 
+                        (String) fuelTypeInput.getSelectedItem(), (String) vehicleTypeInput.getSelectedItem(), (int) seatInput.getValue(), true, inputField.getText());
+        VehicleController.processAddVehiclestoDAO(newVehicle);
+        dialog.showDialog("SUCCESS","Submission Successful", "Added Successfully", "Successfully added a vehicle",true);
+
+        // 3. Reset form
+        resetForm();
+        refreshCards(sortedVehicles);
+    }
+
+    private boolean validateFormFields() {
+        if (!VehicleController.processImageValidation(selectedImageFile, selectedImagePreview)){
+            dialog.showDialog("ERROR","Input Error", "Image Input Error", "Please select an image for the vehicle",true);
+            return false;
+        }
+        if (!VehicleController.processColorValidation(selectedColor)){
+            dialog.showDialog("ERROR","Input Error", "Color Input Error", "Please select a color for the vehicle",true);
+            return false;
+        }
+        if (!VehicleController.processVinNumberValidation(vinNumberInput.getText())) {
+            dialog.showDialog("ERROR","Input Error", "VIN Number Input Error", "VIN number must be 17 alphanumeric characters",true);
+            return false;
+        }
+        if (!VehicleController.processStringsValidation(registrationNumberInput.getText(), brandInput.getText(), modelInput.getText())) {
+            dialog.showDialog("ERROR","Input Error", "Information Input Error", "Please enter all information (except features)",true);
+            return false;
+        }
+
+        if (!VehicleController.processRentalPriceDayValidation( priceInput.getText())) {
+            dialog.showDialog("ERROR","Input Error", "Price Input Error", "Please enter a valid price number",true);
+            return false;
+        }
+
+        if (!VehicleController.processYearValidation((String) yearInput.getSelectedItem())) {
+            dialog.showDialog("ERROR","Input Error", "Year Input Error", "Please select a valid year",true);
+            return false;
+        }
+
+        if (!VehicleController.processMpgValidation(mpgInput.getText())) {
+            dialog.showDialog("ERROR","Input Error", "MPG Input Error", "Please enter a valid mpg number",true);
+            return false;
+        }
+
+        if (!VehicleController.processCapacityValidation(capacityInput.getText())) {
+            dialog.showDialog("ERROR","Input Error", "Capacity Input Error", "Please enter a valid capacity number",true);
+            return false;
+        }
+
+        if (!VehicleController.processHorsepowerValidation(horsepowerInput.getText())) {
+            dialog.showDialog("ERROR","Input Error", "Horsepower Input Error", "Please enter a valid horsepower number",true);
+            return false;
+        }
+
+        if (!VehicleController.processTransmissionValidation((String)transmissionInput.getSelectedItem())) {
+            dialog.showDialog("ERROR","Input Error", "Transmission Input Error", "Please select a transmission type",true);
+            return false;
+        }
+
+        if (!VehicleController.processFuelTypeValidation((String)fuelTypeInput.getSelectedItem())) {
+            dialog.showDialog("ERROR","Input Error", "Fuel Type Input Error", "Please select a fuel type",true);
+
+            return false;
+        }
+
+        if (!VehicleController.processVehicleTypeValidation((String)vehicleTypeInput.getSelectedItem())) {
+            dialog.showDialog("ERROR","Input Error", "Vehicle Type Input Error", "Please select a vehicle type",true);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private void resetForm() {
+        selectedImageFile = null;
+        selectedImagePreview = null;
+        imageLabel.setIcon(null);
+        removeButton.setEnabled(false);
+        // Reset your other form fields too
     }
 }
+

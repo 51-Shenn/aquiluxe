@@ -63,6 +63,7 @@ public class IconLoader extends Theme {
     private static final File BLACK_FUEL_GAUGE_ICON;
     private static final File BLACK_GAS_ICON;
     private static final File BLACK_HORSE_ICON;
+    private static final File BLACK_CIRCLE_ICON;
     
     // dark theme icons
     // overflow-menu
@@ -92,6 +93,7 @@ public class IconLoader extends Theme {
     private static final File WHITE_FUEL_GAUGE_ICON;
     private static final File WHITE_GAS_ICON;
     private static final File WHITE_HORSE_ICON;
+    private static final File WHITE_CIRCLE_ICON;
     
     static {
         String mainPath = "images/icons/";
@@ -181,6 +183,7 @@ public class IconLoader extends Theme {
         BLACK_FUEL_GAUGE_ICON = new File(String.format("%s" + "fuel-gauge.png", vehicleLightThemePath));
         BLACK_GAS_ICON = new File(String.format("%s" + "gas-station.png", vehicleLightThemePath));
         BLACK_HORSE_ICON = new File(String.format("%s" + "horse.png", vehicleLightThemePath));
+        BLACK_CIRCLE_ICON = new File(String.format("%s" + "circle.png", vehicleLightThemePath));
 
         File[] blackIcons = {
             BLACK_CLOSE_ICON,
@@ -206,7 +209,8 @@ public class IconLoader extends Theme {
             BLACK_ENGINE_ICON,
             BLACK_FUEL_GAUGE_ICON,
             BLACK_GAS_ICON,
-            BLACK_HORSE_ICON
+            BLACK_HORSE_ICON,
+            BLACK_CIRCLE_ICON
         };
         
         // dark theme icons
@@ -235,6 +239,7 @@ public class IconLoader extends Theme {
         WHITE_FUEL_GAUGE_ICON = new File(String.format("%s" + "fuel-gauge.png", vehicleDarkThemePath));
         WHITE_GAS_ICON = new File(String.format("%s" + "gas-station.png", vehicleDarkThemePath));
         WHITE_HORSE_ICON = new File(String.format("%s" + "horse.png", vehicleDarkThemePath));
+        WHITE_CIRCLE_ICON = new File(String.format("%s" + "circle.png", vehicleDarkThemePath));
 
         File[] whiteIcons = {
             WHITE_CLOSE_ICON,
@@ -260,7 +265,8 @@ public class IconLoader extends Theme {
             WHITE_ENGINE_ICON,
             WHITE_FUEL_GAUGE_ICON,
             WHITE_GAS_ICON,
-            WHITE_HORSE_ICON
+            WHITE_HORSE_ICON,
+            WHITE_CIRCLE_ICON
         };
 
         // check if every file exists
@@ -459,5 +465,9 @@ public class IconLoader extends Theme {
 
     public static ImageIcon getHorseIcon() {
         return Theme.isDarkMode()? new ImageIcon(WHITE_HORSE_ICON.toString()) : new ImageIcon(BLACK_HORSE_ICON.toString());
+    }
+
+    public static ImageIcon getCircleIcon() {
+        return Theme.isDarkMode()? new ImageIcon(WHITE_CIRCLE_ICON.toString()) : new ImageIcon(BLACK_CIRCLE_ICON.toString());
     }
 }

@@ -152,7 +152,7 @@ public class VehiclesPageDetails extends JPanel {
         ImageIcon capacityIcon = IconLoader.getEngineIcon();
         ImageIcon mpgIcon = IconLoader.getFuelGaugeIcon();
         ImageIcon horsepowerIcon = IconLoader.getHorseIcon();
-        ImageIcon colorIcon = new ImageIcon("images/vehiclepageicons/circle.png");
+        ImageIcon colorIcon = IconLoader.getCircleIcon();
 
         JPanel transmissionPanel = new JPanel(new BorderLayout());
         transmissionPanel.setBackground(Theme.getBackground());
@@ -406,10 +406,9 @@ public class VehiclesPageDetails extends JPanel {
         viewAllButton.setVerticalAlignment(JButton.CENTER);
         viewAllButton.addActionListener(e -> {
             if (e.getActionCommand().equals("View All")) {
-                panel.removeAll();
-                panel.add(new VehiclesPage(frame, panel), BorderLayout.CENTER);
-                panel.revalidate();
-                panel.repaint();
+                JPanel vehiclesPanel = new VehiclesPage(frame, panel, VehiclesPage.getUser());
+                GUIComponents.cardPanel.add(vehiclesPanel, "VehicleDetailsPage");
+                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
             }
         });
 
@@ -420,6 +419,7 @@ public class VehiclesPageDetails extends JPanel {
         JPanel carsContainer = new JPanel(new GridLayout(0, 3, 50, 30));
         carsContainer.setBackground(Theme.getBackground());
         int count = 0;
+        VehiclesPage vehiclesPage = new VehiclesPage(frame, panel, VehiclesPage.getUser());
         for (Vehicle v : vehicless) {
             if (this.vehicle.getBrand().equals(v.getBrand()) && this.vehicle.getModel().equals(v.getModel())) {
                 continue;
@@ -444,7 +444,7 @@ public class VehiclesPageDetails extends JPanel {
             String availability = v.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
             String rentPrice = "RM" + v.getRentalPriceDay() + "/per day";
 
-            carsContainer.add(VehiclesPage.createCarCard(v, image, v.getBrand(), v.getModel(),
+            carsContainer.add(vehiclesPage.createCarCard(v, image, v.getBrand(), v.getModel(),
                     v.getTransmission(), v.getFuelType(), v.getVehicleType(),
                     v.getSeatingCapacity(), rentPrice, availability, frame, panel));
             count++;
