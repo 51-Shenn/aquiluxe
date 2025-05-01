@@ -279,6 +279,11 @@ public class VehiclesPageDetails extends JPanel {
         rentButton.setContentAreaFilled(false);
         rentButton.setBorderPainted(false);
         rentButton.setOpaque(true);
+        if (vehicle.getAvailability()) {
+            rentButton.setEnabled(true);
+        } else {
+            rentButton.setEnabled(false);
+        }
         rentButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {

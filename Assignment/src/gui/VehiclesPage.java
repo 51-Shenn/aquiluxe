@@ -121,8 +121,14 @@ public class VehiclesPage extends JPanel implements ActionListener {
         carRent.setBackground(Theme.getSpecial());
         carRent.setForeground(Theme.getSpecialForeground());
         carRent.setOpaque(true);
+        if (vehicle.getAvailability()) {
+            carRent.setEnabled(true);
+        } else {
+            carRent.setEnabled(false);
+        }
         // if is admin
         if (user instanceof Admin admin && "Manager".equals(admin.getAdminRole())) {
+            carRent.setEnabled(true);
             carRent.setText("EDIT");
             carRent.addMouseListener(new MouseAdapter() {
                 @Override
