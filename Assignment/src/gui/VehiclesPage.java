@@ -1820,6 +1820,12 @@ public class VehiclesPage extends JPanel implements ActionListener {
         transmissionInput.setMinimumSize(new Dimension(200, 50));
         transmissionInput.setForeground(Color.BLACK);
         transmissionInput.setBorder(new LineBorder(Color.BLACK, 2));
+        if (selectedItem.contains("AUTO"))  {
+            selectedItem = "AUTO";
+        }
+        else if (selectedItem.contains("MANUAL")) {
+            selectedItem = "MANUAL";
+        }
         transmissionInput.setSelectedItem(selectedItem);
 
         transmissionInputPanel.add(transmissionLabel, gbc);
