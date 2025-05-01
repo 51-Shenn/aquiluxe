@@ -328,8 +328,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
         }
 
         else {
-            Admin admin = (Admin) user;
             if (user instanceof Admin) {
+                Admin admin = (Admin) user;
                 if (admin.getAdminRole().equals("Manager")){
                     carDetails.setText("DELETE");
                     carDetails.setForeground(Theme.getErrorForeground());
@@ -582,8 +582,10 @@ public class VehiclesPage extends JPanel implements ActionListener {
         }
         else {
             if (user instanceof Admin) {
+                Admin admin = (Admin) user;
                 if (admin.getAdminRole().equals("Manager")){
                     addButton.setVisible(true); 
+                }
             }
         }
 
