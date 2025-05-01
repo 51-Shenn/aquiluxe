@@ -78,7 +78,6 @@ public class Vehicle {
         this.seatingCapacity = seatingCapacity;
         this.availability = availability;
         this.features = features;
-        this.vehicleType = vehicleType;
     }
 
     public int getVehicleId() {
@@ -231,13 +230,5 @@ public class Vehicle {
 
     public static void setVehicles(List<Vehicle> setVehicle) {
         vehicles = setVehicle;
-    }
-
-    public String getVehicletype() {
-        return vehicleType;
-    }
-
-    public void setVehicletype(String vehicleType) {
-        this.vehicleType = vehicleType;
     }
 }
