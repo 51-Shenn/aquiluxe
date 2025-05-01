@@ -176,7 +176,7 @@ public class VehicleService {
             return car;
         }
         for (Vehicle c : car) {
-            if (c.isAvailability() == availability) {
+            if (c.getAvailability() == availability) {
                 filteredCars.add(c);
             }
         }

@@ -36,7 +36,7 @@ public class VehicleDAO {
             stmt.setString(13, vehicle.getFuelType());
             stmt.setString(14, vehicle.getVehicleType());
             stmt.setInt(15, vehicle.getSeatingCapacity());
-            stmt.setBoolean(16, vehicle.isAvailability());
+            stmt.setBoolean(16, vehicle.getAvailability());
             stmt.setString(17, vehicle.getFeatures());
 
             stmt.executeUpdate();

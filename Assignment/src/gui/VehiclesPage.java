@@ -26,6 +26,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
     private List<Vehicle> vehicles;
     private List<Vehicle> sortedVehicles;
+    private Vehicle[] vehicless = new Vehicle[4];
+
     protected final Border BORDER = new LineBorder(Color.BLACK, 2);
     protected final Border PADDING = new EmptyBorder(10, 15, 10, 15);
 
@@ -42,6 +44,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
         this.vehicles = Vehicle.getVehicles();
         //probrably will change later for loader by using vehicle.getvehicles() and maybe car.getcars() and bike.getbikes()?
         this.sortedVehicles = this.vehicles;
+        for (int i = 0; i < 4; i++) {
+            vehicless[i] = vehicles.get(i);
+        }
         VehiclesPage.user = user;
         this.setLayout(new BorderLayout());
 
@@ -75,7 +80,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             Image rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
             image = new ImageIcon(rImage);
 
-            String availability = v.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
+            String availability = v.getAvailability() ? "AVAILABLE" : "UNAVAILABLE";
             String rentPrice = "RM" + v.getRentalPriceDay() + "/per day";
 
             vehicleCards.add(createCarCard(v, image, v.getBrand(), v.getModel(), v.getTransmission(), v.getFuelType(),
@@ -262,7 +267,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             public void mouseClicked(MouseEvent e) {
                 // Check if the click is on the image
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                    JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, vehicles);
+                    JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, vehicless);
                     GUIComponents.cardPanel.add(detailsPanel, "VehicleDetailsPage");
                     GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
                 }
@@ -294,7 +299,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 public void mouseClicked(MouseEvent e) {
                     // Check if the click is on the image
                     if (SwingUtilities.isLeftMouseButton(e)) {
-                        JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, vehicles);
+                        JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, vehicless);
                         GUIComponents.cardPanel.add(detailsPanel, "VehicleDetailsPage");
                         GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
                     }
@@ -973,7 +978,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             Image rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
             image = new ImageIcon(rImage);
 
-            String availability = c.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
+            String availability = c.getAvailability() ? "AVAILABLE" : "UNAVAILABLE";
             String rentPrice = "RM" + c.getRentalPriceDay() + "/per day";
 
             JPanel card = createCarCard(c, image, c.getBrand(), c.getModel(),

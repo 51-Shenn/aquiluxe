@@ -4,7 +4,6 @@ import datamodels.Vehicle;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 import javax.swing.*;
 
 import controllers.VehicleController;
@@ -18,17 +17,17 @@ public class VehiclesPageDetails extends JPanel {
     private JPanel carFeaturesContainer;
     private boolean isFeaturesVisible = false;
     private JPanel emptyBottomPanel = new JPanel();
-    private List<Vehicle> vehicles;
+    private Vehicle[] vehicless;
 
     public static JPanel rentalPanel;
 
-    public VehiclesPageDetails(JFrame frame, JPanel panel, Vehicle vehicle, List<Vehicle> vehicles) {
+    public VehiclesPageDetails(JFrame frame, JPanel panel, Vehicle vehicle,  Vehicle[] vehicless) {
         this.frame = frame;
         this.panel = panel;
         this.vehicle = vehicle;
         this.setBackground(Theme.getBackground());
         this.setLayout(new BorderLayout());
-        this.vehicles = vehicles;
+        this.vehicless = vehicless;
 
         this.add(MainContainer(), BorderLayout.CENTER);
 
@@ -381,12 +380,6 @@ public class VehiclesPageDetails extends JPanel {
     private JPanel moreCarsPanel() {
 
         ImageIcon rightArrowIcon = IconLoader.getRightIcon();
-        Vehicle[] vehicless = new Vehicle[4];
-
-        for (int i = 0; i < 4; i++) {
-            vehicless[i] = vehicles.get(i);
-        }
-
         // title for Other Cars and a button to view more cars
         JPanel otherCarsTitlePanel = new JPanel(new BorderLayout());
         otherCarsTitlePanel.setPreferredSize(new Dimension(800, 100));
@@ -442,7 +435,7 @@ public class VehiclesPageDetails extends JPanel {
             Image rImage = image.getImage().getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH);
             image = new ImageIcon(rImage);
 
-            String availability = v.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
+            String availability = v.getAvailability() ? "AVAILABLE" : "UNAVAILABLE";
             String rentPrice = "RM" + v.getRentalPriceDay() + "/per day";
 
             carsContainer.add(vehiclesPage.createCarCard(v, image, v.getBrand(), v.getModel(),
