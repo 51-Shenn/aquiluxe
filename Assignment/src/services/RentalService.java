@@ -91,7 +91,12 @@ public class RentalService {
     // calculateBaseRentalCost : daysbetween * rentalpriceday
     public static double calculateBaseRentalCost(Rental rental) {
         long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(rental.getRentStartDate(),
-                rental.getRentEndDate()) + 1; // inclusive
+                rental.getRentEndDate());
+
+        if (daysBetween >= 0)
+            daysBetween = daysBetween + 1;
+        else
+            daysBetween = 1;
 
         double rentalPricePerDay = rental.getRentVehicle().getRentalPriceDay();
 

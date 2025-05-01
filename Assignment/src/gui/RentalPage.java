@@ -5,15 +5,24 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.io.File;
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +30,7 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -36,15 +46,19 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import controllers.RentalController;
+import controllers.UserController;
+import database.UserDAO;
 import datamodels.*;
 
 public class RentalPage extends JPanel {
 
-    private final JFrame frame;
-    private final JPanel panel;
+    private JFrame frame;
+    private JPanel panel;
     private JScrollPane mainScrollPane;
     private JLabel totalPriceLabel;
-    private final Map<String, JComponent> inputFieldsMap = new HashMap<>();
+    private Map<String, JComponent> inputFieldsMap = new HashMap<>();
+    private Map<String, JComboBox<String>> comboBoxMap = new HashMap<>();
 
     private final float TITLE_TEXT_SIZE = 20f;
     private final float NORMAL_TEXT_SIZE = 28f;
@@ -56,7 +70,15 @@ public class RentalPage extends JPanel {
 
     private GridBagConstraints gbc = new GridBagConstraints();
 
+    private RentalController rentalController = new RentalController(frame, panel);
     private static Vehicle vehicleSelected;
+    private Rental rental = new Rental(); // default rental object
+    private Payment payment = new Payment();
+
+    private JLabel rentalPriceLabel;
+    private JLabel insurancePriceLabel;
+    private JLabel depositPriceLabel;
+    private JLabel taxPriceLabel;
 
     public RentalPage(JFrame frame, JPanel panel, Vehicle selectedVehicle) {
         this.frame = frame;
@@ -64,15 +86,21 @@ public class RentalPage extends JPanel {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
+        // set vehicle
         vehicleSelected = selectedVehicle;
+        rental.setRentVehicle(vehicleSelected);
+
+        // set customer
+        File accountsFile = new File("files/settings/accounts.txt");
+        User user = UserController.loadCurrentUser(accountsFile);
+        Customer currentCustomer = UserDAO.getCustomerById(user);
+        rental.setRentCustomer(currentCustomer);
 
         // scrollable rental page container
         JSplitPane rentalPage = createRentalPage();
         this.add(rentalPage, BorderLayout.CENTER);
-    }
 
-    public static void setVehicleSelected(Vehicle vehicleSelected) {
-        RentalPage.vehicleSelected = vehicleSelected;
+        addUpdateListeners();
     }
 
     private JSplitPane createRentalPage() {
@@ -108,7 +136,8 @@ public class RentalPage extends JPanel {
     // rental page left container
     private JPanel createLeftContainer() {
         // create container for left panel
-        RoundedPanel leftContainer = new RoundedPanel(30, Theme.getBackground());
+        JPanel leftContainer = new JPanel();
+        leftContainer.setBackground(Theme.getBackground());
         leftContainer.setLayout(new BorderLayout(0, 5));
         leftContainer.setBorder(BorderFactory.createEmptyBorder(60, 100, 100, 100));
 
@@ -127,7 +156,7 @@ public class RentalPage extends JPanel {
         summaryPanel.setBackground(Theme.getBackground());
 
         // rental car summary container
-        RoundedPanel carPanel = new RoundedPanel(20, Color.WHITE);
+        RoundedPanel carPanel = new RoundedPanel(20, Theme.getBackground());
         carPanel.setLayout(new BorderLayout());
         carPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -144,7 +173,7 @@ public class RentalPage extends JPanel {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error loading images: " + e.getMessage());
         }
-        Image rImage = image.getImage().getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH);
+        Image rImage = image.getImage().getScaledInstance(225, 225, java.awt.Image.SCALE_SMOOTH);
         image = new ImageIcon(rImage);
         JLabel carImageLabel = new JLabel(image);
         carImageLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -152,7 +181,7 @@ public class RentalPage extends JPanel {
         // rental car details summary text
         JPanel carDetailsPanel = new JPanel();
         carDetailsPanel.setLayout(new GridBagLayout());
-        carDetailsPanel.setBackground(Color.WHITE);
+        carDetailsPanel.setBackground(Theme.getBackground());
         carDetailsPanel.setBorder(BorderFactory.createEmptyBorder(0, 40, 0, 40));
 
         gbc.gridx = 0;
@@ -163,19 +192,19 @@ public class RentalPage extends JPanel {
 
         // car details text labels
         JLabel carNameLabel = createLabel(vehicleSelected.getBrand() + " " + vehicleSelected.getModel(),
-                30f, Color.BLACK, Color.WHITE, 50, -1);
+                30f, Theme.getForeground(), Theme.getBackground(), 50, -1);
         carNameLabel.setHorizontalAlignment(JLabel.LEFT);
 
         JLabel carTransmissionLabel = createLabel(vehicleSelected.getTransmission() + " Transmission",
-                20f, Color.BLACK, Color.WHITE, 50, -1);
+                20f, Theme.getForeground(), Theme.getBackground(), 50, -1);
         carTransmissionLabel.setHorizontalAlignment(JLabel.LEFT);
 
         JLabel carFuelLabel = createLabel(vehicleSelected.getFuelType(),
-                20f, Color.BLACK, Color.WHITE, 50, -1);
+                20f, Theme.getForeground(), Theme.getBackground(), 50, -1);
         carFuelLabel.setHorizontalAlignment(JLabel.LEFT);
 
         JLabel carRentalPriceLabel = createLabel("RM " + vehicleSelected.getRentalPriceDay() + "/day",
-                20f, Color.BLACK, Color.WHITE, 50, -1);
+                20f, Theme.getForeground(), Theme.getBackground(), 50, -1);
         carRentalPriceLabel.setHorizontalAlignment(JLabel.LEFT);
 
         // gblayout gridy position
@@ -197,45 +226,81 @@ public class RentalPage extends JPanel {
         summaryPanel.add(carPanel, BorderLayout.NORTH);
 
         // add pricing details
-        RoundedPanel pricingPanel = new RoundedPanel(20, Color.WHITE);
+        RoundedPanel pricingPanel = new RoundedPanel(20, Theme.getBackground());
         pricingPanel.setLayout(new GridBagLayout());
         pricingPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 100));
 
+        // get list of costs
+        double[] rentalCosts = rentalController.processRentalCosts(rental);
+
         // pricing details text labels
-        JLabel rentalPriceTextLabel = createLabel("Rental Price : ", 20f,
-                Color.BLACK, Color.WHITE, 30, -1);
+        JLabel rentalPriceTextLabel = createLabel("Base Rental Price : ", 20f,
+                Theme.getForeground(), Theme.getBackground(), 30, -1);
         rentalPriceTextLabel.setOpaque(false);
         rentalPriceTextLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel rentalPriceLabel = createLabel("RM " + vehicleSelected.getRentalPriceDay(), 20f,
-                Color.BLACK, Color.WHITE, 30, -1);
+        rentalPriceLabel = createLabel("RM " + String.format("%.2f", rentalCosts[0]), 20f,
+                Theme.getForeground(), Theme.getBackground(), 30, -1);
         rentalPriceLabel.setOpaque(false);
         rentalPriceLabel.setHorizontalAlignment(JLabel.RIGHT);
 
         JLabel insuranceTextLabel = createLabel("Insurance Price : ", 20f,
-                Color.BLACK, Color.WHITE, 30, -1);
+                Theme.getForeground(), Theme.getBackground(), 30, -1);
         insuranceTextLabel.setOpaque(false);
         insuranceTextLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel insurancePriceLabel = createLabel(
-                "RM " + String.format("%.2f", (vehicleSelected.getRentalPriceDay() * 0.1)), 20f,
-                Color.BLACK, Color.WHITE, 30, -1);
+        insurancePriceLabel = createLabel("RM " + String.format("%.2f", rentalCosts[1]), 20f,
+                Theme.getForeground(), Theme.getBackground(), 30, -1);
         insurancePriceLabel.setOpaque(false);
         insurancePriceLabel.setHorizontalAlignment(JLabel.RIGHT);
 
-        // rental price per day
+        JLabel depositTextLabel = createLabel("Deposit Price (Refundable) : ", 20f,
+                Theme.getForeground(), Theme.getBackground(), 30, -1);
+        depositTextLabel.setOpaque(false);
+        depositTextLabel.setHorizontalAlignment(JLabel.LEFT);
+
+        depositPriceLabel = createLabel("RM " + String.format("%.2f", rentalCosts[2]), 20f,
+                Theme.getForeground(), Theme.getBackground(), 30, -1);
+        depositPriceLabel.setOpaque(false);
+        depositPriceLabel.setHorizontalAlignment(JLabel.RIGHT);
+
+        JLabel taxTextLabel = createLabel("Tax Charges (SST) : ", 20f,
+                Theme.getForeground(), Theme.getBackground(), 30, -1);
+        taxTextLabel.setOpaque(false);
+        taxTextLabel.setHorizontalAlignment(JLabel.LEFT);
+
+        taxPriceLabel = createLabel("RM " + String.format("%.2f", rentalCosts[3]), 20f,
+                Theme.getForeground(), Theme.getBackground(), 30, -1);
+        taxPriceLabel.setOpaque(false);
+        taxPriceLabel.setHorizontalAlignment(JLabel.RIGHT);
+
+        // rental price
         gbc.gridx = 0;
         gbc.gridy = 0;
         pricingPanel.add(rentalPriceTextLabel, gbc);
         gbc.gridx = 1;
         pricingPanel.add(rentalPriceLabel, gbc);
 
-        // insurance price per day
+        // insurance price
         gbc.gridx = 0;
         gbc.gridy = 1;
         pricingPanel.add(insuranceTextLabel, gbc);
         gbc.gridx = 1;
         pricingPanel.add(insurancePriceLabel, gbc);
+
+        // deposit price
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        pricingPanel.add(depositTextLabel, gbc);
+        gbc.gridx = 1;
+        pricingPanel.add(depositPriceLabel, gbc);
+
+        // tax charges
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        pricingPanel.add(taxTextLabel, gbc);
+        gbc.gridx = 1;
+        pricingPanel.add(taxPriceLabel, gbc);
 
         summaryPanel.add(pricingPanel, BorderLayout.CENTER);
 
@@ -246,17 +311,17 @@ public class RentalPage extends JPanel {
 
     private RoundedPanel createTotalPricePanel() {
         // total price
-        RoundedPanel totalPanel = new RoundedPanel(20, Color.WHITE);
+        RoundedPanel totalPanel = new RoundedPanel(20, Theme.getBackground());
         totalPanel.setLayout(new BorderLayout());
         totalPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 100));
 
         JLabel totalPriceTextLabel = createLabel("Total Price : ", 20f,
-                Color.BLACK, Color.WHITE, 30, -1);
+                Theme.getForeground(), Theme.getBackground(), 30, -1);
         totalPriceTextLabel.setOpaque(false);
         totalPriceTextLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        totalPriceLabel = createLabel("RM " + vehicleSelected.getRentalPriceDay(), 40f,
-                Color.BLACK, Color.WHITE, 30, -1);
+        totalPriceLabel = createLabel("RM " + rentalController.processRentalTotalCost(rental), 40f,
+                Theme.getForeground(), Theme.getBackground(), 30, -1);
         totalPriceLabel.setOpaque(false);
         totalPriceLabel.setHorizontalAlignment(JLabel.RIGHT);
 
@@ -269,7 +334,8 @@ public class RentalPage extends JPanel {
     // rental page right container
     private JPanel createRightContainer() {
         // create container for inputs
-        RoundedPanel rightContainer = new RoundedPanel(30, Theme.getBackground());
+        JPanel rightContainer = new JPanel();
+        rightContainer.setBackground(Theme.getBackground());
 
         rightContainer.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -288,7 +354,33 @@ public class RentalPage extends JPanel {
         JPanel billingContainer = createBillingInfoPanel();
         JPanel rentalContainer = createRentalDetailsPanel();
         JPanel paymentContainer = createPaymentMethodContainer();
-        JButton confirmButton = createButton("Confirm", Theme.getSpecial(), Theme.getForeground(), 200, 50);
+        JButton confirmButton = createButton("Confirm", Theme.getSpecial(), Theme.getWhite(), 200, 50);
+        confirmButton.addActionListener(e -> {
+            try {
+                // update customer address
+                processBillingDetails();
+
+                // set rental details
+                processRentalDetails();
+                // set total cost
+                rental.setRentTotalCost(rentalController.processRentalTotalCost(rental));
+
+                // set payment details
+                processPaymentDetails();
+
+                // pass controller
+                System.out.println(rental.toString()); // rental
+                System.out.println(payment.getRental().getRentVehicle().getModel() + payment.getAmount()); // payment
+                System.out.println(rental.getRentCustomer().getUserAddress()); // customer, address
+            } catch (Exception ex) {
+                Dialog dialog = new Dialog(this.frame);
+                dialog.showDialog("HAZARD",
+                        "Warning",
+                        "Incorrect inputs",
+                        "Please input the correct information",
+                        true);
+            }
+        });
 
         // add input panels to right container
         gbc.gridy = 0;
@@ -303,58 +395,171 @@ public class RentalPage extends JPanel {
         return rightContainer;
     }
 
-    // demo
+    // Billing Info
     private JPanel createBillingInfoPanel() {
         JPanel billingContainer = new JPanel(new BorderLayout());
         billingContainer.setBackground(Theme.getBackground());
         billingContainer.add(createTitlePanel("Billing Info"), BorderLayout.NORTH);
 
-        RoundedPanel billingInfoPanel = new RoundedPanel(20, Color.WHITE);
+        RoundedPanel billingInfoPanel = new RoundedPanel(20, Theme.getBackground());
         billingInfoPanel.setLayout(new GridBagLayout());
         billingInfoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        billingInfoPanel.add(createInputContainer("B_Address", "Billing Address: ", 4, true), gbc);
+        billingInfoPanel.add(createInputContainer("BillingAddress", "Billing Address: ", 4, true), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        billingInfoPanel.add(createInputContainer("B_Name", "Billing Name: ", false), gbc);
+        billingInfoPanel.add(createInputContainer("BillingName", "Billing Name: ", false), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        billingInfoPanel.add(createInputContainer("B_Contact", "Billing Contact: ", 1, false), gbc);
+        billingInfoPanel.add(createInputContainer("BillingContact", "Billing Contact: ", false), gbc);
 
         billingContainer.add(billingInfoPanel, BorderLayout.CENTER);
 
         return billingContainer;
     }
 
-    // demo
+    private void processBillingDetails() {
+        rental.getRentCustomer().setAddress(getInputValue("BillingAddress"));
+
+        if (rental.getRentCustomer().getUserAddress().isBlank()
+                || rental.getRentCustomer().getUserAddress().isEmpty()) {
+            Dialog dialog = new Dialog(this.frame);
+            dialog.showDialog("HAZARD",
+                    "Empty",
+                    "Empty Address",
+                    "Please input an billing address",
+                    true);
+        }
+
+    }
+
+    // Rental Details
     private JPanel createRentalDetailsPanel() {
         JPanel rentalContainer = new JPanel(new BorderLayout());
         rentalContainer.setBackground(Theme.getBackground());
         rentalContainer.add(createTitlePanel("Rental Details"), BorderLayout.NORTH);
 
-        RoundedPanel rentalDetailsPanel = new RoundedPanel(20, Color.WHITE);
+        RoundedPanel rentalDetailsPanel = new RoundedPanel(20, Theme.getBackground());
         rentalDetailsPanel.setLayout(new GridBagLayout());
         rentalDetailsPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
         gbc.gridx = 0;
+        gbc.insets = new Insets(10, 0, 10, 0);
+
         gbc.gridy = 0;
-        rentalDetailsPanel.add(createInputContainer("R_Details1", "Rental Details 1: ", false), gbc);
+        rentalDetailsPanel.add(createDateSelector("Start Date", "StartDay", "StartMonth", "StartYear"), gbc);
 
-        gbc.gridx = 0;
         gbc.gridy = 1;
-        rentalDetailsPanel.add(createInputContainer("R_Details2", "Rental Details 2: ", 2, true), gbc);
+        rentalDetailsPanel.add(createTimeSelector("Pick Up Time", "PickUpHour", "PickUpMinute"), gbc);
 
-        gbc.gridx = 0;
         gbc.gridy = 2;
-        rentalDetailsPanel.add(createInputContainer("R_Details3", "Rental Details 3: ", 4, true), gbc);
+        rentalDetailsPanel.add(createDateSelector("End Date", "EndDay", "EndMonth", "EndYear"), gbc);
+
+        gbc.gridy = 3;
+        rentalDetailsPanel.add(createTimeSelector("Drop Off Time", "DropOffHour", "DropOffMinute"), gbc);
 
         rentalContainer.add(rentalDetailsPanel, BorderLayout.CENTER);
 
         return rentalContainer;
+    }
+
+    private void processRentalDetails() {
+        String startDate = getInputValue("StartYear") + "-" +
+                String.format("%02d", Integer.parseInt(getInputValue("StartMonth"))) + "-" +
+                String.format("%02d", Integer.parseInt(getInputValue("StartDay")));
+
+        String endDate = getInputValue("EndYear") + "-" +
+                String.format("%02d", Integer.parseInt(getInputValue("EndMonth"))) + "-" +
+                String.format("%02d", Integer.parseInt(getInputValue("EndDay")));
+
+        String pickupTime = getInputValue("PickUpHour") + ":" + getInputValue("PickUpMinute") + ":00";
+        String dropoffTime = getInputValue("DropOffHour") + ":" + getInputValue("DropOffMinute") + ":00";
+
+        rental.setRentStartDate(Date.valueOf(startDate).toLocalDate());
+        rental.setRentEndDate(Date.valueOf(endDate).toLocalDate());
+        rental.setPickUpTime(Time.valueOf(pickupTime).toLocalTime());
+        rental.setDropoffTime(Time.valueOf(dropoffTime).toLocalTime());
+
+    }
+
+    private JPanel createDateSelector(String title, String day, String month, String year) {
+        JPanel dateContainer = new JPanel(new GridBagLayout());
+        dateContainer.setBackground(Theme.getBackground());
+
+        JLabel titleDateLabel = createLabel(title, 30f, Theme.getForeground(),
+                Theme.getBackground(), 1, 1);
+        titleDateLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(30f));
+
+        JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        wrapper.setBackground(Theme.getBackground());
+        wrapper.add(titleDateLabel);
+
+        String[] yearsList = { "2025", "2026" };
+
+        String[] monthsList = new String[12];
+        for (int i = 0; i < monthsList.length; i++) {
+            monthsList[i] = String.valueOf(i + 1);
+        }
+
+        String[] daysList = new String[31];
+        for (int i = 0; i < daysList.length; i++) {
+            daysList[i] = String.valueOf(i + 1);
+        }
+
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        dateContainer.add(wrapper, gbc);
+
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        dateContainer.add(createComboBox(day, daysList), gbc);
+
+        gbc.gridx = 1;
+        dateContainer.add(createComboBox(month, monthsList), gbc);
+
+        gbc.gridx = 2;
+        dateContainer.add(createComboBox(year, yearsList), gbc);
+
+        return dateContainer;
+    }
+
+    private JPanel createTimeSelector(String title, String hour, String minute) {
+        JPanel dateContainer = new JPanel(new GridBagLayout());
+        dateContainer.setBackground(Theme.getBackground());
+
+        JLabel titleTimeLabel = createLabel(title, 30f, Theme.getForeground(),
+                Theme.getBackground(), 1, 1);
+        titleTimeLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(30f));
+
+        JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        wrapper.setBackground(Theme.getBackground());
+        wrapper.add(titleTimeLabel);
+
+        String[] hourList = { "08", "10", "12", "14", "16", "18", "20", "22" };
+
+        String[] minuteList = { "00", "15", "30", "45" };
+
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        dateContainer.add(wrapper, gbc);
+
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        dateContainer.add(createComboBox(hour, hourList), gbc);
+
+        gbc.gridx = 1;
+        dateContainer.add(createComboBox(minute, minuteList), gbc);
+
+        return dateContainer;
     }
 
     // Payment Method
@@ -363,31 +568,42 @@ public class RentalPage extends JPanel {
         paymentContainer.setBackground(Theme.getBackground());
         paymentContainer.add(createTitlePanel("Payment Method"), BorderLayout.NORTH);
 
-        RoundedPanel paymentMethodPanel = new RoundedPanel(20, Color.WHITE);
+        RoundedPanel paymentMethodPanel = new RoundedPanel(20, Theme.getBackground());
         paymentMethodPanel.setLayout(new GridBagLayout());
         paymentMethodPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        paymentMethodPanel.add(createInputContainer("P_Method", "Payment Method: ", false), gbc);
+        paymentMethodPanel.add(createInputContainer("PaymentMethod", "Payment Method: ", false), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        paymentMethodPanel.add(createInputContainer("C_D_Card", "Credit / Debit Card: ", false), gbc);
+        paymentMethodPanel.add(createInputContainer("CardNumber", "Card Number: ", false), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        paymentMethodPanel.add(createInputContainer("E_Date", "Expiry Date: ", 1, true), gbc);
+        paymentMethodPanel.add(createInputContainer("ExpiryDate", "Expiry Date: ", false), gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        paymentMethodPanel.add(createInputContainer("CVV", "CVV: ", false), gbc);
 
         paymentContainer.add(paymentMethodPanel, BorderLayout.CENTER);
 
         return paymentContainer;
     }
 
+    private void processPaymentDetails() {
+        payment.setRental(rental);
+        payment.setAmount(rental.getRentTotalCost());
+        payment.setPaymentMethod(getInputValue("PaymentMethod"));
+        payment.setPaymentDate(LocalDate.now());
+    }
+
     // create input container (from AuthenticationPage)
     private JPanel createInputContainer(String fieldname, String title, int initialRows, boolean scrollable) {
         JPanel inputPanel = new JPanel(new GridBagLayout());
-        inputPanel.setBackground(Color.WHITE);
+        inputPanel.setBackground(Theme.getBackground());
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -399,7 +615,7 @@ public class RentalPage extends JPanel {
         // input title label
         JLabel titleLabel = new JLabel(title);
         titleLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
-        titleLabel.setForeground(Color.BLACK);
+        titleLabel.setForeground(Theme.getForeground());
         inputPanel.add(titleLabel, gbc);
 
         gbc.gridy++;
@@ -407,18 +623,32 @@ public class RentalPage extends JPanel {
         // input text field
         JTextField inputLineField = new JTextField();
         inputLineField.setFont(INPUT_FONT.deriveFont(NORMAL_TEXT_SIZE));
-        inputLineField.setPreferredSize(new Dimension(700, 50));
-        inputLineField.setMinimumSize(new Dimension(700, 50));
+        inputLineField.setPreferredSize(new Dimension(700, 70));
+        inputLineField.setMinimumSize(new Dimension(700, 70));
         inputLineField.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
         inputLineField.setBorder(new CompoundBorder(BORDER, PADDING));
+
+        if (fieldname == "BillingName") {
+            inputLineField.setText(rental.getRentCustomer().getFullName());
+            inputLineField.setEditable(false);
+        }
+
+        if (fieldname == "BillingContact") {
+            inputLineField.setText("0" + rental.getRentCustomer().getPhoneNumber());
+            inputLineField.setEditable(false);
+        }
 
         // input text area
         JTextArea inputField = new JTextArea(initialRows, 20);
         inputField.setFont(INPUT_FONT.deriveFont(NORMAL_TEXT_SIZE));
-        inputField.setForeground(Color.BLACK);
+        inputField.setForeground(Theme.getBlack());
         inputField.setLineWrap(true);
         inputField.setWrapStyleWord(true);
         inputField.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+
+        if (fieldname == "BillingAddress") {
+            inputField.setText(rental.getRentCustomer().getUserAddress());
+        }
 
         JComponent inputComponent;
         if (scrollable) {
@@ -482,6 +712,13 @@ public class RentalPage extends JPanel {
         } else if (comp instanceof JTextArea) {
             return ((JTextArea) comp).getText();
         }
+
+        JComboBox<String> combobox = comboBoxMap.get(fieldName);
+        if (combobox instanceof JComboBox<String>) {
+            Object selectedItem = ((JComboBox<String>) combobox).getSelectedItem();
+            return selectedItem != null ? selectedItem.toString() : null;
+        }
+
         return null;
     }
 
@@ -527,7 +764,7 @@ public class RentalPage extends JPanel {
     private JLabel createLabel(String text, Float fontSize, Color textColor, Color bgColor, Integer height,
             Integer width) {
         JLabel label = new JLabel(text, SwingConstants.CENTER);
-        label.setFont(CustomFonts.OPEN_SANS_EXTRA_BOLD.deriveFont(fontSize));
+        label.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(fontSize));
         label.setForeground(textColor);
         label.setBackground(bgColor);
         label.setOpaque(true);
@@ -544,8 +781,274 @@ public class RentalPage extends JPanel {
         button.setForeground(textColor);
         button.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
         button.setPreferredSize(new Dimension(width, height));
+        button.setBorderPainted(false);
         button.setFocusPainted(false);
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         return button;
+    }
+
+    private JComboBox<String> createComboBox(String fieldname, String[] stringList) {
+        JComboBox<String> comboBox = new JComboBox<>(stringList);
+        comboBox.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(25f));
+        comboBox.setBackground(Theme.getBackground());
+        comboBox.setForeground(Theme.getBlack());
+        comboBox.setFocusable(false);
+        comboBox.setPreferredSize(new Dimension(250, 50));
+
+        comboBoxMap.put(fieldname, comboBox);
+
+        return comboBox;
+    }
+
+    // Method to add listeners to all date combo boxes
+    private void addUpdateListeners() {
+        initializeCurrentDate();
+
+        // Add action listeners to date combo boxes
+        JComboBox<String> startDayBox = (JComboBox<String>) comboBoxMap.get("StartDay");
+        JComboBox<String> startMonthBox = (JComboBox<String>) comboBoxMap.get("StartMonth");
+        JComboBox<String> startYearBox = (JComboBox<String>) comboBoxMap.get("StartYear");
+        JComboBox<String> endDayBox = (JComboBox<String>) comboBoxMap.get("EndDay");
+        JComboBox<String> endMonthBox = (JComboBox<String>) comboBoxMap.get("EndMonth");
+        JComboBox<String> endYearBox = (JComboBox<String>) comboBoxMap.get("EndYear");
+
+        // Add action listeners to update when any date component changes
+        startDayBox.addActionListener(e -> updateRentalPrices());
+        startMonthBox.addActionListener(e -> {
+            updateDaysInMonth(startDayBox, startMonthBox, startYearBox);
+            updateRentalPrices();
+        });
+        startYearBox.addActionListener(e -> {
+            updateDaysInMonth(startDayBox, startMonthBox, startYearBox);
+            updateRentalPrices();
+        });
+
+        endDayBox.addActionListener(e -> updateRentalPrices());
+        endMonthBox.addActionListener(e -> {
+            updateDaysInMonth(endDayBox, endMonthBox, endYearBox);
+            updateRentalPrices();
+        });
+        endYearBox.addActionListener(e -> {
+            updateDaysInMonth(endDayBox, endMonthBox, endYearBox);
+            updateRentalPrices();
+        });
+    }
+
+    private void initializeCurrentDate() {
+        LocalDate today = LocalDate.now();
+
+        // Set start date to current date
+        JComboBox<String> startDayBox = (JComboBox<String>) comboBoxMap.get("StartDay");
+        JComboBox<String> startMonthBox = (JComboBox<String>) comboBoxMap.get("StartMonth");
+        JComboBox<String> startYearBox = (JComboBox<String>) comboBoxMap.get("StartYear");
+
+        startYearBox.setSelectedItem(String.valueOf(today.getYear()));
+        startMonthBox.setSelectedItem(String.valueOf(today.getMonthValue()));
+        int daysInMonth = getDaysInMonth(today.getMonthValue(), today.getYear());
+        startDayBox.removeAllItems();
+        for (int i = 1; i <= daysInMonth; i++) {
+            startDayBox.addItem(String.valueOf(i));
+        }
+        startDayBox.setSelectedItem(String.valueOf(today.getDayOfMonth()));
+
+        // Set end date to current date + 1 day
+        LocalDate tomorrow = today.plusDays(1);
+
+        JComboBox<String> endDayBox = (JComboBox<String>) comboBoxMap.get("EndDay");
+        JComboBox<String> endMonthBox = (JComboBox<String>) comboBoxMap.get("EndMonth");
+        JComboBox<String> endYearBox = (JComboBox<String>) comboBoxMap.get("EndYear");
+
+        // Set year and month first
+        endYearBox.setSelectedItem(String.valueOf(tomorrow.getYear()));
+        endMonthBox.setSelectedItem(String.valueOf(tomorrow.getMonthValue()));
+
+        // Manually update days in month
+        daysInMonth = getDaysInMonth(tomorrow.getMonthValue(), tomorrow.getYear());
+        endDayBox.removeAllItems();
+        for (int i = 1; i <= daysInMonth; i++) {
+            endDayBox.addItem(String.valueOf(i));
+        }
+        endDayBox.setSelectedItem(String.valueOf(tomorrow.getDayOfMonth()));
+
+        // Store formatted dates for processing
+        String startDateStr = String.format("%d-%02d-%02d",
+                today.getYear(), today.getMonthValue(), today.getDayOfMonth());
+        String endDateStr = String.format("%d-%02d-%02d",
+                tomorrow.getYear(), tomorrow.getMonthValue(), tomorrow.getDayOfMonth());
+
+        inputFieldsMap.put("StartDate", new JTextField(startDateStr));
+        inputFieldsMap.put("EndDate", new JTextField(endDateStr));
+
+        // Initialize rental dates
+        rental.setRentStartDate(today);
+        rental.setRentEndDate(tomorrow);
+
+        // Update prices without relying on listeners
+        double[] rentalCosts = rentalController.processRentalCosts(rental);
+        rentalPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[0]));
+        insurancePriceLabel.setText("RM " + String.format("%.2f", rentalCosts[1]));
+        depositPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[2]));
+        taxPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[3]));
+        totalPriceLabel.setText("RM " + rentalController.processRentalTotalCost(rental));
+    }
+
+    // Update the number of days in the day combo box based on month and year
+    private void updateDaysInMonth(JComboBox<String> dayBox, JComboBox<String> monthBox, JComboBox<String> yearBox) {
+        // Get the selected month and year
+        int month = Integer.parseInt((String) monthBox.getSelectedItem());
+        int year = Integer.parseInt((String) yearBox.getSelectedItem());
+
+        // Get current selected day (to restore if possible)
+        int currentDay = 1;
+        if (dayBox.getSelectedItem() != null) {
+            currentDay = Integer.parseInt((String) dayBox.getSelectedItem());
+        }
+
+        // Determine days in month
+        int daysInMonth = getDaysInMonth(month, year);
+
+        // Store selection state - only try to remove if there are listeners
+        ActionListener[] listeners = dayBox.getActionListeners();
+        if (listeners != null && listeners.length > 0) {
+            dayBox.removeActionListener(listeners[0]);
+        }
+
+        // Update days in combo box
+        dayBox.removeAllItems();
+        for (int i = 1; i <= daysInMonth; i++) {
+            dayBox.addItem(String.valueOf(i));
+        }
+
+        // Restore selection if valid, otherwise select the last day
+        if (currentDay <= daysInMonth) {
+            dayBox.setSelectedItem(String.valueOf(currentDay));
+        } else {
+            dayBox.setSelectedItem(String.valueOf(daysInMonth));
+        }
+
+        // Restore action listener - only add back if we removed one
+        if (listeners != null && listeners.length > 0) {
+            dayBox.addActionListener(e -> updateRentalPrices());
+        }
+    }
+
+    // Get the number of days in a specific month and year
+    private int getDaysInMonth(int month, int year) {
+        switch (month) {
+            case 2: // February
+                return isLeapYear(year) ? 29 : 28;
+            case 4:
+            case 6:
+            case 9:
+            case 11: // April, June, September, November
+                return 30;
+            default: // All other months
+                return 31;
+        }
+    }
+
+    // Check if the year is a leap year
+    private boolean isLeapYear(int year) {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    }
+
+    // Method to update rental prices based on selected dates
+    private void updateRentalPrices() {
+        try {
+            // Get date components from combo boxes
+            String startDay = getInputValue("StartDay");
+            String startMonth = getInputValue("StartMonth");
+            String startYear = getInputValue("StartYear");
+            String endDay = getInputValue("EndDay");
+            String endMonth = getInputValue("EndMonth");
+            String endYear = getInputValue("EndYear");
+
+            // Skip if any fields are null
+            if (startDay == null || startMonth == null || startYear == null ||
+                    endDay == null || endMonth == null || endYear == null) {
+                return;
+            }
+
+            // Format dates into standard format (yyyy-MM-dd)
+            String startDateStr = String.format("%s-%02d-%02d",
+                    startYear, Integer.parseInt(startMonth), Integer.parseInt(startDay));
+            String endDateStr = String.format("%s-%02d-%02d",
+                    endYear, Integer.parseInt(endMonth), Integer.parseInt(endDay));
+
+            // Store formatted dates for later use in processing
+            inputFieldsMap.put("StartDate", new JTextField(startDateStr));
+            inputFieldsMap.put("EndDate", new JTextField(endDateStr));
+
+            // Parse dates
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+            LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+
+            // Validate dates
+            long days = ChronoUnit.DAYS.between(startDate, endDate);
+            if (days < 0) {
+                // If end date is before start date, set end date equal to start date
+                endDate = startDate;
+
+                // Update end date combo boxes to match start date (without triggering
+                // listeners)
+                removeActionListeners((JComboBox<String>) comboBoxMap.get("EndDay"));
+                removeActionListeners((JComboBox<String>) comboBoxMap.get("EndMonth"));
+                removeActionListeners((JComboBox<String>) comboBoxMap.get("EndYear"));
+
+                ((JComboBox<String>) comboBoxMap.get("EndDay")).setSelectedItem(startDay);
+                ((JComboBox<String>) comboBoxMap.get("EndMonth")).setSelectedItem(startMonth);
+                ((JComboBox<String>) comboBoxMap.get("EndYear")).setSelectedItem(startYear);
+
+                addActionListenersBack();
+
+                days = 0;
+            }
+
+            // Update rental object with new dates
+            rental.setRentStartDate(startDate);
+            rental.setRentEndDate(endDate);
+
+            // Process updated costs
+            double[] rentalCosts = rentalController.processRentalCosts(rental);
+
+            // Update labels
+            rentalPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[0]));
+            insurancePriceLabel.setText("RM " + String.format("%.2f", rentalCosts[1]));
+            depositPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[2]));
+            taxPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[3]));
+            totalPriceLabel.setText("RM " + rentalController.processRentalTotalCost(rental));
+
+        } catch (DateTimeParseException e) {
+            System.out.println("Date parsing error: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error updating prices: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    // Helper method to remove action listeners from a combo box
+    private void removeActionListeners(JComboBox<String> comboBox) {
+        ActionListener[] listeners = comboBox.getActionListeners();
+        for (ActionListener listener : listeners) {
+            comboBox.removeActionListener(listener);
+        }
+    }
+
+    // Helper method to add action listeners back to end date combo boxes
+    private void addActionListenersBack() {
+        JComboBox<String> endDayBox = (JComboBox<String>) comboBoxMap.get("EndDay");
+        JComboBox<String> endMonthBox = (JComboBox<String>) comboBoxMap.get("EndMonth");
+        JComboBox<String> endYearBox = (JComboBox<String>) comboBoxMap.get("EndYear");
+
+        endDayBox.addActionListener(e -> updateRentalPrices());
+        endMonthBox.addActionListener(e -> {
+            updateDaysInMonth(endDayBox, endMonthBox, endYearBox);
+            updateRentalPrices();
+        });
+        endYearBox.addActionListener(e -> {
+            updateDaysInMonth(endDayBox, endMonthBox, endYearBox);
+            updateRentalPrices();
+        });
     }
 }

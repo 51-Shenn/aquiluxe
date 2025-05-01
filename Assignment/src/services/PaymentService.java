@@ -11,7 +11,7 @@ import datamodels.Rental;
 public class PaymentService {
 
     private static final int TOKEN_LENGTH = 10;
-    private static final String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     // add Payment
     public static void addPayment(Payment payment) {
@@ -51,7 +51,7 @@ public class PaymentService {
         StringBuilder token = new StringBuilder(TOKEN_LENGTH);
         Random random = new java.util.Random();
         for (int i = 0; i < TOKEN_LENGTH; i++) {
-            token.append(characters.charAt(random.nextInt(characters.length())));
+            token.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
         }
         return token.toString();
     }
