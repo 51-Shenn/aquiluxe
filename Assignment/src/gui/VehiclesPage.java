@@ -647,12 +647,12 @@ public class VehiclesPage extends JPanel implements ActionListener {
         brandLabel.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(15f));
         brandLabel.setForeground(Theme.getForeground());
 
-        UIManager.put("ComboBox.background", Theme.getBackground());
-        UIManager.put("ComboBox.foreground", Theme.getForeground());
-        UIManager.put("ComboBox.selectionBackground", Theme.getHoverBackground());
-        UIManager.put("ComboBox.selectionForeground", Theme.getForeground());
-        UIManager.put("ComboBox.buttonBackground", Theme.getBackground());
-        UIManager.put("ComboBox.buttonShadow", Theme.getSpecial());
+        // UIManager.put("ComboBox.background", Theme.getBackground());
+        // UIManager.put("ComboBox.foreground", Theme.getForeground());
+        // UIManager.put("ComboBox.selectionBackground", Theme.getHoverBackground());
+        // UIManager.put("ComboBox.selectionForeground", Theme.getForeground());
+        // UIManager.put("ComboBox.buttonBackground", Theme.getBackground());
+        // UIManager.put("ComboBox.buttonShadow", Theme.getSpecial());
 
         brandComboBox = new JComboBox<>(brands);
         brandComboBox.setForeground(Color.BLACK);
@@ -1036,8 +1036,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
     private JPanel createBottomBar() {
         JPanel bottomBar = new JPanel();
-        bottomBar.setBackground(Theme.getForeground());
-        bottomBar.setPreferredSize(new Dimension(800, 500));
+        bottomBar.setBackground(Theme.getBackground());
+        bottomBar.setPreferredSize(new Dimension(800, 100));
 
         return bottomBar;
     }
