@@ -328,27 +328,29 @@ public class VehiclesPage extends JPanel implements ActionListener {
             carDetails.setOpaque(true);
 
             carDetails.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent evt) {
-            carDetails.setBackground(Theme.getHoverError());
-            }
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    carDetails.setBackground(Theme.getHoverError());
+                }
 
-            @Override
-            public void mouseExited(MouseEvent evt) {
-            carDetails.setBackground(Theme.getError());
-            }
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    carDetails.setBackground(Theme.getError());
+                }
 
-            @Override
-            public void mousePressed(MouseEvent evt) {
-            carDetails.setBackground(Theme.getPressedError());
-            }
+                @Override
+                public void mousePressed(MouseEvent evt) {
+                    carDetails.setBackground(Theme.getPressedError());
+                }
 
-            @Override
-            public void mouseReleased(MouseEvent evt) {
-            carDetails.setBackground(Theme.getError());
-            VehicleController.processDeleteVehiclefromDAO(vehicle);
-            refreshCards(sortedVehicles);
-            }
+                @Override
+                public void mouseReleased(MouseEvent evt) {
+                    carDetails.setBackground(Theme.getError());
+                    if(dialog.showDialog("HAZARD","Vehicle Deletion", "Delete Vehicle", "Are you sure you want to delete this vehicle?",true)){
+                        VehicleController.processDeleteVehiclefromDAO(vehicle);
+                        refreshCards(sortedVehicles);
+                    }
+                }
             });
         }
             //add the bottom buttons panel and the container for all specific car infos
@@ -1958,7 +1960,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                         Integer.parseInt(capacityInput.getText()), Integer.parseInt(horsepowerInput.getText()), String.format("#%02x%02x%02x", selectedColor.getRed(), selectedColor.getGreen(), selectedColor.getBlue()), Double.parseDouble(mpgInput.getText()), vinNumberInput.getText(), registrationNumberInput.getText(), Double.parseDouble(priceInput.getText()), (String) transmissionInput.getSelectedItem(), 
                         (String) fuelTypeInput.getSelectedItem(), (String) vehicleTypeInput.getSelectedItem(), (int) seatInput.getValue(), true, inputField.getText());
         VehicleController.processAddVehiclestoDAO(newVehicle);
-        dialog.showDialog("SUCCESS","Submission Successful", "Added Successfully", "Successfully added a vehicle",true);
+        dialog.showDialog("SUCCESS","Submission Successful", "Added Successfully", "Successfully added a vehicle",false);
 
         // 3. Reset form
         resetForm();
@@ -2029,11 +2031,27 @@ public class VehiclesPage extends JPanel implements ActionListener {
     }
 
     private void resetForm() {
+        vinNumberInput.setText("");
+        registrationNumberInput.setText("");
+        brandInput.setText("");
+        modelInput.setText("");
+        yearInput.setSelectedIndex(0);
+        priceInput.setText("");
+        colorInput.setBackground(Color.WHITE);
+        colorInput.setText("Pick A Color");
+        selectedColor = null;
+        capacityInput.setText("");
+        horsepowerInput.setText("");
+        mpgInput.setText("");
+        transmissionInput.setSelectedIndex(0);
+        fuelTypeInput.setSelectedIndex(0);
+        vehicleTypeInput.setSelectedIndex(0);
+        seatInput.setValue(1);
+        inputField.setText("");
         selectedImageFile = null;
         selectedImagePreview = null;
         imageLabel.setIcon(null);
         removeButton.setEnabled(false);
-        // Reset your other form fields too
     }
 }
 
