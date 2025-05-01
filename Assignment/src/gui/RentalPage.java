@@ -125,11 +125,6 @@ public class RentalPage extends JPanel {
         splitPane.setBorder(BorderFactory.createEmptyBorder());
         splitPane.setDividerSize(5);
 
-        // check border size
-        // splitPane.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-        // leftContainer.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2));
-        // rightContainer.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
-
         return splitPane;
     }
 
@@ -358,20 +353,20 @@ public class RentalPage extends JPanel {
         confirmButton.addActionListener(e -> {
             try {
                 // update customer address
-                processBillingDetails();
+                getBillingDetails();
 
                 // set rental details
-                processRentalDetails();
+                getRentalDetails();
                 // set total cost
                 rental.setRentTotalCost(rentalController.processRentalTotalCost(rental));
 
                 // set payment details
-                processPaymentDetails();
+                getPaymentDetails();
 
-                // pass controller
-                System.out.println(rental.toString()); // rental
-                System.out.println(payment.getRental().getRentVehicle().getModel() + payment.getAmount()); // payment
-                System.out.println(rental.getRentCustomer().getUserAddress()); // customer, address
+                // process data
+                int rentalId = rentalController.processRental(rental);
+                rental.setRentalId(rentalId);
+                rentalController.processPayment(payment);
             } catch (Exception ex) {
                 Dialog dialog = new Dialog(this.frame);
                 dialog.showDialog("HAZARD",
@@ -422,19 +417,25 @@ public class RentalPage extends JPanel {
         return billingContainer;
     }
 
-    private void processBillingDetails() {
-        rental.getRentCustomer().setAddress(getInputValue("BillingAddress"));
+    private void getBillingDetails() {
 
-        if (rental.getRentCustomer().getUserAddress().isBlank()
-                || rental.getRentCustomer().getUserAddress().isEmpty()) {
+        if (getInputValue("BillingAddress").isBlank()
+                || getInputValue("BillingAddress").isEmpty()) {
             Dialog dialog = new Dialog(this.frame);
             dialog.showDialog("HAZARD",
                     "Empty",
                     "Empty Address",
                     "Please input an billing address",
                     true);
+
+            return;
         }
 
+        if (getInputValue("BillingAddress").equals(rental.getRentCustomer().getUserAddress()))
+            return;
+
+        rental.getRentCustomer().setAddress(getInputValue("BillingAddress"));
+        rentalController.processCustomerAddress(rental.getRentCustomer());
     }
 
     // Rental Details
@@ -470,7 +471,7 @@ public class RentalPage extends JPanel {
         return rentalContainer;
     }
 
-    private void processRentalDetails() {
+    private void getRentalDetails() {
         String startDate = getInputValue("StartYear") + "-" +
                 String.format("%02d", Integer.parseInt(getInputValue("StartMonth"))) + "-" +
                 String.format("%02d", Integer.parseInt(getInputValue("StartDay")));
@@ -593,7 +594,7 @@ public class RentalPage extends JPanel {
         return paymentContainer;
     }
 
-    private void processPaymentDetails() {
+    private void getPaymentDetails() {
         payment.setRental(rental);
         payment.setAmount(rental.getRentTotalCost());
         payment.setPaymentMethod(getInputValue("PaymentMethod"));

@@ -10,8 +10,9 @@ import java.util.List;
 
 public class RentalService {
     // add Rental
-    public static void addRental(Rental rental) {
-        RentalDAO.addRental(rental);
+    public static int addRental(Rental rental) {
+        int rentalId = RentalDAO.addRental(rental);
+        return rentalId;
     }
 
     // updateRentalStatus ( rental : Rental, status : RentalStatus )

@@ -6,7 +6,11 @@ import javax.swing.JPanel;
 import datamodels.Vehicle;
 import gui.RentalPage;
 import datamodels.Rental;
+import datamodels.Customer;
+import datamodels.Payment;
+import services.PaymentService;
 import services.RentalService;
+import services.UserService;
 
 public class RentalController {
 
@@ -40,6 +44,24 @@ public class RentalController {
                 RentalService.calculateDepositCost(rental),
                 RentalService.calculateTaxCost(rental) };
         return rentalCosts;
+    }
+
+    public void processCustomerAddress(Customer customer) {
+        // call service save to db
+        UserService.saveCustomerAddress(customer);
+    }
+
+    public int processRental(Rental rental) {
+        // call service save to db
+        int rentalId = RentalService.addRental(rental);
+        return rentalId;
+    }
+
+    public void processPayment(Payment payment) {
+        // generate token
+        // call service save to db
+        PaymentService.assignPaymentToken(payment, PaymentService.generateRandomToken());
+        PaymentService.addPayment(payment);
     }
 
     // called by gui to get rental details

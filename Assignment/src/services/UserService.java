@@ -720,4 +720,9 @@ public class UserService {
     public static Admin getAdminByObject(User user) {
         return UserDAO.getAdminById(user);
     }
+
+    public static void saveCustomerAddress(Customer customer) {
+        UserDAO.addCustomerDetails(customer, customer.getUserAddress(),
+                customer.getLicense());
+    }
 }
