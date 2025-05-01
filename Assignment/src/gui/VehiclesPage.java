@@ -1,6 +1,7 @@
 package gui;
 
 import controllers.VehicleController;
+import datamodels.Admin;
 import datamodels.User;
 import datamodels.Vehicle;
 
@@ -327,36 +328,39 @@ public class VehiclesPage extends JPanel implements ActionListener {
         }
 
         else {
-            carDetails.setText("DELETE");
-            carDetails.setForeground(Theme.getErrorForeground());
-            carDetails.setBackground(Theme.getError());
-            carDetails.setOpaque(true);
+            Admin admin = (Admin) user;
+            if (admin.getAdminRole().equals("Manager")){
+                carDetails.setText("DELETE");
+                carDetails.setForeground(Theme.getErrorForeground());
+                carDetails.setBackground(Theme.getError());
+                carDetails.setOpaque(true);
 
-            carDetails.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent evt) {
-                    carDetails.setBackground(Theme.getHoverError());
-                }
-
-                @Override
-                public void mouseExited(MouseEvent evt) {
-                    carDetails.setBackground(Theme.getError());
-                }
-
-                @Override
-                public void mousePressed(MouseEvent evt) {
-                    carDetails.setBackground(Theme.getPressedError());
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent evt) {
-                    carDetails.setBackground(Theme.getError());
-                    if(dialog.showDialog("HAZARD","Vehicle Deletion", "Delete Vehicle", "Are you sure you want to delete this vehicle?",true)){
-                        VehicleController.processDeleteVehiclefromDAO(vehicle);
-                        refreshCards(sortedVehicles);
+                carDetails.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(MouseEvent evt) {
+                        carDetails.setBackground(Theme.getHoverError());
                     }
-                }
-            });
+
+                    @Override
+                    public void mouseExited(MouseEvent evt) {
+                        carDetails.setBackground(Theme.getError());
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent evt) {
+                        carDetails.setBackground(Theme.getPressedError());
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent evt) {
+                        carDetails.setBackground(Theme.getError());
+                        if(dialog.showDialog("HAZARD","Vehicle Deletion", "Delete Vehicle", "Are you sure you want to delete this vehicle?",true)){
+                            VehicleController.processDeleteVehiclefromDAO(vehicle);
+                            refreshCards(sortedVehicles);
+                        }
+                    }
+                });
+            }
         }
             //add the bottom buttons panel and the container for all specific car infos
             //into the main card container
@@ -575,7 +579,10 @@ public class VehiclesPage extends JPanel implements ActionListener {
             addButton.setVisible(false);
         }
         else {
-            addButton.setVisible(true);
+            Admin admin = (Admin) user;
+            if (admin.getAdminRole().equals("Manager")){
+                addButton.setVisible(true); 
+            }
         }
 
         topBar.add(allButton);
