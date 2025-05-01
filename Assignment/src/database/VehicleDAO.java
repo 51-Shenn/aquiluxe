@@ -36,7 +36,7 @@ public class VehicleDAO {
             stmt.setString(13, vehicle.getFuelType());
             stmt.setString(14, vehicle.getVehicleType());
             stmt.setInt(15, vehicle.getSeatingCapacity());
-            stmt.setBoolean(16, vehicle.isAvailability());
+            stmt.setBoolean(16, vehicle.getAvailability());
             stmt.setString(17, vehicle.getFeatures());
 
             stmt.executeUpdate();
@@ -109,9 +109,49 @@ public class VehicleDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("\nFAILED TO GET USERS\n");
+            throw new RuntimeException("\nFAILED TO GET VEHICLES\n");
         }
         return vehicles;
+    }
+
+    // get all vehicles
+    public static List<Car> getAllCars() {
+        String sql = "SELECT * FROM Vehicles WHERE vehicle_type IN ('suv', 'mpv', 'sedan', 'coupe', 'convertible', 'hatchback', 'wagon', 'pickup truck')";
+        List<Car> cars = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Car car = (Car) mapResultVehicle(rs);
+                cars.add(car);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO GET CARS\n");
+        }
+        return cars;
+    }
+
+    // get all bikes
+    public static List<Bike> getAllBikes() {
+        String sql = "SELECT * FROM Vehicles WHERE vehicle_type IN ('touring', 'cruiser', 'superbike')";
+        List<Bike> bikes = new ArrayList<>();
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Bike bike = (Bike) mapResultVehicle(rs);
+                bikes.add(bike);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO GET BIKES\n");
+        }
+        return bikes;
     }
 
     // get vehicle by specific id

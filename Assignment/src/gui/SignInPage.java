@@ -27,9 +27,7 @@ public class SignInPage extends AuthenticationPage {
     private final File ACCOUNTS_FILE = new File("files/settings/accounts.txt");
 
     public SignInPage() {
-        this.frame = new JFrame();
-        this.panel = new JPanel();
-        this.user = new User();
+        this(new JFrame(), new JPanel(), new User());
     }
     
     public SignInPage(JFrame frame, JPanel panel, User user) {

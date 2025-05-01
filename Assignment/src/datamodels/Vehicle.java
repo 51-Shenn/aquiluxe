@@ -31,6 +31,30 @@ public class Vehicle {
     }
 
     // Parameterized Constructor
+    public Vehicle( String imagePath, String brand, String model, int year, int capacity,
+            int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
+            double rentalPriceDay, String transmission, String fuelType, String vehicleType, int seatingCapacity,
+            boolean availability, String features) {
+        this.imagePath = imagePath;
+        this.brand = brand;
+        this.model = model;
+        this.year = year;
+        this.capacity = capacity;
+        this.horsepower = horsepower;
+        this.color = color;
+        this.mpg = mpg;
+        this.vinNumber = vinNumber;
+        this.registrationNumber = registrationNumber;
+        this.rentalPriceDay = rentalPriceDay;
+        this.transmission = transmission;
+        this.fuelType = fuelType;
+        this.vehicleType = vehicleType;
+        this.seatingCapacity = seatingCapacity;
+        this.availability = availability;
+        this.features = features;
+    }
+
+    // Parameterized Constructor
     public Vehicle(int vehicleId, String imagePath, String brand, String model, int year, int capacity,
             int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
             double rentalPriceDay, String transmission, String fuelType, String vehicleType, int seatingCapacity,
@@ -78,7 +102,6 @@ public class Vehicle {
         this.seatingCapacity = seatingCapacity;
         this.availability = availability;
         this.features = features;
-        this.vehicleType = vehicleType;
     }
 
     public int getVehicleId() {
@@ -209,7 +232,7 @@ public class Vehicle {
         this.seatingCapacity = seatingCapacity;
     }
 
-    public boolean isAvailability() {
+    public boolean getAvailability() {
         return availability;
     }
 
@@ -231,13 +254,5 @@ public class Vehicle {
 
     public static void setVehicles(List<Vehicle> setVehicle) {
         vehicles = setVehicle;
-    }
-
-    public String getVehicletype() {
-        return vehicleType;
-    }
-
-    public void setVehicletype(String vehicleType) {
-        this.vehicleType = vehicleType;
     }
 }

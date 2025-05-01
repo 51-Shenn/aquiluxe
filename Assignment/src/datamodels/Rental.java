@@ -1,7 +1,7 @@
 package datamodels;
 
-import java.time.LocalTime;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Rental {
     private int rentalId;
@@ -39,16 +39,8 @@ public class Rental {
     public Rental(int rentalId, Customer customer, Vehicle vehicle, LocalDate startDate, LocalDate endDate,
             LocalTime pickupTime, LocalTime dropoffTime, double totalCost, RentalStatus rentalStatus,
             PaymentStatus paymentStatus) {
+        this(customer, vehicle, startDate, endDate, pickupTime, dropoffTime, totalCost, rentalStatus, paymentStatus);
         this.rentalId = rentalId;
-        this.customer = customer;
-        this.vehicle = vehicle;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.pickupTime = pickupTime;
-        this.dropoffTime = dropoffTime;
-        this.totalCost = totalCost;
-        this.rentalStatus = rentalStatus;
-        this.paymentStatus = paymentStatus;
     }
 
     // Restrict Status Variations

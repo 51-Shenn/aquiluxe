@@ -1,6 +1,10 @@
 package datamodels;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Car extends Vehicle {
+    private static List<Car> allCars = new ArrayList<Car>();
     private String carType;
 
     // Default Constructor
@@ -17,6 +21,7 @@ public class Car extends Vehicle {
         super(vehicleId, imagePath, brand, model, year, capacity, horsepower, color, mpg, vinNumber, registrationNumber,
                 rentalPriceDay, transmission, fuelType, carType, seatingCapacity, availability, features);
         this.carType = carType;
+        allCars.add(this);
     }
 
     // Getter and Setters
@@ -26,5 +31,9 @@ public class Car extends Vehicle {
 
     public void setCarType(String carType) {
         this.carType = carType;
+    }
+
+    public static List<Car> getCars() {
+        return allCars;
     }
 }
