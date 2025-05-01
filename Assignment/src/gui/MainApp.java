@@ -43,7 +43,7 @@ public class MainApp extends JFrame {
     }
 
     private void loadDataAndCacheImages() {
-        vehicles = VehicleController.getAllVehicles(); // Get all vehicles
+        vehicles = VehicleController.processVehicles(); // Get all vehicles
         Vehicle.setVehicles(vehicles); // Store in Vehicle class
         ImageLoader.loadImages(vehicles); // Preload images
     }
