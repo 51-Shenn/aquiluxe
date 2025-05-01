@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;;
 
 public class Bike extends Vehicle {
-    private static List<Bike> allBikes = new ArrayList<Bike>();
     private String bikeType;
+    private static List<Bike> allBikes = new ArrayList<>();
 
     // Default Constructor
     public Bike() {

@@ -23,7 +23,7 @@ public class Vehicle {
     protected boolean availability;
     protected String features;
 
-    protected static List<Vehicle> vehicles = new ArrayList<Vehicle>();
+    protected static List<Vehicle> vehicles = new ArrayList<>();
 
     // Default Constructor
     public Vehicle() {
