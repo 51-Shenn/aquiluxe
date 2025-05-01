@@ -294,7 +294,39 @@ public class VehiclesPage extends JPanel implements ActionListener {
             }
         });
         // if is admin
-        if (!user.getUserType().equals("Admin")) {
+        if (user instanceof Admin admin && "Manager".equals(admin.getAdminRole())) {
+            carDetails.setText("DELETE");
+            carDetails.setForeground(Theme.getErrorForeground());
+            carDetails.setBackground(Theme.getError());
+            carDetails.setOpaque(true);
+
+            carDetails.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                   carDetails.setBackground(Theme.getHoverError());
+                }
+
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    carDetails.setBackground(Theme.getError());
+                 }
+
+                @Override
+                public void mousePressed(MouseEvent evt) {
+                    carDetails.setBackground(Theme.getPressedError());
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent evt) {
+                    carDetails.setBackground(Theme.getError());
+                    if(dialog.showDialog("HAZARD","Vehicle Deletion", "Delete Vehicle", "Are you sure you want to delete this vehicle?",true)){
+                        VehicleController.processDeleteVehiclefromDAO(vehicle);
+                        refreshCards(sortedVehicles);
+                    }
+                }
+            });
+        }
+        else {
             carDetails.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -326,46 +358,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 }
             });
         }
-
-        else {
-            if (user instanceof Admin) {
-                Admin admin = (Admin) user;
-                if (admin.getAdminRole().equals("Manager")){
-                    carDetails.setText("DELETE");
-                    carDetails.setForeground(Theme.getErrorForeground());
-                    carDetails.setBackground(Theme.getError());
-                    carDetails.setOpaque(true);
-
-                    carDetails.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseEntered(MouseEvent evt) {
-                            carDetails.setBackground(Theme.getHoverError());
-                        }
-
-                        @Override
-                        public void mouseExited(MouseEvent evt) {
-                            carDetails.setBackground(Theme.getError());
-                        }
-
-                        @Override
-                        public void mousePressed(MouseEvent evt) {
-                            carDetails.setBackground(Theme.getPressedError());
-                        }
-
-                        @Override
-                        public void mouseReleased(MouseEvent evt) {
-                            carDetails.setBackground(Theme.getError());
-                            if(dialog.showDialog("HAZARD","Vehicle Deletion", "Delete Vehicle", "Are you sure you want to delete this vehicle?",true)){
-                                VehicleController.processDeleteVehiclefromDAO(vehicle);
-                                refreshCards(sortedVehicles);
-                            }
-                        }
-                    });
-                }
-            }
-        }
-            //add the bottom buttons panel and the container for all specific car infos
-            //into the main card container
+        //add the bottom buttons panel and the container for all specific car infos
+        //into the main card container
         carCard.add(buttonPanel, BorderLayout.SOUTH);
         carCard.add(carEverythingPanel, BorderLayout.CENTER);
 
@@ -577,16 +571,10 @@ public class VehiclesPage extends JPanel implements ActionListener {
             }
         });
         addButton.addActionListener(e -> showAddCarPopup());
-        if (!user.getUserType().equals("Admin")) {
+        if (user instanceof Admin admin && "Manager".equals(admin.getAdminRole())) {
+            addButton.setVisible(true);
+        } else {
             addButton.setVisible(false);
-        }
-        else {
-            if (user instanceof Admin) {
-                Admin admin = (Admin) user;
-                if (admin.getAdminRole().equals("Manager")){
-                    addButton.setVisible(true); 
-                }
-            }
         }
 
         topBar.add(allButton);
