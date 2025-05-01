@@ -1,5 +1,6 @@
 package gui;
 
+import controllers.UserController;
 import datamodels.User;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -7,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -214,8 +216,11 @@ public class GUIComponents extends JPanel {
         menu.setFocusPainted(false);
         menu.setBackground(Theme.getBackground());
         menu.addActionListener(e -> {
+            File accountsFile = new File("files/settings/accounts.txt");
+
             if (overflowMenu == null) {
-                overflowMenu = new OverflowMenu(this.frame, this.panel, this.user);
+                User currentUser = UserController.loadCurrentUser(accountsFile);
+                overflowMenu = new OverflowMenu(this.frame, this.panel, currentUser);
                 OverflowMenu.setGuiComponents(this);
                 this.frame.getLayeredPane().add(overflowMenu, JLayeredPane.POPUP_LAYER);
                 overflowMenu.setBounds(this.frame.getWidth() - (overflowMenu.MENU_WIDTH + 35), 90,
