@@ -455,4 +455,27 @@ public class VehicleService {
         VehicleDAO.deleteVehicle(vehicle);
     }
 
+    public static void updateVehiclefromDAO(Vehicle vehicle, Vehicle updatedVehicle) {
+
+        VehicleDAO.updateVehicleColumnValue(vehicle, "image_path", updatedVehicle.getImagePath());
+        VehicleDAO.updateVehicleColumnValue(vehicle, "brand", updatedVehicle.getBrand());
+        VehicleDAO.updateVehicleColumnValue(vehicle, "model", updatedVehicle.getModel());
+        VehicleDAO.updateVehicleColumnValue(vehicle, "year", updatedVehicle.getYear() + "");
+        VehicleDAO.updateVehicleColumnValue(vehicle, "capacity", updatedVehicle.getCapacity() + "");
+        VehicleDAO.updateVehicleColumnValue(vehicle, "horsepower", updatedVehicle.getHorsepower() + "");
+        VehicleDAO.updateVehicleColumnValue(vehicle, "color", updatedVehicle.getColor());
+        VehicleDAO.updateVehicleColumnValue(vehicle, "mpg", updatedVehicle.getMpg() + "");
+        VehicleDAO.updateVehicleColumnValue(vehicle, "vin_number", updatedVehicle.getVinNumber());
+        VehicleDAO.updateVehicleColumnValue(vehicle, "registration_number", updatedVehicle.getRegistrationNumber());
+        VehicleDAO.updateVehicleColumnValue(vehicle, "rental_price_day", updatedVehicle.getRentalPriceDay() + "");
+        VehicleDAO.updateVehicleColumnValue(vehicle, "transmission", updatedVehicle.getTransmission());
+        VehicleDAO.updateVehicleColumnValue(vehicle, "fuel_type", updatedVehicle.getFuelType());
+        VehicleDAO.updateVehicleColumnValue(vehicle, "vehicle_type", updatedVehicle.getVehicleType());
+        VehicleDAO.updateVehicleColumnValue(vehicle, "seating_capacity", updatedVehicle.getSeatingCapacity() + "");
+        VehicleDAO.updateVehicleColumnValue(vehicle, "availability", Boolean.toString(updatedVehicle.getAvailability()));
+        VehicleDAO.updateVehicleColumnValue(vehicle, "features", updatedVehicle.getFeatures());
+
+    }
+
+
 }
