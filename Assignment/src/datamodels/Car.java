@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Car extends Vehicle {
-    private static List<Car> allCars = new ArrayList<Car>();
     private String carType;
+    private static List<Car> allCars = new ArrayList<>();
 
     // Default Constructor
     public Car() {

@@ -1,12 +1,11 @@
 package gui;
 
+import controllers.VehicleController;
 import datamodels.Vehicle;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
-
-import controllers.VehicleController;
 
 public class VehiclesPageDetails extends JPanel {
 
@@ -525,8 +524,8 @@ public class VehiclesPageDetails extends JPanel {
     // Bottom panel
     private JPanel bottomBar() {
         JPanel bottomBar = new JPanel();
-        bottomBar.setBackground(Color.BLACK);
-        bottomBar.setPreferredSize(new Dimension(800, 500));
+        bottomBar.setBackground(Theme.getBackground());
+        bottomBar.setPreferredSize(new Dimension(800, 100));
 
         return bottomBar;
     }
