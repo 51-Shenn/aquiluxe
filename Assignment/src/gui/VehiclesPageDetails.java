@@ -18,15 +18,17 @@ public class VehiclesPageDetails extends JPanel {
     private JPanel carFeaturesContainer;
     private boolean isFeaturesVisible = false;
     private JPanel emptyBottomPanel = new JPanel();
+    private List<Vehicle> vehicles;
 
     public static JPanel rentalPanel;
 
-    public VehiclesPageDetails(JFrame frame, JPanel panel, Vehicle vehicle) {
+    public VehiclesPageDetails(JFrame frame, JPanel panel, Vehicle vehicle, List<Vehicle> vehicles) {
         this.frame = frame;
         this.panel = panel;
         this.vehicle = vehicle;
         this.setBackground(Theme.getBackground());
         this.setLayout(new BorderLayout());
+        this.vehicles = vehicles;
 
         this.add(MainContainer(), BorderLayout.CENTER);
 
@@ -115,7 +117,7 @@ public class VehiclesPageDetails extends JPanel {
     private JPanel technicalSpecsPanel() {
         ImageIcon downIcon = IconLoader.getDownIcon();
         ImageIcon upIcon = IconLoader.getUpIcon();
-        // sample
+        
         JPanel technicalSpecsPanel = new JPanel(new BorderLayout(5, 5));
         technicalSpecsPanel.setPreferredSize(new Dimension(600, 800));
         technicalSpecsPanel.setBackground(Theme.getBackground());
@@ -380,7 +382,6 @@ public class VehiclesPageDetails extends JPanel {
 
         ImageIcon rightArrowIcon = IconLoader.getRightIcon();
         Vehicle[] vehicless = new Vehicle[4];
-        List<Vehicle> vehicles = VehicleController.processVehicles();
 
         for (int i = 0; i < 4; i++) {
             vehicless[i] = vehicles.get(i);
@@ -485,37 +486,43 @@ public class VehiclesPageDetails extends JPanel {
         carMainFeaturesContainer.setBackground(Theme.getBackground());
         carMainFeaturesContainer.setPreferredSize(new Dimension(1600, 500));
 
-        JPanel featuresContainer = new JPanel(new BorderLayout());
-        featuresContainer.setPreferredSize(new Dimension(1600, 200));
+        JPanel featuresContainer = new JPanel(new GridBagLayout());
+        featuresContainer.setPreferredSize(new Dimension(1600, 500));
         featuresContainer.setBackground(Theme.getBackground());
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
         JLabel featuresLabel = new JLabel("Features");
+
         featuresLabel.setForeground(Theme.getForeground());
         featuresLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(30f));
 
+        gbc.insets = new Insets(10, 0, 5, 0);
+        featuresContainer.add(featuresLabel, gbc);
+
         String[] features = this.vehicle.getFeatures().split(",");
-        StringBuilder result = new StringBuilder("<html>");
         for (String feature : features) {
-            result.append("- ").append(feature).append("<br>");
+            feature = "- " + feature;
+            JLabel featuresContent = new JLabel(feature);
+            featuresContent.setForeground(Theme.getSecondaryForeground());
+            featuresContent.setFont(CustomFonts.INSTRUMENT_SANS_SEMI_BOLD.deriveFont(20f));
+            gbc.insets = new Insets(0, 0, 5, 0);
+            gbc.gridy++;
+            featuresContainer.add(featuresContent, gbc);
         }
-        result.append("<html>");
-        JLabel featuresContent = new JLabel(result.toString());
-        featuresContent.setForeground(Theme.getSecondaryForeground());
-        featuresContent.setFont(CustomFonts.INSTRUMENT_SANS_SEMI_BOLD.deriveFont(20f));
 
-        JPanel emptyPanel = new JPanel();
-        emptyPanel.setBackground(Theme.getBackground());
-        emptyPanel.setPreferredSize(new Dimension(1600, 30));
-        JPanel featurePanel = new JPanel(new BorderLayout());
-        featurePanel.setBackground(Theme.getBackground());
-        featurePanel.add(emptyPanel, BorderLayout.NORTH);
-        featurePanel.add(featuresLabel, BorderLayout.CENTER);
-
-        featuresContainer.add(featurePanel, BorderLayout.NORTH);
-        featuresContainer.add(featuresContent, BorderLayout.CENTER);
+        gbc.gridy++;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        featuresContainer.add(Box.createVerticalGlue(), gbc);
 
         carMainFeaturesContainer.add(featuresContainer, BorderLayout.CENTER);
-
         carMainFeaturesContainer.add(sidePanel(), BorderLayout.EAST);
         carMainFeaturesContainer.add(sidePanel(), BorderLayout.WEST);
 

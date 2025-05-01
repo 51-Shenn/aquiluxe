@@ -262,7 +262,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             public void mouseClicked(MouseEvent e) {
                 // Check if the click is on the image
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                    JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle);
+                    JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, vehicles);
                     GUIComponents.cardPanel.add(detailsPanel, "VehicleDetailsPage");
                     GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
                 }
@@ -294,7 +294,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 public void mouseClicked(MouseEvent e) {
                     // Check if the click is on the image
                     if (SwingUtilities.isLeftMouseButton(e)) {
-                        JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle);
+                        JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, vehicles);
                         GUIComponents.cardPanel.add(detailsPanel, "VehicleDetailsPage");
                         GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
                     }
