@@ -121,13 +121,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
         carRent.setBackground(Theme.getSpecial());
         carRent.setForeground(Theme.getSpecialForeground());
         carRent.setOpaque(true);
-        if (vehicle.getAvailability()) {
-            carRent.setEnabled(true);
-        } else {
-            carRent.setEnabled(false);
-        }
         // if is admin
-        if (user instanceof Admin admin && "Manager".equals(admin.getAdminRole())) {
+        if (user.getUserType().equals("Admin")) {
             carRent.setEnabled(true);
             carRent.setText("EDIT");
             carRent.addMouseListener(new MouseAdapter() {
@@ -154,30 +149,37 @@ public class VehiclesPage extends JPanel implements ActionListener {
             });
         }
         else {
-            carRent.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent evt) {
-                    carRent.setBackground(Theme.getHoverSpecial());
-                }
-
-                @Override
-                public void mouseExited(MouseEvent evt) {
-                    carRent.setBackground(Theme.getSpecial());
-                }
-
-                @Override
-                public void mousePressed(MouseEvent evt) {
-                    carRent.setBackground(Theme.getPressedSpecial());
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent evt) {
-                    carRent.setBackground(Theme.getSpecial());
-                    JPanel rentalPanel = new RentalPage(frame, panel, vehicle);
-                    GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
-                    GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
-                }
-            });
+            carRent.setEnabled(vehicle.getAvailability());
+            if(vehicle.getAvailability()) {
+                carRent.setBackground(Theme.getSpecial());
+                carRent.setForeground(Theme.getSpecialForeground());
+                
+                carRent.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(MouseEvent evt) {
+                        carRent.setBackground(Theme.getHoverSpecial());
+                    }
+                    @Override
+                    public void mouseExited(MouseEvent evt) {
+                        carRent.setBackground(Theme.getSpecial());
+                    }
+                    @Override
+                    public void mousePressed(MouseEvent evt) {
+                        carRent.setBackground(Theme.getPressedSpecial());
+                    }
+                    @Override
+                    public void mouseReleased(MouseEvent evt) {
+                        carRent.setBackground(Theme.getSpecial());
+                        JPanel rentalPanel = new RentalPage(frame, panel, vehicle);
+                        GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
+                        GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
+                    }
+                });
+            }
+            else {
+                carRent.setBackground(Color.GRAY);
+                carRent.setForeground(Theme.getSpecialForeground());
+            }
         }
 
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 0, 5));
@@ -327,7 +329,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             }
         });
         // if is admin
-        if (user instanceof Admin admin && "Manager".equals(admin.getAdminRole())) {
+        if (user.getUserType().equals("Admin")) {
             carDetails.setText("DELETE");
             carDetails.setForeground(Theme.getErrorForeground());
             carDetails.setBackground(Theme.getError());
@@ -606,7 +608,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             }
         });
         addButton.addActionListener(e -> showAddCarPopup());
-        if (user instanceof Admin admin && "Manager".equals(admin.getAdminRole())) {
+        if (user.getUserType().equals("Admin")) {
             addButton.setVisible(true);
         } else {
             addButton.setVisible(false);

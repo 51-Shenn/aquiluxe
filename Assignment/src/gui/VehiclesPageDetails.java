@@ -279,35 +279,38 @@ public class VehiclesPageDetails extends JPanel {
         rentButton.setContentAreaFilled(false);
         rentButton.setBorderPainted(false);
         rentButton.setOpaque(true);
-        if (vehicle.getAvailability()) {
+        if(vehicle.getAvailability()) {
             rentButton.setEnabled(true);
-        } else {
-            rentButton.setEnabled(false);
+            rentButton.setBackground(Theme.getSpecial());
+            rentButton.setForeground(Theme.getSpecialForeground());
+                    
+            rentButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    rentButton.setBackground(Theme.getHoverSpecial());
+                }
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    rentButton.setBackground(Theme.getSpecial());
+                }
+                @Override
+                public void mousePressed(MouseEvent evt) {
+                    rentButton.setBackground(Theme.getPressedSpecial());
+                }
+                @Override
+                public void mouseReleased(MouseEvent evt) {
+                    rentButton.setBackground(Theme.getSpecial());
+                    JPanel rentalPanel = new RentalPage(frame, panel, vehicle);
+                    GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
+                    GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
+                }
+            });
         }
-        rentButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent evt) {
-                rentButton.setBackground(Theme.getHoverSpecial());
-            }
-
-            @Override
-            public void mouseExited(MouseEvent evt) {
-                rentButton.setBackground(Theme.getSpecial());
-            }
-
-            @Override
-            public void mousePressed(MouseEvent evt) {
-                rentButton.setBackground(Theme.getPressedSpecial());
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent evt) {
-                rentButton.setBackground(Theme.getSpecial());
-                rentalPanel = new RentalPage(frame, panel, vehicle);
-                GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
-                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
-            }
-        });
+        else {
+            rentButton.setEnabled(false);
+            rentButton.setBackground(Color.GRAY);
+            rentButton.setForeground(Theme.getSpecialForeground());
+        }
         rentPanel.add(rentButton);
         buttonsPanel.add(rentPanel, BorderLayout.EAST);
 
