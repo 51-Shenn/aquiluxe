@@ -36,4 +36,28 @@ public class Car extends Vehicle {
     public static List<Car> getCars() {
         return allCars;
     }
+
+    @Override
+    public String toString() {
+        return " Car { " +
+                "vehicleId = " + vehicleId +
+                ", imagePath = '" + imagePath + '\'' +
+                ", brand = '" + brand + '\'' +
+                ", model = '" + model + '\'' +
+                ", year = '" + year + '\'' +
+                ", capacity = '" + capacity + '\'' +
+                ", horsepower = '" + horsepower + '\'' +
+                ", color = '" + color + '\'' +
+                ", mpg = '" + mpg + '\'' +
+                ", vinNumber = '" + vinNumber + '\'' +
+                ", registrationNumber = '" + registrationNumber + '\'' +
+                ", rentalPriceDay = '" + rentalPriceDay + '\'' +
+                ", transmission = '" + transmission + '\'' +
+                ", fuelType = '" + fuelType + '\'' +
+                ", carType = '" + carType + '\'' +
+                ", seatingCapacity = '" + seatingCapacity + '\'' +
+                ", availability = '" + availability + '\'' +
+                ", features = '" + features + '\'' +
+                " }";
+    }
 }

@@ -239,4 +239,28 @@ public class Vehicle {
     public static void setVehicles(List<Vehicle> setVehicle) {
         vehicles = setVehicle;
     }
+
+    @Override
+    public String toString() {
+        return " Vehicle { " +
+                "vehicleId = " + vehicleId +
+                ", imagePath = '" + imagePath + '\'' +
+                ", brand = '" + brand + '\'' +
+                ", model = '" + model + '\'' +
+                ", year = '" + year + '\'' +
+                ", capacity = '" + capacity + '\'' +
+                ", horsepower = '" + horsepower + '\'' +
+                ", color = '" + color + '\'' +
+                ", mpg = '" + mpg + '\'' +
+                ", vinNumber = '" + vinNumber + '\'' +
+                ", registrationNumber = '" + registrationNumber + '\'' +
+                ", rentalPriceDay = '" + rentalPriceDay + '\'' +
+                ", transmission = '" + transmission + '\'' +
+                ", fuelType = '" + fuelType + '\'' +
+                ", vehicleType = '" + vehicleType + '\'' +
+                ", seatingCapacity = '" + seatingCapacity + '\'' +
+                ", availability = '" + availability + '\'' +
+                ", features = '" + features + '\'' +
+                " }";
+    }
 }

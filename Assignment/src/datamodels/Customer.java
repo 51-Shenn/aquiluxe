@@ -53,4 +53,18 @@ public class Customer extends User {
     public void addRental(Rental rental) {
         this.rentalHistory.add(rental);
     }
+
+    @Override
+    public String toString() {
+        return " Customer { " +
+                "userId = " + userId +
+                ", fullName = '" + fullName + '\'' +
+                ", gender = '" + gender + '\'' +
+                ", phoneNumber = '" + phoneNumber + '\'' +
+                ", userEmail = '" + userEmail + '\'' +
+                ", username = '" + username + '\'' +
+                ", address = '" + address + '\'' +
+                ", license = '" + license + '\'' +
+                " }";
+    }
 }
