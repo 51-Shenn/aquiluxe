@@ -1358,7 +1358,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         gbc.gridx = 2;
         gbc.gridy = 3;
         gbc.gridwidth = 1; 
-        rightContainer.add(createColorInputContainer(Color.WHITE),gbc);
+        rightContainer.add(createColorInputContainer(Color.WHITE, "Pick A Color"),gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 4;
@@ -1526,7 +1526,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         gbc.gridx = 2;
         gbc.gridy = 3;
         gbc.gridwidth = 1; 
-        rightContainer.add(createColorInputContainer(Color.decode(vehicle.getColor())),gbc);
+        rightContainer.add(createColorInputContainer(Color.decode(vehicle.getColor()), VehicleController.processClosestColorName(Color.decode(vehicle.getColor()))),gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 4;
@@ -1784,7 +1784,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         return priceInputPanel;
     }
 
-    private JPanel createColorInputContainer(Color color) {
+    private JPanel createColorInputContainer(Color color, String input) {
         JPanel colorInputPanel = new JPanel(new GridBagLayout());
         colorInputPanel.setBackground(Theme.getBackground());
 
@@ -1805,7 +1805,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         colorInput.setMinimumSize(new Dimension(200, 50));
         colorInput.setForeground(Color.BLACK);
         colorInput.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(10, 15, 10, 15)));
-        colorInput.setText(VehicleController.processClosestColorName(color));
+        colorInput.setText(input);
         colorInput.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -2238,7 +2238,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                         Integer.parseInt(capacityInput.getText()), Integer.parseInt(horsepowerInput.getText()), String.format("#%02x%02x%02x", selectedColor.getRed(), selectedColor.getGreen(), selectedColor.getBlue()), Double.parseDouble(mpgInput.getText()), vinNumberInput.getText(), registrationNumberInput.getText(), Double.parseDouble(priceInput.getText()), ((String) transmissionInput.getSelectedItem()).substring(0,1) + ((String) transmissionInput.getSelectedItem()).substring(1).toLowerCase(), 
                         ((String) fuelTypeInput.getSelectedItem()).substring(0,1) + ((String) fuelTypeInput.getSelectedItem()).substring(1).toLowerCase(), ((String) vehicleTypeInput.getSelectedItem()).toLowerCase(), (int) seatInput.getValue(), vehicle.getAvailability(), inputField.getText());
         
-        if (selectedImageFile != null && !selectedImageFile.getPath().equals(vehicle.getImagePath())) {
+        if (selectedImageFile != null && !selectedImageFile.getName().equals(new File(vehicle.getImagePath()).getName())) {
             boolean imageSaved = VehicleController.processImageSaving(selectedImageFile, selectedImagePreview);
             if (!imageSaved) {
                 dialog.showDialog("ERROR","Image Saving Error", "Image Saving Error", "Failed to save image",true);
