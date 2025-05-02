@@ -54,7 +54,7 @@ public class Bike extends Vehicle {
                 ", rentalPriceDay = '" + rentalPriceDay + '\'' +
                 ", transmission = '" + transmission + '\'' +
                 ", fuelType = '" + fuelType + '\'' +
-                ", bikeType = '" + bikeType + '\'' +
+                ", bikeType = '" + vehicleType + '\'' +
                 ", seatingCapacity = '" + seatingCapacity + '\'' +
                 ", availability = '" + availability + '\'' +
                 ", features = '" + features + '\'' +
