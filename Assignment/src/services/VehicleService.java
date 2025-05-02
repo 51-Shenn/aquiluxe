@@ -381,7 +381,7 @@ public class VehicleService {
     public static boolean validateMpg(String mpg) {
         try {
             double value = Double.parseDouble(mpg);
-            return value > 0;
+            return value >= 0;
         } catch (NumberFormatException e) {
             return false;
         }
@@ -390,7 +390,7 @@ public class VehicleService {
     public static boolean validateCapacity(String capacity) {
         try {
             int value = Integer.parseInt(capacity);
-            return value > 0;
+            return value >= 0;
         } catch (NumberFormatException e) {
             return false;
         }

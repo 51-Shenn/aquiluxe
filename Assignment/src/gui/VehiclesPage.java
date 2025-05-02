@@ -2653,10 +2653,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
     private void goBackToVehiclePage() {
         // Create completely fresh VehiclesPage instance
-        VehiclesPage refreshedPage = new VehiclesPage(frame, panel, user);
-
+        JPanel refreshedPage = new VehiclesPage(frame, panel, user);
         // Replace current view in card layout
-        GUIComponents.cardPanel.remove(this); // Remove current details page
         GUIComponents.cardPanel.add(refreshedPage, "VehiclesPage");
         GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
     }
