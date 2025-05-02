@@ -194,7 +194,7 @@ public class VehiclesPageDetails extends JPanel {
         carTypeLabel.setForeground(Theme.getForeground());
         carTypeLabel.setVerticalTextPosition(JLabel.BOTTOM);
         carTypeLabel.setHorizontalTextPosition(JLabel.CENTER);
-        carTypeLabel.setText(carType);
+        carTypeLabel.setText(carType.substring(0,1).toUpperCase() + carType.substring(1));
         carTypeLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(15f));
         carTypePanel.add(carTypeLabel, BorderLayout.CENTER);
         carTypePanel.setBackground(Theme.getBackground());
