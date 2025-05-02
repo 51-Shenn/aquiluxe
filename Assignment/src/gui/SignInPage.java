@@ -144,7 +144,7 @@ public class SignInPage extends AuthenticationPage {
 
         gbc.anchor = GridBagConstraints.WEST;
 
-        container.add(createEmailContainer("Username / Email Address: "), gbc);
+        container.add(createEmailContainer("Email Address / Username: "), gbc);
         container.add(createPasswordContainer(), gbc);
         gbc.insets = new Insets(50, 20, 0, 0);
         container.add(createProceedContainer(), gbc);

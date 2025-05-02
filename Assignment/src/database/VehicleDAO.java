@@ -90,7 +90,7 @@ public class VehicleDAO {
                     color, mpg, vin, regNumber, rentalPrice, transmission,
                     fuelType, vehicleType, seatingCapacity, available, features);
         } else {
-            return new Vehicle();
+            throw new IllegalArgumentException("Unknown vehicle type: " + vehicleType);
         }
     }
 
