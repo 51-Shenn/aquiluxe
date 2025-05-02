@@ -1,8 +1,11 @@
 package services;
 
+import datamodels.BikeDiscount;
+import datamodels.CarDiscount;
 import datamodels.Rental;
 import datamodels.User;
 import datamodels.Vehicle;
+import datamodels.VehicleDiscount;
 import database.RentalDAO;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -89,9 +92,11 @@ public class RentalService {
         return RentalDAO.getRentalsByDateRange(startDate, endDate);
     }
 
+    private static long daysBetween;
+
     // calculateBaseRentalCost : daysbetween * rentalpriceday
     public static double calculateBaseRentalCost(Rental rental) {
-        long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(rental.getRentStartDate(),
+        daysBetween = java.time.temporal.ChronoUnit.DAYS.between(rental.getRentStartDate(),
                 rental.getRentEndDate());
 
         if (daysBetween >= 0)
@@ -144,12 +149,36 @@ public class RentalService {
         return subtotalRentalCost;
     }
 
+    // calculate discount amount
+    public static double calculateDiscount(Rental rental) {
+        double subtotalRentalCost = calculateSubtotalRentalCost(rental);
+        double discountAmount = 0;
+
+        Vehicle vehicle = rental.getRentVehicle();
+        VehicleDiscount discount = null;
+
+        if (daysBetween > 3) {
+            if (vehicle instanceof datamodels.Car) {
+                discount = new CarDiscount();
+            } else if (vehicle instanceof datamodels.Bike) {
+                discount = new BikeDiscount();
+            }
+
+            if (discount != null) {
+                discountAmount = discount.calculateDiscountPrice(subtotalRentalCost);
+            }
+        }
+
+        return discountAmount;
+    }
+
     // calculateTotalRentalCost with deposit cost
     public static double calculateTotalRentalCost(Rental rental) {
         double subtotalRentalCost = calculateSubtotalRentalCost(rental);
         double depositCost = calculateDepositCost(rental);
+        double discountCost = calculateDiscount(rental);
 
-        double totalRentalCost = subtotalRentalCost + depositCost;
+        double totalRentalCost = subtotalRentalCost - discountCost + depositCost;
 
         return totalRentalCost;
     }
