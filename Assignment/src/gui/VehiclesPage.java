@@ -1,5 +1,6 @@
 package gui;
 
+import controllers.UserController;
 import controllers.VehicleController;
 import datamodels.Admin;
 import datamodels.Bike;
@@ -123,8 +124,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
         carRent.setForeground(Theme.getSpecialForeground());
         carRent.setOpaque(true);
         // if is admin
-        if (user instanceof Admin) {
-            Admin admin = (Admin) user;
+        if (user.getUserType().equals("Admin")) {
+            Admin admin = UserController.getAdminFromDatabase(user);
             if (admin.getAdminRole().equals("Manager")) {
                 carRent.setEnabled(true);
                 carRent.setText("EDIT");
@@ -150,6 +151,40 @@ public class VehiclesPage extends JPanel implements ActionListener {
                         showEditCarPopup(vehicle);
                     }
                 });
+            }
+            else {
+                carRent.setEnabled(vehicle.getAvailability());
+                if(vehicle.getAvailability()) {
+                    carRent.setBackground(Theme.getSpecial());
+                    carRent.setForeground(Theme.getSpecialForeground());
+                    
+                    carRent.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseEntered(MouseEvent evt) {
+                            carRent.setBackground(Theme.getHoverSpecial());
+                        }
+                        @Override
+                        public void mouseExited(MouseEvent evt) {
+                            carRent.setBackground(Theme.getSpecial());
+                        }
+                        @Override
+                        public void mousePressed(MouseEvent evt) {
+                            carRent.setBackground(Theme.getPressedSpecial());
+                        }
+                        @Override
+                        public void mouseReleased(MouseEvent evt) {
+                            carRent.setBackground(Theme.getSpecial());
+                            JPanel rentalPanel = new RentalPage(frame, panel, vehicle);
+                            GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
+                            GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
+                        }
+                    });
+                }
+                else {
+                    carRent.setBackground(Color.GRAY);
+                    carRent.setForeground(Theme.getSpecialForeground());
+                }
+                
             }
         }
         else {
@@ -341,8 +376,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
             }
         });
         // if is admin
-        if (user instanceof Admin) {
-            Admin admin = (Admin) user;
+        if (user.getUserType().equals("Admin")) {
+            Admin admin = UserController.getAdminFromDatabase(user);
             if (admin.getAdminRole().equals("Manager")) {
                 carDetails.setText("DELETE");
                 carDetails.setForeground(Theme.getErrorForeground());
@@ -378,6 +413,42 @@ public class VehiclesPage extends JPanel implements ActionListener {
                                 vehicless[i] = vehicles.get(i);
                             }
                             goBackToVehiclePage();
+                        }
+                    }
+                });
+            }
+            else {
+                carDetails.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        // Check if the click is on the image
+                        if (SwingUtilities.isLeftMouseButton(e)) {
+                            JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, vehicles);
+                            GUIComponents.cardPanel.add(detailsPanel, "VehicleDetailsPage");
+                            GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
+                        }
+                    }
+    
+                    @Override
+                    public void mousePressed(MouseEvent evt) {
+                        if (SwingUtilities.isLeftMouseButton(evt)) {
+                            carPicture.setIcon(toGreyScale(image)); // Set greyscale image
+                            carAvailability.setBackground(Theme.getPressedSpecial());
+                        }
+                    }
+    
+                    @Override
+                    public void mouseReleased(MouseEvent evt) {
+                        if (SwingUtilities.isLeftMouseButton(evt)) {
+                            carPicture.setIcon(image); // Restore original image
+                            if (availability.equals("AVAILABLE")) {
+                                carAvailability.setBackground(Theme.getSpecial());
+                            } else {
+                                carAvailability.setBackground(Theme.getError());
+                            }
+                            transLabel.setIcon(IconLoader.getTransmissionIcon());
+                            fuelTypeLabel.setIcon(IconLoader.getGasIcon());
+                            seatsLabel.setIcon(IconLoader.getSeatIcon());
                         }
                     }
                 });
@@ -632,10 +703,13 @@ public class VehiclesPage extends JPanel implements ActionListener {
             }
         });
         addButton.addActionListener(e -> showAddCarPopup());
-        if (user instanceof Admin) {
-            Admin admin = (Admin) user;
+        if (user.getUserType().equals("Admin")) {
+            Admin admin = UserController.getAdminFromDatabase(user);
             if (admin.getAdminRole().equals("Manager")) {
                 addButton.setVisible(true);
+            }
+            else {
+                addButton.setVisible(false);
             }
         } else {
             addButton.setVisible(false);

@@ -3,7 +3,7 @@ package datamodels;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Vehicle {
+public abstract class Vehicle {
     protected int vehicleId;
     protected String imagePath;
     protected String brand;

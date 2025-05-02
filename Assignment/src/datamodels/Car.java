@@ -54,7 +54,7 @@ public class Car extends Vehicle {
                 ", rentalPriceDay = '" + rentalPriceDay + '\'' +
                 ", transmission = '" + transmission + '\'' +
                 ", fuelType = '" + fuelType + '\'' +
-                ", carType = '" + carType + '\'' +
+                ", carType = '" + vehicleType + '\'' +
                 ", seatingCapacity = '" + seatingCapacity + '\'' +
                 ", availability = '" + availability + '\'' +
                 ", features = '" + features + '\'' +

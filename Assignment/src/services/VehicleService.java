@@ -460,6 +460,4 @@ public class VehicleService {
         VehicleDAO.updateVehicle(updatedVehicle);
 
     }
-
-
 }
