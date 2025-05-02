@@ -1,6 +1,9 @@
 package gui;
 
+import controllers.UserController;
 import controllers.VehicleController;
+import database.UserDAO;
+import datamodels.Customer;
 import datamodels.User;
 import datamodels.Vehicle;
 
@@ -170,6 +173,13 @@ public class VehiclesPage extends JPanel implements ActionListener {
                     @Override
                     public void mouseReleased(MouseEvent evt) {
                         carRent.setBackground(Theme.getSpecial());
+                        File accountsFile = new File("files/settings/accounts.txt");
+                        user = UserController.loadCurrentUser(accountsFile);
+                        if (user.getUserType().equals("Guest") || user.getUserType().equals("Admin")) {
+                            // Display dialog
+                            System.err.println("Please Sign In");
+                            return;
+                        }
                         JPanel rentalPanel = new RentalPage(frame, panel, vehicle);
                         GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
                         GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");

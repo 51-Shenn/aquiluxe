@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Random;
 import datamodels.Payment;
 import database.PaymentDAO;
+import database.RentalDAO;
+
 import java.time.LocalDate;
 import datamodels.User;
+import datamodels.Rental.PaymentStatus;
 import datamodels.Rental;
 
 public class PaymentService {
@@ -14,8 +17,9 @@ public class PaymentService {
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     // add Payment
-    public static void addPayment(Payment payment) {
+    public static void addPayment(Rental rental, Payment payment) {
         PaymentDAO.addPayment(payment);
+        RentalDAO.updatePaymentStatus(rental, PaymentStatus.PAID);
     }
 
     // update payment amount

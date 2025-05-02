@@ -57,11 +57,11 @@ public class RentalController {
         return rentalId;
     }
 
-    public void processPayment(Payment payment) {
+    public void processPayment(Rental rental, Payment payment) {
         // generate token
         // call service save to db
         PaymentService.assignPaymentToken(payment, PaymentService.generateRandomToken());
-        PaymentService.addPayment(payment);
+        PaymentService.addPayment(rental, payment);
     }
 
     // called by gui to get rental details

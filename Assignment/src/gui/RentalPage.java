@@ -73,6 +73,9 @@ public class RentalPage extends JPanel {
     private static Vehicle vehicleSelected;
     private Rental rental = new Rental(); // default rental object
     private Payment payment = new Payment();
+    private User user = new User();
+
+    private boolean validDetails = false;
 
     private JLabel rentalPriceLabel;
     private JLabel insurancePriceLabel;
@@ -92,7 +95,7 @@ public class RentalPage extends JPanel {
         try {
             // set customer
             File accountsFile = new File("files/settings/accounts.txt");
-            User user = UserController.loadCurrentUser(accountsFile);
+            user = UserController.loadCurrentUser(accountsFile);
             Customer currentCustomer = UserDAO.getCustomerById(user);
             rental.setRentCustomer(currentCustomer);
         } catch (Exception e) {
@@ -392,11 +395,35 @@ public class RentalPage extends JPanel {
                 getPaymentDetails();
 
                 // process data
-                int rentalId = rentalController.processRental(rental);
-                rental.setRentalId(rentalId);
-                rentalController.processPayment(payment);
-                System.out.println(payment.getPaymentMethod() + getInputValue("OnlineBanking"));
+                if (validDetails) {
+                    int rentalId = rentalController.processRental(rental);
+                    rental.setRentalId(rentalId);
+                    rentalController.processPayment(rental, payment);
+
+                    Dialog dialog = new Dialog(this.frame);
+                    dialog.showDialog("SUCCESS",
+                            "Success",
+                            "Payment Success",
+                            "Rental has been booked",
+                            false);
+
+                    // update vehicle availability
+                    System.out.println(GUIComponents.cardPanel.getComponents().length);
+                    GUIComponents.cardPanel.remove(GUIComponents.vehiclesPanel);
+                    System.out.println(GUIComponents.cardPanel.getComponents().length);
+                    GUIComponents.vehiclesPanel = new VehiclesPage(frame, panel, user);
+                    GUIComponents.cardPanel.add(GUIComponents.vehiclesPanel, "VehiclesPage");
+                    GUIComponents.vehiclesPanel.revalidate();
+                    GUIComponents.vehiclesPanel.repaint();
+                    System.out.println(GUIComponents.cardPanel.getComponents().length);
+                    GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
+                    GUIComponents.cardPanel.revalidate();
+                    GUIComponents.cardPanel.repaint();
+
+                    validDetails = false;
+                }
             } catch (Exception ex) {
+                System.err.println(ex.getMessage());
                 Dialog dialog = new Dialog(this.frame);
                 dialog.showDialog("HAZARD",
                         "Warning",
@@ -612,14 +639,14 @@ public class RentalPage extends JPanel {
         gbc.weightx = 1.0;
         gbc.gridx = 0;
         gbc.gridy = 0;
-        paymentMethodPanel.add(createPaymentMethodSelector("Payment Method", "PaymentMethod"), gbc);
+        paymentMethodPanel.add(createPaymentMethodSelector("Payment Method:", "PaymentMethod"), gbc);
         // combobox select payment method : online banking or card
 
         gbc.gridx = 0;
         gbc.gridy = 1;
         cardNumberPanel = createInputContainer("CardNumber", "Card Number: ", false);
         paymentMethodPanel.add(cardNumberPanel, gbc);
-        onlineBankingPanel = createInputContainer("OnlineBanking", "Bank: ", false);
+        onlineBankingPanel = createBankSelector("Bank:", "OnlineBanking");
         onlineBankingPanel.setVisible(false);
         paymentMethodPanel.add(onlineBankingPanel, gbc);
 
@@ -639,10 +666,26 @@ public class RentalPage extends JPanel {
     }
 
     private void getPaymentDetails() {
+        if (getInputValue("PaymentMethod").equals("Credit/Debit Card"))
+            if (getInputValue("CardNumber").length() < 16 || getInputValue("CardNumber").isBlank()
+                    || getInputValue("CardNumber").isEmpty() ||
+                    getInputValue("ExpiryDate").isBlank() || getInputValue("ExpiryDate").isEmpty() ||
+                    getInputValue("CVV").isBlank() || getInputValue("CVV").isEmpty()) {
+                Dialog dialog = new Dialog(this.frame);
+                dialog.showDialog("HAZARD",
+                        "Empty",
+                        "Empty Payment Details",
+                        "Please input complete Payment Details",
+                        true);
+
+                return;
+            }
+
         payment.setRental(rental);
         payment.setAmount(rental.getRentTotalCost());
         payment.setPaymentMethod(getInputValue("PaymentMethod"));
         payment.setPaymentDate(LocalDate.now());
+        validDetails = true;
     }
 
     private JPanel createPaymentMethodSelector(String title, String paymentMethod) {
@@ -690,6 +733,34 @@ public class RentalPage extends JPanel {
         paymentContainer.add(comboBoxPayment, gbc);
 
         return paymentContainer;
+    }
+
+    private JPanel createBankSelector(String title, String bank) {
+        JPanel bankContainer = new JPanel(new GridBagLayout());
+        bankContainer.setBackground(Theme.getBackground());
+
+        JLabel titleBankLabel = createLabel(title, 25f, Theme.getForeground(),
+                Theme.getBackground(), 1, 1);
+        titleBankLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(25f));
+
+        JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        wrapper.setBackground(Theme.getBackground());
+        wrapper.add(titleBankLabel);
+
+        String[] bankList = { "Maybank2U", "CIMB", "Hong Leong", "AmBank", "OCBC", "RHB", "Public Bank" };
+
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        bankContainer.add(wrapper, gbc);
+
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        JComboBox<String> comboBoxBank = createComboBox(bank, bankList);
+
+        bankContainer.add(comboBoxBank, gbc);
+
+        return bankContainer;
     }
 
     // create input container (from AuthenticationPage)
