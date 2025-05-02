@@ -5,7 +5,8 @@ import java.util.List;
 
 public class Car extends Vehicle {
     private static List<Car> allCars = new ArrayList<>();
-    private static final String[] CAR_TYPES = { "mpv", "suv", "sedan", "coupe", "convertible", "hatchback", "wagon", "pickup truck" };
+    private static final String[] CAR_TYPES = { "mpv", "suv", "sedan", "coupe", "convertible", "hatchback", "wagon",
+            "pickup truck" };
 
     // Default Constructor
     public Car() {
@@ -54,7 +55,7 @@ public class Car extends Vehicle {
                 ", rentalPriceDay = '" + rentalPriceDay + '\'' +
                 ", transmission = '" + transmission + '\'' +
                 ", fuelType = '" + fuelType + '\'' +
-                ", carType = '" + carType + '\'' +
+                ", carType = '" + vehicleType + '\'' +
                 ", seatingCapacity = '" + seatingCapacity + '\'' +
                 ", availability = '" + availability + '\'' +
                 ", features = '" + features + '\'' +
