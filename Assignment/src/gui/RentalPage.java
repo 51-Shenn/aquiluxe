@@ -666,9 +666,8 @@ public class RentalPage extends JPanel {
     }
 
     private void getPaymentDetails() {
-        if (getInputValue("PaymentMethod").equals("Credit/Debit Card"))
-            if (getInputValue("CardNumber").length() < 16 || getInputValue("CardNumber").isBlank()
-                    || getInputValue("CardNumber").isEmpty() ||
+        if (getInputValue("PaymentMethod").equals("Credit/Debit Card")) {
+            if (getInputValue("CardNumber").isBlank() || getInputValue("CardNumber").isEmpty() ||
                     getInputValue("ExpiryDate").isBlank() || getInputValue("ExpiryDate").isEmpty() ||
                     getInputValue("CVV").isBlank() || getInputValue("CVV").isEmpty()) {
                 Dialog dialog = new Dialog(this.frame);
@@ -680,6 +679,18 @@ public class RentalPage extends JPanel {
 
                 return;
             }
+            if (getInputValue("CardNumber").length() < 16 || getInputValue("ExpiryDate").length() < 5
+                    || getInputValue("CVV").length() < 3) {
+                Dialog dialog = new Dialog(this.frame);
+                dialog.showDialog("HAZARD",
+                        "Invalid",
+                        "Incomplee Payment Details",
+                        "16 Digit Card Number : Expiry Date MM/YY : 3 Digit CVV",
+                        true);
+
+                return;
+            }
+        }
 
         payment.setRental(rental);
         payment.setAmount(rental.getRentTotalCost());
