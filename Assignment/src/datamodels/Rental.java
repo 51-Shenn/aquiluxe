@@ -152,7 +152,7 @@ public class Rental {
 
     @Override
     public String toString() {
-        return "Rental{" +
+        return "Rental {" +
                 "rentalId=" + rentalId +
                 ", customer=" + customer.getFullName() +
                 ", vehicle=" + vehicle.getBrand() + vehicle.getModel() +

@@ -866,7 +866,7 @@ public class OverflowMenu extends JLayeredPane {
                     frame.getLayeredPane().remove(this);
                     UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
 
-                    this.user = new User();
+                    this.user = UserController.loadCurrentUser(ACCOUNTS_FILE);
                     GUIComponents.refreshHomePage(this.frame, this.panel, this.user, guiComponents);
                 }
             });

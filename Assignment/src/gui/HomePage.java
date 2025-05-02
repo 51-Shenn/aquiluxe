@@ -305,7 +305,7 @@ public class HomePage extends JPanel {
                 if (proceed) {
                     UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
 
-                    this.user = new User();
+                    this.user = UserController.loadCurrentUser(ACCOUNTS_FILE);
                     GUIComponents.refreshHomePage(this.frame, this.panel, this.user, guiComponents);
                     GUIComponents.cardLayout.show(GUIComponents.cardPanel, "HomePage");
                 }
