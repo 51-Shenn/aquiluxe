@@ -2,7 +2,11 @@ package datamodels;
 
 public class BikeDiscount extends VehicleDiscount {
 
-    private final double BIKE_DISCOUNT_RATE = 0.10;
+    private static final double BIKE_DISCOUNT_RATE = 0.10;
+
+    public static double getBikeDiscountRate() {
+        return BIKE_DISCOUNT_RATE;
+    }
     
     @Override
     public double calculateDiscountPrice(double price) {

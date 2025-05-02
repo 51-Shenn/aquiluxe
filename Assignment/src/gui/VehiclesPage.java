@@ -39,6 +39,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
     private final JPanel panel;
     private JPanel vehicleCards;
     private static User user;
+    private static Admin admin;
     private Dialog dialog = new Dialog();
 
     public VehiclesPage(JFrame frame, JPanel panel, User user) {
@@ -51,6 +52,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
             vehicless[i] = vehicles.get(i);
         }
         VehiclesPage.user = user;
+        if (user.getUserType().equals("Admin")) {
+            admin = UserController.getAdminFromDatabase(user);
+        }
         this.setLayout(new BorderLayout());
 
         this.add(createCarCardsContainer(this.vehicles), BorderLayout.CENTER);
@@ -125,7 +129,6 @@ public class VehiclesPage extends JPanel implements ActionListener {
         carRent.setOpaque(true);
         // if is admin
         if (user.getUserType().equals("Admin")) {
-            Admin admin = UserController.getAdminFromDatabase(user);
             if (admin.getAdminRole().equals("Manager")) {
                 carRent.setEnabled(true);
                 carRent.setText("EDIT");
@@ -265,7 +268,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         carAvailability.setForeground(Theme.getSpecialForeground());
         carAvailability.setPreferredSize(new Dimension(200, 20));
 
-        JLabel carTypeLabel = new JLabel(vehicleType);
+        JLabel carTypeLabel = new JLabel(vehicleType.substring(0,1).toUpperCase() + vehicleType.substring(1));
         carTypeLabel.setHorizontalTextPosition(JLabel.LEFT);
         carTypeLabel.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(12.5f));
         carTypeLabel.setPreferredSize(new Dimension(50, 10));
@@ -385,7 +388,6 @@ public class VehiclesPage extends JPanel implements ActionListener {
         });
         // if is admin
         if (user.getUserType().equals("Admin")) {
-            Admin admin = UserController.getAdminFromDatabase(user);
             if (admin.getAdminRole().equals("Manager")) {
                 carDetails.setText("DELETE");
                 carDetails.setForeground(Theme.getErrorForeground());
@@ -713,7 +715,6 @@ public class VehiclesPage extends JPanel implements ActionListener {
         });
         addButton.addActionListener(e -> showAddCarPopup());
         if (user.getUserType().equals("Admin")) {
-            Admin admin = UserController.getAdminFromDatabase(user);
             if (admin.getAdminRole().equals("Manager")) {
                 addButton.setVisible(true);
             }
@@ -2653,10 +2654,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
     private void goBackToVehiclePage() {
         // Create completely fresh VehiclesPage instance
-        VehiclesPage refreshedPage = new VehiclesPage(frame, panel, user);
-
+        JPanel refreshedPage = new VehiclesPage(frame, panel, user);
         // Replace current view in card layout
-        GUIComponents.cardPanel.remove(this); // Remove current details page
         GUIComponents.cardPanel.add(refreshedPage, "VehiclesPage");
         GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
     }
