@@ -14,6 +14,7 @@ import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
@@ -60,12 +61,10 @@ public class RentalPage extends JPanel {
     private Map<String, JComponent> inputFieldsMap = new HashMap<>();
     private Map<String, JComboBox<String>> comboBoxMap = new HashMap<>();
 
-    private final float TITLE_TEXT_SIZE = 20f;
     private final float NORMAL_TEXT_SIZE = 28f;
     private final float BUTTON_TEXT_SIZE = 30f;
     private final Border BORDER = new LineBorder(Color.BLACK, 2);
     private final Border PADDING = new EmptyBorder(10, 15, 10, 15);
-    private final Font TITLE_FONT = CustomFonts.ROBOTO_SEMI_BOLD;
     private final Font INPUT_FONT = CustomFonts.OPEN_SANS_REGULAR;
 
     private GridBagConstraints gbc = new GridBagConstraints();
@@ -198,7 +197,8 @@ public class RentalPage extends JPanel {
                 20f, Theme.getForeground(), Theme.getBackground(), 50, -1);
         carFuelLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel carRentalPriceLabel = createLabel("RM " + vehicleSelected.getRentalPriceDay() + "/day",
+        JLabel carRentalPriceLabel = createLabel(
+                "RM " + String.format("%.2f", vehicleSelected.getRentalPriceDay()) + "/day",
                 20f, Theme.getForeground(), Theme.getBackground(), 50, -1);
         carRentalPriceLabel.setHorizontalAlignment(JLabel.LEFT);
 
@@ -310,13 +310,15 @@ public class RentalPage extends JPanel {
         totalPanel.setLayout(new BorderLayout());
         totalPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 100));
 
-        JLabel totalPriceTextLabel = createLabel("Total Price : ", 20f,
+        JLabel totalPriceTextLabel = createLabel("Total Price : ", 30f,
                 Theme.getForeground(), Theme.getBackground(), 30, -1);
+        totalPriceTextLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
         totalPriceTextLabel.setOpaque(false);
         totalPriceTextLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        totalPriceLabel = createLabel("RM " + rentalController.processRentalTotalCost(rental), 40f,
-                Theme.getForeground(), Theme.getBackground(), 30, -1);
+        totalPriceLabel = createLabel("RM " + String.format("%.2f", rentalController.processRentalTotalCost(rental)),
+                30f, Theme.getForeground(), Theme.getBackground(), 30, -1);
+        totalPriceLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
         totalPriceLabel.setOpaque(false);
         totalPriceLabel.setHorizontalAlignment(JLabel.RIGHT);
 
@@ -352,6 +354,22 @@ public class RentalPage extends JPanel {
         JButton confirmButton = createButton("Confirm", Theme.getSpecial(), Theme.getWhite(), 200, 50);
         confirmButton.addActionListener(e -> {
             try {
+                if (getInputValue("PaymentMethod").equals("Online Banking")) {
+                    Dialog dialog1 = new Dialog(this.frame);
+                    dialog1.showDialog("SUCCESS",
+                            "Payment",
+                            "Payment Gateway",
+                            "Proceeding to Payment Gateway of " + getInputValue("OnlineBanking") + " ... ",
+                            false);
+
+                    Dialog dialog2 = new Dialog(this.frame);
+                    dialog2.showDialog("SUCCESS",
+                            "Payment",
+                            "Successful Payment",
+                            "Payment through " + getInputValue("OnlineBanking") + " was successful!",
+                            false);
+                }
+
                 // update customer address
                 getBillingDetails();
 
@@ -367,6 +385,7 @@ public class RentalPage extends JPanel {
                 int rentalId = rentalController.processRental(rental);
                 rental.setRentalId(rentalId);
                 rentalController.processPayment(payment);
+                System.out.println(payment.getPaymentMethod() + getInputValue("OnlineBanking"));
             } catch (Exception ex) {
                 Dialog dialog = new Dialog(this.frame);
                 dialog.showDialog("HAZARD",
@@ -494,15 +513,15 @@ public class RentalPage extends JPanel {
         JPanel dateContainer = new JPanel(new GridBagLayout());
         dateContainer.setBackground(Theme.getBackground());
 
-        JLabel titleDateLabel = createLabel(title, 30f, Theme.getForeground(),
+        JLabel titleDateLabel = createLabel(title, 25f, Theme.getForeground(),
                 Theme.getBackground(), 1, 1);
-        titleDateLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(30f));
+        titleDateLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(25f));
 
         JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         wrapper.setBackground(Theme.getBackground());
         wrapper.add(titleDateLabel);
 
-        String[] yearsList = { "2025", "2026" };
+        String[] yearsList = { "2025", "2026", "2027" };
 
         String[] monthsList = new String[12];
         for (int i = 0; i < monthsList.length; i++) {
@@ -536,9 +555,9 @@ public class RentalPage extends JPanel {
         JPanel dateContainer = new JPanel(new GridBagLayout());
         dateContainer.setBackground(Theme.getBackground());
 
-        JLabel titleTimeLabel = createLabel(title, 30f, Theme.getForeground(),
+        JLabel titleTimeLabel = createLabel(title, 25f, Theme.getForeground(),
                 Theme.getBackground(), 1, 1);
-        titleTimeLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(30f));
+        // titleTimeLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(25f));
 
         JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         wrapper.setBackground(Theme.getBackground());
@@ -563,31 +582,46 @@ public class RentalPage extends JPanel {
         return dateContainer;
     }
 
+    private JPanel cardNumberPanel;
+    private JPanel expiryDatePanel;
+    private JPanel cvvPanel;
+    private JPanel onlineBankingPanel;
+
     // Payment Method
     private JPanel createPaymentMethodContainer() {
         JPanel paymentContainer = new JPanel(new BorderLayout());
         paymentContainer.setBackground(Theme.getBackground());
-        paymentContainer.add(createTitlePanel("Payment Method"), BorderLayout.NORTH);
+        paymentContainer.add(createTitlePanel("Payment"), BorderLayout.NORTH);
 
         RoundedPanel paymentMethodPanel = new RoundedPanel(20, Theme.getBackground());
         paymentMethodPanel.setLayout(new GridBagLayout());
         paymentMethodPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
         gbc.gridx = 0;
         gbc.gridy = 0;
-        paymentMethodPanel.add(createInputContainer("PaymentMethod", "Payment Method: ", false), gbc);
+        paymentMethodPanel.add(createPaymentMethodSelector("Payment Method", "PaymentMethod"), gbc);
+        // combobox select payment method : online banking or card
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        paymentMethodPanel.add(createInputContainer("CardNumber", "Card Number: ", false), gbc);
+        cardNumberPanel = createInputContainer("CardNumber", "Card Number: ", false);
+        paymentMethodPanel.add(cardNumberPanel, gbc);
+        onlineBankingPanel = createInputContainer("OnlineBanking", "Bank: ", false);
+        onlineBankingPanel.setVisible(false);
+        paymentMethodPanel.add(onlineBankingPanel, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        paymentMethodPanel.add(createInputContainer("ExpiryDate", "Expiry Date: ", false), gbc);
+        expiryDatePanel = createInputContainer("ExpiryDate", "Expiry Date: ", false);
+        paymentMethodPanel.add(expiryDatePanel, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 3;
-        paymentMethodPanel.add(createInputContainer("CVV", "CVV: ", false), gbc);
+        cvvPanel = createInputContainer("CVV", "CVV: ", false);
+        paymentMethodPanel.add(cvvPanel, gbc);
 
         paymentContainer.add(paymentMethodPanel, BorderLayout.CENTER);
 
@@ -599,6 +633,53 @@ public class RentalPage extends JPanel {
         payment.setAmount(rental.getRentTotalCost());
         payment.setPaymentMethod(getInputValue("PaymentMethod"));
         payment.setPaymentDate(LocalDate.now());
+    }
+
+    private JPanel createPaymentMethodSelector(String title, String paymentMethod) {
+        JPanel paymentContainer = new JPanel(new GridBagLayout());
+        paymentContainer.setBackground(Theme.getBackground());
+
+        JLabel titlePaymentLabel = createLabel(title, 25f, Theme.getForeground(),
+                Theme.getBackground(), 1, 1);
+        titlePaymentLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(25f));
+
+        JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        wrapper.setBackground(Theme.getBackground());
+        wrapper.add(titlePaymentLabel);
+
+        String[] paymentMethodList = { "Credit/Debit Card", "Online Banking" };
+
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        paymentContainer.add(wrapper, gbc);
+
+        gbc.gridy = 1;
+        gbc.gridx = 0;
+        JComboBox<String> comboBoxPayment = createComboBox(paymentMethod, paymentMethodList);
+        comboBoxPayment.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                String selected = (String) e.getItem();
+                boolean showCardInputs = selected.equals("Credit/Debit Card");
+
+                if (cardNumberPanel != null)
+                    cardNumberPanel.setVisible(showCardInputs);
+                if (expiryDatePanel != null)
+                    expiryDatePanel.setVisible(showCardInputs);
+                if (cvvPanel != null)
+                    cvvPanel.setVisible(showCardInputs);
+                if (onlineBankingPanel != null)
+                    onlineBankingPanel.setVisible(!showCardInputs);
+
+                // Force re-layout
+                cardNumberPanel.getParent().revalidate();
+                cardNumberPanel.getParent().repaint();
+            }
+        });
+
+        paymentContainer.add(comboBoxPayment, gbc);
+
+        return paymentContainer;
     }
 
     // create input container (from AuthenticationPage)
@@ -615,7 +696,7 @@ public class RentalPage extends JPanel {
 
         // input title label
         JLabel titleLabel = new JLabel(title);
-        titleLabel.setFont(TITLE_FONT.deriveFont(TITLE_TEXT_SIZE));
+        titleLabel.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(25f));
         titleLabel.setForeground(Theme.getForeground());
         inputPanel.add(titleLabel, gbc);
 
@@ -739,7 +820,8 @@ public class RentalPage extends JPanel {
         titlePanel.setBackground(Theme.getBackground());
         titlePanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 5, 0));
 
-        JLabel titleLabel = createLabel(title, 30f, Theme.getSpecial(), Theme.getBackground(), 50, -1);
+        JLabel titleLabel = createLabel(title, 35f, Theme.getSpecial(), Theme.getBackground(), 50, -1);
+        titleLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(35f));
         titleLabel.setHorizontalAlignment(JLabel.LEFT);
 
         titlePanel.add(titleLabel);
@@ -754,6 +836,7 @@ public class RentalPage extends JPanel {
         titlePanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 5, 0));
 
         JLabel titleLabel = createLabel(title, size, Theme.getSpecial(), Theme.getBackground(), 50, -1);
+        titleLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(size));
         titleLabel.setHorizontalAlignment(JLabel.LEFT);
 
         titlePanel.add(titleLabel);
@@ -765,7 +848,7 @@ public class RentalPage extends JPanel {
     private JLabel createLabel(String text, Float fontSize, Color textColor, Color bgColor, Integer height,
             Integer width) {
         JLabel label = new JLabel(text, SwingConstants.CENTER);
-        label.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(fontSize));
+        label.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(fontSize));
         label.setForeground(textColor);
         label.setBackground(bgColor);
         label.setOpaque(true);
@@ -890,7 +973,7 @@ public class RentalPage extends JPanel {
         insurancePriceLabel.setText("RM " + String.format("%.2f", rentalCosts[1]));
         depositPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[2]));
         taxPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[3]));
-        totalPriceLabel.setText("RM " + rentalController.processRentalTotalCost(rental));
+        totalPriceLabel.setText("RM " + String.format("%.2f", rentalController.processRentalTotalCost(rental)));
     }
 
     // Update the number of days in the day combo box based on month and year
@@ -1018,7 +1101,7 @@ public class RentalPage extends JPanel {
             insurancePriceLabel.setText("RM " + String.format("%.2f", rentalCosts[1]));
             depositPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[2]));
             taxPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[3]));
-            totalPriceLabel.setText("RM " + rentalController.processRentalTotalCost(rental));
+            totalPriceLabel.setText("RM " + String.format("%.2f", rentalController.processRentalTotalCost(rental)));
 
         } catch (DateTimeParseException e) {
             System.out.println("Date parsing error: " + e.getMessage());

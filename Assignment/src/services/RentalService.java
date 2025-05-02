@@ -103,7 +103,7 @@ public class RentalService {
 
         double baseRentalCost = daysBetween * rentalPricePerDay;
 
-        return Math.round(baseRentalCost * 100.0) / 100.0;
+        return baseRentalCost;
     }
 
     // calculateDepositCost : 120% of base rental cost
@@ -112,7 +112,7 @@ public class RentalService {
 
         double depositCost = baseRentalCost * 1.20;
 
-        return Math.round(depositCost * 100.0) / 100.0;
+        return depositCost;
     }
 
     // calculateInsuranceCost : 15% of base rental cost
@@ -121,7 +121,7 @@ public class RentalService {
 
         double insuranceCost = baseRentalCost * 0.15;
 
-        return Math.round(insuranceCost * 100.0) / 100.0;
+        return insuranceCost;
     }
 
     // calculateTaxCost : 5% of base rental cost
@@ -130,7 +130,7 @@ public class RentalService {
 
         double taxCost = baseRentalCost * 0.05;
 
-        return Math.round(taxCost * 100.0) / 100.0;
+        return taxCost;
     }
 
     // calculateSubtotalRentalCost without deposit cost
@@ -141,7 +141,7 @@ public class RentalService {
 
         double subtotalRentalCost = baseRentalCost + insuranceCost + taxCost;
 
-        return Math.round(subtotalRentalCost * 100.0) / 100.0;
+        return subtotalRentalCost;
     }
 
     // calculateTotalRentalCost with deposit cost
@@ -151,7 +151,7 @@ public class RentalService {
 
         double totalRentalCost = subtotalRentalCost + depositCost;
 
-        return Math.round(totalRentalCost * 100.0) / 100.0;
+        return totalRentalCost;
     }
 
 }
