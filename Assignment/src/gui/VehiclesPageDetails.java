@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
+import java.util.List;
 
 public class VehiclesPageDetails extends JPanel {
 
@@ -16,17 +17,17 @@ public class VehiclesPageDetails extends JPanel {
     private JPanel carFeaturesContainer;
     private boolean isFeaturesVisible = false;
     private JPanel emptyBottomPanel = new JPanel();
-    private Vehicle[] vehicless;
+    private List<Vehicle> vehicles;
 
     public static JPanel rentalPanel;
 
-    public VehiclesPageDetails(JFrame frame, JPanel panel, Vehicle vehicle,  Vehicle[] vehicless) {
+    public VehiclesPageDetails(JFrame frame, JPanel panel, Vehicle vehicle, List<Vehicle> vehicles) {
         this.frame = frame;
         this.panel = panel;
         this.vehicle = vehicle;
+        this.vehicles = vehicles;
         this.setBackground(Theme.getBackground());
         this.setLayout(new BorderLayout());
-        this.vehicless = vehicless;
 
         this.add(MainContainer(), BorderLayout.CENTER);
 
@@ -279,30 +280,38 @@ public class VehiclesPageDetails extends JPanel {
         rentButton.setContentAreaFilled(false);
         rentButton.setBorderPainted(false);
         rentButton.setOpaque(true);
-        rentButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent evt) {
-                rentButton.setBackground(Theme.getHoverSpecial());
-            }
-
-            @Override
-            public void mouseExited(MouseEvent evt) {
-                rentButton.setBackground(Theme.getSpecial());
-            }
-
-            @Override
-            public void mousePressed(MouseEvent evt) {
-                rentButton.setBackground(Theme.getPressedSpecial());
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent evt) {
-                rentButton.setBackground(Theme.getSpecial());
-                rentalPanel = new RentalPage(frame, panel, vehicle);
-                GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
-                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
-            }
-        });
+        if(vehicle.getAvailability()) {
+            rentButton.setEnabled(true);
+            rentButton.setBackground(Theme.getSpecial());
+            rentButton.setForeground(Theme.getSpecialForeground());
+                    
+            rentButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    rentButton.setBackground(Theme.getHoverSpecial());
+                }
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    rentButton.setBackground(Theme.getSpecial());
+                }
+                @Override
+                public void mousePressed(MouseEvent evt) {
+                    rentButton.setBackground(Theme.getPressedSpecial());
+                }
+                @Override
+                public void mouseReleased(MouseEvent evt) {
+                    rentButton.setBackground(Theme.getSpecial());
+                    JPanel rentalPanel = new RentalPage(frame, panel, vehicle);
+                    GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
+                    GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
+                }
+            });
+        }
+        else {
+            rentButton.setEnabled(false);
+            rentButton.setBackground(Color.GRAY);
+            rentButton.setForeground(Theme.getSpecialForeground());
+        }
         rentPanel.add(rentButton);
         buttonsPanel.add(rentPanel, BorderLayout.EAST);
 
@@ -413,7 +422,7 @@ public class VehiclesPageDetails extends JPanel {
         carsContainer.setBackground(Theme.getBackground());
         int count = 0;
         VehiclesPage vehiclesPage = new VehiclesPage(frame, panel, VehiclesPage.getUser());
-        for (Vehicle v : vehicless) {
+        for (Vehicle v : vehicles) {
             if (this.vehicle.getBrand().equals(v.getBrand()) && this.vehicle.getModel().equals(v.getModel())) {
                 continue;
             } else if (count == 3) {

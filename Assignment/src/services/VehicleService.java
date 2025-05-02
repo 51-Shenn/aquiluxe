@@ -455,4 +455,11 @@ public class VehicleService {
         VehicleDAO.deleteVehicle(vehicle);
     }
 
+    public static void updateVehiclefromDAO(Vehicle updatedVehicle) {
+
+        VehicleDAO.updateVehicle(updatedVehicle);
+
+    }
+
+
 }

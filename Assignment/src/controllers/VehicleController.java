@@ -216,4 +216,9 @@ public class VehicleController {
 
         VehicleService.deleteVehiclefromDAO(vehicle);
     }
+
+    public static void processUpdateVehiclefromDAO(Vehicle updatedVehicle) {
+
+        VehicleService.updateVehiclefromDAO(updatedVehicle);
+    }
 }
