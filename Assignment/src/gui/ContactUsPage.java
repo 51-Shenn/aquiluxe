@@ -19,7 +19,9 @@ import javax.swing.JPanel;
 
 public class ContactUsPage extends JPanel {
 
+    @SuppressWarnings("unused")
     private JFrame frame;
+    @SuppressWarnings("unused")
     private JPanel panel;
 
     ContactUsPage() {

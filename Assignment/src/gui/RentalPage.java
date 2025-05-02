@@ -212,7 +212,7 @@ public class RentalPage extends JPanel {
         carFuelLabel.setHorizontalAlignment(JLabel.LEFT);
 
         JLabel carRentalPriceLabel = createLabel(
-                "RM " + String.format("%.2f", vehicleSelected.getRentalPriceDay()) + "/day",
+                "RM " + String.format("%,.2f", vehicleSelected.getRentalPriceDay()) + "/day",
                 20f, Theme.getForeground(), Theme.getBackground(), 50, -1);
         carRentalPriceLabel.setHorizontalAlignment(JLabel.LEFT);
 
@@ -248,7 +248,7 @@ public class RentalPage extends JPanel {
         rentalPriceTextLabel.setOpaque(false);
         rentalPriceTextLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        rentalPriceLabel = createLabel("RM " + String.format("%.2f", rentalCosts[0]), 20f,
+        rentalPriceLabel = createLabel("RM " + String.format("%,.2f", rentalCosts[0]), 20f,
                 Theme.getForeground(), Theme.getBackground(), 30, -1);
         rentalPriceLabel.setOpaque(false);
         rentalPriceLabel.setHorizontalAlignment(JLabel.RIGHT);
@@ -258,7 +258,7 @@ public class RentalPage extends JPanel {
         insuranceTextLabel.setOpaque(false);
         insuranceTextLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        insurancePriceLabel = createLabel("RM " + String.format("%.2f", rentalCosts[1]), 20f,
+        insurancePriceLabel = createLabel("RM " + String.format("%,.2f", rentalCosts[1]), 20f,
                 Theme.getForeground(), Theme.getBackground(), 30, -1);
         insurancePriceLabel.setOpaque(false);
         insurancePriceLabel.setHorizontalAlignment(JLabel.RIGHT);
@@ -268,7 +268,7 @@ public class RentalPage extends JPanel {
         depositTextLabel.setOpaque(false);
         depositTextLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        depositPriceLabel = createLabel("RM " + String.format("%.2f", rentalCosts[2]), 20f,
+        depositPriceLabel = createLabel("RM " + String.format("%,.2f", rentalCosts[2]), 20f,
                 Theme.getForeground(), Theme.getBackground(), 30, -1);
         depositPriceLabel.setOpaque(false);
         depositPriceLabel.setHorizontalAlignment(JLabel.RIGHT);
@@ -278,7 +278,7 @@ public class RentalPage extends JPanel {
         taxTextLabel.setOpaque(false);
         taxTextLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        taxPriceLabel = createLabel("RM " + String.format("%.2f", rentalCosts[3]), 20f,
+        taxPriceLabel = createLabel("RM " + String.format("%,.2f", rentalCosts[3]), 20f,
                 Theme.getForeground(), Theme.getBackground(), 30, -1);
         taxPriceLabel.setOpaque(false);
         taxPriceLabel.setHorizontalAlignment(JLabel.RIGHT);
@@ -288,7 +288,7 @@ public class RentalPage extends JPanel {
         discountTextLabel.setOpaque(false);
         discountTextLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        discountPriceLabel = createLabel("RM " + String.format("%.2f", rentalCosts[4]), 20f,
+        discountPriceLabel = createLabel("RM " + String.format("%,.2f", rentalCosts[4]), 20f,
                 Theme.getForeground(), Theme.getBackground(), 30, -1);
         discountPriceLabel.setOpaque(false);
         discountPriceLabel.setHorizontalAlignment(JLabel.RIGHT);
@@ -347,7 +347,7 @@ public class RentalPage extends JPanel {
         totalPriceTextLabel.setOpaque(false);
         totalPriceTextLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        totalPriceLabel = createLabel("RM " + String.format("%.2f", rentalController.processRentalTotalCost(rental)),
+        totalPriceLabel = createLabel("RM " + String.format("%,.2f", rentalController.processRentalTotalCost(rental)),
                 30f, Theme.getForeground(), Theme.getBackground(), 30, -1);
         totalPriceLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
         totalPriceLabel.setOpaque(false);
@@ -1079,12 +1079,12 @@ public class RentalPage extends JPanel {
 
         // Update prices without relying on listeners
         double[] rentalCosts = rentalController.processRentalCosts(rental);
-        rentalPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[0]));
-        insurancePriceLabel.setText("RM " + String.format("%.2f", rentalCosts[1]));
-        depositPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[2]));
-        taxPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[3]));
-        discountPriceLabel.setText("- RM " + String.format("%.2f", rentalCosts[4]));
-        totalPriceLabel.setText("RM " + String.format("%.2f", rentalController.processRentalTotalCost(rental)));
+        rentalPriceLabel.setText("RM " + String.format("%,.2f", rentalCosts[0]));
+        insurancePriceLabel.setText("RM " + String.format("%,.2f", rentalCosts[1]));
+        depositPriceLabel.setText("RM " + String.format("%,.2f", rentalCosts[2]));
+        taxPriceLabel.setText("RM " + String.format("%,.2f", rentalCosts[3]));
+        discountPriceLabel.setText("- RM " + String.format("%,.2f", rentalCosts[4]));
+        totalPriceLabel.setText("RM " + String.format("%,.2f", rentalController.processRentalTotalCost(rental)));
     }
 
     // Update the number of days in the day combo box based on month and year
@@ -1208,12 +1208,12 @@ public class RentalPage extends JPanel {
             double[] rentalCosts = rentalController.processRentalCosts(rental);
 
             // Update labels
-            rentalPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[0]));
-            insurancePriceLabel.setText("RM " + String.format("%.2f", rentalCosts[1]));
-            depositPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[2]));
-            taxPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[3]));
-            discountPriceLabel.setText("- RM " + String.format("%.2f", rentalCosts[4]));
-            totalPriceLabel.setText("RM " + String.format("%.2f", rentalController.processRentalTotalCost(rental)));
+            rentalPriceLabel.setText("RM " + String.format("%,.2f", rentalCosts[0]));
+            insurancePriceLabel.setText("RM " + String.format("%,.2f", rentalCosts[1]));
+            depositPriceLabel.setText("RM " + String.format("%,.2f", rentalCosts[2]));
+            taxPriceLabel.setText("RM " + String.format("%,.2f", rentalCosts[3]));
+            discountPriceLabel.setText("- RM " + String.format("%,.2f", rentalCosts[4]));
+            totalPriceLabel.setText("RM " + String.format("%,.2f", rentalController.processRentalTotalCost(rental)));
 
         } catch (DateTimeParseException e) {
             System.out.println("Date parsing error: " + e.getMessage());

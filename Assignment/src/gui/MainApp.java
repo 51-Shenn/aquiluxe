@@ -34,16 +34,6 @@ public class MainApp extends JFrame {
         // inside main page cardlayout swap between home, vehicles, vehicles details,
         // rental page, rental history, payment history, about us, contact us
 
-        /*
-         * Dark Light Mode Switching
-         * 
-         * 1. Rental Page
-         * 2. Rental History
-         * 3. Payment History
-         * 4. Admin Approve Rental
-         * 
-         */
-
         File accountsFile = new File("files/settings/accounts.txt");
         if (accountsFile.exists()) {
             User currentUser = UserController.loadCurrentUser(accountsFile);

@@ -21,13 +21,14 @@ public class GUIComponents extends JPanel {
     private JPanel panel;
     private User user;
     public static OverflowMenu overflowMenu;
-    private JButton[] topBarButtons = new JButton[4];
-    private String[] topBarButtonsLabels = { "Home", "Vehicles", "About", "Contact" };
+    private JButton[] topBarButtons = new JButton[5];
+    private String[] topBarButtonsLabels = { "Home", "Vehicles", "About", "Contact", "Rentals" };
 
     public static JPanel homePanel;
     public static JPanel vehiclesPanel;
     public static JPanel aboutUsPanel;
     public static JPanel contactUsPanel;
+    public static JPanel rentalHistoryPanel;
     public static CardLayout cardLayout;
     public static JPanel cardPanel;
 
@@ -54,11 +55,14 @@ public class GUIComponents extends JPanel {
         vehiclesPanel = new VehiclesPage(this.frame, this.panel, this.user);
         aboutUsPanel = new AboutUsPage(this.frame, this.panel);
         contactUsPanel = new ContactUsPage(this.frame, this.panel);
+        rentalHistoryPanel = new RentalHistory(this.frame, this.panel, this.user);
 
         cardPanel.add(homePanel, "HomePage");
         cardPanel.add(vehiclesPanel, "VehiclesPage");
         cardPanel.add(aboutUsPanel, "AboutUsPage");
         cardPanel.add(contactUsPanel, "ContactUsPage");
+        cardPanel.add(rentalHistoryPanel, "RentalHistoryPage");
+        // switch user, sign out - remove rentalhistory - add back with current user
 
         add(createTopBar(), BorderLayout.WEST);
         add(menuButton(), BorderLayout.EAST);
@@ -191,6 +195,11 @@ public class GUIComponents extends JPanel {
         topBarButtons[3].addActionListener(e -> {
             pageIndicator(3);
             cardLayout.show(cardPanel, "ContactUsPage");
+        });
+
+        topBarButtons[4].addActionListener(e -> {
+            pageIndicator(4);
+            cardLayout.show(cardPanel, "RentalHistoryPage");
         });
 
         return topBarButtons;
