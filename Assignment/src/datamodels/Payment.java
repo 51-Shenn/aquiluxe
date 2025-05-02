@@ -74,4 +74,16 @@ public class Payment {
     public void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
     }
+
+    @Override
+    public String toString() {
+        return " Payment { " +
+                "paymentId = " + paymentId +
+                ", rentalId = '" + rental.getRentalId() + '\'' +
+                ", amount = '" + amount + '\'' +
+                ", paymentMethod = '" + paymentMethod + '\'' +
+                ", paymentToken = '" + paymentToken + '\'' +
+                ", paymentDate = '" + paymentDate + '\'' +
+                " }";
+    }
 }
