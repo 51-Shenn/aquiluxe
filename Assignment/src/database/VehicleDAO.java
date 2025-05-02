@@ -265,20 +265,49 @@ public class VehicleDAO {
     }
 
     // update vehicle values
-    public static boolean updateVehicleColumnValue(Vehicle vehicle, String column, String value) {
-        String sql = "UPDATE vehicles SET " + column + " = ? WHERE vehicle_id = ?";
-
+    public static boolean updateVehicle(Vehicle vehicle) {
+        String sql = "UPDATE vehicles SET "
+            + "image_path = ?, "
+            + "brand = ?, model = ?, year = ?, "
+            + "capacity = ?, horsepower = ?, color = ?, "
+            + "mpg = ?, vin_number = ?, registration_number = ?, "
+            + "rental_price_day = ?, transmission = ?, fuel_type = ?, "
+            + "vehicle_type = ?, seating_capacity = ?, availability = ?, "
+            + "features = ? "
+            + "WHERE vehicle_id = ?";
+    
         try (Connection conn = DatabaseConnection.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, value);
-            stmt.setInt(2, vehicle.getVehicleId());
-
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            // Set all parameters
+            int paramIndex = 1;
+            stmt.setString(paramIndex++, vehicle.getImagePath());
+            stmt.setString(paramIndex++, vehicle.getBrand());
+            stmt.setString(paramIndex++, vehicle.getModel());
+            stmt.setInt(paramIndex++, vehicle.getYear());
+            stmt.setInt(paramIndex++, vehicle.getCapacity());
+            stmt.setInt(paramIndex++, vehicle.getHorsepower());
+            stmt.setString(paramIndex++, vehicle.getColor());
+            stmt.setDouble(paramIndex++, vehicle.getMpg());
+            stmt.setString(paramIndex++, vehicle.getVinNumber());
+            stmt.setString(paramIndex++, vehicle.getRegistrationNumber());
+            stmt.setDouble(paramIndex++, vehicle.getRentalPriceDay());
+            stmt.setString(paramIndex++, vehicle.getTransmission());
+            stmt.setString(paramIndex++, vehicle.getFuelType());
+            stmt.setString(paramIndex++, vehicle.getVehicleType());
+            stmt.setInt(paramIndex++, vehicle.getSeatingCapacity());
+            stmt.setBoolean(paramIndex++, vehicle.getAvailability());
+            stmt.setString(paramIndex++, vehicle.getFeatures());
+            stmt.setInt(paramIndex++, vehicle.getVehicleId());
+    
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
+            
         } catch (SQLException e) {
+            // Log the full error
+            System.err.println("Error updating vehicle ID " + vehicle.getVehicleId());
             e.printStackTrace();
-            throw new RuntimeException("\nFAILED TO UPDATE VEHICLE\n");
+            throw new RuntimeException("Failed to update vehicle: " + e.getMessage());
         }
     }
 

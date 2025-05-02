@@ -59,24 +59,8 @@ public class Vehicle {
             int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
             double rentalPriceDay, String transmission, String fuelType, String vehicleType, int seatingCapacity,
             boolean availability, String features) {
+        this(imagePath, brand, model, year, capacity, horsepower, color, mpg, vinNumber, registrationNumber, rentalPriceDay, transmission, fuelType, vehicleType, seatingCapacity, availability, features);
         this.vehicleId = vehicleId;
-        this.imagePath = imagePath;
-        this.brand = brand;
-        this.model = model;
-        this.year = year;
-        this.capacity = capacity;
-        this.horsepower = horsepower;
-        this.color = color;
-        this.mpg = mpg;
-        this.vinNumber = vinNumber;
-        this.registrationNumber = registrationNumber;
-        this.rentalPriceDay = rentalPriceDay;
-        this.transmission = transmission;
-        this.fuelType = fuelType;
-        this.vehicleType = vehicleType;
-        this.seatingCapacity = seatingCapacity;
-        this.availability = availability;
-        this.features = features;
     }
 
     // Getters and Setters
