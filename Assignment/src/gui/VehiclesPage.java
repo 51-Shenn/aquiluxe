@@ -42,8 +42,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
         this.frame = frame;
         this.panel = panel;
-        this.vehicles = Vehicle.getVehicles();
-        //probrably will change later for loader by using vehicle.getvehicles() and maybe car.getcars() and bike.getbikes()?
+        this.vehicles = new ArrayList<>(VehicleController.processVehicles());
         this.sortedVehicles = this.vehicles;
         for (int i = 0; i < 4; i++) {
             vehicless[i] = vehicles.get(i);
@@ -303,7 +302,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             public void mouseClicked(MouseEvent e) {
                 // Check if the click is on the image
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                    JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, vehicless);
+                    JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, vehicles);
                     GUIComponents.cardPanel.add(detailsPanel, "VehicleDetailsPage");
                     GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
                 }
@@ -358,7 +357,12 @@ public class VehiclesPage extends JPanel implements ActionListener {
                         VehicleController.processDeleteVehiclefromDAO(vehicle);
                         File imageFile = new File(vehicle.getImagePath());
                         imageFile.delete();
-                        refreshCards(sortedVehicles);
+                        vehicles = new ArrayList<>(VehicleController.processVehicles());
+                        sortedVehicles = vehicles;
+                        for (int i = 0; i < 4; i++) {
+                            vehicless[i] = vehicles.get(i);
+                        }
+                        goBackToVehiclePage();
                     }
                 }
             });
@@ -369,7 +373,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 public void mouseClicked(MouseEvent e) {
                     // Check if the click is on the image
                     if (SwingUtilities.isLeftMouseButton(e)) {
-                        JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, vehicless);
+                        JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, vehicles);
                         GUIComponents.cardPanel.add(detailsPanel, "VehicleDetailsPage");
                         GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
                     }
@@ -1017,12 +1021,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
             String availability = c.getAvailability() ? "AVAILABLE" : "UNAVAILABLE";
             String rentPrice = "RM" + c.getRentalPriceDay() + "/per day";
 
-            JPanel card = createCarCard(c, image, c.getBrand(), c.getModel(),
+            vehicleCards.add(createCarCard(c, image, c.getBrand(), c.getModel(),
                     c.getTransmission(), c.getFuelType(), c.getVehicleType(),
-                    c.getSeatingCapacity(), rentPrice, availability, frame, panel);
-
-            card.setPreferredSize(new Dimension(350, 400));
-            vehicleCards.add(card);
+                    c.getSeatingCapacity(), rentPrice, availability, frame, panel));
         }
 
         // Add empty panels if needed
@@ -1049,6 +1050,30 @@ public class VehiclesPage extends JPanel implements ActionListener {
         // Force layout update
         vehicleCards.revalidate();
         vehicleCards.repaint();
+    }
+
+    private void updateFilterDropdowns() {
+        // Update Brands dropdown
+        List<String> updatedBrands = new ArrayList<>();
+        updatedBrands.add("ALL");
+        updatedBrands.addAll(VehicleController.processAllBrands(vehicles));
+        brandComboBox.setModel(new DefaultComboBoxModel<>(updatedBrands.toArray(new String[0])));
+        
+        // Reset Models dropdown based on selected brand
+        if (brandComboBox.getSelectedIndex() > 0) {
+            List<String> modelsList = new ArrayList<>();
+            modelsList.add("ALL");
+            modelsList.addAll(VehicleController.processAllModelsByBrand(
+                vehicles, 
+                brandComboBox.getSelectedItem().toString()
+            ));
+            modelComboBox.setModel(new DefaultComboBoxModel<>(modelsList.toArray(new String[0])));
+            modelComboBox.setEnabled(true);
+        } else {
+            modelComboBox.setModel(new DefaultComboBoxModel<>(new String[]{"ALL"}));
+            modelComboBox.setEnabled(false);
+        }
+        applyFilters();
     }
 
     private JPanel createCarRightPanel() {
@@ -1506,7 +1531,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
-        rightContainer.add(createCapacityInputContainer(Double.toString(vehicle.getCapacity())),gbc);
+        rightContainer.add(createCapacityInputContainer(Integer.toString(vehicle.getCapacity())),gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 4;
@@ -1774,13 +1799,13 @@ public class VehiclesPage extends JPanel implements ActionListener {
         colorLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
         colorLabel.setForeground(Theme.getForeground());
 
-        colorInput = new RoundedButton(0,Color.WHITE);
+        colorInput = new RoundedButton(0,color);
         colorInput.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
         colorInput.setPreferredSize(new Dimension(200, 50));
         colorInput.setMinimumSize(new Dimension(200, 50));
         colorInput.setForeground(Color.BLACK);
         colorInput.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(10, 15, 10, 15)));
-        colorInput.setText(VehicleController.processClosestColorName(selectedColor));
+        colorInput.setText(VehicleController.processClosestColorName(color));
         colorInput.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -2094,20 +2119,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         imageLabel = new JLabel("No Image Selected", JLabel.CENTER);
         imageLabel.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(15f));
         imageLabel.setBorder(BorderFactory.createLineBorder(Theme.getTransparencyColor()));
-        imageLabel.setPreferredSize(new Dimension(500, 500));
-        if (existingImagePath != null && !existingImagePath.isEmpty()) {
-            try {
-                selectedImageFile = new File(existingImagePath);
-                selectedImagePreview = ImageIO.read(selectedImageFile);
-                ImageIcon icon = new ImageIcon(
-                    selectedImagePreview.getScaledInstance(500, 500, Image.SCALE_SMOOTH));
-                imageLabel.setIcon(icon);
-                imageLabel.setText("");
-                removeButton.setEnabled(true);
-            } catch (IOException ex) {
-                System.err.println(ex.getMessage());
-            }
-        }    
+        imageLabel.setPreferredSize(new Dimension(500, 500));   
 
         // Buttons
         JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -2122,6 +2134,20 @@ public class VehiclesPage extends JPanel implements ActionListener {
         removeButton.setPreferredSize(new Dimension(250, 100));
         removeButton.setFocusable(false);
         removeButton.setEnabled(false);
+
+        if (existingImagePath != null && !existingImagePath.isEmpty()) {
+            try {
+                selectedImageFile = new File(existingImagePath);
+                selectedImagePreview = ImageIO.read(selectedImageFile);
+                ImageIcon icon = new ImageIcon(
+                    selectedImagePreview.getScaledInstance(500, 500, Image.SCALE_SMOOTH));
+                imageLabel.setIcon(icon);
+                imageLabel.setText("");
+                removeButton.setEnabled(true);
+            } catch (IOException ex) {
+                System.err.println(ex.getMessage());
+            }
+        } 
 
         buttonPanel.add(selectButton);
         buttonPanel.add(removeButton);
@@ -2186,25 +2212,31 @@ public class VehiclesPage extends JPanel implements ActionListener {
             }
     
         Vehicle newVehicle = new Vehicle("images/cars/" + VehicleController.processGetImagePath(selectedImageFile), brandInput.getText(), modelInput.getText(), Integer.parseInt((String)yearInput.getSelectedItem()),
-                        Integer.parseInt(capacityInput.getText()), Integer.parseInt(horsepowerInput.getText()), String.format("#%02x%02x%02x", selectedColor.getRed(), selectedColor.getGreen(), selectedColor.getBlue()), Double.parseDouble(mpgInput.getText()), vinNumberInput.getText(), registrationNumberInput.getText(), Double.parseDouble(priceInput.getText()), (String) transmissionInput.getSelectedItem(), 
-                        (String) fuelTypeInput.getSelectedItem(), (String) vehicleTypeInput.getSelectedItem(), (int) seatInput.getValue(), true, inputField.getText());
+                        Integer.parseInt(capacityInput.getText()), Integer.parseInt(horsepowerInput.getText()), String.format("#%02x%02x%02x", selectedColor.getRed(), selectedColor.getGreen(), selectedColor.getBlue()), Double.parseDouble(mpgInput.getText()), vinNumberInput.getText(), registrationNumberInput.getText(), Double.parseDouble(priceInput.getText()), ((String) transmissionInput.getSelectedItem()).substring(0,1) + ((String) transmissionInput.getSelectedItem()).substring(1).toLowerCase(), 
+                        ((String) fuelTypeInput.getSelectedItem()).substring(0,1) + ((String) fuelTypeInput.getSelectedItem()).substring(1).toLowerCase(), ((String) vehicleTypeInput.getSelectedItem()).toLowerCase(), (int) seatInput.getValue(), true, inputField.getText());
         VehicleController.processAddVehiclestoDAO(newVehicle);
         dialog.showDialog("SUCCESS","Submission Successful", "Added Successfully", "Successfully added a vehicle",false);
 
         // 2. Reset form
         resetForm();
-        refreshCards(sortedVehicles);
+        vehicles = new ArrayList<>(VehicleController.processVehicles());
+        sortedVehicles = vehicles;
+        for (int i = 0; i < 4; i++) {
+            vehicless[i] = vehicles.get(i);
+        }
+        updateFilterDropdowns();
     }
 
     private void handleEdit(Vehicle vehicle) {
         // 1. Validate form fields here
+        selectedColor = Color.decode(vehicle.getColor());
         if (!validateFormFields()){
             return;
         }
     
-        Vehicle newVehicle = new Vehicle(vehicle.getImagePath(), brandInput.getText(), modelInput.getText(), Integer.parseInt((String)yearInput.getSelectedItem()),
-                        Integer.parseInt(capacityInput.getText()), Integer.parseInt(horsepowerInput.getText()), String.format("#%02x%02x%02x", selectedColor.getRed(), selectedColor.getGreen(), selectedColor.getBlue()), Double.parseDouble(mpgInput.getText()), vinNumberInput.getText(), registrationNumberInput.getText(), Double.parseDouble(priceInput.getText()), (String) transmissionInput.getSelectedItem(), 
-                        (String) fuelTypeInput.getSelectedItem(), (String) vehicleTypeInput.getSelectedItem(), (int) seatInput.getValue(), vehicle.getAvailability(), inputField.getText());
+        Vehicle newVehicle = new Vehicle(vehicle.getVehicleId(), vehicle.getImagePath(), brandInput.getText(), modelInput.getText(), Integer.parseInt((String)yearInput.getSelectedItem()),
+                        Integer.parseInt(capacityInput.getText()), Integer.parseInt(horsepowerInput.getText()), String.format("#%02x%02x%02x", selectedColor.getRed(), selectedColor.getGreen(), selectedColor.getBlue()), Double.parseDouble(mpgInput.getText()), vinNumberInput.getText(), registrationNumberInput.getText(), Double.parseDouble(priceInput.getText()), ((String) transmissionInput.getSelectedItem()).substring(0,1) + ((String) transmissionInput.getSelectedItem()).substring(1).toLowerCase(), 
+                        ((String) fuelTypeInput.getSelectedItem()).substring(0,1) + ((String) fuelTypeInput.getSelectedItem()).substring(1).toLowerCase(), ((String) vehicleTypeInput.getSelectedItem()).toLowerCase(), (int) seatInput.getValue(), vehicle.getAvailability(), inputField.getText());
         
         if (selectedImageFile != null && !selectedImageFile.getPath().equals(vehicle.getImagePath())) {
             boolean imageSaved = VehicleController.processImageSaving(selectedImageFile, selectedImagePreview);
@@ -2214,10 +2246,25 @@ public class VehiclesPage extends JPanel implements ActionListener {
             }
             newVehicle.setImagePath("images/cars/" + VehicleController.processGetImagePath(selectedImageFile));
         }
-        VehicleController.processUpdateVehiclefromDAO(vehicle, newVehicle);
+        VehicleController.processUpdateVehiclefromDAO(newVehicle);
         dialog.showDialog("SUCCESS","Editing Successful", "Updated Successfully", "Successfully updated the vehicle",false);
 
-        refreshCards(sortedVehicles);
+        vehicles = new ArrayList<>(VehicleController.processVehicles());
+        sortedVehicles = vehicles;
+        for (int i = 0; i < 4; i++) {
+            vehicless[i] = vehicles.get(i);
+        }
+        goBackToVehiclePage();
+    }
+
+    private void goBackToVehiclePage() {
+        // Create completely fresh VehiclesPage instance
+        VehiclesPage refreshedPage = new VehiclesPage(frame, panel, user);
+        
+        // Replace current view in card layout
+        GUIComponents.cardPanel.remove(this); // Remove current details page
+        GUIComponents.cardPanel.add(refreshedPage, "VehiclesPage");
+        GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
     }
 
     private boolean validateFormFields() {
@@ -2238,7 +2285,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             return false;
         }
 
-        if (!VehicleController.processRentalPriceDayValidation( priceInput.getText())) {
+        if (!VehicleController.processRentalPriceDayValidation(priceInput.getText())) {
             dialog.showDialog("ERROR","Input Error", "Price Input Error", "Please enter a valid price number",true);
             return false;
         }
