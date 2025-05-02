@@ -305,7 +305,7 @@ public class HomePage extends JPanel {
                 if (proceed) {
                     UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
 
-                    this.user = new User();
+                    this.user = UserController.loadCurrentUser(ACCOUNTS_FILE);
                     new Navigation().homePageNavigation(this.frame, this.panel, this.user);
                 }
             });
