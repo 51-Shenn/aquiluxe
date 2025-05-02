@@ -89,11 +89,21 @@ public class RentalPage extends JPanel {
         vehicleSelected = selectedVehicle;
         rental.setRentVehicle(vehicleSelected);
 
-        // set customer
-        File accountsFile = new File("files/settings/accounts.txt");
-        User user = UserController.loadCurrentUser(accountsFile);
-        Customer currentCustomer = UserDAO.getCustomerById(user);
-        rental.setRentCustomer(currentCustomer);
+        try {
+            // set customer
+            File accountsFile = new File("files/settings/accounts.txt");
+            User user = UserController.loadCurrentUser(accountsFile);
+            Customer currentCustomer = UserDAO.getCustomerById(user);
+            rental.setRentCustomer(currentCustomer);
+        } catch (Exception e) {
+            Dialog dialogError = new Dialog();
+            dialogError.showDialog("ERROR",
+                    "Account",
+                    "No Account Signed In",
+                    "Please Sign In or Create an account",
+                    false);
+            return;
+        }
 
         // scrollable rental page container
         JSplitPane rentalPage = createRentalPage();
