@@ -2,7 +2,11 @@ package datamodels;
 
 public class CarDiscount extends VehicleDiscount {
 
-    private final double CAR_DISCOUNT_RATE = 0.15;
+    private static final double CAR_DISCOUNT_RATE = 0.15;
+
+    public static double getCarDiscountRate() {
+        return CAR_DISCOUNT_RATE;
+    }
 
     @Override
     public double calculateDiscountPrice(double price) {
