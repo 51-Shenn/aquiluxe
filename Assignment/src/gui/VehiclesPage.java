@@ -2,6 +2,8 @@ package gui;
 
 import controllers.VehicleController;
 import datamodels.Admin;
+import datamodels.Bike;
+import datamodels.Car;
 import datamodels.User;
 import datamodels.Vehicle;
 
@@ -121,31 +123,34 @@ public class VehiclesPage extends JPanel implements ActionListener {
         carRent.setForeground(Theme.getSpecialForeground());
         carRent.setOpaque(true);
         // if is admin
-        if (user.getUserType().equals("Admin")) {
-            carRent.setEnabled(true);
-            carRent.setText("EDIT");
-            carRent.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent evt) {
-                    carRent.setBackground(Theme.getHoverSpecial());
-                }
+        if (user instanceof Admin) {
+            Admin admin = (Admin) user;
+            if (admin.getAdminRole().equals("Manager")) {
+                carRent.setEnabled(true);
+                carRent.setText("EDIT");
+                carRent.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(MouseEvent evt) {
+                        carRent.setBackground(Theme.getHoverSpecial());
+                    }
 
-                @Override
-                public void mouseExited(MouseEvent evt) {
-                    carRent.setBackground(Theme.getSpecial());
-                }
+                    @Override
+                    public void mouseExited(MouseEvent evt) {
+                        carRent.setBackground(Theme.getSpecial());
+                    }
 
-                @Override
-                public void mousePressed(MouseEvent evt) {
-                    carRent.setBackground(Theme.getPressedSpecial());
-                }
+                    @Override
+                    public void mousePressed(MouseEvent evt) {
+                        carRent.setBackground(Theme.getPressedSpecial());
+                    }
 
-                @Override
-                public void mouseReleased(MouseEvent evt) {
-                    carRent.setBackground(Theme.getSpecial());
-                    showEditCarPopup(vehicle);
-                }
-            });
+                    @Override
+                    public void mouseReleased(MouseEvent evt) {
+                        carRent.setBackground(Theme.getSpecial());
+                        showEditCarPopup(vehicle);
+                    }
+                });
+            }
         }
         else {
             carRent.setEnabled(vehicle.getAvailability());
@@ -312,7 +317,11 @@ public class VehiclesPage extends JPanel implements ActionListener {
             public void mousePressed(MouseEvent evt) {
                 if (SwingUtilities.isLeftMouseButton(evt)) {
                     carPicture.setIcon(toGreyScale(image)); // Set greyscale image
-                    carAvailability.setBackground(Theme.getPressedSpecial());
+                    if (availability.equals("AVAILABLE")) {
+                        carAvailability.setBackground(Theme.getPressedSpecial());
+                    } else {
+                        carAvailability.setBackground(Theme.getError());
+                    }
                 }
             }
 
@@ -320,7 +329,11 @@ public class VehiclesPage extends JPanel implements ActionListener {
             public void mouseReleased(MouseEvent evt) {
                 if (SwingUtilities.isLeftMouseButton(evt)) {
                     carPicture.setIcon(image); // Restore original image
-                    carAvailability.setBackground(Theme.getPressedSpecial());
+                    if (availability.equals("AVAILABLE")) {
+                        carAvailability.setBackground(Theme.getSpecial());
+                    } else {
+                        carAvailability.setBackground(Theme.getError());
+                    }
                     transLabel.setIcon(IconLoader.getTransmissionIcon());
                     fuelTypeLabel.setIcon(IconLoader.getGasIcon());
                     seatsLabel.setIcon(IconLoader.getSeatIcon());
@@ -328,44 +341,47 @@ public class VehiclesPage extends JPanel implements ActionListener {
             }
         });
         // if is admin
-        if (user.getUserType().equals("Admin")) {
-            carDetails.setText("DELETE");
-            carDetails.setForeground(Theme.getErrorForeground());
-            carDetails.setBackground(Theme.getError());
-            carDetails.setOpaque(true);
+        if (user instanceof Admin) {
+            Admin admin = (Admin) user;
+            if (admin.getAdminRole().equals("Manager")) {
+                carDetails.setText("DELETE");
+                carDetails.setForeground(Theme.getErrorForeground());
+                carDetails.setBackground(Theme.getError());
+                carDetails.setOpaque(true);
 
-            carDetails.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseEntered(MouseEvent evt) {
-                   carDetails.setBackground(Theme.getHoverError());
-                }
-
-                @Override
-                public void mouseExited(MouseEvent evt) {
-                    carDetails.setBackground(Theme.getError());
-                 }
-
-                @Override
-                public void mousePressed(MouseEvent evt) {
-                    carDetails.setBackground(Theme.getPressedError());
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent evt) {
-                    carDetails.setBackground(Theme.getError());
-                    if(dialog.showDialog("HAZARD","Vehicle Deletion", "Delete Vehicle", "Are you sure you want to delete this vehicle?",true)){
-                        VehicleController.processDeleteVehiclefromDAO(vehicle);
-                        File imageFile = new File(vehicle.getImagePath());
-                        imageFile.delete();
-                        vehicles = new ArrayList<>(VehicleController.processVehicles());
-                        sortedVehicles = vehicles;
-                        for (int i = 0; i < 4; i++) {
-                            vehicless[i] = vehicles.get(i);
-                        }
-                        goBackToVehiclePage();
+                carDetails.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(MouseEvent evt) {
+                    carDetails.setBackground(Theme.getHoverError());
                     }
-                }
-            });
+
+                    @Override
+                    public void mouseExited(MouseEvent evt) {
+                        carDetails.setBackground(Theme.getError());
+                    }
+
+                    @Override
+                    public void mousePressed(MouseEvent evt) {
+                        carDetails.setBackground(Theme.getPressedError());
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent evt) {
+                        carDetails.setBackground(Theme.getError());
+                        if(dialog.showDialog("HAZARD","Vehicle Deletion", "Delete Vehicle", "Are you sure you want to delete this vehicle?",true)){
+                            VehicleController.processDeleteVehiclefromDAO(vehicle);
+                            File imageFile = new File(vehicle.getImagePath());
+                            imageFile.delete();
+                            vehicles = new ArrayList<>(VehicleController.processVehicles());
+                            sortedVehicles = vehicles;
+                            for (int i = 0; i < 4; i++) {
+                                vehicless[i] = vehicles.get(i);
+                            }
+                            goBackToVehiclePage();
+                        }
+                    }
+                });
+            }
         }
         else {
             carDetails.addMouseListener(new MouseAdapter() {
@@ -391,7 +407,11 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 public void mouseReleased(MouseEvent evt) {
                     if (SwingUtilities.isLeftMouseButton(evt)) {
                         carPicture.setIcon(image); // Restore original image
-                        carAvailability.setBackground(Theme.getPressedSpecial());
+                        if (availability.equals("AVAILABLE")) {
+                            carAvailability.setBackground(Theme.getSpecial());
+                        } else {
+                            carAvailability.setBackground(Theme.getError());
+                        }
                         transLabel.setIcon(IconLoader.getTransmissionIcon());
                         fuelTypeLabel.setIcon(IconLoader.getGasIcon());
                         seatsLabel.setIcon(IconLoader.getSeatIcon());
@@ -612,8 +632,11 @@ public class VehiclesPage extends JPanel implements ActionListener {
             }
         });
         addButton.addActionListener(e -> showAddCarPopup());
-        if (user.getUserType().equals("Admin")) {
-            addButton.setVisible(true);
+        if (user instanceof Admin) {
+            Admin admin = (Admin) user;
+            if (admin.getAdminRole().equals("Manager")) {
+                addButton.setVisible(true);
+            }
         } else {
             addButton.setVisible(false);
         }
@@ -640,7 +663,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
     private JComboBox<String> yearComboBox;
     private JComboBox<String> carTypeComboBox;
     private JLabel carTypeLabel;
-    private String[] vehicleType  = { "ALL", "SUV", "MPV", "SEDAN", "CONVERTIBLE", "COUPE", "PICKUP TRUCK", "HATCHBACK", "WAGON", "TOURING", "CRUISER", "SUPERBIKE" };
+    private String[] vehicleType  = { "ALL", "suv", "mpv", "sedan", "convertible", "coupe", "pickup truck", "hatchback", "wagon", "touring", "cruiser", "superbike" };
     private JComboBox<String> transTypeComboBox;
     private JComboBox<String> fuelTypeComboBox;
     private JComboBox<String> availabilityComboBox;
@@ -906,7 +929,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             this.vehicles = new ArrayList<>(VehicleController.processBikes());
             this.sortedVehicles = this.vehicles;
             carTypeLabel.setText("Select A Bike Type: ");
-            vehicleType = new String[] { "ALL", "TOURING", "CRUISER" , "SUPERBIKE" };
+            vehicleType = new String[] { "ALL", "touring", "cruiser" , "superbike" };
             carTypeComboBox.removeAllItems();
             for (String type : vehicleType){
                 carTypeComboBox.addItem(type);
@@ -916,7 +939,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             this.vehicles = new ArrayList<>(VehicleController.processCars());
             this.sortedVehicles = this.vehicles;
             carTypeLabel.setText("Select A Car Type: ");
-            vehicleType = new String[] { "ALL", "SUV", "MPV", "SEDAN", "CONVERTIBLE", "COUPE", "PICKUP TRUCK", "HATCHBACK", "WAGON" };
+            vehicleType = new String[] { "ALL", "suv", "mpv", "sedan", "convertible", "coupe", "pickup truck", "hatchback", "wagon" };
             carTypeComboBox.removeAllItems();
             for (String type : vehicleType){
                 carTypeComboBox.addItem(type);
@@ -926,7 +949,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             this.vehicles = new ArrayList<>(VehicleController.processVehicles());
             this.sortedVehicles = this.vehicles;
             carTypeLabel.setText("Select A Car or Bike Type: ");
-            vehicleType = new String[] { "ALL", "SUV", "MPV", "SEDAN", "CONVERTIBLE", "COUPE", "PICKUP TRUCK", "HATCHBACK", "WAGON", "TOURING", "CRUISER", "SUPERBIKE" };
+            vehicleType = new String[] { "ALL", "suv", "mpv", "sedan", "comvertible", "coupe", "pickup truck", "hatchback", "wagon", "touring", "cruiser", "superbike" };
             carTypeComboBox.removeAllItems();
             for (String type : vehicleType){
                 carTypeComboBox.addItem(type);
@@ -1327,76 +1350,86 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.gridwidth = 1; 
+        rightContainer.add(createVehicleSelectionInputContainer("CAR"),gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        rightContainer.add(createAvailableInputContainer(true),gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         gbc.gridwidth = 2; 
         rightContainer.add(createVinNumberInputContainer(""),gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         gbc.gridwidth = 1; 
         rightContainer.add(createRegistrationNumberInputContainer(""),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.gridwidth = 3; 
         rightContainer.add(createBrandInputContainer(""),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.gridwidth = 2;
         rightContainer.add(createModelInputContainer(""),gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.gridwidth = 1; 
         rightContainer.add(createYearInputContainer("Select Year"),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 2; 
         rightContainer.add(createPriceInputContainer(""),gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 1; 
         rightContainer.add(createColorInputContainer(Color.WHITE, "Pick A Color"),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.gridwidth = 1;
         rightContainer.add(createCapacityInputContainer(""),gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.gridwidth = 1;
         rightContainer.add(createHorsepowerInputContainer(""),gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.gridwidth = 1;
         rightContainer.add(createMpgInputContainer(""),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 1;
         rightContainer.add(createTransmissionInputContainer("Select Transmission"),gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 1;
         rightContainer.add(createFuelTypeInputContainer("Select Fuel Type"),gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 1;
         rightContainer.add(createVehicleTypeInputContainer("Select Vehicle Type"),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         gbc.gridwidth = 3;
         rightContainer.add(createSeatInputContainer(1),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 8;
         gbc.gridwidth = 3;
         rightContainer.add(createInputContainer("Features", 3, ""),gbc);
 
@@ -1493,79 +1526,106 @@ public class VehiclesPage extends JPanel implements ActionListener {
         rightContainer.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
         rightContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+        String vehicleType = "";
+
+        for (String cartype : Car.getCarTypes()) {
+            if (vehicle.getVehicleType().equalsIgnoreCase(cartype)) {
+                vehicleType = "CAR";
+                vehicleTypes = Car.getCarTypes();
+                break;
+            }
+        }
+
+        for (String biketype : Bike.getBikeTypes()) {
+            if (vehicle.getVehicleType().equalsIgnoreCase(biketype)) {
+                vehicleType = "BIKE";
+                vehicleTypes = Bike.getBikeTypes();
+                break;
+            }
+        }
+
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.gridwidth = 1; 
+        rightContainer.add(createVehicleSelectionInputContainer(vehicleType),gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        rightContainer.add(createAvailableInputContainer(vehicle.getAvailability()),gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         gbc.gridwidth = 2; 
         rightContainer.add(createVinNumberInputContainer(vehicle.getVinNumber()),gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         gbc.gridwidth = 1; 
         rightContainer.add(createRegistrationNumberInputContainer(vehicle.getRegistrationNumber()),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.gridwidth = 3; 
         rightContainer.add(createBrandInputContainer(vehicle.getBrand()),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.gridwidth = 2;
         rightContainer.add(createModelInputContainer(vehicle.getModel()),gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.gridwidth = 1; 
         rightContainer.add(createYearInputContainer(Integer.toString(vehicle.getYear())),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 2; 
         rightContainer.add(createPriceInputContainer(Double.toString(vehicle.getRentalPriceDay())),gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 1; 
         rightContainer.add(createColorInputContainer(Color.decode(vehicle.getColor()), VehicleController.processClosestColorName(Color.decode(vehicle.getColor()))),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.gridwidth = 1;
         rightContainer.add(createCapacityInputContainer(Integer.toString(vehicle.getCapacity())),gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.gridwidth = 1;
         rightContainer.add(createHorsepowerInputContainer(Integer.toString(vehicle.getHorsepower())),gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.gridwidth = 1;
         rightContainer.add(createMpgInputContainer(Double.toString(vehicle.getMpg())),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 1;
-        //fix later here
         rightContainer.add(createTransmissionInputContainer(vehicle.getTransmission().toUpperCase()),gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 1;
         rightContainer.add(createFuelTypeInputContainer(vehicle.getFuelType().toUpperCase()),gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 1;
-        rightContainer.add(createVehicleTypeInputContainer(vehicle.getVehicleType().toUpperCase()),gbc);
+        rightContainer.add(createVehicleTypeInputContainer(vehicle.getVehicleType()),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         gbc.gridwidth = 3;
         rightContainer.add(createSeatInputContainer(vehicle.getSeatingCapacity()),gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 8;
         gbc.gridwidth = 3;
         rightContainer.add(createInputContainer("Features", 3, vehicle.getFeatures()),gbc);
 
@@ -1610,12 +1670,205 @@ public class VehiclesPage extends JPanel implements ActionListener {
         editCar.setVisible(true);
     }
 
+    private RoundedButton selectCarButton, selectBikeButton;
+    private RoundedButton availableButton, unavailableButton;
     private JTextField vinNumberInput, registrationNumberInput,brandInput, modelInput, priceInput, capacityInput, horsepowerInput, mpgInput;
     private JComboBox<String> yearInput,transmissionInput,fuelTypeInput,vehicleTypeInput;
     private JSlider seatInput;
     private JTextArea inputField;
     private RoundedButton colorInput;
     private Color selectedColor;
+    private String selectedVehicle;
+    private boolean availabilitySelection;
+    private String[] vehicleTypes = vehicleType;
+
+    private JPanel createVehicleSelectionInputContainer(String input) {
+        JPanel vehicleSelectionInputPanel = new JPanel(new GridBagLayout());
+        vehicleSelectionInputPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.gridwidth = 2;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        JLabel vehicleSelectionLabel = new JLabel("Vehicle");
+        vehicleSelectionLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        vehicleSelectionLabel.setForeground(Theme.getForeground());
+
+        selectCarButton = new RoundedButton(10,Theme.getHoverBackground());
+        selectCarButton.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        selectCarButton.setPreferredSize(new Dimension(100, 50));
+        selectCarButton.setMinimumSize(new Dimension(100, 50));
+        selectCarButton.setForeground(Theme.getForeground());
+        selectCarButton.setIcon(IconLoader.getCarIcon());
+        selectCarButton.setBorderPainted(false);
+        selectCarButton.setFocusable(false);
+        selectCarButton.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                selectCarButton.setBackground(Theme.getBackground());
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                selectCarButton.setBackground(Theme.getHoverBackground());
+                selectBikeButton.setBackground(Theme.getBackground());
+                selectedVehicle = "CAR";
+                updateVehicleTypeDropdown(Car.getCarTypes());
+            }
+        });
+
+        selectBikeButton = new RoundedButton(10,Theme.getHoverBackground());
+        selectBikeButton.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        selectBikeButton.setPreferredSize(new Dimension(100, 50));
+        selectBikeButton.setMinimumSize(new Dimension(100, 50));
+        selectBikeButton.setForeground(Theme.getForeground());
+        selectBikeButton.setIcon(IconLoader.getBikeIcon());
+        selectBikeButton.setBorderPainted(false);
+        selectBikeButton.setFocusable(false);
+        selectBikeButton.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                selectBikeButton.setBackground(Theme.getBackground());
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                selectBikeButton.setBackground(Theme.getHoverBackground());
+                selectCarButton.setBackground(Theme.getBackground());
+                selectedVehicle = "BIKE";
+                updateVehicleTypeDropdown(Bike.getBikeTypes());
+            }
+        });
+
+        if (input.equals("CAR")) {
+            selectBikeButton.setBackgroundColor(Theme.getBackground());
+            selectCarButton.setBackground(Theme.getHoverBackground());
+            selectedVehicle = "CAR";
+        }
+        else if (input.equals("BIKE")) {
+            selectBikeButton.setBackgroundColor(Theme.getHoverBackground());
+            selectCarButton.setBackground(Theme.getBackground());
+            selectedVehicle = "BIKE";
+        }
+        else {
+            selectBikeButton.setBackgroundColor(Theme.getBackground());
+            selectCarButton.setBackground(Theme.getHoverBackground());
+            selectedVehicle = "CAR";
+        }
+
+        vehicleSelectionInputPanel.add(vehicleSelectionLabel, gbc);
+        gbc.gridy = 1;
+        gbc.weightx = 0.5;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        vehicleSelectionInputPanel.add(selectCarButton, gbc);
+        gbc.gridx++;
+        vehicleSelectionInputPanel.add(selectBikeButton, gbc);
+
+        return vehicleSelectionInputPanel;
+    }
+
+    private void updateVehicleTypeDropdown(String[] types) {
+        vehicleTypes = types;
+        if (vehicleTypeInput != null) {
+            vehicleTypeInput.setModel(new DefaultComboBoxModel<>(types));
+            vehicleTypeInput.insertItemAt("Select Vehicle Type", 0);
+            vehicleTypeInput.setSelectedIndex(0);
+        }
+    }
+
+    private JPanel createAvailableInputContainer(boolean availability) {
+        JPanel availabilityInputPanel = new JPanel(new GridBagLayout());
+        availabilityInputPanel.setBackground(Theme.getBackground());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(5, 0, 0, 0);
+
+        JLabel availabilityLabel = new JLabel("Availability");
+        availabilityLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        availabilityLabel.setForeground(Theme.getForeground());
+
+        availableButton = new RoundedButton(10,Theme.getHoverBackground());
+        availableButton.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        availableButton.setPreferredSize(new Dimension(200, 50));
+        availableButton.setMinimumSize(new Dimension(200, 50));
+        availableButton.setForeground(Theme.getForeground());
+        availableButton.setText("AVAILABLE");
+        availableButton.setBorderPainted(false);
+        availableButton.setFocusable(false);
+        availableButton.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                availableButton.setBackground(Theme.getHoverBackground());
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                availableButton.setBackground(Theme.getHoverBackground());
+                unavailableButton.setBackground(Theme.getBackground());
+                availabilitySelection = true;
+            }
+        });
+
+        unavailableButton = new RoundedButton(10,Theme.getHoverBackground());
+        unavailableButton.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
+        unavailableButton.setPreferredSize(new Dimension(200, 50));
+        unavailableButton.setMinimumSize(new Dimension(200, 50));
+        unavailableButton.setForeground(Theme.getForeground());
+        unavailableButton.setText("UNAVAILABLE");
+        unavailableButton.setBorderPainted(false);
+        unavailableButton.setFocusable(false);
+        unavailableButton.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                unavailableButton.setBackground(Theme.getHoverBackground());
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                unavailableButton.setBackground(Theme.getHoverBackground());
+                availableButton.setBackground(Theme.getBackground());
+                availabilitySelection = false;
+            }
+        });
+
+        if (availability) {
+            unavailableButton.setBackgroundColor(Theme.getBackground());
+            availableButton.setBackground(Theme.getHoverBackground());
+            availabilitySelection = true;
+        }
+        else {
+            unavailableButton.setBackgroundColor(Theme.getHoverBackground());
+            availableButton.setBackground(Theme.getBackground());
+            availabilitySelection = false;
+        }
+
+        availabilityInputPanel.add(availabilityLabel, gbc);
+        gbc.gridy = 1;
+        gbc.weightx = 0.5;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        availabilityInputPanel.add(availableButton, gbc);
+        gbc.gridx++;
+        availabilityInputPanel.add(unavailableButton, gbc);
+
+        return availabilityInputPanel;
+    }
 
     private JPanel createVinNumberInputContainer(String input) {
         JPanel vinNumberInputPanel = new JPanel(new GridBagLayout());
@@ -1905,8 +2158,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         vehicleTypeLabel.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
         vehicleTypeLabel.setForeground(Theme.getForeground());
 
-        vehicleTypeInput = new JComboBox<String>(vehicleType);
-        vehicleTypeInput.removeItem("ALL");
+        vehicleTypeInput = new JComboBox<String>(vehicleTypes);
         vehicleTypeInput.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(14f));
         vehicleTypeInput.insertItemAt("Select Vehicle Type", 0);
         vehicleTypeInput.setPreferredSize(new Dimension(200, 50));
@@ -2210,12 +2462,20 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 dialog.showDialog("ERROR","Image Saving Error", "Image Saving Error", "Failed to save image",true);
                 return;
             }
-    
-        Vehicle newVehicle = new Vehicle("images/cars/" + VehicleController.processGetImagePath(selectedImageFile), brandInput.getText(), modelInput.getText(), Integer.parseInt((String)yearInput.getSelectedItem()),
-                        Integer.parseInt(capacityInput.getText()), Integer.parseInt(horsepowerInput.getText()), String.format("#%02x%02x%02x", selectedColor.getRed(), selectedColor.getGreen(), selectedColor.getBlue()), Double.parseDouble(mpgInput.getText()), vinNumberInput.getText(), registrationNumberInput.getText(), Double.parseDouble(priceInput.getText()), ((String) transmissionInput.getSelectedItem()).substring(0,1) + ((String) transmissionInput.getSelectedItem()).substring(1).toLowerCase(), 
-                        ((String) fuelTypeInput.getSelectedItem()).substring(0,1) + ((String) fuelTypeInput.getSelectedItem()).substring(1).toLowerCase(), ((String) vehicleTypeInput.getSelectedItem()).toLowerCase(), (int) seatInput.getValue(), true, inputField.getText());
-        VehicleController.processAddVehiclestoDAO(newVehicle);
-        dialog.showDialog("SUCCESS","Submission Successful", "Added Successfully", "Successfully added a vehicle",false);
+        if (selectedVehicle.equals("CAR")) {
+            Vehicle newVehicle = new Car("images/cars/" + VehicleController.processGetImagePath(selectedImageFile), brandInput.getText(), modelInput.getText(), Integer.parseInt((String)yearInput.getSelectedItem()),
+                            Integer.parseInt(capacityInput.getText()), Integer.parseInt(horsepowerInput.getText()), String.format("#%02x%02x%02x", selectedColor.getRed(), selectedColor.getGreen(), selectedColor.getBlue()), Double.parseDouble(mpgInput.getText()), vinNumberInput.getText(), registrationNumberInput.getText(), Double.parseDouble(priceInput.getText()), ((String) transmissionInput.getSelectedItem()).substring(0,1) + ((String) transmissionInput.getSelectedItem()).substring(1).toLowerCase(), 
+                            ((String) fuelTypeInput.getSelectedItem()).substring(0,1) + ((String) fuelTypeInput.getSelectedItem()).substring(1).toLowerCase(), ((String) vehicleTypeInput.getSelectedItem()).toLowerCase(), (int) seatInput.getValue(), availabilitySelection, inputField.getText());
+            VehicleController.processAddVehiclestoDAO(newVehicle);
+            dialog.showDialog("SUCCESS","Submission Successful", "Added Successfully", "Successfully added a vehicle",false);
+        }
+        else {
+            Vehicle newVehicle = new Bike("images/cars/" + VehicleController.processGetImagePath(selectedImageFile), brandInput.getText(), modelInput.getText(), Integer.parseInt((String)yearInput.getSelectedItem()),
+                            Integer.parseInt(capacityInput.getText()), Integer.parseInt(horsepowerInput.getText()), String.format("#%02x%02x%02x", selectedColor.getRed(), selectedColor.getGreen(), selectedColor.getBlue()), Double.parseDouble(mpgInput.getText()), vinNumberInput.getText(), registrationNumberInput.getText(), Double.parseDouble(priceInput.getText()), ((String) transmissionInput.getSelectedItem()).substring(0,1) + ((String) transmissionInput.getSelectedItem()).substring(1).toLowerCase(), 
+                            ((String) fuelTypeInput.getSelectedItem()).substring(0,1) + ((String) fuelTypeInput.getSelectedItem()).substring(1).toLowerCase(), ((String) vehicleTypeInput.getSelectedItem()).toLowerCase(), (int) seatInput.getValue(), availabilitySelection, inputField.getText());
+            VehicleController.processAddVehiclestoDAO(newVehicle);
+            dialog.showDialog("SUCCESS","Submission Successful", "Added Successfully", "Successfully added a vehicle",false);
+        }
 
         // 2. Reset form
         resetForm();
@@ -2234,10 +2494,19 @@ public class VehiclesPage extends JPanel implements ActionListener {
             return;
         }
     
-        Vehicle newVehicle = new Vehicle(vehicle.getVehicleId(), vehicle.getImagePath(), brandInput.getText(), modelInput.getText(), Integer.parseInt((String)yearInput.getSelectedItem()),
-                        Integer.parseInt(capacityInput.getText()), Integer.parseInt(horsepowerInput.getText()), String.format("#%02x%02x%02x", selectedColor.getRed(), selectedColor.getGreen(), selectedColor.getBlue()), Double.parseDouble(mpgInput.getText()), vinNumberInput.getText(), registrationNumberInput.getText(), Double.parseDouble(priceInput.getText()), ((String) transmissionInput.getSelectedItem()).substring(0,1) + ((String) transmissionInput.getSelectedItem()).substring(1).toLowerCase(), 
-                        ((String) fuelTypeInput.getSelectedItem()).substring(0,1) + ((String) fuelTypeInput.getSelectedItem()).substring(1).toLowerCase(), ((String) vehicleTypeInput.getSelectedItem()).toLowerCase(), (int) seatInput.getValue(), vehicle.getAvailability(), inputField.getText());
-        
+        Vehicle newVehicle;
+
+        if (selectedVehicle.equals("CAR")) {
+            newVehicle = new Car(vehicle.getVehicleId(), vehicle.getImagePath(), brandInput.getText(), modelInput.getText(), Integer.parseInt((String)yearInput.getSelectedItem()),
+                            Integer.parseInt(capacityInput.getText()), Integer.parseInt(horsepowerInput.getText()), String.format("#%02x%02x%02x", selectedColor.getRed(), selectedColor.getGreen(), selectedColor.getBlue()), Double.parseDouble(mpgInput.getText()), vinNumberInput.getText(), registrationNumberInput.getText(), Double.parseDouble(priceInput.getText()), ((String) transmissionInput.getSelectedItem()).substring(0,1) + ((String) transmissionInput.getSelectedItem()).substring(1).toLowerCase(), 
+                            ((String) fuelTypeInput.getSelectedItem()).substring(0,1) + ((String) fuelTypeInput.getSelectedItem()).substring(1).toLowerCase(), ((String) vehicleTypeInput.getSelectedItem()).toLowerCase(), (int) seatInput.getValue(), availabilitySelection, inputField.getText());
+        }
+        else {
+            newVehicle = new Bike(vehicle.getVehicleId(), vehicle.getImagePath(), brandInput.getText(), modelInput.getText(), Integer.parseInt((String)yearInput.getSelectedItem()),
+                            Integer.parseInt(capacityInput.getText()), Integer.parseInt(horsepowerInput.getText()), String.format("#%02x%02x%02x", selectedColor.getRed(), selectedColor.getGreen(), selectedColor.getBlue()), Double.parseDouble(mpgInput.getText()), vinNumberInput.getText(), registrationNumberInput.getText(), Double.parseDouble(priceInput.getText()), ((String) transmissionInput.getSelectedItem()).substring(0,1) + ((String) transmissionInput.getSelectedItem()).substring(1).toLowerCase(), 
+                            ((String) fuelTypeInput.getSelectedItem()).substring(0,1) + ((String) fuelTypeInput.getSelectedItem()).substring(1).toLowerCase(), ((String) vehicleTypeInput.getSelectedItem()).toLowerCase(), (int) seatInput.getValue(), availabilitySelection, inputField.getText());
+        }
+
         if (selectedImageFile != null && !selectedImageFile.getName().equals(new File(vehicle.getImagePath()).getName())) {
             boolean imageSaved = VehicleController.processImageSaving(selectedImageFile, selectedImagePreview);
             if (!imageSaved) {
