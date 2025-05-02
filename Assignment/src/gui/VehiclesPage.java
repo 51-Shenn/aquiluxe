@@ -265,7 +265,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         carAvailability.setForeground(Theme.getSpecialForeground());
         carAvailability.setPreferredSize(new Dimension(200, 20));
 
-        JLabel carTypeLabel = new JLabel(vehicleType);
+        JLabel carTypeLabel = new JLabel(vehicleType.substring(0,1).toUpperCase() + vehicleType.substring(1));
         carTypeLabel.setHorizontalTextPosition(JLabel.LEFT);
         carTypeLabel.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(12.5f));
         carTypeLabel.setPreferredSize(new Dimension(50, 10));
