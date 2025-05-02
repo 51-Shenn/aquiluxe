@@ -81,6 +81,7 @@ public class RentalPage extends JPanel {
     private JLabel insurancePriceLabel;
     private JLabel depositPriceLabel;
     private JLabel taxPriceLabel;
+    private JLabel discountPriceLabel;
 
     public RentalPage(JFrame frame, JPanel panel, Vehicle selectedVehicle) {
         this.frame = frame;
@@ -282,6 +283,16 @@ public class RentalPage extends JPanel {
         taxPriceLabel.setOpaque(false);
         taxPriceLabel.setHorizontalAlignment(JLabel.RIGHT);
 
+        JLabel discountTextLabel = createLabel("Discount (Rent days > 3) : ", 20f,
+                Theme.getForeground(), Theme.getBackground(), 30, -1);
+        discountTextLabel.setOpaque(false);
+        discountTextLabel.setHorizontalAlignment(JLabel.LEFT);
+
+        discountPriceLabel = createLabel("RM " + String.format("%.2f", rentalCosts[4]), 20f,
+                Theme.getForeground(), Theme.getBackground(), 30, -1);
+        discountPriceLabel.setOpaque(false);
+        discountPriceLabel.setHorizontalAlignment(JLabel.RIGHT);
+
         // rental price
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -299,16 +310,23 @@ public class RentalPage extends JPanel {
         // deposit price
         gbc.gridx = 0;
         gbc.gridy = 2;
-        pricingPanel.add(depositTextLabel, gbc);
+        pricingPanel.add(taxTextLabel, gbc);
         gbc.gridx = 1;
-        pricingPanel.add(depositPriceLabel, gbc);
+        pricingPanel.add(taxPriceLabel, gbc);
 
         // tax charges
         gbc.gridx = 0;
         gbc.gridy = 3;
-        pricingPanel.add(taxTextLabel, gbc);
+        pricingPanel.add(discountTextLabel, gbc);
         gbc.gridx = 1;
-        pricingPanel.add(taxPriceLabel, gbc);
+        pricingPanel.add(discountPriceLabel, gbc);
+
+        // tax charges
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        pricingPanel.add(depositTextLabel, gbc);
+        gbc.gridx = 1;
+        pricingPanel.add(depositPriceLabel, gbc);
 
         summaryPanel.add(pricingPanel, BorderLayout.CENTER);
 
@@ -1065,6 +1083,7 @@ public class RentalPage extends JPanel {
         insurancePriceLabel.setText("RM " + String.format("%.2f", rentalCosts[1]));
         depositPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[2]));
         taxPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[3]));
+        discountPriceLabel.setText("- RM " + String.format("%.2f", rentalCosts[4]));
         totalPriceLabel.setText("RM " + String.format("%.2f", rentalController.processRentalTotalCost(rental)));
     }
 
@@ -1193,6 +1212,7 @@ public class RentalPage extends JPanel {
             insurancePriceLabel.setText("RM " + String.format("%.2f", rentalCosts[1]));
             depositPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[2]));
             taxPriceLabel.setText("RM " + String.format("%.2f", rentalCosts[3]));
+            discountPriceLabel.setText("- RM " + String.format("%.2f", rentalCosts[4]));
             totalPriceLabel.setText("RM " + String.format("%.2f", rentalController.processRentalTotalCost(rental)));
 
         } catch (DateTimeParseException e) {

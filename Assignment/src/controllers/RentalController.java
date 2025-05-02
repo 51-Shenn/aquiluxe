@@ -42,7 +42,8 @@ public class RentalController {
         double[] rentalCosts = { RentalService.calculateBaseRentalCost(rental),
                 RentalService.calculateInsuranceCost(rental),
                 RentalService.calculateDepositCost(rental),
-                RentalService.calculateTaxCost(rental) };
+                RentalService.calculateTaxCost(rental),
+                RentalService.calculateDiscount(rental) };
         return rentalCosts;
     }
 
