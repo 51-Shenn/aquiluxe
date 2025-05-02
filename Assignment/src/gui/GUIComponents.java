@@ -217,10 +217,11 @@ public class GUIComponents extends JPanel {
         menu.setBackground(Theme.getBackground());
         menu.addActionListener(e -> {
             File accountsFile = new File("files/settings/accounts.txt");
-            
+
             if (overflowMenu == null) {
                 User currentUser = UserController.loadCurrentUser(accountsFile);
                 overflowMenu = new OverflowMenu(this.frame, this.panel, currentUser);
+                OverflowMenu.setGuiComponents(this);
                 this.frame.getLayeredPane().add(overflowMenu, JLayeredPane.POPUP_LAYER);
                 overflowMenu.setBounds(this.frame.getWidth() - (overflowMenu.MENU_WIDTH + 35), 90,
                         overflowMenu.MENU_WIDTH, overflowMenu.MENU_HEIGHT);
@@ -233,5 +234,19 @@ public class GUIComponents extends JPanel {
         });
 
         return menu;
+    }
+
+    public static void refreshHomePage(JFrame frame, JPanel panel, User user, GUIComponents guiComponents) {
+        cardPanel.remove(homePanel);
+        System.out.println(cardPanel.getComponents().length);
+        homePanel = new HomePage(frame, panel, user, guiComponents);
+        homePanel.revalidate();
+        homePanel.repaint();
+        cardPanel.add(homePanel, "HomePage");
+        // cardLayout.show(cardPanel, "HomePage");
+        System.out.println(cardPanel.getComponents().length);
+        cardPanel.revalidate();
+        cardPanel.repaint();
+
     }
 }

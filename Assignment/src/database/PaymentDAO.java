@@ -26,7 +26,7 @@ public class PaymentDAO {
             stmt.setDouble(2, payment.getAmount());
             stmt.setString(3, payment.getPaymentMethod());
             stmt.setString(4, payment.getPaymentToken());
-            stmt.setDate(4, Date.valueOf(payment.getPaymentDate()));
+            stmt.setDate(5, Date.valueOf(payment.getPaymentDate()));
 
             stmt.executeUpdate();
 

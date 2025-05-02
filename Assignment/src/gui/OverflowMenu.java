@@ -35,6 +35,7 @@ public class OverflowMenu extends JLayeredPane {
     private JFrame frame;
     private JPanel panel;
     private User user;
+    private static GUIComponents guiComponents;
     public final int MENU_WIDTH;
     public final int MENU_HEIGHT;
     private boolean isExpanded = false;
@@ -116,6 +117,14 @@ public class OverflowMenu extends JLayeredPane {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public static GUIComponents getGuiComponents() {
+        return guiComponents;
+    }
+
+    public static void setGuiComponents(GUIComponents guiComponents) {
+        OverflowMenu.guiComponents = guiComponents;
     }
 
     public int getMENU_WIDTH() {
@@ -333,7 +342,7 @@ public class OverflowMenu extends JLayeredPane {
                     this.user = UserController.getUserFromDatabase(this.user);
 
                     this.frame.getLayeredPane().remove(this);
-                    new Navigation().homePageNavigation(this.frame, this.panel, this.user);
+                    GUIComponents.refreshHomePage(this.frame, this.panel, this.user, guiComponents);
 
                     dialog.showDialog(
                             "SUCCESS",
@@ -608,7 +617,7 @@ public class OverflowMenu extends JLayeredPane {
                             this.user = everyUser;
 
                             frame.getLayeredPane().remove(this);
-                            new Navigation().homePageNavigation(this.frame, this.panel, this.user);
+                            GUIComponents.refreshHomePage(this.frame, this.panel, this.user, guiComponents);
 
                             Dialog dialog = new Dialog(this.frame);
                             dialog.showDialog(
@@ -834,7 +843,7 @@ public class OverflowMenu extends JLayeredPane {
                 UserController.useTheme(newTheme, THEME_FILE);
 
                 frame.getLayeredPane().remove(this);
-                new Navigation().homePageNavigation(this.frame, this.panel, this.user);
+                GUIComponents.refreshHomePage(this.frame, this.panel, this.user, guiComponents);
             });
         }
         if (text.equals("Sign Up")) {
@@ -858,7 +867,7 @@ public class OverflowMenu extends JLayeredPane {
                     UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
 
                     this.user = UserController.loadCurrentUser(ACCOUNTS_FILE);
-                    new Navigation().homePageNavigation(this.frame, this.panel, this.user);
+                    GUIComponents.refreshHomePage(this.frame, this.panel, this.user, guiComponents);
                 }
             });
         }
@@ -880,7 +889,7 @@ public class OverflowMenu extends JLayeredPane {
                     this.user = UserController.loadCurrentUser(ACCOUNTS_FILE);
 
                     frame.getLayeredPane().remove(this);
-                    new Navigation().homePageNavigation(this.frame, this.panel, this.user);
+                    GUIComponents.refreshHomePage(this.frame, this.panel, this.user, guiComponents);
                 }
             });
         }
