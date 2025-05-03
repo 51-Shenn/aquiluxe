@@ -242,7 +242,7 @@ public class VehicleService {
         List<Vehicle> filteredCars = new ArrayList<>();
 
         searchInput = searchInput.toUpperCase();
-        String[] inputs = searchInput.split("\\s+");
+        String[] inputs = searchInput.trim().split("\\s+");
 
         if (searchInput.equals("SEARCH FOR VEHICLES") || searchInput.equals("")) {
             return car;
