@@ -280,5 +280,7 @@ public class GUIComponents extends JPanel {
         System.out.println(cardPanel.getComponents().length);
         cardPanel.revalidate();
         cardPanel.repaint();
+
+        System.out.println(user.getFullName());
     }
 }
