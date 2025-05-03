@@ -342,7 +342,7 @@ public class OverflowMenu extends JLayeredPane {
                     this.user = UserController.getUserFromDatabase(this.user);
 
                     this.frame.getLayeredPane().remove(this);
-                    GUIComponents.refreshHomePage(this.frame, this.panel, this.user, guiComponents);
+                    GUIComponents.refreshPages(this.frame, this.panel, this.user, guiComponents);
 
                     dialog.showDialog(
                             "SUCCESS",
@@ -617,7 +617,7 @@ public class OverflowMenu extends JLayeredPane {
                             this.user = everyUser;
 
                             frame.getLayeredPane().remove(this);
-                            GUIComponents.refreshHomePage(this.frame, this.panel, this.user, guiComponents);
+                            GUIComponents.refreshPages(this.frame, this.panel, this.user, guiComponents);
 
                             Dialog dialog = new Dialog(this.frame);
                             dialog.showDialog(
@@ -843,7 +843,7 @@ public class OverflowMenu extends JLayeredPane {
                 UserController.useTheme(newTheme, THEME_FILE);
 
                 frame.getLayeredPane().remove(this);
-                GUIComponents.refreshHomePage(this.frame, this.panel, this.user, guiComponents);
+                GUIComponents.refreshPages(this.frame, this.panel, this.user, guiComponents);
             });
         }
         if (text.equals("Sign Up")) {
@@ -867,7 +867,7 @@ public class OverflowMenu extends JLayeredPane {
                     UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
 
                     this.user = UserController.loadCurrentUser(ACCOUNTS_FILE);
-                    GUIComponents.refreshHomePage(this.frame, this.panel, this.user, guiComponents);
+                    GUIComponents.refreshPages(this.frame, this.panel, this.user, guiComponents);
                 }
             });
         }
@@ -889,7 +889,7 @@ public class OverflowMenu extends JLayeredPane {
                     this.user = UserController.loadCurrentUser(ACCOUNTS_FILE);
 
                     frame.getLayeredPane().remove(this);
-                    GUIComponents.refreshHomePage(this.frame, this.panel, this.user, guiComponents);
+                    GUIComponents.refreshPages(this.frame, this.panel, this.user, guiComponents);
                 }
             });
         }

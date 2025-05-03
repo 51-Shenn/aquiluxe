@@ -57,6 +57,7 @@ public class RentalHistory extends JPanel {
     public RentalHistory(JFrame frame, JPanel panel, User user) {
         this.frame = frame;
         this.panel = panel;
+        this.user = user;
         setLayout(new BorderLayout());
 
         try {
@@ -66,15 +67,15 @@ public class RentalHistory extends JPanel {
             System.out.println(this.user.getFullName() + " loaded user");
 
             if (this.user.getUserType().equals("Customer")) {
-                System.out.println(this.user.getFullName() + "C1");
+                System.out.println(this.user.getFullName() + " C1");
                 this.customer = UserDAO.getCustomerById(this.user);
-                System.out.println(this.customer.getFullName() + "C1");
+                System.out.println(this.customer.getFullName() + " C1");
             } else if (this.user.getUserType().equals("Admin")) {
-                System.out.println(this.user.getFullName() + "A1");
+                System.out.println(this.user.getFullName() + " A1");
                 this.admin = UserDAO.getAdminById(this.user);
-                System.out.println(this.admin.getFullName() + "A1");
+                System.out.println(this.admin.getFullName() + " A1");
             } else {
-                System.out.println(this.user.getFullName() + "G1");
+                System.out.println(this.user.getFullName() + " G1");
                 this.customer = UserDAO.getCustomerById(this.user);
             }
 
