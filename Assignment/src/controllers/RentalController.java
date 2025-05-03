@@ -79,11 +79,11 @@ public class RentalController {
     }
 
     public void updateRental(Rental rental, RentalStatus status) {
-        if (rental.getPaymentStatus() == PaymentStatus.PAID) {
+        if (rental.getPaymentStatus() == PaymentStatus.PAID && rental.getRentalStatus() == RentalStatus.CANCELLED) {
             RentalService.updatePaymentStatus(rental, PaymentStatus.REFUNDED);
         }
 
-        if (rental.getPaymentStatus() == PaymentStatus.PENDING) {
+        if (rental.getPaymentStatus() == PaymentStatus.PENDING && rental.getRentalStatus() == RentalStatus.CANCELLED) {
             RentalService.updatePaymentStatus(rental, PaymentStatus.FAILED);
         }
 
