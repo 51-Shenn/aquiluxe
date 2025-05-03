@@ -242,20 +242,67 @@ public class VehicleService {
         List<Vehicle> filteredCars = new ArrayList<>();
 
         searchInput = searchInput.toUpperCase();
+        String[] inputs = searchInput.split("\\s+");
 
         if (searchInput.equals("SEARCH FOR VEHICLES") || searchInput.equals("")) {
             return car;
         }
-        else {
-            for (Vehicle c : car) {
-                if (c.getBrand().toUpperCase().contains(searchInput) || c.getModel().toUpperCase().contains(searchInput) || Integer.toString(c.getYear()).contains(searchInput) || c.getTransmission().toUpperCase().contains(searchInput) || 
-                c.getFuelType().toUpperCase().contains(searchInput) || c.getVehicleType().toUpperCase().contains(searchInput) || c.getFeatures().toUpperCase().contains(searchInput)) {
-                        filteredCars.add(c);
+        else if (inputs.length == 1) {
+            try {
+                int num = Integer.parseInt(inputs[0]);
+                if (inputs[0].length() == 4 ) {
+                    for (Vehicle c : car) {
+                        if (num == (c.getYear())) {
+                            filteredCars.add(c);
+                        }
+                    }
+                    return filteredCars;
                 }
             }
+            catch (NumberFormatException e) { 
+                for (Vehicle c : car) {
+                    if ((c.getBrand().toUpperCase()).contains(inputs[0]) || (c.getModel().toUpperCase()).contains(inputs[0]) || (c.getVehicleType().toUpperCase()).contains(inputs[0])){
+                        filteredCars.add(c);
+                    }
+                }
+                return filteredCars;
+            }
+        }
+        else if (inputs.length >= 2) {
+            for (Vehicle c : car) {
+                boolean matchesAll = true;
+        
+                for (String input : inputs) {
+                    input = input.toUpperCase();
+                    boolean match = false;
+        
+                    try {
+                        int num = Integer.parseInt(input);
+                        if (input.length() == 4 && num == c.getYear()) {
+                            match = true;
+                        }
+                    } catch (NumberFormatException e) {
+                        if (c.getBrand().toUpperCase().contains(input) ||
+                            c.getModel().toUpperCase().contains(input) ||
+                            c.getVehicleType().toUpperCase().contains(input)) {
+                            match = true;
+                        }
+                    }
+        
+                    if (!match) {
+                        matchesAll = false;
+                        break;
+                    }
+                }
+        
+                if (matchesAll) {
+                    filteredCars.add(c);
+                }
+            }
+        
             return filteredCars;
         }
-
+        return filteredCars;
     }
 
     public static List<Vehicle> sortByYearNewestFirst(List<Vehicle> cars) {
