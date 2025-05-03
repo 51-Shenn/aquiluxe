@@ -116,7 +116,7 @@ public class VehiclesPageDetails extends JPanel {
     private JPanel technicalSpecsPanel() {
         ImageIcon downIcon = IconLoader.getDownIcon();
         ImageIcon upIcon = IconLoader.getUpIcon();
-        
+
         JPanel technicalSpecsPanel = new JPanel(new BorderLayout(5, 5));
         technicalSpecsPanel.setPreferredSize(new Dimension(600, 800));
         technicalSpecsPanel.setBackground(Theme.getBackground());
@@ -194,7 +194,7 @@ public class VehiclesPageDetails extends JPanel {
         carTypeLabel.setForeground(Theme.getForeground());
         carTypeLabel.setVerticalTextPosition(JLabel.BOTTOM);
         carTypeLabel.setHorizontalTextPosition(JLabel.CENTER);
-        carTypeLabel.setText(carType.substring(0,1).toUpperCase() + carType.substring(1));
+        carTypeLabel.setText(carType.substring(0, 1).toUpperCase() + carType.substring(1));
         carTypeLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(15f));
         carTypePanel.add(carTypeLabel, BorderLayout.CENTER);
         carTypePanel.setBackground(Theme.getBackground());
@@ -280,24 +280,27 @@ public class VehiclesPageDetails extends JPanel {
         rentButton.setContentAreaFilled(false);
         rentButton.setBorderPainted(false);
         rentButton.setOpaque(true);
-        if(vehicle.getAvailability()) {
+        if (vehicle.getAvailability()) {
             rentButton.setEnabled(true);
             rentButton.setBackground(Theme.getSpecial());
             rentButton.setForeground(Theme.getSpecialForeground());
-                    
+
             rentButton.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent evt) {
                     rentButton.setBackground(Theme.getHoverSpecial());
                 }
+
                 @Override
                 public void mouseExited(MouseEvent evt) {
                     rentButton.setBackground(Theme.getSpecial());
                 }
+
                 @Override
                 public void mousePressed(MouseEvent evt) {
                     rentButton.setBackground(Theme.getPressedSpecial());
                 }
+
                 @Override
                 public void mouseReleased(MouseEvent evt) {
                     rentButton.setBackground(Theme.getSpecial());
@@ -306,31 +309,34 @@ public class VehiclesPageDetails extends JPanel {
                     GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
                 }
             });
-        }
-        else {
+        } else {
             rentButton.setEnabled(false);
             rentButton.setBackground(Color.GRAY);
             rentButton.setForeground(Theme.getSpecialForeground());
         }
-        if(VehiclesPage.getUser().getUserType().equals("Admin") && VehiclesPage.getAdmin().getAdminRole().equals("Manager")) {
+        if (VehiclesPage.getUser().getUserType().equals("Admin")
+                && VehiclesPage.getAdmin().getAdminRole().equals("Manager")) {
             rentButton.setEnabled(true);
             rentButton.setBackground(Theme.getSpecial());
             rentButton.setForeground(Theme.getSpecialForeground());
             rentButton.setText("EDIT");
-                    
+
             rentButton.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent evt) {
                     rentButton.setBackground(Theme.getHoverSpecial());
                 }
+
                 @Override
                 public void mouseExited(MouseEvent evt) {
                     rentButton.setBackground(Theme.getSpecial());
                 }
+
                 @Override
                 public void mousePressed(MouseEvent evt) {
                     rentButton.setBackground(Theme.getPressedSpecial());
                 }
+
                 @Override
                 public void mouseReleased(MouseEvent evt) {
                     rentButton.setBackground(Theme.getSpecial());
@@ -435,9 +441,7 @@ public class VehiclesPageDetails extends JPanel {
         viewAllButton.setVerticalAlignment(JButton.CENTER);
         viewAllButton.addActionListener(e -> {
             if (e.getActionCommand().equals("View All")) {
-                JPanel vehiclesPanel = new VehiclesPage(frame, panel, VehiclesPage.getUser());
-                GUIComponents.cardPanel.add(vehiclesPanel, "VehicleDetailsPage");
-                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
+                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
             }
         });
 
@@ -465,7 +469,7 @@ public class VehiclesPageDetails extends JPanel {
                 }
 
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Error loading images: " + e.getMessage());
+                System.err.println(e.getMessage());
             }
             Image rImage = image.getImage().getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH);
             image = new ImageIcon(rImage);

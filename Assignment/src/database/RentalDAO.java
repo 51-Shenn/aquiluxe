@@ -135,7 +135,8 @@ public class RentalDAO {
         int customerId = rs.getInt("customer_id");
         int vehicleId = rs.getInt("vehicle_id");
 
-        Customer customer = (Customer) UserDAO.getUserById(customerId);
+        User user = UserDAO.getUserById(getUserIdbyCustomerId(customerId));
+        Customer customer = (Customer) UserDAO.getCustomerById(user);
         Vehicle vehicle = VehicleDAO.getVehicleById(vehicleId);
 
         // convert string status to enum
@@ -154,6 +155,28 @@ public class RentalDAO {
                 rs.getDouble("total_cost"),
                 rentalStatus,
                 paymentStatus);
+    }
+
+    // get user id by customer id
+    private static int getUserIdbyCustomerId(int customerId) {
+        String sql = "SELECT user_id FROM customers WHERE customer_id = ? LIMIT 1;";
+        int userId = 0;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, customerId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    userId = rs.getInt("user_id");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO GET USER ID\n");
+        }
+        return userId;
     }
 
     // get rental by ID
@@ -244,14 +267,16 @@ public class RentalDAO {
     }
 
     // get rentals by status
-    public static List<Rental> getRentalsByStatus(RentalStatus status) {
-        String sql = "SELECT * FROM rentals WHERE rental_status = ?";
+    public static List<Rental> getRentalsByStatus(RentalStatus status1, RentalStatus status2, RentalStatus status3) {
+        String sql = "SELECT * FROM rentals WHERE rental_status IN (?,?,?)";
         List<Rental> rentals = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, status.toString());
+            stmt.setString(1, status1.toString());
+            stmt.setString(2, status2.toString());
+            stmt.setString(3, status3.toString());
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -261,7 +286,7 @@ public class RentalDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("\nFAILED TO GET RENTALS BY STATUS\n");
+            throw new RuntimeException("\nFAILED TO GET RENTALS BY STATUSES\n");
         }
         return rentals;
     }
@@ -331,6 +356,10 @@ public class RentalDAO {
 
                 // If rental is completed, make vehicle available again
                 if (status == RentalStatus.COMPLETED) {
+                    updateVehicleAvailability(rental.getRentVehicle(), true);
+                }
+
+                if (status == RentalStatus.CANCELLED) {
                     updateVehicleAvailability(rental.getRentVehicle(), true);
                 }
             }

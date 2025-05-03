@@ -13,7 +13,9 @@ import services.VehicleService;
 
 public class VehicleController {
 
+    @SuppressWarnings("unused")
     private final JFrame frame;
+    @SuppressWarnings("unused")
     private final JPanel panel;
 
     public VehicleController(JFrame frame, JPanel panel) {
@@ -108,7 +110,7 @@ public class VehicleController {
                                 processFilteredCarFuelType(
                                         processFilteredCarAvailability(processFilteredCarType(
                                                 processFilteredCarSeats(processFilteredCarPrice(
-                                                    processSearchCars(filteredCars, searchInput),
+                                                        processSearchCars(filteredCars, searchInput),
                                                         filterMinPrice.trim(), filterMaxPrice.trim()), filterSeats),
                                                 filterCarType), filterAvailability),
                                         filterFuelType),
@@ -119,91 +121,94 @@ public class VehicleController {
     }
 
     public static String processClosestColorName(Color color) {
-        
+
         return VehicleService.getClosestColorName(color);
     }
 
     public static boolean processColorValidation(Color color) {
-        
+
         return VehicleService.validateColor(color);
     }
 
     public static boolean processVinNumberValidation(String vinNumber) {
-        
+
         return VehicleService.validateVinNumber(vinNumber);
     }
 
     public static boolean processStringsValidation(String registrationNumber, String brand, String model) {
-        
+
         return VehicleService.validateStrings(registrationNumber, brand, model);
     }
 
     public static boolean processRentalPriceDayValidation(String rentalPriceDay) {
-        
+
         return VehicleService.validateRentalPriceDay(rentalPriceDay);
     }
 
     public static boolean processYearValidation(String year) {
-        
+
         return VehicleService.validateYear(year);
     }
 
     public static boolean processMpgValidation(String mpg) {
-        
+
         return VehicleService.validateMpg(mpg);
     }
 
     public static boolean processCapacityValidation(String capacity) {
-        
+
         return VehicleService.validateCapacity(capacity);
     }
 
     public static boolean processHorsepowerValidation(String horsepower) {
-        
+
         return VehicleService.validateHorsepower(horsepower);
     }
 
     public static boolean processTransmissionValidation(String transmission) {
-        
+
         return VehicleService.validateTransmission(transmission);
     }
 
     public static boolean processFuelTypeValidation(String fuelType) {
-        
+
         return VehicleService.validateFuelType(fuelType);
     }
 
     public static boolean processVehicleTypeValidation(String vehicleType) {
-        
+
         return VehicleService.validateVehicleType(vehicleType);
     }
 
     public static boolean processImageValidation(File selectedImageFile, BufferedImage selectedImagePreview) {
-        
+
         return VehicleService.validateImage(selectedImageFile, selectedImagePreview);
     }
 
-    //submit add car (get all values)
-    // public static String processAddCar(String vinNumber, String registrationNumber, String brand, String model, String rentalPriceDay, String transmission, String fueltype, String vehicleType,  Color color, File selectedImageFile, BufferedImage selectedImagePreview) {
+    // submit add car (get all values)
+    // public static String processAddCar(String vinNumber, String
+    // registrationNumber, String brand, String model, String rentalPriceDay, String
+    // transmission, String fueltype, String vehicleType, Color color, File
+    // selectedImageFile, BufferedImage selectedImagePreview) {
 
-    //     else {
-    //         return "success";
-    //     }
+    // else {
+    // return "success";
+    // }
     // }
 
-    //validate vinNumber (18digit)
+    // validate vinNumber (18digit)
 
-    //validate color (color cannot be null)
+    // validate color (color cannot be null)
 
-    //all cannot be null except features
+    // all cannot be null except features
 
-    //validate picture (must be square and image naming must be distinct)
+    // validate picture (must be square and image naming must be distinct)
     public static boolean processImageSaving(File selectedImageFile, BufferedImage selectedImagePreview) {
         return VehicleService.imageSaving(selectedImageFile, selectedImagePreview);
     }
 
     public static String processGetImagePath(File selectedImageFile) {
-        
+
         return VehicleService.getImage_Path(selectedImageFile);
     }
 

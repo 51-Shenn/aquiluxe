@@ -77,10 +77,32 @@ public class RentalService {
                 return RentalDAO.getRentalsByVehicle((Vehicle) value);
             }
             case RENTAL_STATUS -> {
-                return RentalDAO.getRentalsByStatus((Rental.RentalStatus) value);
+                return RentalDAO.getRentalsByStatus((Rental.RentalStatus) value, (Rental.RentalStatus) value,
+                        (Rental.RentalStatus) value);
             }
             case PAYMENT_STATUS -> {
                 return RentalDAO.getRentalsByPaymentStatus((Rental.PaymentStatus) value);
+            }
+            default -> {
+                throw new IllegalArgumentException("Unsupported filter type: " + type);
+            }
+        }
+    }
+
+    public static List<Rental> getRentalHistory(FilterType type, Object value1, Object value2, Object value3) {
+        switch (type) {
+            case USER -> {
+                return RentalDAO.getRentalsByUser((User) value1);
+            }
+            case VEHICLE -> {
+                return RentalDAO.getRentalsByVehicle((Vehicle) value1);
+            }
+            case RENTAL_STATUS -> {
+                return RentalDAO.getRentalsByStatus((Rental.RentalStatus) value1, (Rental.RentalStatus) value2,
+                        (Rental.RentalStatus) value3);
+            }
+            case PAYMENT_STATUS -> {
+                return RentalDAO.getRentalsByPaymentStatus((Rental.PaymentStatus) value1);
             }
             default -> {
                 throw new IllegalArgumentException("Unsupported filter type: " + type);
