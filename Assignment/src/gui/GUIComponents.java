@@ -237,7 +237,7 @@ public class GUIComponents extends JPanel {
         return topBarButtons;
     }
 
-    private static void pageIndicator(int index) {
+    public static void pageIndicator(int index) {
         for (JButton button : topBarButtons) {
             button.setForeground(Theme.getForeground());
             button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));

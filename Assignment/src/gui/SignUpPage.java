@@ -182,8 +182,13 @@ public class SignUpPage extends AuthenticationPage {
             Navigation.setWindowsLookAndFeel();
             MainApp.getGuiComponents().setVisible(true);
             GUIComponents.topBarPanel.setVisible(true);
+            GUIComponents.pageIndicator(0);
             GUIComponents.mainCardLayout.show(GUIComponents.mainCardPanel, "MainPage");
             GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "HomePage");
+            GUIComponents.mainCardPanel.revalidate();
+            GUIComponents.mainCardPanel.repaint();
+            GUIComponents.subCardPanel.revalidate();
+            GUIComponents.subCardPanel.repaint();
         });
 
         GridBagConstraints gbc = new GridBagConstraints();
