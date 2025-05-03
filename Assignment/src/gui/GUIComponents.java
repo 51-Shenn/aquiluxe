@@ -245,7 +245,7 @@ public class GUIComponents extends JPanel {
         return menu;
     }
 
-    public static void refreshHomePage(JFrame frame, JPanel panel, User user, GUIComponents guiComponents) {
+    public static void refreshPages(JFrame frame, JPanel panel, User user, GUIComponents guiComponents) {
         cardPanel.remove(homePanel);
         System.out.println(cardPanel.getComponents().length);
         homePanel = new HomePage(frame, panel, user, guiComponents);
@@ -257,14 +257,28 @@ public class GUIComponents extends JPanel {
         cardPanel.revalidate();
         cardPanel.repaint();
 
-        // refresh vehicle page 
-        // cardPanel.remove(vehiclesPanel);
-        // vehiclesPanel = new VehiclesPage(frame, panel, user);
-        // vehiclesPanel.revalidate();
-        // vehiclesPanel.repaint();
-        // cardPanel.add(vehiclesPanel, "VehiclesPage");
-        // cardLayout.show(cardPanel,"VehiclesPage");
-        // cardPanel.revalidate();
-        // cardPanel.repaint();
+        // refresh vehicle page
+        cardPanel.remove(vehiclesPanel);
+        System.out.println(cardPanel.getComponents().length);
+        vehiclesPanel = new VehiclesPage(frame, panel, user);
+        vehiclesPanel.revalidate();
+        vehiclesPanel.repaint();
+        cardPanel.add(vehiclesPanel, "VehiclesPage");
+        // cardLayout.show(cardPanel, "VehiclesPage");
+        System.out.println(cardPanel.getComponents().length);
+        cardPanel.revalidate();
+        cardPanel.repaint();
+
+        // refresh rental history page
+        cardPanel.remove(rentalHistoryPanel);
+        System.out.println(cardPanel.getComponents().length);
+        rentalHistoryPanel = new RentalHistory(frame, panel, user);
+        rentalHistoryPanel.revalidate();
+        rentalHistoryPanel.repaint();
+        cardPanel.add(rentalHistoryPanel, "RentalHistoryPage");
+        // cardLayout.show(cardPanel, "VehiclesPage");
+        System.out.println(cardPanel.getComponents().length);
+        cardPanel.revalidate();
+        cardPanel.repaint();
     }
 }

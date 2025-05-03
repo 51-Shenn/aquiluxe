@@ -35,7 +35,6 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -181,7 +180,7 @@ public class RentalPage extends JPanel {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error loading images: " + e.getMessage());
+            System.err.println(e.getMessage());
         }
         Image rImage = image.getImage().getScaledInstance(225, 225, java.awt.Image.SCALE_SMOOTH);
         image = new ImageIcon(rImage);

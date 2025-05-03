@@ -60,6 +60,15 @@ public class ImageLoader {
         }
     }
 
+    public static void cacheImageIfNeeded(Vehicle vehicle) {
+        if (!vehicleImageCache.containsKey(vehicle.getImagePath())) {
+            ImageIcon image = new ImageIcon(vehicle.getImagePath());
+            Image rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
+            image = new ImageIcon(rImage);
+            vehicleImageCache.put(vehicle.getImagePath(), image);
+        }
+    }
+
     public static ImageIcon getWhitePorscheImage() {
         return scaleImage(WHITE_PORSCHE, 1100, 609);
     }
