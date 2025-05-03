@@ -1329,6 +1329,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         addCar.setPreferredSize(new Dimension(1600, 900));
         addCar.setLayout(new BorderLayout());
         addCar.setBackground(Theme.getBackground());
+        addCar.setResizable(false);
 
         JLabel title = new JLabel("New Vehicle", JLabel.CENTER);
         title.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(30f));
@@ -1474,7 +1475,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         RoundedButton submitButton = new RoundedButton(10, Theme.getSpecial());
         submitButton.setText("Submit");
         submitButton.setForeground(Theme.getSpecialForeground());
-        submitButton.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(20f));
+        submitButton.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(25f));
         submitButton.setFocusable(false);
         submitButton.setBorderPainted(false);
         submitButton.setPreferredSize(new Dimension(150, 75));
@@ -1503,6 +1504,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         gbc.gridx = 2;
         gbc.gridy = 10;
         gbc.gridwidth = 1;
+        gbc.insets = new Insets(50, 0, 0, 0);
         rightContainer.add(submitButton, gbc);
 
         formPanel.add(informationPanel);
@@ -1521,6 +1523,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         editCar.setPreferredSize(new Dimension(1600, 900));
         editCar.setLayout(new BorderLayout());
         editCar.setBackground(Theme.getBackground());
+        editCar.setResizable(false);
 
         JLabel title = new JLabel("Edit Vehicle", JLabel.CENTER);
         title.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(30f));
@@ -1668,7 +1671,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         RoundedButton submitButton = new RoundedButton(10, Theme.getSpecial());
         submitButton.setText("Submit");
         submitButton.setForeground(Theme.getSpecialForeground());
-        submitButton.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(20f));
+        submitButton.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(25f));
         submitButton.setFocusable(false);
         submitButton.setBorderPainted(false);
         submitButton.setPreferredSize(new Dimension(150, 75));
@@ -1697,6 +1700,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         gbc.gridx = 2;
         gbc.gridy = 10;
         gbc.gridwidth = 1;
+        gbc.insets = new Insets(50, 0, 0, 0);
         rightContainer.add(submitButton, gbc);
 
         formPanel.add(informationPanel);
@@ -2406,6 +2410,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
     private JPanel initImageUploader(String existingImagePath) {
         // Image Upload Components
         JPanel imageUploadPanel = new JPanel(new BorderLayout());
+        imageUploadPanel.setBackground(Theme.getBackground());
 
         selectButton = new RoundedButton(10,Theme.getBackground());
         selectButton.setText("Select Image");
@@ -2438,7 +2443,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 selectedImageFile = new File(existingImagePath);
                 selectedImagePreview = ImageIO.read(selectedImageFile);
                 ImageIcon icon = new ImageIcon(
-                        selectedImagePreview.getScaledInstance(500, 500, Image.SCALE_SMOOTH));
+                        selectedImagePreview.getScaledInstance(850, 850, Image.SCALE_SMOOTH));
                 imageLabel.setIcon(icon);
                 imageLabel.setText("");
                 removeButton.setEnabled(true);
