@@ -2687,7 +2687,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         }
 
         if (selectedImageFile != null
-                && !selectedImageFile.getName().equals(new File(vehicle.getImagePath()).getName())) {
+                && !selectedImageFile.getAbsolutePath().equals(new File(vehicle.getImagePath()).getAbsolutePath())) {
             boolean imageSaved = VehicleController.processImageSaving(selectedImageFile, selectedImagePreview);
             if (!imageSaved) {
                 dialog.showDialog("ERROR", "Image Saving Error", "Image Saving Error", "Failed to save image", true);
