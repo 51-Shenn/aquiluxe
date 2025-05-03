@@ -21,8 +21,8 @@ public class GUIComponents extends JPanel {
     private JPanel panel;
     private User user;
     public static OverflowMenu overflowMenu;
-    private JButton[] topBarButtons = new JButton[5];
-    private String[] topBarButtonsLabels = { "Home", "Vehicles", "About", "Contact", "History" };
+    private static JButton[] topBarButtons = new JButton[5];
+    private String[] topBarButtonsLabels = { "Home", "Vehicles", "About", "Contact", "Rentals" };
 
     public static JPanel homePanel;
     public static JPanel vehiclesPanel;
@@ -42,6 +42,7 @@ public class GUIComponents extends JPanel {
         this.frame = frame;
         this.panel = panel;
         this.user = user;
+
         setBackground(Theme.getBackground());
         setPreferredSize(new Dimension(frame.getWidth(), 80));
         setLayout(new BorderLayout());
@@ -106,8 +107,8 @@ public class GUIComponents extends JPanel {
         return topBarButtons;
     }
 
-    public void setTopBarButtons(JButton[] topBarButtons) {
-        this.topBarButtons = topBarButtons;
+    public static void setTopBarButtons(JButton[] buttons) {
+        topBarButtons = buttons;
     }
 
     public String[] getTopBarButtonsLabels() {
@@ -205,7 +206,7 @@ public class GUIComponents extends JPanel {
         return topBarButtons;
     }
 
-    private void pageIndicator(int index) {
+    private static void pageIndicator(int index) {
         for (JButton button : topBarButtons) {
             button.setForeground(Theme.getForeground());
             button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
