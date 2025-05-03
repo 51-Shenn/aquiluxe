@@ -2,9 +2,11 @@ package gui;
 
 import controllers.UserController;
 import controllers.VehicleController;
+import database.UserDAO;
 import datamodels.Admin;
 import datamodels.Bike;
 import datamodels.Car;
+import datamodels.Customer;
 import datamodels.User;
 import datamodels.Vehicle;
 
@@ -154,40 +156,85 @@ public class VehiclesPage extends JPanel implements ActionListener {
                         showEditCarPopup(vehicle);
                     }
                 });
-            }
-            else {
+            } else {
                 carRent.setEnabled(vehicle.getAvailability());
-                if(vehicle.getAvailability()) {
+                if (vehicle.getAvailability()) {
                     carRent.setBackground(Theme.getSpecial());
                     carRent.setForeground(Theme.getSpecialForeground());
-                    
+
                     carRent.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseEntered(MouseEvent evt) {
                             carRent.setBackground(Theme.getHoverSpecial());
                         }
+
                         @Override
                         public void mouseExited(MouseEvent evt) {
                             carRent.setBackground(Theme.getSpecial());
                         }
+
                         @Override
                         public void mousePressed(MouseEvent evt) {
                             carRent.setBackground(Theme.getPressedSpecial());
                         }
+
                         @Override
                         public void mouseReleased(MouseEvent evt) {
                             carRent.setBackground(Theme.getSpecial());
+                            try {
+                                if (user.getUserType() == null || user.getUserType().trim().isEmpty() ||
+                                        user.getUserType() == "Guest") {
+                                    throw new IllegalArgumentException("No User Account Registered");
+                                }
+                            } catch (Exception e) {
+                                System.err.println(e.getMessage());
+                                Dialog dialogError = new Dialog();
+                                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
+                                dialogError.showDialog("ERROR",
+                                        "Account",
+                                        "No Account Signed In",
+                                        "Please Sign In or Create an account",
+                                        false);
+                                return;
+                            }
+
+                            try {
+                                Customer currentCustomer = UserDAO.getCustomerById(user);
+                                if (currentCustomer.getLicense() == null
+                                        || currentCustomer.getLicense().trim().isEmpty()) {
+                                    throw new IllegalArgumentException("No Driving License Registered");
+                                }
+                            } catch (Exception e) {
+                                System.err.println(e.getMessage());
+                                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
+                                if (user.getUserType() == "Customer") {
+                                    Dialog dialogError = new Dialog();
+                                    dialogError.showDialog("ERROR",
+                                            "Driving License",
+                                            "No Driving License Registered",
+                                            "Please register a valid Driving License.",
+                                            false);
+                                    return;
+                                }
+
+                                Dialog dialogError = new Dialog();
+                                dialogError.showDialog("ERROR",
+                                        "Account",
+                                        "Account Error",
+                                        "Please ensure user is valid Customer.",
+                                        false);
+                                return;
+                            }
                             JPanel rentalPanel = new RentalPage(frame, panel, vehicle);
                             GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
                             GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
                         }
                     });
-                }
-                else {
+                } else {
                     carRent.setBackground(Color.GRAY);
                     carRent.setForeground(Theme.getSpecialForeground());
                 }
-                
+
             }
         } else {
             carRent.setEnabled(vehicle.getAvailability());
@@ -219,8 +266,43 @@ public class VehiclesPage extends JPanel implements ActionListener {
                         if (user.getUserType().equals("Guest") || user.getUserType().equals("Admin")) {
                             // Display dialog
                             System.err.println("Please Sign In");
+                            // return;
+                        }
+                        try {
+                            if (user.getUserType() == null || user.getUserType().trim().isEmpty() ||
+                                    user.getUserType() == "Guest") {
+                                throw new IllegalArgumentException("No User Account Registered");
+                            }
+                        } catch (Exception e) {
+                            System.err.println(e.getMessage());
+                            Dialog dialogError = new Dialog();
+                            GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
+                            dialogError.showDialog("ERROR",
+                                    "Account",
+                                    "No Account Signed In",
+                                    "Please Sign In or Create an account",
+                                    false);
                             return;
                         }
+
+                        try {
+                            Customer currentCustomer = UserDAO.getCustomerById(user);
+                            if (currentCustomer.getLicense() == null
+                                    || currentCustomer.getLicense().trim().isEmpty()) {
+                                throw new IllegalArgumentException("No Identity Card Registered");
+                            }
+                        } catch (Exception e) {
+                            System.err.println(e.getMessage());
+                            GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
+                            Dialog dialogError = new Dialog();
+                            dialogError.showDialog("ERROR",
+                                    "Identity Card",
+                                    "No Identity Card Registered",
+                                    "Please register a valid Identity Card.",
+                                    false);
+                            return;
+                        }
+
                         JPanel rentalPanel = new RentalPage(frame, panel, vehicle);
                         GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
                         GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
@@ -268,7 +350,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         carAvailability.setForeground(Theme.getSpecialForeground());
         carAvailability.setPreferredSize(new Dimension(200, 20));
 
-        JLabel carTypeLabel = new JLabel(vehicleType.substring(0,1).toUpperCase() + vehicleType.substring(1));
+        JLabel carTypeLabel = new JLabel(vehicleType.substring(0, 1).toUpperCase() + vehicleType.substring(1));
         carTypeLabel.setHorizontalTextPosition(JLabel.LEFT);
         carTypeLabel.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(12.5f));
         carTypeLabel.setPreferredSize(new Dimension(50, 10));
@@ -427,8 +509,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                         }
                     }
                 });
-            }
-            else {
+            } else {
                 carDetails.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
@@ -439,7 +520,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                             GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
                         }
                     }
-    
+
                     @Override
                     public void mousePressed(MouseEvent evt) {
                         if (SwingUtilities.isLeftMouseButton(evt)) {
@@ -447,7 +528,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                             carAvailability.setBackground(Theme.getPressedSpecial());
                         }
                     }
-    
+
                     @Override
                     public void mouseReleased(MouseEvent evt) {
                         if (SwingUtilities.isLeftMouseButton(evt)) {
@@ -717,8 +798,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         if (user.getUserType().equals("Admin")) {
             if (admin.getAdminRole().equals("Manager")) {
                 addButton.setVisible(true);
-            }
-            else {
+            } else {
                 addButton.setVisible(false);
             }
         } else {
