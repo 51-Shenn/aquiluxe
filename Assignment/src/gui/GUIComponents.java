@@ -22,7 +22,7 @@ public class GUIComponents extends JPanel {
     private User user;
     public static OverflowMenu overflowMenu;
     private JButton[] topBarButtons = new JButton[5];
-    private String[] topBarButtonsLabels = { "Home", "Vehicles", "About", "Contact", "Rentals" };
+    private String[] topBarButtonsLabels = { "Home", "Vehicles", "About", "Contact", "History" };
 
     public static JPanel homePanel;
     public static JPanel vehiclesPanel;

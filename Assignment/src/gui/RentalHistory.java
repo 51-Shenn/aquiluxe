@@ -211,33 +211,42 @@ public class RentalHistory extends JPanel {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate startDate = rental.getRentStartDate();
         String startDateText = "Start: " + startDate.format(dateFormatter);
-        JLabel carTransmissionLabel = createLabel(
+        JLabel startDateLabel = createLabel(
                 startDateText,
                 25f, Theme.getForeground(), Theme.getBackground(), 50, -1);
-        carTransmissionLabel.setHorizontalAlignment(JLabel.LEFT);
+        startDateLabel.setHorizontalAlignment(JLabel.LEFT);
 
         LocalDate endDate = rental.getRentEndDate();
         String endDateText = "End: " + endDate.format(dateFormatter);
-        JLabel carFuelLabel = createLabel(
+        JLabel endDateLabel = createLabel(
                 endDateText,
                 25f, Theme.getForeground(), Theme.getBackground(), 50, -1);
-        carFuelLabel.setHorizontalAlignment(JLabel.LEFT);
+        endDateLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel carRentalPriceLabel = createLabel(
-                "RM " + String.format("%,.2f", rental.getRentTotalCost()),
+        JLabel pickUpTimeLabel = createLabel(
+                "Pick Up: " + rental.getPickUpTime().toString(),
                 25f, Theme.getForeground(), Theme.getBackground(), 50, -1);
-        carRentalPriceLabel.setHorizontalAlignment(JLabel.LEFT);
+        pickUpTimeLabel.setHorizontalAlignment(JLabel.LEFT);
+        pickUpTimeLabel.setName("pickUpTime");
+
+        JLabel dropOffTimeLabel = createLabel(
+                "Drop Off: " + rental.getDropoffTime().toString(),
+                25f, Theme.getForeground(), Theme.getBackground(), 50, -1);
+        dropOffTimeLabel.setHorizontalAlignment(JLabel.LEFT);
+        dropOffTimeLabel.setName("dropOffTime");
 
         // gblayout gridy position
         gbc.gridy = 0;
         carDetailsPanel.add(carNameLabel, gbc);
         gbc.insets.left = 30; // indent for other labels
         gbc.gridy = 1;
-        carDetailsPanel.add(carTransmissionLabel, gbc);
+        carDetailsPanel.add(startDateLabel, gbc);
         gbc.gridy = 2;
-        carDetailsPanel.add(carFuelLabel, gbc);
+        carDetailsPanel.add(endDateLabel, gbc);
         gbc.gridy = 3;
-        carDetailsPanel.add(carRentalPriceLabel, gbc);
+        carDetailsPanel.add(pickUpTimeLabel, gbc);
+        gbc.gridy = 4;
+        carDetailsPanel.add(dropOffTimeLabel, gbc);
         gbc.insets.left = 0; // reset indent
 
         // add label in panel
@@ -265,14 +274,10 @@ public class RentalHistory extends JPanel {
             paymentStatusLabel.setHorizontalAlignment(JLabel.LEFT);
             paymentStatusLabel.setName("paymentStatus");
 
-            // payment date
-            LocalDate paymentDate = rental.getRentStartDate();
-            String paymentDateText = "Payment Date: " + paymentDate.format(dateFormatter);
-            JLabel paymentDateLabel = createLabel(
-                    paymentDateText,
+            JLabel carRentalPriceLabel = createLabel(
+                    "Total Cost: RM " + String.format("%,.2f", rental.getRentTotalCost()),
                     25f, Theme.getForeground(), Theme.getBackground(), 50, -1);
-            paymentDateLabel.setHorizontalAlignment(JLabel.LEFT);
-            paymentDateLabel.setName("paymentDate");
+            carRentalPriceLabel.setHorizontalAlignment(JLabel.LEFT);
 
             gbc.gridx = 0;
             gbc.gridy = 0;
@@ -280,14 +285,14 @@ public class RentalHistory extends JPanel {
             gbc.gridy = 1;
             detailsPanel.add(paymentStatusLabel, gbc);
             gbc.gridy = 2;
-            detailsPanel.add(paymentDateLabel, gbc);
+            detailsPanel.add(carRentalPriceLabel, gbc);
         }
 
         if (this.admin != null) {
             // customer name
             JLabel customerNameLabel = createLabel(
                     rental.getRentCustomer().getFullName(),
-                    25f, Theme.getForeground(), Theme.getBackground(), 50, -1);
+                    30f, Theme.getForeground(), Theme.getBackground(), 50, -1);
             customerNameLabel.setHorizontalAlignment(JLabel.LEFT);
             customerNameLabel.setName("customerName");
 
@@ -312,27 +317,16 @@ public class RentalHistory extends JPanel {
             paymentStatusLabel.setHorizontalAlignment(JLabel.LEFT);
             paymentStatusLabel.setName("paymentStatus");
 
-            // payment date
-            LocalDate paymentDate = rental.getRentStartDate();
-            String paymentDateText = "Payment Date: " + paymentDate.format(dateFormatter);
-            JLabel paymentDateLabel = createLabel(
-                    paymentDateText,
-                    25f, Theme.getForeground(), Theme.getBackground(), 50, -1);
-            paymentDateLabel.setHorizontalAlignment(JLabel.LEFT);
-            paymentDateLabel.setName("paymentDate");
-
             gbc.gridx = 0;
             gbc.gridy = 0;
             detailsPanel.add(customerNameLabel, gbc);
+            gbc.insets.left = 30;
             gbc.gridy = 1;
             detailsPanel.add(customerICLabel, gbc);
             gbc.gridy = 2;
-            gbc.insets.left = 30;
             detailsPanel.add(rentalStatusLabel, gbc);
             gbc.gridy = 3;
             detailsPanel.add(paymentStatusLabel, gbc);
-            gbc.gridy = 4;
-            detailsPanel.add(paymentDateLabel, gbc);
             gbc.insets.left = 0;
         }
 
@@ -374,8 +368,6 @@ public class RentalHistory extends JPanel {
                 GUIComponents.rentalHistoryPanel.revalidate();
                 GUIComponents.rentalHistoryPanel.repaint();
 
-                System.out.println(rental.getRentVehicle().getModel() +
-                        rental.getRentalStatus().toString() + rental.getPaymentStatus().toString());
             });
 
             if (!rental.getRentalStatus().equals(RentalStatus.PENDING)) {
@@ -421,6 +413,8 @@ public class RentalHistory extends JPanel {
         }
 
         if (this.admin != null) {
+            // check rental status - display appropriate button
+            // check payment status - if pending, reject only - if paid, continue normal
             JButton approveButton = new JButton("Approve");
             approveButton.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(30f));
             approveButton.setBackground(Theme.getSuccess());
@@ -437,9 +431,6 @@ public class RentalHistory extends JPanel {
                 rentalController.updateRental(rental, rental.getRentalStatus());
                 GUIComponents.rentalHistoryPanel.revalidate();
                 GUIComponents.rentalHistoryPanel.repaint();
-
-                System.out.println(rental.getRentVehicle().getModel() +
-                        rental.getRentalStatus().toString() + rental.getPaymentStatus().toString());
             });
 
             JButton rejectButton = new JButton("Reject");
@@ -458,9 +449,6 @@ public class RentalHistory extends JPanel {
                 rentalController.updateRental(rental, rental.getRentalStatus());
                 GUIComponents.rentalHistoryPanel.revalidate();
                 GUIComponents.rentalHistoryPanel.repaint();
-
-                System.out.println(rental.getRentVehicle().getModel() +
-                        rental.getRentalStatus().toString() + rental.getPaymentStatus().toString());
             });
 
             JButton pickUpButton = new JButton("Pick Up");
@@ -479,9 +467,6 @@ public class RentalHistory extends JPanel {
                 rentalController.updateRental(rental, rental.getRentalStatus());
                 GUIComponents.rentalHistoryPanel.revalidate();
                 GUIComponents.rentalHistoryPanel.repaint();
-
-                System.out.println(rental.getRentVehicle().getModel() +
-                        rental.getRentalStatus().toString() + rental.getPaymentStatus().toString());
             });
 
             JButton dropOffButton = new JButton("Drop Off");
@@ -500,9 +485,6 @@ public class RentalHistory extends JPanel {
                 rentalController.updateRental(rental, rental.getRentalStatus());
                 GUIComponents.rentalHistoryPanel.revalidate();
                 GUIComponents.rentalHistoryPanel.repaint();
-
-                System.out.println(rental.getRentVehicle().getModel() +
-                        rental.getRentalStatus().toString() + rental.getPaymentStatus().toString());
             });
 
             // view vehicle details button
@@ -572,6 +554,7 @@ public class RentalHistory extends JPanel {
         return label;
     }
 
+    // after update, refresh the rental history page
     private void updateRentalPanel(Rental rental) {
         JPanel panel = rentalPanelMap.get(rental);
         if (panel != null) {
