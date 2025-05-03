@@ -2478,7 +2478,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                     return;
                 }
                 ImageIcon icon = new ImageIcon(
-                        selectedImagePreview.getScaledInstance(500, 500, Image.SCALE_SMOOTH));
+                        selectedImagePreview.getScaledInstance(850, 850, Image.SCALE_SMOOTH));
                 imageLabel.setIcon(icon);
                 imageLabel.setText("");
                 removeButton.setEnabled(true);
