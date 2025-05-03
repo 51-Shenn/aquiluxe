@@ -843,7 +843,16 @@ public class OverflowMenu extends JLayeredPane {
                 UserController.useTheme(newTheme, THEME_FILE);
 
                 frame.getLayeredPane().remove(this);
-                GUIComponents.refreshPages(this.frame, this.panel, this.user, guiComponents);
+
+                guiComponents.getFrame().getContentPane().removeAll();
+
+                guiComponents = new GUIComponents(guiComponents.getFrame(),
+                        (JPanel) guiComponents.getFrame().getContentPane(),
+                        this.user);
+                guiComponents.getFrame().getContentPane().add(guiComponents, BorderLayout.NORTH);
+
+                guiComponents.getFrame().revalidate();
+                guiComponents.getFrame().repaint();
             });
         }
         if (text.equals("Sign Up")) {
