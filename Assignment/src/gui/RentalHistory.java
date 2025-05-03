@@ -413,8 +413,7 @@ public class RentalHistory extends JPanel {
         }
 
         if (this.admin != null) {
-            // check rental status - display appropriate button
-            // check payment status - if pending, reject only - if paid, continue normal
+
             JButton approveButton = new JButton("Approve");
             approveButton.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(30f));
             approveButton.setBackground(Theme.getSuccess());
@@ -511,31 +510,43 @@ public class RentalHistory extends JPanel {
                 System.out.println(GUIComponents.cardPanel.getComponents().length);
             });
 
-            // JPanel spacing = new JPanel();
-            // spacing.setPreferredSize(new Dimension(250, 100));
-            // spacing.setOpaque(true);
-            // spacing.setBackground(Theme.getBackground());
+            if (rental.getRentalStatus().equals(RentalStatus.PENDING)) {
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                operationsPanel.add(approveButton, gbc);
+                gbc.gridy = 1;
+                operationsPanel.add(rejectButton, gbc);
+                gbc.gridy = 2;
+                operationsPanel.add(viewVehicleButton, gbc);
+            }
 
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            operationsPanel.add(approveButton, gbc);
-            gbc.gridy = 1;
-            operationsPanel.add(rejectButton, gbc);
-            gbc.gridy = 2;
-            operationsPanel.add(pickUpButton, gbc);
-            gbc.gridy = 3;
-            operationsPanel.add(dropOffButton, gbc);
-            gbc.gridy = 4;
-            operationsPanel.add(viewVehicleButton, gbc);
+            if (rental.getRentalStatus().equals(RentalStatus.APPROVED)) {
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                operationsPanel.add(pickUpButton, gbc);
+                gbc.gridy = 1;
+                operationsPanel.add(viewVehicleButton, gbc);
+            }
+
+            if (rental.getRentalStatus().equals(RentalStatus.ACTIVE)) {
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                operationsPanel.add(dropOffButton, gbc);
+                gbc.gridy = 1;
+                operationsPanel.add(viewVehicleButton, gbc);
+            }
         }
 
         gbc.gridy = 0;
         gbc.gridx = 0;
         rentalPanelContainer.add(carPanel, gbc);
         gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.NORTH;
         rentalPanelContainer.add(detailsPanel, gbc);
         gbc.gridx = 2;
+        gbc.anchor = GridBagConstraints.SOUTH;
         rentalPanelContainer.add(operationsPanel, gbc);
+        gbc.anchor = GridBagConstraints.CENTER;
         gbc.gridx = 0;
 
         return rentalPanelContainer;
