@@ -1,7 +1,7 @@
 package datamodels;
 
-import java.time.LocalTime;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Rental {
     private int rentalId;
@@ -17,7 +17,7 @@ public class Rental {
 
     // Default Constructor
     public Rental() {
-        this(0, new Customer(), new Vehicle(), LocalDate.now(), LocalDate.now(), LocalTime.now(), LocalTime.now(), 0.0,
+        this(0, new Customer(), null, LocalDate.now(), LocalDate.now(), LocalTime.now(), LocalTime.now(), 0.0,
                 RentalStatus.PENDING, PaymentStatus.PENDING); // Default values
     }
 
@@ -39,16 +39,8 @@ public class Rental {
     public Rental(int rentalId, Customer customer, Vehicle vehicle, LocalDate startDate, LocalDate endDate,
             LocalTime pickupTime, LocalTime dropoffTime, double totalCost, RentalStatus rentalStatus,
             PaymentStatus paymentStatus) {
+        this(customer, vehicle, startDate, endDate, pickupTime, dropoffTime, totalCost, rentalStatus, paymentStatus);
         this.rentalId = rentalId;
-        this.customer = customer;
-        this.vehicle = vehicle;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.pickupTime = pickupTime;
-        this.dropoffTime = dropoffTime;
-        this.totalCost = totalCost;
-        this.rentalStatus = rentalStatus;
-        this.paymentStatus = paymentStatus;
     }
 
     // Restrict Status Variations
@@ -57,7 +49,7 @@ public class Rental {
     }
 
     public enum PaymentStatus {
-        PENDING, PAID, FAILED
+        PENDING, PAID, FAILED, REFUNDED
     }
 
     // Getters and Setters
@@ -160,7 +152,7 @@ public class Rental {
 
     @Override
     public String toString() {
-        return "Rental{" +
+        return "Rental {" +
                 "rentalId=" + rentalId +
                 ", customer=" + customer.getFullName() +
                 ", vehicle=" + vehicle.getBrand() + vehicle.getModel() +

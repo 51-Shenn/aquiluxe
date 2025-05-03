@@ -1,12 +1,12 @@
 package gui;
 
+import controllers.VehicleController;
 import datamodels.Vehicle;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
+import java.util.List;
 
 public class VehiclesPageDetails extends JPanel {
 
@@ -17,13 +17,15 @@ public class VehiclesPageDetails extends JPanel {
     private JPanel carFeaturesContainer;
     private boolean isFeaturesVisible = false;
     private JPanel emptyBottomPanel = new JPanel();
+    private List<Vehicle> vehicles;
 
     public static JPanel rentalPanel;
 
-    public VehiclesPageDetails(JFrame frame, JPanel panel, Vehicle vehicle) {
+    public VehiclesPageDetails(JFrame frame, JPanel panel, Vehicle vehicle, List<Vehicle> vehicles) {
         this.frame = frame;
         this.panel = panel;
         this.vehicle = vehicle;
+        this.vehicles = vehicles;
         this.setBackground(Theme.getBackground());
         this.setLayout(new BorderLayout());
 
@@ -114,7 +116,7 @@ public class VehiclesPageDetails extends JPanel {
     private JPanel technicalSpecsPanel() {
         ImageIcon downIcon = IconLoader.getDownIcon();
         ImageIcon upIcon = IconLoader.getUpIcon();
-        // sample
+
         JPanel technicalSpecsPanel = new JPanel(new BorderLayout(5, 5));
         technicalSpecsPanel.setPreferredSize(new Dimension(600, 800));
         technicalSpecsPanel.setBackground(Theme.getBackground());
@@ -144,22 +146,14 @@ public class VehiclesPageDetails extends JPanel {
         String color = vehicle.getColor();
 
         // loop through every details of the vehicle and show
-        ImageIcon[] detailsIcons = new ImageIcon[8];
-        ImageIcon transmissionIcon = new ImageIcon("images/vehiclepageicons/manual-transmission.png");
-        ImageIcon fuelIcon = new ImageIcon("images/vehiclepageicons/gas-station.png");
-        ImageIcon seatsIcon = new ImageIcon("images/vehiclepageicons/vehicle-seat.png");
-        ImageIcon carTypeIcon = new ImageIcon("images/vehiclepageicons/chassis.png");
-        ImageIcon capacityIcon = new ImageIcon("images/vehiclepageicons/engine.png");
-        ImageIcon mpgIcon = new ImageIcon("images/vehiclepageicons/fuel-gauge.png");
-        ImageIcon horsepowerIcon = new ImageIcon("images/vehiclepageicons/horse.png");
-        ImageIcon colorIcon = new ImageIcon("images/vehiclepageicons/circle.png");
-        detailsIcons[0] = transmissionIcon;
-        detailsIcons[1] = fuelIcon;
-        detailsIcons[2] = seatsIcon;
-        detailsIcons[3] = carTypeIcon;
-        detailsIcons[4] = capacityIcon;
-        detailsIcons[5] = mpgIcon;
-        detailsIcons[6] = horsepowerIcon;
+        ImageIcon transmissionIcon = IconLoader.getTransmissionIcon();
+        ImageIcon fuelIcon = IconLoader.getGasIcon();
+        ImageIcon seatsIcon = IconLoader.getSeatIcon();
+        ImageIcon carTypeIcon = IconLoader.getChassisIcon();
+        ImageIcon capacityIcon = IconLoader.getEngineIcon();
+        ImageIcon mpgIcon = IconLoader.getFuelGaugeIcon();
+        ImageIcon horsepowerIcon = IconLoader.getHorseIcon();
+        ImageIcon colorIcon = IconLoader.getCircleIcon();
 
         JPanel transmissionPanel = new JPanel(new BorderLayout());
         transmissionPanel.setBackground(Theme.getBackground());
@@ -200,7 +194,7 @@ public class VehiclesPageDetails extends JPanel {
         carTypeLabel.setForeground(Theme.getForeground());
         carTypeLabel.setVerticalTextPosition(JLabel.BOTTOM);
         carTypeLabel.setHorizontalTextPosition(JLabel.CENTER);
-        carTypeLabel.setText(carType);
+        carTypeLabel.setText(carType.substring(0,1).toUpperCase() + carType.substring(1));
         carTypeLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(15f));
         carTypePanel.add(carTypeLabel, BorderLayout.CENTER);
         carTypePanel.setBackground(Theme.getBackground());
@@ -242,9 +236,9 @@ public class VehiclesPageDetails extends JPanel {
         colorPanel.setBackground(Theme.getBackground());
         JLabel colorIconLabel = new JLabel(colorIcon);
         JPanel colorIconPanel = new JPanel(new BorderLayout());
-        colorIconPanel.setBackground(Theme.getBackground());
+        colorIconPanel.setBackground(Color.decode(color));
         colorIconPanel.add(colorIconLabel, BorderLayout.CENTER);
-        JLabel colorLabel = new JLabel(color);
+        JLabel colorLabel = new JLabel(VehicleController.processClosestColorName(Color.decode(color)));
         colorLabel.setBackground(Theme.getBackground());
         colorLabel.setForeground(Theme.getForeground());
         colorLabel.setPreferredSize(new Dimension(0, 25));
@@ -286,31 +280,40 @@ public class VehiclesPageDetails extends JPanel {
         rentButton.setContentAreaFilled(false);
         rentButton.setBorderPainted(false);
         rentButton.setOpaque(true);
-        rentButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent evt) {
-                rentButton.setBackground(Theme.getHoverSpecial());
-            }
+        if (vehicle.getAvailability()) {
+            rentButton.setEnabled(true);
+            rentButton.setBackground(Theme.getSpecial());
+            rentButton.setForeground(Theme.getSpecialForeground());
 
-            @Override
-            public void mouseExited(MouseEvent evt) {
-                rentButton.setBackground(Theme.getSpecial());
-            }
+            rentButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    rentButton.setBackground(Theme.getHoverSpecial());
+                }
 
-            @Override
-            public void mousePressed(MouseEvent evt) {
-                rentButton.setBackground(Theme.getPressedSpecial());
-            }
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    rentButton.setBackground(Theme.getSpecial());
+                }
 
-            @Override
-            public void mouseReleased(MouseEvent evt) {
-                rentButton.setBackground(Theme.getSpecial());
-                rentalPanel = new RentalPage(frame, panel, vehicle);
-                rentalPanel.setBorder(new LineBorder(Color.CYAN, 3));
-                GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
-                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
-            }
-        });
+                @Override
+                public void mousePressed(MouseEvent evt) {
+                    rentButton.setBackground(Theme.getPressedSpecial());
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent evt) {
+                    rentButton.setBackground(Theme.getSpecial());
+                    JPanel rentalPanel = new RentalPage(frame, panel, vehicle);
+                    GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
+                    GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
+                }
+            });
+        } else {
+            rentButton.setEnabled(false);
+            rentButton.setBackground(Color.GRAY);
+            rentButton.setForeground(Theme.getSpecialForeground());
+        }
         rentPanel.add(rentButton);
         buttonsPanel.add(rentPanel, BorderLayout.EAST);
 
@@ -387,18 +390,11 @@ public class VehiclesPageDetails extends JPanel {
     private JPanel moreCarsPanel() {
 
         ImageIcon rightArrowIcon = IconLoader.getRightIcon();
-        Vehicle[] vehicless = new Vehicle[4];
-        List<Vehicle> vehicles = Vehicle.getVehicles();
-
-        for (int i = 0; i < 4; i++) {
-            vehicless[i] = vehicles.get(i);
-        }
-
         // title for Other Cars and a button to view more cars
         JPanel otherCarsTitlePanel = new JPanel(new BorderLayout());
         otherCarsTitlePanel.setPreferredSize(new Dimension(800, 100));
         otherCarsTitlePanel.setBackground(Theme.getBackground());
-        JLabel otherCarsLabel = new JLabel("Other Cars");
+        JLabel otherCarsLabel = new JLabel("Other Vehicles");
         otherCarsLabel.setForeground(Theme.getForeground());
         otherCarsLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(35f));
         JButton viewAllButton = new JButton("View All");
@@ -425,7 +421,8 @@ public class VehiclesPageDetails extends JPanel {
         JPanel carsContainer = new JPanel(new GridLayout(0, 3, 50, 30));
         carsContainer.setBackground(Theme.getBackground());
         int count = 0;
-        for (Vehicle v : vehicless) {
+        VehiclesPage vehiclesPage = new VehiclesPage(frame, panel, VehiclesPage.getUser());
+        for (Vehicle v : vehicles) {
             if (this.vehicle.getBrand().equals(v.getBrand()) && this.vehicle.getModel().equals(v.getModel())) {
                 continue;
             } else if (count == 3) {
@@ -433,7 +430,7 @@ public class VehiclesPageDetails extends JPanel {
             }
             ImageIcon image = null;
             try {
-                image = new ImageIcon(vehicle.getImagePath());
+                image = new ImageIcon(v.getImagePath());
 
                 // Check if any image failed to load
                 if (image.getIconWidth() == -1) {
@@ -446,12 +443,12 @@ public class VehiclesPageDetails extends JPanel {
             Image rImage = image.getImage().getScaledInstance(400, 400, java.awt.Image.SCALE_SMOOTH);
             image = new ImageIcon(rImage);
 
-            String availability = vehicle.isAvailability() ? "AVAILABLE" : "UNAVAILABLE";
-            String rentPrice = "RM" + vehicle.getRentalPriceDay() + "/per day";
+            String availability = v.getAvailability() ? "AVAILABLE" : "UNAVAILABLE";
+            String rentPrice = "RM" + v.getRentalPriceDay() + "/per day";
 
-            carsContainer.add(VehiclesPage.createCarCard(vehicle, image, vehicle.getBrand(), vehicle.getModel(),
-                    vehicle.getTransmission(), vehicle.getFuelType(), vehicle.getVehicleType(),
-                    vehicle.getSeatingCapacity(), rentPrice, availability, frame, panel));
+            carsContainer.add(vehiclesPage.createCarCard(v, image, v.getBrand(), v.getModel(),
+                    v.getTransmission(), v.getFuelType(), v.getVehicleType(),
+                    v.getSeatingCapacity(), rentPrice, availability, frame, panel));
             count++;
         }
 
@@ -490,31 +487,43 @@ public class VehiclesPageDetails extends JPanel {
         carMainFeaturesContainer.setBackground(Theme.getBackground());
         carMainFeaturesContainer.setPreferredSize(new Dimension(1600, 500));
 
-        JPanel featuresContainer = new JPanel(new BorderLayout());
-        featuresContainer.setPreferredSize(new Dimension(1600, 200));
+        JPanel featuresContainer = new JPanel(new GridBagLayout());
+        featuresContainer.setPreferredSize(new Dimension(1600, 500));
         featuresContainer.setBackground(Theme.getBackground());
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
         JLabel featuresLabel = new JLabel("Features");
+
         featuresLabel.setForeground(Theme.getForeground());
         featuresLabel.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(30f));
 
-        JLabel featuresContent = new JLabel(this.vehicle.getFeatures());
-        featuresContent.setForeground(Theme.getSecondaryForeground());
-        featuresContent.setFont(CustomFonts.INSTRUMENT_SANS_SEMI_BOLD.deriveFont(20f));
+        gbc.insets = new Insets(10, 0, 5, 0);
+        featuresContainer.add(featuresLabel, gbc);
 
-        JPanel emptyPanel = new JPanel();
-        emptyPanel.setBackground(Theme.getBackground());
-        emptyPanel.setPreferredSize(new Dimension(1600, 30));
-        JPanel featurePanel = new JPanel(new BorderLayout());
-        featurePanel.setBackground(Theme.getBackground());
-        featurePanel.add(emptyPanel, BorderLayout.NORTH);
-        featurePanel.add(featuresLabel, BorderLayout.CENTER);
+        String[] features = this.vehicle.getFeatures().split(",");
+        for (String feature : features) {
+            feature = "- " + feature;
+            JLabel featuresContent = new JLabel(feature);
+            featuresContent.setForeground(Theme.getSecondaryForeground());
+            featuresContent.setFont(CustomFonts.INSTRUMENT_SANS_SEMI_BOLD.deriveFont(20f));
+            gbc.insets = new Insets(0, 0, 5, 0);
+            gbc.gridy++;
+            featuresContainer.add(featuresContent, gbc);
+        }
 
-        featuresContainer.add(featurePanel, BorderLayout.NORTH);
-        featuresContainer.add(featuresContent, BorderLayout.CENTER);
+        gbc.gridy++;
+        gbc.weighty = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        featuresContainer.add(Box.createVerticalGlue(), gbc);
 
         carMainFeaturesContainer.add(featuresContainer, BorderLayout.CENTER);
-
         carMainFeaturesContainer.add(sidePanel(), BorderLayout.EAST);
         carMainFeaturesContainer.add(sidePanel(), BorderLayout.WEST);
 
@@ -524,8 +533,8 @@ public class VehiclesPageDetails extends JPanel {
     // Bottom panel
     private JPanel bottomBar() {
         JPanel bottomBar = new JPanel();
-        bottomBar.setBackground(Color.BLACK);
-        bottomBar.setPreferredSize(new Dimension(800, 500));
+        bottomBar.setBackground(Theme.getBackground());
+        bottomBar.setPreferredSize(new Dimension(800, 100));
 
         return bottomBar;
     }

@@ -19,19 +19,28 @@ public class MainApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setAlwaysOnTop(false);
         setIconImage(IconLoader.getAppIcon().getImage()); // Window Icon
-        JPanel contentPanel = new JPanel(new BorderLayout());
+
+        JPanel contentPanel;
+        contentPanel = new JPanel(new BorderLayout());
+
+        // swap signin, signup, forgotpassword, theme main page, other theme main page
+        // inside main page cardlayout swap between home, vehicles, vehicles details,
+        // rental page, rental history, payment history, about us, contact us
 
         File accountsFile = new File("files/settings/accounts.txt");
         User currentUser = accountsFile.exists() ? UserController.loadCurrentUser(accountsFile) : null;
         add(new GUIComponents(this, contentPanel, currentUser), BorderLayout.NORTH);
         add(contentPanel, BorderLayout.CENTER);
 
-        GUIComponents.showPage("HomePage");
-
+        setAlwaysOnTop(true);
         setVisible(true);
         setAlwaysOnTop(false);
+    }
 
-        GUIComponents.loadVehiclesPageAsync(this, contentPanel);
+    private void loadDataAndCacheImages() {
+        vehicles = VehicleController.processVehicles(); // Get all vehicles
+        Vehicle.setVehicles(vehicles); // Store in Vehicle class
+        ImageLoader.loadImages(vehicles); // Preload images
     }
 
     public static void main(String[] args) {
