@@ -617,6 +617,7 @@ public class OverflowMenu extends JLayeredPane {
                             this.user = everyUser;
 
                             frame.getLayeredPane().remove(this);
+                            UserController.switchToAccount(this.user, ACCOUNTS_FILE);
                             GUIComponents.refreshPages(this.frame, this.panel, this.user, guiComponents);
 
                             Dialog dialog = new Dialog(this.frame);
@@ -627,7 +628,6 @@ public class OverflowMenu extends JLayeredPane {
                                     "All switched! You're logged in as " + this.user.getUsername(),
                                     false);
 
-                            UserController.switchToAccount(this.user, ACCOUNTS_FILE);
                         });
 
                         gbc.insets = new Insets(5, 30, 5, 30);
@@ -843,7 +843,17 @@ public class OverflowMenu extends JLayeredPane {
                 UserController.useTheme(newTheme, THEME_FILE);
 
                 frame.getLayeredPane().remove(this);
-                GUIComponents.refreshPages(this.frame, this.panel, this.user, guiComponents);
+
+                
+                MainApp.getGuiComponents().getFrame().getContentPane().removeAll();
+
+                MainApp.setGuiComponents(new GUIComponents(MainApp.getGuiComponents().getFrame(),
+                        (JPanel) MainApp.getGuiComponents().getFrame().getContentPane(),
+                        this.user));
+                MainApp.getGuiComponents().getFrame().getContentPane().add(MainApp.getGuiComponents(), BorderLayout.NORTH);
+
+                MainApp.getGuiComponents().getFrame().revalidate();
+                MainApp.getGuiComponents().getFrame().repaint();
             });
         }
         if (text.equals("Sign Up")) {

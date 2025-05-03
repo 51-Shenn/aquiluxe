@@ -188,7 +188,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                             } catch (Exception e) {
                                 System.err.println(e.getMessage());
                                 Dialog dialogError = new Dialog();
-                                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
+                                GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehiclesPage");
                                 dialogError.showDialog("ERROR",
                                         "Account",
                                         "No Account Signed In",
@@ -205,7 +205,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                                 }
                             } catch (Exception e) {
                                 System.err.println(e.getMessage());
-                                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
+                                GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehiclesPage");
                                 if (user.getUserType() == "Customer") {
                                     Dialog dialogError = new Dialog();
                                     dialogError.showDialog("ERROR",
@@ -225,8 +225,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
                                 return;
                             }
                             JPanel rentalPanel = new RentalPage(frame, panel, vehicle);
-                            GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
-                            GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
+                            GUIComponents.subCardPanel.add(rentalPanel, "RentalPage");
+                            GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "RentalPage");
                         }
                     });
                 } else {
@@ -275,7 +275,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                         } catch (Exception e) {
                             System.err.println(e.getMessage());
                             Dialog dialogError = new Dialog();
-                            GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
+                            GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehiclesPage");
                             dialogError.showDialog("ERROR",
                                     "Account",
                                     "No Account Signed In",
@@ -292,7 +292,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                             }
                         } catch (Exception e) {
                             System.err.println(e.getMessage());
-                            GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
+                            GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehiclesPage");
                             Dialog dialogError = new Dialog();
                             dialogError.showDialog("ERROR",
                                     "Identity Card",
@@ -303,8 +303,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
                         }
 
                         JPanel rentalPanel = new RentalPage(frame, panel, vehicle);
-                        GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
-                        GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
+                        GUIComponents.subCardPanel.add(rentalPanel, "RentalPage");
+                        GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "RentalPage");
                     }
                 });
             } else {
@@ -436,8 +436,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 // Check if the click is on the image
                 if (SwingUtilities.isLeftMouseButton(e)) {
                     JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, firstFourVehicles);
-                    GUIComponents.cardPanel.add(detailsPanel, "VehicleDetailsPage");
-                    GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
+                    GUIComponents.subCardPanel.add(detailsPanel, "VehicleDetailsPage");
+                    GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehicleDetailsPage");
                 }
             }
 
@@ -515,8 +515,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
                         // Check if the click is on the image
                         if (SwingUtilities.isLeftMouseButton(e)) {
                             JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, firstFourVehicles);
-                            GUIComponents.cardPanel.add(detailsPanel, "VehicleDetailsPage");
-                            GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
+                            GUIComponents.subCardPanel.add(detailsPanel, "VehicleDetailsPage");
+                            GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehicleDetailsPage");
                         }
                     }
 
@@ -551,8 +551,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
                     // Check if the click is on the image
                     if (SwingUtilities.isLeftMouseButton(e)) {
                         JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, firstFourVehicles);
-                        GUIComponents.cardPanel.add(detailsPanel, "VehicleDetailsPage");
-                        GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
+                        GUIComponents.subCardPanel.add(detailsPanel, "VehicleDetailsPage");
+                        GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehicleDetailsPage");
                     }
                 }
 
@@ -1690,7 +1690,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         rightContainer.add(removeButton, gbc);
-        
+
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
@@ -2512,7 +2512,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         JPanel imageUploadPanel = new JPanel(new BorderLayout());
         imageUploadPanel.setBackground(Theme.getBackground());
 
-        selectButton = new RoundedButton(10,Theme.getBackground());
+        selectButton = new RoundedButton(10, Theme.getBackground());
         selectButton.setText("Select Image");
         selectButton.setFocusable(false);
         selectButton.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
@@ -2520,8 +2520,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
         selectButton.setMinimumSize(new Dimension(400, 50));
         selectButton.setForeground(Theme.getForeground());
         selectButton.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(10, 15, 10, 15)));
-        
-        removeButton = new RoundedButton(10,Theme.getBackground());
+
+        removeButton = new RoundedButton(10, Theme.getBackground());
         removeButton.setText("Remove");
         removeButton.setFocusable(false);
         removeButton.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
@@ -2718,8 +2718,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
         // Create completely fresh VehiclesPage instance
         JPanel refreshedPage = new VehiclesPage(frame, panel, user);
         // Replace current view in card layout
-        GUIComponents.cardPanel.add(refreshedPage, "VehiclesPage");
-        GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
+        GUIComponents.subCardPanel.add(refreshedPage, "VehiclesPage");
+        GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehiclesPage");
     }
 
     private boolean validateFormFields() {

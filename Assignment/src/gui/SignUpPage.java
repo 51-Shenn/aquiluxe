@@ -179,7 +179,11 @@ public class SignUpPage extends AuthenticationPage {
         closeButton.setContentAreaFilled(false);
         closeButton.setFocusPainted(false);
         closeButton.addActionListener(e -> {
-            new Navigation().homePageNavigation(this.frame, this.panel, this.user);
+            Navigation.setWindowsLookAndFeel();
+            MainApp.getGuiComponents().setVisible(true);
+            GUIComponents.topBarPanel.setVisible(true);
+            GUIComponents.mainCardLayout.show(GUIComponents.mainCardPanel, "MainPage");
+            GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "HomePage");
         });
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -345,7 +349,7 @@ public class SignUpPage extends AuthenticationPage {
         linkButton.setBorder(new EmptyBorder(0, 0, 0, 0));
         linkButton.setHorizontalAlignment(SwingConstants.LEFT);
         linkButton.addActionListener(e -> {
-            this.frame.setContentPane(new SignInPage(this.frame, this.panel, this.user));
+            GUIComponents.mainCardLayout.show(GUIComponents.mainCardPanel, "SignInPage");
             this.frame.revalidate();
             this.frame.repaint();
         });
@@ -383,17 +387,17 @@ public class SignUpPage extends AuthenticationPage {
                         confirmPasswordValidationLabel);
                 if (isValidUserDetails) {
                     currentPage = "USER";
-                    this.frame.setContentPane(new SignInPage(this.frame, this.panel, this.user));
+                    GUIComponents.mainCardLayout.show(GUIComponents.mainCardPanel, "SignInPage");
                     this.frame.validate();
+                    this.frame.revalidate();
 
                     Dialog dialog = new Dialog(this.frame);
                     dialog.showDialog(
-                        "SUCCESS",
-                        "Sign Up",
-                        "Account Created Successfully",
-                        "Awesome! Your account is ready — let's get you signed in!",
-                        false
-                    );
+                            "SUCCESS",
+                            "Sign Up",
+                            "Account Created Successfully",
+                            "Awesome! Your account is ready — let's get you signed in!",
+                            false);
                 }
             }
         });

@@ -52,6 +52,8 @@ public class RentalHistory extends JPanel {
     private Map<Rental, JPanel> rentalPanelMap = new HashMap<>();
     private RentalController rentalController = new RentalController();
 
+    private String rentalsTitle = "Rentals";
+
     private GridBagConstraints gbc = new GridBagConstraints();
 
     public RentalHistory(JFrame frame, JPanel panel, User user) {
@@ -67,15 +69,12 @@ public class RentalHistory extends JPanel {
             System.out.println(this.user.getFullName() + " loaded user");
 
             if (this.user.getUserType().equals("Customer")) {
-                System.out.println(this.user.getFullName() + " C1");
                 this.customer = UserDAO.getCustomerById(this.user);
-                System.out.println(this.customer.getFullName() + " C1");
+                this.rentalsTitle = "My Rentals";
             } else if (this.user.getUserType().equals("Admin")) {
-                System.out.println(this.user.getFullName() + " A1");
                 this.admin = UserDAO.getAdminById(this.user);
-                System.out.println(this.admin.getFullName() + " A1");
+                this.rentalsTitle = "Manage Rentals";
             } else {
-                System.out.println(this.user.getFullName() + " G1");
                 this.customer = UserDAO.getCustomerById(this.user);
             }
 
@@ -109,7 +108,7 @@ public class RentalHistory extends JPanel {
 
     private JLabel createTitlePanel() {
         // Title
-        JLabel titleLabel = new JLabel("Rental History", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel(this.rentalsTitle, SwingConstants.CENTER);
         titleLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(40f));
         titleLabel.setForeground(Theme.getSpecial());
         titleLabel.setBackground(Theme.getBackground());
@@ -211,33 +210,42 @@ public class RentalHistory extends JPanel {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate startDate = rental.getRentStartDate();
         String startDateText = "Start: " + startDate.format(dateFormatter);
-        JLabel carTransmissionLabel = createLabel(
+        JLabel startDateLabel = createLabel(
                 startDateText,
                 25f, Theme.getForeground(), Theme.getBackground(), 50, -1);
-        carTransmissionLabel.setHorizontalAlignment(JLabel.LEFT);
+        startDateLabel.setHorizontalAlignment(JLabel.LEFT);
 
         LocalDate endDate = rental.getRentEndDate();
         String endDateText = "End: " + endDate.format(dateFormatter);
-        JLabel carFuelLabel = createLabel(
+        JLabel endDateLabel = createLabel(
                 endDateText,
                 25f, Theme.getForeground(), Theme.getBackground(), 50, -1);
-        carFuelLabel.setHorizontalAlignment(JLabel.LEFT);
+        endDateLabel.setHorizontalAlignment(JLabel.LEFT);
 
-        JLabel carRentalPriceLabel = createLabel(
-                "RM " + String.format("%,.2f", rental.getRentTotalCost()),
+        JLabel pickUpTimeLabel = createLabel(
+                "Pick Up: " + rental.getPickUpTime().toString(),
                 25f, Theme.getForeground(), Theme.getBackground(), 50, -1);
-        carRentalPriceLabel.setHorizontalAlignment(JLabel.LEFT);
+        pickUpTimeLabel.setHorizontalAlignment(JLabel.LEFT);
+        pickUpTimeLabel.setName("pickUpTime");
+
+        JLabel dropOffTimeLabel = createLabel(
+                "Drop Off: " + rental.getDropoffTime().toString(),
+                25f, Theme.getForeground(), Theme.getBackground(), 50, -1);
+        dropOffTimeLabel.setHorizontalAlignment(JLabel.LEFT);
+        dropOffTimeLabel.setName("dropOffTime");
 
         // gblayout gridy position
         gbc.gridy = 0;
         carDetailsPanel.add(carNameLabel, gbc);
         gbc.insets.left = 30; // indent for other labels
         gbc.gridy = 1;
-        carDetailsPanel.add(carTransmissionLabel, gbc);
+        carDetailsPanel.add(startDateLabel, gbc);
         gbc.gridy = 2;
-        carDetailsPanel.add(carFuelLabel, gbc);
+        carDetailsPanel.add(endDateLabel, gbc);
         gbc.gridy = 3;
-        carDetailsPanel.add(carRentalPriceLabel, gbc);
+        carDetailsPanel.add(pickUpTimeLabel, gbc);
+        gbc.gridy = 4;
+        carDetailsPanel.add(dropOffTimeLabel, gbc);
         gbc.insets.left = 0; // reset indent
 
         // add label in panel
@@ -265,14 +273,10 @@ public class RentalHistory extends JPanel {
             paymentStatusLabel.setHorizontalAlignment(JLabel.LEFT);
             paymentStatusLabel.setName("paymentStatus");
 
-            // payment date
-            LocalDate paymentDate = rental.getRentStartDate();
-            String paymentDateText = "Payment Date: " + paymentDate.format(dateFormatter);
-            JLabel paymentDateLabel = createLabel(
-                    paymentDateText,
+            JLabel carRentalPriceLabel = createLabel(
+                    "Total Cost: RM " + String.format("%,.2f", rental.getRentTotalCost()),
                     25f, Theme.getForeground(), Theme.getBackground(), 50, -1);
-            paymentDateLabel.setHorizontalAlignment(JLabel.LEFT);
-            paymentDateLabel.setName("paymentDate");
+            carRentalPriceLabel.setHorizontalAlignment(JLabel.LEFT);
 
             gbc.gridx = 0;
             gbc.gridy = 0;
@@ -280,20 +284,32 @@ public class RentalHistory extends JPanel {
             gbc.gridy = 1;
             detailsPanel.add(paymentStatusLabel, gbc);
             gbc.gridy = 2;
-            detailsPanel.add(paymentDateLabel, gbc);
+            detailsPanel.add(carRentalPriceLabel, gbc);
         }
 
         if (this.admin != null) {
             // customer name
+            String customerNameText = "None";
+            try {
+                customerNameText = rental.getRentCustomer().getFullName();
+            } catch (Exception e) {
+                customerNameText = "Deleted";
+            }
             JLabel customerNameLabel = createLabel(
-                    rental.getRentCustomer().getFullName(),
-                    25f, Theme.getForeground(), Theme.getBackground(), 50, -1);
+                    customerNameText,
+                    30f, Theme.getForeground(), Theme.getBackground(), 50, -1);
             customerNameLabel.setHorizontalAlignment(JLabel.LEFT);
             customerNameLabel.setName("customerName");
 
             // customer ic
+            String customerICText = "None";
+            try {
+                customerICText = rental.getRentCustomer().getLicense();
+            } catch (Exception e) {
+                customerICText = "Deleted";
+            }
             JLabel customerICLabel = createLabel(
-                    rental.getRentCustomer().getLicense(),
+                    customerICText,
                     25f, Theme.getForeground(), Theme.getBackground(), 50, -1);
             customerICLabel.setHorizontalAlignment(JLabel.LEFT);
             customerICLabel.setName("customerIC");
@@ -312,27 +328,16 @@ public class RentalHistory extends JPanel {
             paymentStatusLabel.setHorizontalAlignment(JLabel.LEFT);
             paymentStatusLabel.setName("paymentStatus");
 
-            // payment date
-            LocalDate paymentDate = rental.getRentStartDate();
-            String paymentDateText = "Payment Date: " + paymentDate.format(dateFormatter);
-            JLabel paymentDateLabel = createLabel(
-                    paymentDateText,
-                    25f, Theme.getForeground(), Theme.getBackground(), 50, -1);
-            paymentDateLabel.setHorizontalAlignment(JLabel.LEFT);
-            paymentDateLabel.setName("paymentDate");
-
             gbc.gridx = 0;
             gbc.gridy = 0;
             detailsPanel.add(customerNameLabel, gbc);
+            gbc.insets.left = 30;
             gbc.gridy = 1;
             detailsPanel.add(customerICLabel, gbc);
             gbc.gridy = 2;
-            gbc.insets.left = 30;
             detailsPanel.add(rentalStatusLabel, gbc);
             gbc.gridy = 3;
             detailsPanel.add(paymentStatusLabel, gbc);
-            gbc.gridy = 4;
-            detailsPanel.add(paymentDateLabel, gbc);
             gbc.insets.left = 0;
         }
 
@@ -374,13 +379,13 @@ public class RentalHistory extends JPanel {
                 GUIComponents.rentalHistoryPanel.revalidate();
                 GUIComponents.rentalHistoryPanel.repaint();
 
-                System.out.println(rental.getRentVehicle().getModel() +
-                        rental.getRentalStatus().toString() + rental.getPaymentStatus().toString());
             });
 
             if (!rental.getRentalStatus().equals(RentalStatus.PENDING)) {
                 cancelButton.setVisible(false);
             }
+
+            // delete rentals - hide rental
 
             // view vehicle details button
             JButton viewVehicleButton = new JButton(
@@ -394,16 +399,16 @@ public class RentalHistory extends JPanel {
             viewVehicleButton.setFocusPainted(false);
             viewVehicleButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             viewVehicleButton.addActionListener(e -> {
-                System.out.println(GUIComponents.cardPanel.getComponents().length);
+                System.out.println(GUIComponents.subCardPanel.getComponents().length);
                 JPanel vehicleDetailsPanel = new VehiclesPageDetails(frame, panel, rental.getRentVehicle(),
                         Vehicle.getVehicles());
-                GUIComponents.cardPanel.add(vehicleDetailsPanel, "VehicleDetailsPage");
+                GUIComponents.subCardPanel.add(vehicleDetailsPanel, "VehicleDetailsPage");
                 vehicleDetailsPanel.revalidate();
                 vehicleDetailsPanel.repaint();
-                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
-                GUIComponents.cardPanel.revalidate();
-                GUIComponents.cardPanel.repaint();
-                System.out.println(GUIComponents.cardPanel.getComponents().length);
+                GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehicleDetailsPage");
+                GUIComponents.subCardPanel.revalidate();
+                GUIComponents.subCardPanel.repaint();
+                System.out.println(GUIComponents.subCardPanel.getComponents().length);
             });
 
             JPanel spacing = new JPanel();
@@ -421,6 +426,7 @@ public class RentalHistory extends JPanel {
         }
 
         if (this.admin != null) {
+
             JButton approveButton = new JButton("Approve");
             approveButton.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(30f));
             approveButton.setBackground(Theme.getSuccess());
@@ -437,9 +443,6 @@ public class RentalHistory extends JPanel {
                 rentalController.updateRental(rental, rental.getRentalStatus());
                 GUIComponents.rentalHistoryPanel.revalidate();
                 GUIComponents.rentalHistoryPanel.repaint();
-
-                System.out.println(rental.getRentVehicle().getModel() +
-                        rental.getRentalStatus().toString() + rental.getPaymentStatus().toString());
             });
 
             JButton rejectButton = new JButton("Reject");
@@ -458,9 +461,6 @@ public class RentalHistory extends JPanel {
                 rentalController.updateRental(rental, rental.getRentalStatus());
                 GUIComponents.rentalHistoryPanel.revalidate();
                 GUIComponents.rentalHistoryPanel.repaint();
-
-                System.out.println(rental.getRentVehicle().getModel() +
-                        rental.getRentalStatus().toString() + rental.getPaymentStatus().toString());
             });
 
             JButton pickUpButton = new JButton("Pick Up");
@@ -479,9 +479,6 @@ public class RentalHistory extends JPanel {
                 rentalController.updateRental(rental, rental.getRentalStatus());
                 GUIComponents.rentalHistoryPanel.revalidate();
                 GUIComponents.rentalHistoryPanel.repaint();
-
-                System.out.println(rental.getRentVehicle().getModel() +
-                        rental.getRentalStatus().toString() + rental.getPaymentStatus().toString());
             });
 
             JButton dropOffButton = new JButton("Drop Off");
@@ -500,9 +497,25 @@ public class RentalHistory extends JPanel {
                 rentalController.updateRental(rental, rental.getRentalStatus());
                 GUIComponents.rentalHistoryPanel.revalidate();
                 GUIComponents.rentalHistoryPanel.repaint();
+            });
 
-                System.out.println(rental.getRentVehicle().getModel() +
-                        rental.getRentalStatus().toString() + rental.getPaymentStatus().toString());
+            // overdue button
+            JButton overdueButton = new JButton("Overdue");
+            overdueButton.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(30f));
+            overdueButton.setBackground(Theme.getError());
+            overdueButton.setForeground(Theme.getErrorForeground());
+            overdueButton.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+            overdueButton.setPreferredSize(new Dimension(100, 50));
+            overdueButton.setBorderPainted(false);
+            overdueButton.setFocusPainted(false);
+            overdueButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            overdueButton.addActionListener(e -> {
+                overdueButton.setVisible(false);
+                rental.setRentalStatus(RentalStatus.OVERDUE);
+                updateRentalPanel(rental);
+                rentalController.updateRental(rental, rental.getRentalStatus());
+                GUIComponents.rentalHistoryPanel.revalidate();
+                GUIComponents.rentalHistoryPanel.repaint();
             });
 
             // view vehicle details button
@@ -517,43 +530,60 @@ public class RentalHistory extends JPanel {
             viewVehicleButton.setFocusPainted(false);
             viewVehicleButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             viewVehicleButton.addActionListener(e -> {
-                System.out.println(GUIComponents.cardPanel.getComponents().length);
+                System.out.println(GUIComponents.subCardPanel.getComponents().length);
                 JPanel vehicleDetailsPanel = new VehiclesPageDetails(frame, panel, rental.getRentVehicle(),
                         Vehicle.getVehicles());
-                GUIComponents.cardPanel.add(vehicleDetailsPanel, "VehicleDetailsPage");
+                GUIComponents.subCardPanel.add(vehicleDetailsPanel, "VehicleDetailsPage");
                 vehicleDetailsPanel.revalidate();
                 vehicleDetailsPanel.repaint();
-                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
-                GUIComponents.cardPanel.revalidate();
-                GUIComponents.cardPanel.repaint();
-                System.out.println(GUIComponents.cardPanel.getComponents().length);
+                GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehicleDetailsPage");
+                GUIComponents.subCardPanel.revalidate();
+                GUIComponents.subCardPanel.repaint();
+                System.out.println(GUIComponents.subCardPanel.getComponents().length);
             });
 
-            // JPanel spacing = new JPanel();
-            // spacing.setPreferredSize(new Dimension(250, 100));
-            // spacing.setOpaque(true);
-            // spacing.setBackground(Theme.getBackground());
+            if (rental.getRentalStatus().equals(RentalStatus.PENDING)) {
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                operationsPanel.add(approveButton, gbc);
+                gbc.gridy = 1;
+                operationsPanel.add(rejectButton, gbc);
+                gbc.gridy = 2;
+                operationsPanel.add(viewVehicleButton, gbc);
+            }
 
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            operationsPanel.add(approveButton, gbc);
-            gbc.gridy = 1;
-            operationsPanel.add(rejectButton, gbc);
-            gbc.gridy = 2;
-            operationsPanel.add(pickUpButton, gbc);
-            gbc.gridy = 3;
-            operationsPanel.add(dropOffButton, gbc);
-            gbc.gridy = 4;
-            operationsPanel.add(viewVehicleButton, gbc);
+            if (rental.getRentalStatus().equals(RentalStatus.APPROVED)) {
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                rejectButton.setText("Cancel");
+                operationsPanel.add(rejectButton, gbc);
+                gbc.gridy = 1;
+                operationsPanel.add(pickUpButton, gbc);
+                gbc.gridy = 2;
+                operationsPanel.add(viewVehicleButton, gbc);
+            }
+
+            if (rental.getRentalStatus().equals(RentalStatus.ACTIVE)) {
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                operationsPanel.add(dropOffButton, gbc);
+                gbc.gridy = 1;
+                operationsPanel.add(overdueButton, gbc);
+                gbc.gridy = 2;
+                operationsPanel.add(viewVehicleButton, gbc);
+            }
         }
 
         gbc.gridy = 0;
         gbc.gridx = 0;
         rentalPanelContainer.add(carPanel, gbc);
         gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.NORTH;
         rentalPanelContainer.add(detailsPanel, gbc);
         gbc.gridx = 2;
+        gbc.anchor = GridBagConstraints.SOUTH;
         rentalPanelContainer.add(operationsPanel, gbc);
+        gbc.anchor = GridBagConstraints.CENTER;
         gbc.gridx = 0;
 
         return rentalPanelContainer;
@@ -572,6 +602,7 @@ public class RentalHistory extends JPanel {
         return label;
     }
 
+    // after update, refresh the rental history page
     private void updateRentalPanel(Rental rental) {
         JPanel panel = rentalPanelMap.get(rental);
         if (panel != null) {

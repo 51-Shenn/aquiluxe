@@ -3,15 +3,23 @@ package gui;
 import controllers.UserController;
 import controllers.VehicleController;
 import datamodels.User;
+import datamodels.Vehicle;
 import java.awt.*;
 import java.io.File;
-import javax.swing.*;
 import java.util.List;
-import datamodels.Vehicle;
+import javax.swing.*;
 
 public class MainApp extends JFrame {
 
     private List<Vehicle> vehicles;
+    private static GUIComponents guiComponents;
+
+    public static GUIComponents getGuiComponents() {
+        return guiComponents;
+    }
+    public static void setGuiComponents(GUIComponents components) {
+        guiComponents = components;
+    }
 
     public MainApp() {
         Navigation.setWindowsLookAndFeel();
@@ -30,16 +38,14 @@ public class MainApp extends JFrame {
         JPanel contentPanel;
         contentPanel = new JPanel(new BorderLayout());
 
-        // swap signin, signup, forgotpassword, theme main page, other theme main page
-        // inside main page cardlayout swap between home, vehicles, vehicles details,
-        // rental page, rental history, payment history, about us, contact us
-
         File accountsFile = new File("files/settings/accounts.txt");
         if (accountsFile.exists()) {
             User currentUser = UserController.loadCurrentUser(accountsFile);
-            add(new GUIComponents(this, contentPanel, currentUser), BorderLayout.NORTH);
+            guiComponents = new GUIComponents(this, contentPanel, currentUser);
+            add(guiComponents, BorderLayout.NORTH);
         } else {
-            add(new GUIComponents(this, contentPanel, null), BorderLayout.NORTH);
+            guiComponents = new GUIComponents(this, contentPanel, null);
+            add(guiComponents, BorderLayout.NORTH);
         }
         add(contentPanel, BorderLayout.CENTER);
 

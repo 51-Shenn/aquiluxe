@@ -291,6 +291,24 @@ public class UserDAO {
         }
     }
 
+    // update customer profile values
+    public static boolean updateCustomerColumnValue(int userId, String column, String value) {
+        String sql = "UPDATE customers SET " + column + " = ? WHERE user_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, value);
+            stmt.setInt(2, userId);
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("\nFAILED TO UPDATE CUSTOMER\n");
+        }
+    }
+
     // delete user
     public static boolean deleteUser(User user) {
         String sql = "DELETE FROM users WHERE user_id = ?";

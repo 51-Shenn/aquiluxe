@@ -208,7 +208,7 @@ public class HomePage extends JPanel {
             topBarButtons[1].setForeground(Theme.getSpecial());
             topBarButtons[1].setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
 
-            GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
+            GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehiclesPage");
         });
 
         gbc.insets = new Insets(70, 0, 0, 0);
@@ -307,7 +307,6 @@ public class HomePage extends JPanel {
 
                     this.user = UserController.loadCurrentUser(ACCOUNTS_FILE);
                     GUIComponents.refreshPages(this.frame, this.panel, this.user, guiComponents);
-                    GUIComponents.cardLayout.show(GUIComponents.cardPanel, "HomePage");
                 }
             });
             signOutButton.addMouseListener(new MouseAdapter() {

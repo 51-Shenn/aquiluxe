@@ -34,13 +34,13 @@ public class Navigation {
     }
 
     private void authenticationPageNavigation(JFrame frame, JPanel panel, User user, String pageToNavigate) {
-        frame.getContentPane().removeAll();
+        // frame.getContentPane().removeAll();
 
         removeWindowsLookAndFeel();
 
         switch (pageToNavigate) {
-            case "SIGN_IN" -> frame.add(new SignInPage(frame, panel, user));
-            case "SIGN_UP" -> frame.add(new SignUpPage(frame, panel, user));
+            case "SIGN_IN" -> GUIComponents.mainCardLayout.show(GUIComponents.mainCardPanel, "SignInPage");
+            case "SIGN_UP" -> GUIComponents.mainCardLayout.show(GUIComponents.mainCardPanel, "SignUpPage");
         }
 
         frame.revalidate();
@@ -57,10 +57,10 @@ public class Navigation {
         frame.add(newGuiComponents, BorderLayout.NORTH);
         frame.add(panel, BorderLayout.CENTER);
 
-        GUIComponents.cardPanel.remove(GUIComponents.homePanel);
+        GUIComponents.subCardPanel.remove(GUIComponents.homePanel);
         GUIComponents.homePanel = new HomePage(frame, panel, user, newGuiComponents);
-        GUIComponents.cardPanel.add(GUIComponents.homePanel, "HomePage");
-        GUIComponents.cardLayout.show(GUIComponents.cardPanel, "HomePage");
+        GUIComponents.subCardPanel.add(GUIComponents.homePanel, "HomePage");
+        GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "HomePage");
         // panel.removeAll();
         // panel.add(new HomePage(frame, panel, user, newGuiComponents),
         // BorderLayout.CENTER);
@@ -71,6 +71,8 @@ public class Navigation {
     // from home page
     public ActionListener toSignInPage(JFrame frame, JPanel panel, User user) {
         return e -> {
+            MainApp.getGuiComponents().setVisible(false);
+            GUIComponents.topBarPanel.setVisible(false);
             authenticationPageNavigation(frame, panel, user, "SIGN_IN");
         };
     }
@@ -79,6 +81,8 @@ public class Navigation {
     public ActionListener toSignInPage(JFrame frame, JPanel panel, JLayeredPane layeredPane, User user) {
         return e -> {
             frame.getLayeredPane().remove(layeredPane);
+            MainApp.getGuiComponents().setVisible(false);
+            GUIComponents.topBarPanel.setVisible(false);
             authenticationPageNavigation(frame, panel, user, "SIGN_IN");
         };
     }
@@ -86,6 +90,8 @@ public class Navigation {
     // from home page
     public ActionListener toSignUpPage(JFrame frame, JPanel panel, User user) {
         return e -> {
+            MainApp.getGuiComponents().setVisible(false);
+            GUIComponents.topBarPanel.setVisible(false);
             authenticationPageNavigation(frame, panel, user, "SIGN_UP");
         };
     }
@@ -94,6 +100,8 @@ public class Navigation {
     public ActionListener toSignUpPage(JFrame frame, JPanel panel, JLayeredPane layeredPane, User user) {
         return e -> {
             frame.getLayeredPane().remove(layeredPane);
+            MainApp.getGuiComponents().setVisible(false);
+            GUIComponents.topBarPanel.setVisible(false);
             authenticationPageNavigation(frame, panel, user, "SIGN_UP");
         };
     }

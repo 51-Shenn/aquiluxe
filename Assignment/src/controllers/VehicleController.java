@@ -1,14 +1,12 @@
 package controllers;
 
 import datamodels.Vehicle;
-
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
-
 import services.VehicleService;
 
 public class VehicleController {
@@ -189,23 +187,6 @@ public class VehicleController {
 
         return VehicleService.validateImage(selectedImageFile, selectedImagePreview);
     }
-
-    // submit add car (get all values)
-    // public static String processAddCar(String vinNumber, String
-    // registrationNumber, String brand, String model, String rentalPriceDay, String
-    // transmission, String fueltype, String vehicleType, Color color, File
-    // selectedImageFile, BufferedImage selectedImagePreview) {
-
-    // else {
-    // return "success";
-    // }
-    // }
-
-    // validate vinNumber (18digit)
-
-    // validate color (color cannot be null)
-
-    // all cannot be null except features
 
     // validate picture (must be square and image naming must be distinct)
     public static boolean processImageSaving(File selectedImageFile, BufferedImage selectedImagePreview) {
