@@ -56,15 +56,6 @@ public class Customer extends User {
 
     @Override
     public String toString() {
-        return " Customer { " +
-                "userId = " + userId +
-                ", fullName = '" + fullName + '\'' +
-                ", gender = '" + gender + '\'' +
-                ", phoneNumber = '" + phoneNumber + '\'' +
-                ", userEmail = '" + userEmail + '\'' +
-                ", username = '" + username + '\'' +
-                ", address = '" + address + '\'' +
-                ", license = '" + license + '\'' +
-                " }";
+        return super.toString() + String.format("Address: %s\n" + "License: %s\n", address, license);
     }
 }

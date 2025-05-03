@@ -244,25 +244,27 @@ public abstract class Vehicle {
 
     @Override
     public String toString() {
-        return " Vehicle { " +
-                "vehicleId = " + vehicleId +
-                ", imagePath = '" + imagePath + '\'' +
-                ", brand = '" + brand + '\'' +
-                ", model = '" + model + '\'' +
-                ", year = '" + year + '\'' +
-                ", capacity = '" + capacity + '\'' +
-                ", horsepower = '" + horsepower + '\'' +
-                ", color = '" + color + '\'' +
-                ", mpg = '" + mpg + '\'' +
-                ", vinNumber = '" + vinNumber + '\'' +
-                ", registrationNumber = '" + registrationNumber + '\'' +
-                ", rentalPriceDay = '" + rentalPriceDay + '\'' +
-                ", transmission = '" + transmission + '\'' +
-                ", fuelType = '" + fuelType + '\'' +
-                ", vehicleType = '" + vehicleType + '\'' +
-                ", seatingCapacity = '" + seatingCapacity + '\'' +
-                ", availability = '" + availability + '\'' +
-                ", features = '" + features + '\'' +
-                " }";
+        return String.format(
+            "Vehicle ID: %d\n" + 
+            "Image Path: %s\n" + 
+            "Brand: %s\n" + 
+            "Model: %s\n" + 
+            "Year: %d\n" + 
+            "Capacity: %d\n" + 
+            "Horsepower: %d\n" + 
+            "Color: %s\n" + 
+            "Mpg: %.2f\n" + 
+            "Vin Number: %s\n" + 
+            "Registration Number: %s\n" + 
+            "Rental Price Per Day: %.2f\n" +
+            "Transmission: %s\n" + 
+            "Fuel Type: %s\n" + 
+            "Vehicle Type: %s\n" + 
+            "Seating Capacity: %d\n" + 
+            "Available: %b\n" + 
+            "Features: %s\n"  
+            , vehicleId, imagePath, brand, model, year, capacity, horsepower, color , mpg, vinNumber, registrationNumber
+            , rentalPriceDay, transmission, fuelType, vehicleType, seatingCapacity, availability, features
+        );
     }
 }
