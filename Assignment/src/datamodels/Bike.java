@@ -39,26 +39,7 @@ public class Bike extends Vehicle {
 
     @Override
     public String toString() {
-        return " Bike { " +
-                "vehicleId = " + vehicleId +
-                ", imagePath = '" + imagePath + '\'' +
-                ", brand = '" + brand + '\'' +
-                ", model = '" + model + '\'' +
-                ", year = '" + year + '\'' +
-                ", capacity = '" + capacity + '\'' +
-                ", horsepower = '" + horsepower + '\'' +
-                ", color = '" + color + '\'' +
-                ", mpg = '" + mpg + '\'' +
-                ", vinNumber = '" + vinNumber + '\'' +
-                ", registrationNumber = '" + registrationNumber + '\'' +
-                ", rentalPriceDay = '" + rentalPriceDay + '\'' +
-                ", transmission = '" + transmission + '\'' +
-                ", fuelType = '" + fuelType + '\'' +
-                ", bikeType = '" + vehicleType + '\'' +
-                ", seatingCapacity = '" + seatingCapacity + '\'' +
-                ", availability = '" + availability + '\'' +
-                ", features = '" + features + '\'' +
-                " }";
+        return super.toString();
     }
 
     public static String[] getBikeTypes() {

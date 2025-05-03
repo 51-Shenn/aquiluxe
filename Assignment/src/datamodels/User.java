@@ -109,14 +109,15 @@ public class User {
     // Debug
     @Override
     public String toString() {
-        return " User { " +
-                "userId = " + userId +
-                ", fullName = '" + fullName + '\'' +
-                ", gender = '" + gender + '\'' +
-                ", phoneNumber = '" + phoneNumber + '\'' +
-                ", userEmail = '" + userEmail + '\'' +
-                ", username = '" + username + '\'' +
-                ", usertype = '" + userType + '\'' +
-                " }";
+        return String.format(
+            "User ID: %d\n" +
+            "Full Name: %s\n" + 
+            "Username: %s\n" +
+            "Gender: %s\n" + 
+            "Phone Number: %s\n" + 
+            "Email Address: %s\n" + 
+            "User Type: %s\n"
+            , userId, fullName, username, gender, phoneNumber, userEmail, userType
+        );
     }
 }

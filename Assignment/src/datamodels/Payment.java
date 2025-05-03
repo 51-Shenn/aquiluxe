@@ -77,13 +77,14 @@ public class Payment {
 
     @Override
     public String toString() {
-        return " Payment { " +
-                "paymentId = " + paymentId +
-                ", rentalId = '" + rental.getRentalId() + '\'' +
-                ", amount = '" + amount + '\'' +
-                ", paymentMethod = '" + paymentMethod + '\'' +
-                ", paymentToken = '" + paymentToken + '\'' +
-                ", paymentDate = '" + paymentDate + '\'' +
-                " }";
+        return String.format(
+            "Payment ID: %d\n" + 
+            "Rental ID: %d\n" + 
+            "Amount: %.2f\n" + 
+            "Payment Method: %s\n" +
+            "Payment Token: %s\n" + 
+            "Payment Date: %s\n"
+            , paymentId, rental.getRentalId(), amount, paymentMethod, paymentToken, paymentDate
+        );
     }
 }
