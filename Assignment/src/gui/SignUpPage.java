@@ -179,8 +179,7 @@ public class SignUpPage extends AuthenticationPage {
         closeButton.setContentAreaFilled(false);
         closeButton.setFocusPainted(false);
         closeButton.addActionListener(e -> {
-            GUIComponents.refreshPanels(this.frame, this.panel, this.user);
-            GUIComponents.cardLayout.show(this.panel, "HomePage");
+            new Navigation().homePageNavigation(this.frame, this.panel, this.user);
         });
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -389,11 +388,12 @@ public class SignUpPage extends AuthenticationPage {
 
                     Dialog dialog = new Dialog(this.frame);
                     dialog.showDialog(
-                            "SUCCESS",
-                            "Sign Up",
-                            "Account Created Successfully",
-                            "Awesome! Your account is ready — let's get you signed in!",
-                            false);
+                        "SUCCESS",
+                        "Sign Up",
+                        "Account Created Successfully",
+                        "Awesome! Your account is ready — let's get you signed in!",
+                        false
+                    );
                 }
             }
         });

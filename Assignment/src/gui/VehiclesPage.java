@@ -68,7 +68,6 @@ public class VehiclesPage extends JPanel implements ActionListener {
         // images in the future will change this to loop to check all car images
         vehicleCards = new JPanel(new GridLayout(0, 3, 50, 30));
         vehicleCards.setBackground(Theme.getBackground());
-        // HashMap<String, ImageIcon> imageMap = ImageLoader.getImageCache();
 
         for (Vehicle v : vehicles) {
             ImageIcon image = null;
@@ -97,7 +96,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                     v.getVehicleType(),
                     v.getSeatingCapacity(), rentPrice, availability, frame, panel));
         }
-        System.out.println("CREATE vehicles cards DONE");
+
         return vehicleCards;
     }
 
@@ -377,7 +376,6 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
         // container for picture at the top
         JLabel carPicture = new JLabel(image);
-        carPicture.putClientProperty("imagePath", vehicle.getImagePath());
         carPicture.setPreferredSize(new Dimension(225, 225));
 
         JPanel carPicturePanel = new JPanel(new BorderLayout());
@@ -593,16 +591,18 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
     private JScrollPane createCarCardsContainer(List<Vehicle> vehicles) {
 
+        // JPanel vehicleCards = new JPanel(new GridLayout(0,3,20,15));
+
         JPanel carCardsPanel = new JPanel(new BorderLayout());
         carCardsPanel.add(createCarCards(vehicles), BorderLayout.CENTER);
         carCardsPanel.add(createCarRightPanel(), BorderLayout.EAST);
         carCardsPanel.add(createBottomBar(), BorderLayout.SOUTH);
         carCardsPanel.add(createCarLeftPanel(), BorderLayout.WEST);
 
-        JScrollPane container = new JScrollPane(carCardsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        JScrollPane container = new JScrollPane(carCardsPanel);
         container.getVerticalScrollBar().setUnitIncrement(30);
         container.setBorder(BorderFactory.createEmptyBorder());
+        container.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         return container;
     }
@@ -1194,35 +1194,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 (String) searchBar.getText()));
     }
 
-    public void refreshCardImages() {
-        System.out.println("Refreshing vehicle cards");
-        HashMap<String, ImageIcon> imageMap = ImageLoader.getImageCache();
-        for (Component comp : vehicleCards.getComponents()) {
-            if (comp instanceof JPanel cardPanel) {
-                // Find the Vehicle object for this card (you may need to store it as a client
-                // property or in a map)
-                // For this example, let's assume you store the image path as a client property:
-                JLabel carPicture = null;
-                for (Component sub : cardPanel.getComponents()) {
-                    if (sub instanceof JLabel label && label.getIcon() != null) {
-                        carPicture = label;
-                        break;
-                    }
-                }
-                if (carPicture != null) {
-                    // Suppose you stored the image path as a client property:
-                    String imagePath = (String) carPicture.getClientProperty("imagePath");
-                    if (imagePath != null && imageMap.containsKey(imagePath)) {
-                        carPicture.setIcon(imageMap.get(imagePath));
-                    }
-                }
-            }
-        }
-        vehicleCards.revalidate();
-        vehicleCards.repaint();
-    }
-
-    public void refreshCards(List<Vehicle> filteredvehicles) {
+    private void refreshCards(List<Vehicle> filteredvehicles) {
         // Clear existing cards but preserve layout
         vehicleCards.removeAll();
         vehicleCards.setLayout(new GridLayout(0, 3, 50, 30));

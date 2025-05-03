@@ -1,15 +1,22 @@
 package gui;
 
 import controllers.UserController;
+import controllers.VehicleController;
 import datamodels.User;
 import java.awt.*;
 import java.io.File;
 import javax.swing.*;
+import java.util.List;
+import datamodels.Vehicle;
 
 public class MainApp extends JFrame {
 
+    private List<Vehicle> vehicles;
+
     public MainApp() {
         Navigation.setWindowsLookAndFeel();
+
+        loadDataAndCacheImages();
 
         setTitle("AQUILUXE");
         setLayout(new BorderLayout());
@@ -17,7 +24,7 @@ public class MainApp extends JFrame {
         setMaximumSize(new Dimension(1920, 1080));
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setAlwaysOnTop(false);
+
         setIconImage(IconLoader.getAppIcon().getImage()); // Window Icon
 
         JPanel contentPanel;
@@ -28,8 +35,12 @@ public class MainApp extends JFrame {
         // rental page, rental history, payment history, about us, contact us
 
         File accountsFile = new File("files/settings/accounts.txt");
-        User currentUser = accountsFile.exists() ? UserController.loadCurrentUser(accountsFile) : null;
-        add(new GUIComponents(this, contentPanel, currentUser), BorderLayout.NORTH);
+        if (accountsFile.exists()) {
+            User currentUser = UserController.loadCurrentUser(accountsFile);
+            add(new GUIComponents(this, contentPanel, currentUser), BorderLayout.NORTH);
+        } else {
+            add(new GUIComponents(this, contentPanel, null), BorderLayout.NORTH);
+        }
         add(contentPanel, BorderLayout.CENTER);
 
         setAlwaysOnTop(true);
@@ -44,6 +55,6 @@ public class MainApp extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(MainApp::new);
+        SwingUtilities.invokeLater(() -> new MainApp());
     }
 }

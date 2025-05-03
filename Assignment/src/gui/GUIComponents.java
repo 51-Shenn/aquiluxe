@@ -2,46 +2,27 @@ package gui;
 
 import controllers.UserController;
 import datamodels.User;
-import datamodels.Vehicle;
-
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-<<<<<<< HEAD
-import java.util.List;
-
-=======
 import java.io.File;
->>>>>>> 7289e0cfaa9c713c5fb38bbb3466d5dddf5e5ea5
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.SwingWorker;
 import javax.swing.border.LineBorder;
-
-import controllers.VehicleController;
-
-import java.awt.Color;
 
 public class GUIComponents extends JPanel {
 
     private JFrame frame;
     private JPanel panel;
     private User user;
-    private static JButton[] buttons;
     public static OverflowMenu overflowMenu;
-<<<<<<< HEAD
-    private static JButton[] topBarButtons = new JButton[4];
-    private String[] topBarButtonsLabels = { "Home", "Vehicles", "About", "Contact" };
-=======
     private JButton[] topBarButtons = new JButton[5];
     private String[] topBarButtonsLabels = { "Home", "Vehicles", "About", "Contact", "Rentals" };
->>>>>>> 7289e0cfaa9c713c5fb38bbb3466d5dddf5e5ea5
 
     public static JPanel homePanel;
     public static JPanel vehiclesPanel;
@@ -50,7 +31,6 @@ public class GUIComponents extends JPanel {
     public static JPanel rentalHistoryPanel;
     public static CardLayout cardLayout;
     public static JPanel cardPanel;
-    public static boolean vehiclesPageLoaded = false;
 
     public GUIComponents() {
         this(new JFrame(), new JPanel(), new User());
@@ -70,17 +50,9 @@ public class GUIComponents extends JPanel {
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         cardPanel.setBackground(Theme.getBackground());
-        cardPanel.setBorder(new LineBorder(Color.RED, 3));
-
-        setBorder(new LineBorder(Color.YELLOW, 3));
 
         homePanel = new HomePage(this.frame, this.panel, this.user, this);
-<<<<<<< HEAD
-        homePanel.setBorder(new LineBorder(Color.GREEN, 3));
-        vehiclesPanel = new VehiclesPage(this.frame, this.panel);
-=======
         vehiclesPanel = new VehiclesPage(this.frame, this.panel, this.user);
->>>>>>> 7289e0cfaa9c713c5fb38bbb3466d5dddf5e5ea5
         aboutUsPanel = new AboutUsPage(this.frame, this.panel);
         contactUsPanel = new ContactUsPage(this.frame, this.panel);
         rentalHistoryPanel = new RentalHistory(this.frame, this.panel, this.user);
@@ -96,124 +68,6 @@ public class GUIComponents extends JPanel {
         add(menuButton(), BorderLayout.EAST);
         this.panel.add(cardPanel, BorderLayout.CENTER);
         cardLayout.show(cardPanel, "HomePage");
-    }
-
-    public static void showPage(String pageName) {
-        if (cardLayout != null && cardPanel != null) {
-            cardLayout.show(cardPanel, pageName);
-            cardPanel.revalidate();
-            cardPanel.repaint();
-        }
-    }
-
-    public static void loadVehiclesPageAsync(JFrame frame, JPanel contentPanel) {
-        new SwingWorker<List<Vehicle>, Void>() {
-            private List<Vehicle> vehicles;
-
-            @Override
-            protected List<Vehicle> doInBackground() {
-                vehicles = VehicleController.getAllVehicles();
-                Vehicle.setVehicles(vehicles);
-                ImageLoader.loadImages(vehicles);
-
-                return vehicles;
-            }
-
-            @Override
-            protected void done() {
-                try {
-                    get();
-
-                    System.out.println("Loading vehicles: " + vehicles.size() + " vehicles loaded.");
-
-                    // SwingUtilities.invokeLater(() -> {
-                    ((VehiclesPage) vehiclesPanel).refreshCards(Vehicle.getVehicles());
-                    // vehiclesPanel.revalidate();
-                    // vehiclesPanel.repaint();
-                    // cardLayout.show(cardPanel, "VehiclesPage");
-
-                    // });
-                } catch (Exception e) {
-                    System.out.println("Error loading vehicles: " + e.getMessage());
-                    // loadVehiclesPageAsync(frame, cardPanel);
-                }
-            }
-        }.execute();
-    }
-
-    // not using
-    public static void updateTheme() {
-        // Update the background of all buttons
-        if (buttons != null) {
-            for (JButton button : buttons) {
-                button.setBackground(Theme.getBackground());
-                button.setForeground(Theme.getForeground());
-                button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
-            }
-        }
-
-        // Update the background of the top bar buttons
-        if (topBarButtons != null) {
-            for (JButton button : topBarButtons) {
-                button.setBackground(Theme.getBackground());
-                button.setForeground(Theme.getForeground());
-                if (button.getForeground().equals(Theme.getSpecial())) {
-                    button.setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
-                } else
-                    button.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(18f));
-            }
-        }
-
-        // Create a data structure array to hold all panels
-        JPanel[] panels = { homePanel, vehiclesPanel, aboutUsPanel, contactUsPanel, cardPanel };
-
-        // Iterate through the array and update backgrounds, revalidate, and repaint
-        for (JPanel panel : panels) {
-            if (panel != null) {
-                updatePanelComponents(panel);
-                panel.revalidate();
-                panel.repaint();
-            }
-        }
-    }
-
-    // Refreshes the panels and updates the theme
-    public static void refreshPanels(JFrame frame, JPanel panel, User user) {
-        // updateTheme();
-        createNewThemedPanels(frame, (JPanel) panel.getParent(), user);
-        GUIComponents.overflowMenu = null;
-
-        frame.revalidate();
-        frame.repaint();
-    }
-
-    private static void createNewThemedPanels(JFrame frame, JPanel panel, User user) {
-        overflowMenu = null;
-
-        panel.removeAll();
-        panel.add(new GUIComponents(frame, panel, user), BorderLayout.NORTH);
-        panel.revalidate();
-        panel.repaint();
-    }
-
-    // not using
-    private static void updatePanelComponents(java.awt.Container container) {
-
-        // check which panel is being updated and update the theme accordingly
-        // create a method for each panel to update the theme
-
-        for (java.awt.Component component : container.getComponents()) {
-            component.setBackground(Theme.getBackground());
-            component.setForeground(Theme.getForeground());
-
-            if (component instanceof JLabel) {
-                component.setFont(CustomFonts.INSTRUMENT_SANS_MEDIUM.deriveFont(22f));
-            } else if (component instanceof JButton) {
-                component.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(24f));
-            } else if (component instanceof java.awt.Container) {
-                updatePanelComponents((java.awt.Container) component);
-            }
-        }
     }
 
     public JFrame getFrame() {
@@ -253,7 +107,7 @@ public class GUIComponents extends JPanel {
     }
 
     public void setTopBarButtons(JButton[] topBarButtons) {
-        GUIComponents.topBarButtons = topBarButtons;
+        this.topBarButtons = topBarButtons;
     }
 
     public String[] getTopBarButtonsLabels() {
@@ -278,7 +132,7 @@ public class GUIComponents extends JPanel {
             }
             topBarButtons[0].setForeground(Theme.getSpecial());
             topBarButtons[0].setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
-            showPage("HomePage");
+            cardLayout.show(cardPanel, "HomePage");
         });
 
         return logo;
@@ -298,7 +152,7 @@ public class GUIComponents extends JPanel {
         topBarContainer.add(logo(), gbc);
 
         gbc.insets = new Insets(0, 5, 0, 0);
-        buttons = createButtons();
+        JButton[] buttons = createButtons();
         for (JButton button : buttons) {
             topBarContainer.add(button, gbc);
         }
@@ -325,27 +179,22 @@ public class GUIComponents extends JPanel {
 
         topBarButtons[0].addActionListener(e -> {
             pageIndicator(0);
-            showPage("HomePage");
+            cardLayout.show(cardPanel, "HomePage");
         });
 
         topBarButtons[1].addActionListener(e -> {
-            // if (!vehiclesPageLoaded) {
-            // JOptionPane.showMessageDialog(frame, "Vehicles are still loading, please
-            // wait...");
-            // return;
-            // }
             pageIndicator(1);
-            showPage("VehiclesPage");
+            cardLayout.show(cardPanel, "VehiclesPage");
         });
 
         topBarButtons[2].addActionListener(e -> {
             pageIndicator(2);
-            showPage("AboutUsPage");
+            cardLayout.show(cardPanel, "AboutUsPage");
         });
 
         topBarButtons[3].addActionListener(e -> {
             pageIndicator(3);
-            showPage("ContactUsPage");
+            cardLayout.show(cardPanel, "ContactUsPage");
         });
 
         topBarButtons[4].addActionListener(e -> {

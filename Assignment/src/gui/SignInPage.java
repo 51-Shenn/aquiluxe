@@ -29,7 +29,7 @@ public class SignInPage extends AuthenticationPage {
     public SignInPage() {
         this(new JFrame(), new JPanel(), new User());
     }
-
+    
     public SignInPage(JFrame frame, JPanel panel, User user) {
         this.frame = frame;
         this.panel = panel;
@@ -38,7 +38,7 @@ public class SignInPage extends AuthenticationPage {
         Navigation.removeWindowsLookAndFeel();
     }
 
-    public JFrame getFrame() {
+   public JFrame getFrame() {
         return frame;
     }
 
@@ -82,7 +82,7 @@ public class SignInPage extends AuthenticationPage {
         return ACCOUNTS_FILE;
     }
 
-    @Override
+   @Override
     protected JLabel createWallpaperLabel() {
         JLabel wallpaperLabel = new JLabel();
         wallpaperLabel.setOpaque(false);
@@ -118,8 +118,7 @@ public class SignInPage extends AuthenticationPage {
         closeButton.setContentAreaFilled(false);
         closeButton.setFocusPainted(false);
         closeButton.addActionListener(e -> {
-            GUIComponents.refreshPanels(this.frame, this.panel, this.user);
-            GUIComponents.cardLayout.show(this.panel, "HomePage");
+            new Navigation().homePageNavigation(this.frame, this.panel, this.user);
         });
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -248,23 +247,22 @@ public class SignInPage extends AuthenticationPage {
         nextButton.setPreferredSize(new Dimension(150, 70));
         nextButton.setMinimumSize(new Dimension(150, HEIGHT));
         nextButton.addActionListener(e -> {
-            boolean isValidSignInDetails = UserController.passSignInDetails(emailInput.getText(),
-                    passwordInput.getPassword(), emailValidationLabel, passwordValidationLabel);
-            if (isValidSignInDetails) {
+            boolean isValidSignInDetails = UserController.passSignInDetails(emailInput.getText(), passwordInput.getPassword(), emailValidationLabel, passwordValidationLabel);
+            if(isValidSignInDetails) {
                 this.user = UserController.passSignInDetails(emailInput.getText(), passwordInput.getPassword());
 
-                this.panel.removeAll();
-                GUIComponents.refreshPanels(this.frame, this.panel, this.user);
-                GUIComponents.cardLayout.show(this.panel, "HomePage");
+                this.frame.getContentPane().removeAll();
+                new Navigation().homePageNavigation(this.frame, this.panel, this.user); 
 
                 Dialog dialog = new Dialog(this.frame);
                 dialog.showDialog(
-                        "SUCCESS",
-                        "Welcome",
-                        "Login Successful",
-                        "You're in! " + this.user.getUsername(),
-                        false);
-
+                    "SUCCESS",
+                    "Welcome",
+                    "Login Successful",
+                    "You're in! " + this.user.getUsername(),
+                    false
+                );
+                
                 UserController.switchToAccount(this.user, ACCOUNTS_FILE);
             }
         });
@@ -286,7 +284,7 @@ public class SignInPage extends AuthenticationPage {
         logo.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(30f));
         logo.setForeground(Color.DARK_GRAY);
 
-        String[] texts = { "Your Journey,", "Our Wheels." };
+        String[] texts = {"Your Journey,", "Our Wheels."};
         for (String text : texts) {
             JLabel lines = new JLabel(text);
             if (text.equals(texts[0]))

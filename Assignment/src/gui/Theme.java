@@ -8,14 +8,12 @@ public class Theme {
     // public static Color LIGHT_BLUE = new Color(0x306CFE);
     // public static Color OFF_WHITE = new Color(0xF4F7FF);
     // public static Color BLACK = new Color(0x0A0908);
-
+    
     private static final Color BLACK = new Color(0x000000);
     private static final Color WHITE = new Color(0xFFFFFF);
     private static final Color SUCCESS = new Color(0x28A745);
     private static final Color ERROR = new Color(0xDC3545);
-
-    private static String overrideMode = null;
-
+    
     private final static File THEME_FILE = new File("files/settings/theme.txt");
 
     public static Color getWhite() {
@@ -33,7 +31,7 @@ public class Theme {
     public static Color getBackground() {
         return isDarkMode() ? new Color(0x121212) : WHITE;
     }
-
+    
     public static Color getHoverBackground() {
         return isDarkMode() ? new Color(0x252525) : new Color(0XF0F0F0);
     }
@@ -103,18 +101,7 @@ public class Theme {
     }
 
     public static boolean isDarkMode() {
-        String theme = overrideMode != null ? overrideMode : UserController.loadTheme(THEME_FILE);
-        return theme.equalsIgnoreCase("Dark");
-    }
-
-    // create 2 GUIComponents for light and dark mode
-    // check the current theme and show the appropriate panels
-    // swap between them when the theme is changed
-    public static void setManualTheme(String mode) {
-        if (mode == null || (!mode.equalsIgnoreCase("Light") && !mode.equalsIgnoreCase("Dark"))) {
-            overrideMode = null; // Reset to use file
-        } else {
-            overrideMode = mode;
-        }
+        String theme = UserController.loadTheme(THEME_FILE);
+        return theme.equals("Dark");
     }
 }

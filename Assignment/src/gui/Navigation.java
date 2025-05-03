@@ -1,6 +1,7 @@
 package gui;
 
 import datamodels.User;
+import java.awt.BorderLayout;
 import java.awt.Window;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;

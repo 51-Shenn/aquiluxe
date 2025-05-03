@@ -36,19 +36,15 @@ public class ImageLoader {
     }
 
     public static void loadImages(List<Vehicle> vehicles) {
-        // new Thread(() -> {
-        for (Vehicle vehicle : vehicles) {
-            try {
+        new Thread(() -> {
+            for (Vehicle vehicle : vehicles) {
                 ImageIcon image = new ImageIcon(vehicle.getImagePath());
                 Image rImage = image.getImage().getScaledInstance(400, 400, Image.SCALE_SMOOTH);
                 image = new ImageIcon(rImage);
 
                 vehicleImageCache.put(vehicle.getImagePath(), image);
-            } catch (Exception e) {
-                System.out.println("Error loading image: " + vehicle.getImagePath() + " - " + e.getMessage());
             }
-        }
-        // }).start();
+        }).start();
     }
 
     public static HashMap<String, ImageIcon> getImageCache() {
