@@ -94,19 +94,17 @@ public class RentalPage extends JPanel {
         rental.setRentVehicle(vehicleSelected);
 
         try {
-
+            // set customer
             File accountsFile = new File("files/settings/accounts.txt");
             user = UserController.loadCurrentUser(accountsFile);
             Customer currentCustomer = UserDAO.getCustomerById(user);
             rental.setRentCustomer(currentCustomer);
-
         } catch (Exception e) {
             Dialog dialogError = new Dialog();
-            GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
             dialogError.showDialog("ERROR",
                     "Account",
-                    "Account Error",
-                    "Please ensure user is valid Customer.",
+                    "No Account Signed In",
+                    "Please Sign In or Create an account",
                     false);
             return;
         }
