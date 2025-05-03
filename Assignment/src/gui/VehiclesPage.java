@@ -629,6 +629,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         carButton.setBounds(375, 25, 65, 50);
         carButton.setFocusable(false);
         carButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(12.5f));
+        carButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         carButton.addActionListener(this);
 
         bikeButton = new RoundedButton(10, Theme.getHoverBackground());
@@ -637,6 +638,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         bikeButton.setBounds(450, 25, 65, 50);
         bikeButton.setFocusable(false);
         bikeButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(12.5f));
+        bikeButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         bikeButton.addActionListener(this);
 
         allButton = new RoundedButton(10, Theme.getBackground());
@@ -647,6 +649,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         allButton.setFocusable(false);
         allButton.setForeground(Theme.getForeground());
         allButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
+        allButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         allButton.addActionListener(this);
 
         searchBar.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(20f));
