@@ -1874,7 +1874,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
             @Override
             public void mousePressed(MouseEvent evt) {
-                unavailableButton.setBackground(Theme.getHoverBackground());
+                unavailableButton.setBackground(Theme.getBackground());
             }
 
             @Override
