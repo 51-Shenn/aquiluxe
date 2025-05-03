@@ -406,10 +406,13 @@ public class VehicleService {
     }
 
     //all cannot be null except features
-    public static boolean validateStrings(String registrationNumber, String brand, String model) {
-        return registrationNumber != null && !registrationNumber.isEmpty()
-        && brand != null && !brand.isEmpty()
+    public static boolean validateStrings(String brand, String model) {
+        return brand != null && !brand.isEmpty()
         && model != null && !model.isEmpty();
+    }
+
+    public static boolean validateRegistrationNumber(String registrationNumber) {
+        return registrationNumber != null && !registrationNumber.isEmpty() && !registrationNumber.matches("[A-HJ-NPR-Z0-9 ]+");
     }
 
     public static boolean validateRentalPriceDay(String rentalPriceDay) {

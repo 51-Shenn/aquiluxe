@@ -135,9 +135,14 @@ public class VehicleController {
         return VehicleService.validateVinNumber(vinNumber);
     }
 
-    public static boolean processStringsValidation(String registrationNumber, String brand, String model) {
+    public static boolean processStringsValidation(String brand, String model) {
 
-        return VehicleService.validateStrings(registrationNumber, brand, model);
+        return VehicleService.validateStrings( brand, model);
+    }
+
+    public static boolean processRegistrationNumberValidation(String registrationNumber) {
+
+        return VehicleService.validateRegistrationNumber(registrationNumber);
     }
 
     public static boolean processRentalPriceDayValidation(String rentalPriceDay) {
