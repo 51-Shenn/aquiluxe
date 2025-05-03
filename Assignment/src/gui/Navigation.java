@@ -71,6 +71,7 @@ public class Navigation {
     // from home page
     public ActionListener toSignInPage(JFrame frame, JPanel panel, User user) {
         return e -> {
+            MainApp.getGuiComponents().setVisible(false);
             GUIComponents.topBarPanel.setVisible(false);
             authenticationPageNavigation(frame, panel, user, "SIGN_IN");
         };
@@ -80,6 +81,7 @@ public class Navigation {
     public ActionListener toSignInPage(JFrame frame, JPanel panel, JLayeredPane layeredPane, User user) {
         return e -> {
             frame.getLayeredPane().remove(layeredPane);
+            MainApp.getGuiComponents().setVisible(false);
             GUIComponents.topBarPanel.setVisible(false);
             authenticationPageNavigation(frame, panel, user, "SIGN_IN");
         };
@@ -88,6 +90,7 @@ public class Navigation {
     // from home page
     public ActionListener toSignUpPage(JFrame frame, JPanel panel, User user) {
         return e -> {
+            MainApp.getGuiComponents().setVisible(false);
             GUIComponents.topBarPanel.setVisible(false);
             authenticationPageNavigation(frame, panel, user, "SIGN_UP");
         };
@@ -97,6 +100,7 @@ public class Navigation {
     public ActionListener toSignUpPage(JFrame frame, JPanel panel, JLayeredPane layeredPane, User user) {
         return e -> {
             frame.getLayeredPane().remove(layeredPane);
+            MainApp.getGuiComponents().setVisible(false);
             GUIComponents.topBarPanel.setVisible(false);
             authenticationPageNavigation(frame, panel, user, "SIGN_UP");
         };

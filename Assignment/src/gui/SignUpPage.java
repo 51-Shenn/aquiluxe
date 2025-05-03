@@ -180,6 +180,7 @@ public class SignUpPage extends AuthenticationPage {
         closeButton.setFocusPainted(false);
         closeButton.addActionListener(e -> {
             Navigation.setWindowsLookAndFeel();
+            MainApp.getGuiComponents().setVisible(true);
             GUIComponents.topBarPanel.setVisible(true);
             GUIComponents.mainCardLayout.show(GUIComponents.mainCardPanel, "MainPage");
             GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "HomePage");
