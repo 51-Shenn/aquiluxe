@@ -281,6 +281,7 @@ public class GUIComponents extends JPanel {
         cardPanel.revalidate();
         cardPanel.repaint();
 
+        pageIndicator(0);
         cardLayout.show(cardPanel, "HomePage");
 
         System.out.println(user.getFullName());
