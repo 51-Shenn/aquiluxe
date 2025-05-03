@@ -38,28 +38,14 @@ public class Car extends Vehicle {
         return allCars;
     }
 
+    public String getVehicleCategory() {
+        return "Car";
+    }
+
     @Override
     public String toString() {
-        return " Car { " +
-                "vehicleId = " + vehicleId +
-                ", imagePath = '" + imagePath + '\'' +
-                ", brand = '" + brand + '\'' +
-                ", model = '" + model + '\'' +
-                ", year = '" + year + '\'' +
-                ", capacity = '" + capacity + '\'' +
-                ", horsepower = '" + horsepower + '\'' +
-                ", color = '" + color + '\'' +
-                ", mpg = '" + mpg + '\'' +
-                ", vinNumber = '" + vinNumber + '\'' +
-                ", registrationNumber = '" + registrationNumber + '\'' +
-                ", rentalPriceDay = '" + rentalPriceDay + '\'' +
-                ", transmission = '" + transmission + '\'' +
-                ", fuelType = '" + fuelType + '\'' +
-                ", carType = '" + vehicleType + '\'' +
-                ", seatingCapacity = '" + seatingCapacity + '\'' +
-                ", availability = '" + availability + '\'' +
-                ", features = '" + features + '\'' +
-                " }";
+        return "Vehicle Category: " + getVehicleCategory() + "\n" + 
+                super.toString();
     }
 
     public static String[] getCarTypes() {

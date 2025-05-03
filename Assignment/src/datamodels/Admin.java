@@ -27,14 +27,6 @@ public class Admin extends User {
 
     @Override
     public String toString() {
-        return " Admin { " +
-                "userId = " + userId +
-                ", fullName = '" + fullName + '\'' +
-                ", gender = '" + gender + '\'' +
-                ", phoneNumber = '" + phoneNumber + '\'' +
-                ", userEmail = '" + userEmail + '\'' +
-                ", username = '" + username + '\'' +
-                ", position = '" + position + '\'' +
-                " }";
+        return super.toString() + String.format("Position: %s\n", position);
     }
 }

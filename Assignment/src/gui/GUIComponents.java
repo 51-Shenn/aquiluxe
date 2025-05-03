@@ -257,5 +257,14 @@ public class GUIComponents extends JPanel {
         cardPanel.revalidate();
         cardPanel.repaint();
 
+        // refresh vehicle page 
+        // cardPanel.remove(vehiclesPanel);
+        // vehiclesPanel = new VehiclesPage(frame, panel, user);
+        // vehiclesPanel.revalidate();
+        // vehiclesPanel.repaint();
+        // cardPanel.add(vehiclesPanel, "VehiclesPage");
+        // cardLayout.show(cardPanel,"VehiclesPage");
+        // cardPanel.revalidate();
+        // cardPanel.repaint();
     }
 }

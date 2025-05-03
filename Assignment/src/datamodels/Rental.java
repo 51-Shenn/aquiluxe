@@ -152,17 +152,18 @@ public class Rental {
 
     @Override
     public String toString() {
-        return "Rental {" +
-                "rentalId=" + rentalId +
-                ", customer=" + customer.getFullName() +
-                ", vehicle=" + vehicle.getBrand() + vehicle.getModel() +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", pickupTime=" + pickupTime +
-                ", dropoffTime=" + dropoffTime +
-                ", totalCost=" + totalCost +
-                ", rentalStatus=" + rentalStatus +
-                ", paymentStatus=" + paymentStatus +
-                '}';
+        return String.format(
+            "Rental ID: %d\n" + 
+            "Customer: %s\n" + 
+            "Vehicle: %s %s\n" + 
+            "Start Date: %s\n" +
+            "End Date: %s\n" + 
+            "Pick Up Time: %s\n" + 
+            "Drop Off Time: %s\n" + 
+            "Total Cost: %.2f\n" +
+            "Rental Status: %s\n" + 
+            "Payment Status: %s\n"
+            , rentalId, customer.getFullName(), vehicle.getBrand(), vehicle.getModel(), startDate, endDate, pickupTime, dropoffTime, totalCost, rentalStatus, paymentStatus
+        );
     }
 }
