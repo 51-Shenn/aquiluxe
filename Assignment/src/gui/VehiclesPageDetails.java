@@ -1,10 +1,16 @@
 package gui;
 
+import controllers.UserController;
 import controllers.VehicleController;
+import database.UserDAO;
+import datamodels.Customer;
+import datamodels.User;
 import datamodels.Vehicle;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+
 import javax.swing.*;
 import java.util.List;
 
@@ -304,6 +310,54 @@ public class VehiclesPageDetails extends JPanel {
                 @Override
                 public void mouseReleased(MouseEvent evt) {
                     rentButton.setBackground(Theme.getSpecial());
+                    User user = null;
+                    try {
+                        File accountsFile = new File("files/settings/accounts.txt");
+                        user = UserController.loadCurrentUser(accountsFile);
+
+                        if (user.getUserType() == null || user.getUserType().trim().isEmpty() ||
+                                user.getUserType() == "Guest") {
+                            throw new IllegalArgumentException("No User Account Registered");
+                        }
+                    } catch (Exception e) {
+                        System.err.println(e.getMessage());
+                        Dialog dialogError = new Dialog();
+                        GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehiclesPage");
+                        dialogError.showDialog("ERROR",
+                                "Account",
+                                "No Account Signed In",
+                                "Please Sign In or Create an account",
+                                false);
+                        return;
+                    }
+
+                    try {
+                        Customer currentCustomer = UserDAO.getCustomerById(user);
+                        if (currentCustomer.getLicense() == null
+                                || currentCustomer.getLicense().trim().isEmpty()) {
+                            throw new IllegalArgumentException("No Driving License Registered");
+                        }
+                    } catch (Exception e) {
+                        System.err.println(e.getMessage());
+                        GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehiclesPage");
+                        if (user.getUserType() == "Customer") {
+                            Dialog dialogError = new Dialog();
+                            dialogError.showDialog("ERROR",
+                                    "Driving License",
+                                    "No Driving License Registered",
+                                    "Please register a valid Driving License.",
+                                    false);
+                            return;
+                        }
+
+                        Dialog dialogError = new Dialog();
+                        dialogError.showDialog("ERROR",
+                                "Account",
+                                "Account Error",
+                                "Please ensure user is valid Customer.",
+                                false);
+                        return;
+                    }
                     JPanel rentalPanel = new RentalPage(frame, panel, vehicle);
                     GUIComponents.subCardPanel.add(rentalPanel, "RentalPage");
                     GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "RentalPage");
