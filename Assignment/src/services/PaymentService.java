@@ -4,18 +4,22 @@ import java.util.List;
 import java.util.Random;
 import datamodels.Payment;
 import database.PaymentDAO;
+import database.RentalDAO;
+
 import java.time.LocalDate;
 import datamodels.User;
+import datamodels.Rental.PaymentStatus;
 import datamodels.Rental;
 
 public class PaymentService {
 
     private static final int TOKEN_LENGTH = 10;
-    private static final String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     // add Payment
-    public static void addPayment(Payment payment) {
+    public static void addPayment(Rental rental, Payment payment) {
         PaymentDAO.addPayment(payment);
+        RentalDAO.updatePaymentStatus(rental, PaymentStatus.PAID);
     }
 
     // update payment amount
@@ -51,7 +55,7 @@ public class PaymentService {
         StringBuilder token = new StringBuilder(TOKEN_LENGTH);
         Random random = new java.util.Random();
         for (int i = 0; i < TOKEN_LENGTH; i++) {
-            token.append(characters.charAt(random.nextInt(characters.length())));
+            token.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
         }
         return token.toString();
     }

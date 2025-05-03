@@ -29,9 +29,7 @@ public class ForgotPasswordPage extends AuthenticationPage {
     private JLabel confirmPasswordValidationLabel;
 
     public ForgotPasswordPage() {
-        this.frame = new JFrame();
-        this.panel = new JPanel();
-        this.user = new User();
+        this(new JFrame(), new JPanel(), new User());
     }
 
     public ForgotPasswordPage(JFrame frame, JPanel panel, User user) {
@@ -150,7 +148,7 @@ public class ForgotPasswordPage extends AuthenticationPage {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.anchor = GridBagConstraints.WEST;
 
-        container.add(createEmailContainer("Username / Email Address: "), gbc);
+        container.add(createEmailContainer("Email Address / Username: "), gbc);
         container.add(createPhoneContainer(), gbc);
         gbc.insets = new Insets(50, 20, 0, 0);
         container.add(createProceedContainer(container), gbc);

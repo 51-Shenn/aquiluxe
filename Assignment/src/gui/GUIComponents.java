@@ -1,5 +1,6 @@
 package gui;
 
+import controllers.UserController;
 import datamodels.User;
 import datamodels.Vehicle;
 
@@ -9,8 +10,12 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+<<<<<<< HEAD
 import java.util.List;
 
+=======
+import java.io.File;
+>>>>>>> 7289e0cfaa9c713c5fb38bbb3466d5dddf5e5ea5
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -30,20 +35,25 @@ public class GUIComponents extends JPanel {
     private User user;
     private static JButton[] buttons;
     public static OverflowMenu overflowMenu;
+<<<<<<< HEAD
     private static JButton[] topBarButtons = new JButton[4];
     private String[] topBarButtonsLabels = { "Home", "Vehicles", "About", "Contact" };
+=======
+    private JButton[] topBarButtons = new JButton[5];
+    private String[] topBarButtonsLabels = { "Home", "Vehicles", "About", "Contact", "Rentals" };
+>>>>>>> 7289e0cfaa9c713c5fb38bbb3466d5dddf5e5ea5
 
     public static JPanel homePanel;
     public static JPanel vehiclesPanel;
     public static JPanel aboutUsPanel;
     public static JPanel contactUsPanel;
+    public static JPanel rentalHistoryPanel;
     public static CardLayout cardLayout;
     public static JPanel cardPanel;
     public static boolean vehiclesPageLoaded = false;
 
     public GUIComponents() {
-        this.frame = new JFrame();
-        this.panel = new JPanel();
+        this(new JFrame(), new JPanel(), new User());
     }
 
     public GUIComponents(JFrame frame, JPanel panel, User user) {
@@ -65,15 +75,22 @@ public class GUIComponents extends JPanel {
         setBorder(new LineBorder(Color.YELLOW, 3));
 
         homePanel = new HomePage(this.frame, this.panel, this.user, this);
+<<<<<<< HEAD
         homePanel.setBorder(new LineBorder(Color.GREEN, 3));
         vehiclesPanel = new VehiclesPage(this.frame, this.panel);
+=======
+        vehiclesPanel = new VehiclesPage(this.frame, this.panel, this.user);
+>>>>>>> 7289e0cfaa9c713c5fb38bbb3466d5dddf5e5ea5
         aboutUsPanel = new AboutUsPage(this.frame, this.panel);
         contactUsPanel = new ContactUsPage(this.frame, this.panel);
+        rentalHistoryPanel = new RentalHistory(this.frame, this.panel, this.user);
 
         cardPanel.add(homePanel, "HomePage");
         cardPanel.add(vehiclesPanel, "VehiclesPage");
         cardPanel.add(aboutUsPanel, "AboutUsPage");
         cardPanel.add(contactUsPanel, "ContactUsPage");
+        cardPanel.add(rentalHistoryPanel, "RentalHistoryPage");
+        // switch user, sign out - remove rentalhistory - add back with current user
 
         add(createTopBar(), BorderLayout.WEST);
         add(menuButton(), BorderLayout.EAST);
@@ -331,6 +348,11 @@ public class GUIComponents extends JPanel {
             showPage("ContactUsPage");
         });
 
+        topBarButtons[4].addActionListener(e -> {
+            pageIndicator(4);
+            cardLayout.show(cardPanel, "RentalHistoryPage");
+        });
+
         return topBarButtons;
     }
 
@@ -354,8 +376,12 @@ public class GUIComponents extends JPanel {
         menu.setFocusPainted(false);
         menu.setBackground(Theme.getBackground());
         menu.addActionListener(e -> {
+            File accountsFile = new File("files/settings/accounts.txt");
+
             if (overflowMenu == null) {
-                overflowMenu = new OverflowMenu(this.frame, this.panel, this.user);
+                User currentUser = UserController.loadCurrentUser(accountsFile);
+                overflowMenu = new OverflowMenu(this.frame, this.panel, currentUser);
+                OverflowMenu.setGuiComponents(this);
                 this.frame.getLayeredPane().add(overflowMenu, JLayeredPane.POPUP_LAYER);
                 overflowMenu.setBounds(this.frame.getWidth() - (overflowMenu.MENU_WIDTH + 35), 90,
                         overflowMenu.MENU_WIDTH, overflowMenu.MENU_HEIGHT);
@@ -368,5 +394,19 @@ public class GUIComponents extends JPanel {
         });
 
         return menu;
+    }
+
+    public static void refreshHomePage(JFrame frame, JPanel panel, User user, GUIComponents guiComponents) {
+        cardPanel.remove(homePanel);
+        System.out.println(cardPanel.getComponents().length);
+        homePanel = new HomePage(frame, panel, user, guiComponents);
+        homePanel.revalidate();
+        homePanel.repaint();
+        cardPanel.add(homePanel, "HomePage");
+        // cardLayout.show(cardPanel, "HomePage");
+        System.out.println(cardPanel.getComponents().length);
+        cardPanel.revalidate();
+        cardPanel.repaint();
+
     }
 }

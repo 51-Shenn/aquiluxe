@@ -19,12 +19,13 @@ import javax.swing.JPanel;
 
 public class ContactUsPage extends JPanel {
 
+    @SuppressWarnings("unused")
     private JFrame frame;
+    @SuppressWarnings("unused")
     private JPanel panel;
 
     ContactUsPage() {
-        this.frame = new JFrame();
-        this.panel = new JPanel();
+        this(new JFrame(), new JPanel());
     }
 
     ContactUsPage(JFrame frame, JPanel panel) {
