@@ -69,17 +69,12 @@ public class RentalHistory extends JPanel {
             System.out.println(this.user.getFullName() + " loaded user");
 
             if (this.user.getUserType().equals("Customer")) {
-                System.out.println(this.user.getFullName() + " C1");
                 this.customer = UserDAO.getCustomerById(this.user);
                 this.rentalsTitle = "My Rentals";
-                System.out.println(this.customer.getFullName() + " C1");
             } else if (this.user.getUserType().equals("Admin")) {
-                System.out.println(this.user.getFullName() + " A1");
                 this.admin = UserDAO.getAdminById(this.user);
                 this.rentalsTitle = "Manage Rentals";
-                System.out.println(this.admin.getFullName() + " A1");
             } else {
-                System.out.println(this.user.getFullName() + " G1");
                 this.customer = UserDAO.getCustomerById(this.user);
             }
 
