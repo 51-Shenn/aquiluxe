@@ -538,15 +538,25 @@ public class VehiclesPageDetails extends JPanel {
         gbc.insets = new Insets(10, 0, 5, 0);
         featuresContainer.add(featuresLabel, gbc);
 
-        String[] features = this.vehicle.getFeatures().split(",");
-        for (String feature : features) {
-            feature = "- " + feature;
-            JLabel featuresContent = new JLabel(feature);
+        if (vehicle.getFeatures() == null || vehicle.getFeatures().isEmpty()) {
+            JLabel featuresContent = new JLabel("No Description");
             featuresContent.setForeground(Theme.getSecondaryForeground());
             featuresContent.setFont(CustomFonts.INSTRUMENT_SANS_SEMI_BOLD.deriveFont(20f));
             gbc.insets = new Insets(0, 0, 5, 0);
             gbc.gridy++;
             featuresContainer.add(featuresContent, gbc);
+        }
+        else {
+            String[] features = this.vehicle.getFeatures().split(",");
+            for (String feature : features) {
+                feature = "- " + feature;
+                JLabel featuresContent = new JLabel(feature);
+                featuresContent.setForeground(Theme.getSecondaryForeground());
+                featuresContent.setFont(CustomFonts.INSTRUMENT_SANS_SEMI_BOLD.deriveFont(20f));
+                gbc.insets = new Insets(0, 0, 5, 0);
+                gbc.gridy++;
+                featuresContainer.add(featuresContent, gbc);
+            }
         }
 
         gbc.gridy++;
