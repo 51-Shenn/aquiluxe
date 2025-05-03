@@ -135,9 +135,14 @@ public class VehicleController {
         return VehicleService.validateVinNumber(vinNumber);
     }
 
-    public static boolean processStringsValidation(String registrationNumber, String brand, String model) {
+    public static boolean processStringsValidation(String brand, String model) {
 
-        return VehicleService.validateStrings(registrationNumber, brand, model);
+        return VehicleService.validateStrings( brand, model);
+    }
+
+    public static boolean processRegistrationNumberValidation(String registrationNumber) {
+
+        return VehicleService.validateRegistrationNumber(registrationNumber);
     }
 
     public static boolean processRentalPriceDayValidation(String rentalPriceDay) {
@@ -219,7 +224,24 @@ public class VehicleController {
 
     public static void processDeleteVehiclefromDAO(Vehicle vehicle) {
 
-        VehicleService.deleteVehiclefromDAO(vehicle);
+        vehicle.setBrand("Deleted");
+        vehicle.setModel("Deleted");
+        vehicle.setYear(0);
+        vehicle.setCapacity(0);
+        vehicle.setHorsepower(0);
+        vehicle.setColor("Deleted");
+        vehicle.setMpg(0);
+        vehicle.setVinNumber("Deleted");
+        vehicle.setRegistrationNumber("Deleted");
+        vehicle.setRentalPriceDay(0);
+        vehicle.setTransmission("Deleted");
+        vehicle.setFuelType("Deleted");
+        vehicle.setVehicleType("Deleted");
+        vehicle.setSeatingCapacity(0);
+        vehicle.setAvailability(false);
+        vehicle.setFeatures("Deleted");
+
+        VehicleService.updateVehiclefromDAO(vehicle);
     }
 
     public static void processUpdateVehiclefromDAO(Vehicle updatedVehicle) {

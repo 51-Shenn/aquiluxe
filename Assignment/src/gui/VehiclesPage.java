@@ -2687,7 +2687,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         }
 
         if (selectedImageFile != null
-                && !selectedImageFile.getName().equals(new File(vehicle.getImagePath()).getName())) {
+                && !selectedImageFile.getAbsolutePath().equals(new File(vehicle.getImagePath()).getAbsolutePath())) {
             boolean imageSaved = VehicleController.processImageSaving(selectedImageFile, selectedImagePreview);
             if (!imageSaved) {
                 dialog.showDialog("ERROR", "Image Saving Error", "Image Saving Error", "Failed to save image", true);
@@ -2732,10 +2732,15 @@ public class VehiclesPage extends JPanel implements ActionListener {
                     "VIN number must be 17 alphanumeric characters", true);
             return false;
         }
-        if (!VehicleController.processStringsValidation(registrationNumberInput.getText(), brandInput.getText(),
+        if (!VehicleController.processStringsValidation(brandInput.getText(),
                 modelInput.getText())) {
             dialog.showDialog("ERROR", "Input Error", "Information Input Error",
                     "Please enter all information (except features)", true);
+            return false;
+        }
+        if (!VehicleController.processRegistrationNumberValidation(registrationNumberInput.getText())) {
+            dialog.showDialog("ERROR", "Input Error", "Information Input Error",
+                    "Registration number must only contain alphanumeric characters", true);
             return false;
         }
 
