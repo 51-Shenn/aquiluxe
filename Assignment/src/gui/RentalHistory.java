@@ -290,15 +290,27 @@ public class RentalHistory extends JPanel {
 
         if (this.admin != null) {
             // customer name
+            String customerNameText = "None";
+            try {
+                customerNameText = rental.getRentCustomer().getFullName();
+            } catch (Exception e) {
+                customerNameText = "Deleted";
+            }
             JLabel customerNameLabel = createLabel(
-                    rental.getRentCustomer().getFullName(),
+                    customerNameText,
                     30f, Theme.getForeground(), Theme.getBackground(), 50, -1);
             customerNameLabel.setHorizontalAlignment(JLabel.LEFT);
             customerNameLabel.setName("customerName");
 
             // customer ic
+            String customerICText = "None";
+            try {
+                customerICText = rental.getRentCustomer().getLicense();
+            } catch (Exception e) {
+                customerICText = "Deleted";
+            }
             JLabel customerICLabel = createLabel(
-                    rental.getRentCustomer().getLicense(),
+                    customerICText,
                     25f, Theme.getForeground(), Theme.getBackground(), 50, -1);
             customerICLabel.setHorizontalAlignment(JLabel.LEFT);
             customerICLabel.setName("customerIC");
