@@ -52,6 +52,8 @@ public class RentalHistory extends JPanel {
     private Map<Rental, JPanel> rentalPanelMap = new HashMap<>();
     private RentalController rentalController = new RentalController();
 
+    private String rentalsTitle = "Rentals";
+
     private GridBagConstraints gbc = new GridBagConstraints();
 
     public RentalHistory(JFrame frame, JPanel panel, User user) {
@@ -69,10 +71,12 @@ public class RentalHistory extends JPanel {
             if (this.user.getUserType().equals("Customer")) {
                 System.out.println(this.user.getFullName() + " C1");
                 this.customer = UserDAO.getCustomerById(this.user);
+                this.rentalsTitle = "My Rentals";
                 System.out.println(this.customer.getFullName() + " C1");
             } else if (this.user.getUserType().equals("Admin")) {
                 System.out.println(this.user.getFullName() + " A1");
                 this.admin = UserDAO.getAdminById(this.user);
+                this.rentalsTitle = "Manage Rentals";
                 System.out.println(this.admin.getFullName() + " A1");
             } else {
                 System.out.println(this.user.getFullName() + " G1");
@@ -109,7 +113,7 @@ public class RentalHistory extends JPanel {
 
     private JLabel createTitlePanel() {
         // Title
-        JLabel titleLabel = new JLabel("Rental History", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel(this.rentalsTitle, SwingConstants.CENTER);
         titleLabel.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(40f));
         titleLabel.setForeground(Theme.getSpecial());
         titleLabel.setBackground(Theme.getBackground());
@@ -386,6 +390,8 @@ public class RentalHistory extends JPanel {
                 cancelButton.setVisible(false);
             }
 
+            // delete rentals - hide rental
+
             // view vehicle details button
             JButton viewVehicleButton = new JButton(
                     "Vehicle Details >");
@@ -498,6 +504,25 @@ public class RentalHistory extends JPanel {
                 GUIComponents.rentalHistoryPanel.repaint();
             });
 
+            // overdue button
+            JButton overdueButton = new JButton("Overdue");
+            overdueButton.setFont(CustomFonts.OPEN_SANS_REGULAR.deriveFont(30f));
+            overdueButton.setBackground(Theme.getError());
+            overdueButton.setForeground(Theme.getErrorForeground());
+            overdueButton.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+            overdueButton.setPreferredSize(new Dimension(100, 50));
+            overdueButton.setBorderPainted(false);
+            overdueButton.setFocusPainted(false);
+            overdueButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            overdueButton.addActionListener(e -> {
+                overdueButton.setVisible(false);
+                rental.setRentalStatus(RentalStatus.OVERDUE);
+                updateRentalPanel(rental);
+                rentalController.updateRental(rental, rental.getRentalStatus());
+                GUIComponents.rentalHistoryPanel.revalidate();
+                GUIComponents.rentalHistoryPanel.repaint();
+            });
+
             // view vehicle details button
             JButton viewVehicleButton = new JButton(
                     "Vehicle Details >");
@@ -535,8 +560,11 @@ public class RentalHistory extends JPanel {
             if (rental.getRentalStatus().equals(RentalStatus.APPROVED)) {
                 gbc.gridx = 0;
                 gbc.gridy = 0;
-                operationsPanel.add(pickUpButton, gbc);
+                rejectButton.setText("Cancel");
+                operationsPanel.add(rejectButton, gbc);
                 gbc.gridy = 1;
+                operationsPanel.add(pickUpButton, gbc);
+                gbc.gridy = 2;
                 operationsPanel.add(viewVehicleButton, gbc);
             }
 
@@ -545,6 +573,8 @@ public class RentalHistory extends JPanel {
                 gbc.gridy = 0;
                 operationsPanel.add(dropOffButton, gbc);
                 gbc.gridy = 1;
+                operationsPanel.add(overdueButton, gbc);
+                gbc.gridy = 2;
                 operationsPanel.add(viewVehicleButton, gbc);
             }
         }
