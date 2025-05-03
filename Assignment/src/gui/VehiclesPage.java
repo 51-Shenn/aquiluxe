@@ -30,7 +30,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
     private List<Vehicle> vehicles;
     private List<Vehicle> sortedVehicles;
-    private Vehicle[] vehicless = new Vehicle[4];
+    private List<Vehicle> firstFourVehicles;
 
     protected final Border BORDER = new LineBorder(Color.BLACK, 2);
     protected final Border PADDING = new EmptyBorder(10, 15, 10, 15);
@@ -48,9 +48,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         this.panel = panel;
         this.vehicles = new ArrayList<>(VehicleController.processVehicles());
         this.sortedVehicles = this.vehicles;
-        for (int i = 0; i < 4; i++) {
-            vehicless[i] = vehicles.get(i);
-        }
+        this.firstFourVehicles = vehicles.subList(0, Math.min(4, vehicles.size()));
         VehiclesPage.user = user;
         if (user.getUserType().equals("Admin")) {
             admin = UserController.getAdminFromDatabase(user);
@@ -353,7 +351,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             public void mouseClicked(MouseEvent e) {
                 // Check if the click is on the image
                 if (SwingUtilities.isLeftMouseButton(e)) {
-                    JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, vehicles);
+                    JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, firstFourVehicles);
                     GUIComponents.cardPanel.add(detailsPanel, "VehicleDetailsPage");
                     GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
                 }
@@ -420,9 +418,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                             imageFile.delete();
                             vehicles = new ArrayList<>(VehicleController.processVehicles());
                             sortedVehicles = vehicles;
-                            for (int i = 0; i < 4; i++) {
-                                vehicless[i] = vehicles.get(i);
-                            }
+                            firstFourVehicles = vehicles.subList(0, Math.min(4, vehicles.size()));
                             goBackToVehiclePage();
                         }
                     }
@@ -434,7 +430,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                     public void mouseClicked(MouseEvent e) {
                         // Check if the click is on the image
                         if (SwingUtilities.isLeftMouseButton(e)) {
-                            JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, vehicles);
+                            JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, firstFourVehicles);
                             GUIComponents.cardPanel.add(detailsPanel, "VehicleDetailsPage");
                             GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
                         }
@@ -470,7 +466,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 public void mouseClicked(MouseEvent e) {
                     // Check if the click is on the image
                     if (SwingUtilities.isLeftMouseButton(e)) {
-                        JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, vehicles);
+                        JPanel detailsPanel = new VehiclesPageDetails(frame, panel, vehicle, firstFourVehicles);
                         GUIComponents.cardPanel.add(detailsPanel, "VehicleDetailsPage");
                         GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
                     }
@@ -2568,9 +2564,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         resetForm();
         vehicles = new ArrayList<>(VehicleController.processVehicles());
         sortedVehicles = vehicles;
-        for (int i = 0; i < 4; i++) {
-            vehicless[i] = vehicles.get(i);
-        }
+        firstFourVehicles = vehicles.subList(0, Math.min(4, vehicles.size()));
         updateFilterDropdowns();
     }
 
@@ -2628,9 +2622,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
         vehicles = new ArrayList<>(VehicleController.processVehicles());
         sortedVehicles = vehicles;
-        for (int i = 0; i < 4; i++) {
-            vehicless[i] = vehicles.get(i);
-        }
+        firstFourVehicles = vehicles.subList(0, Math.min(4, vehicles.size()));
         goBackToVehiclePage();
     }
 
