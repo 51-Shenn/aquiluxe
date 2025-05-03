@@ -74,21 +74,84 @@ public class VehicleService {
 
     public static List<Vehicle> getAllVehiclesfromDAO() {
 
-        List<Vehicle> vehicles = new ArrayList<>(VehicleDAO.getAllVehicles());
+        List<Vehicle> allVehicles = new ArrayList<>(VehicleDAO.getAllVehicles());
+        List<Vehicle> vehicles = new ArrayList<>();
+        for (Vehicle vehicle : allVehicles) {
+            if (!(vehicle.getBrand().equals("Deleted") && 
+                vehicle.getModel().equals("Deleted") && 
+                vehicle.getYear() == 0 && 
+                vehicle.getCapacity() == 0 &&
+                vehicle.getHorsepower() == 0 &&
+                vehicle.getColor().equals("Deleted") &&
+                vehicle.getMpg() == 0 &&
+                vehicle.getVinNumber().equals("Deleted") &&
+                vehicle.getRegistrationNumber().equals("Deleted") &&
+                vehicle.getRentalPriceDay() == 0 &&
+                vehicle.getTransmission().equals("Deleted") &&
+                vehicle.getFuelType().equals("Deleted") &&
+                vehicle.getSeatingCapacity() == 0 &&
+                vehicle.getAvailability() == false &&
+                vehicle.getFeatures().equals("Deleted")))
+            {
+                vehicles.add(vehicle);
+            }
+        }
 
         return vehicles;
     }
 
     public static List<Vehicle> getAllCarsfromDAO() {
 
-        List<Vehicle> vehicles = new ArrayList<>(VehicleDAO.getAllCars());
+        List<Vehicle> allVehicles = new ArrayList<>(VehicleDAO.getAllCars());
+        List<Vehicle> vehicles = new ArrayList<>();
+        for (Vehicle vehicle : allVehicles) {
+            if (!(vehicle.getBrand().equals("Deleted") && 
+                vehicle.getModel().equals("Deleted") && 
+                vehicle.getYear() == 0 && 
+                vehicle.getCapacity() == 0 &&
+                vehicle.getHorsepower() == 0 &&
+                vehicle.getColor().equals("Deleted") &&
+                vehicle.getMpg() == 0 &&
+                vehicle.getVinNumber().equals("Deleted") &&
+                vehicle.getRegistrationNumber().equals("Deleted") &&
+                vehicle.getRentalPriceDay() == 0 &&
+                vehicle.getTransmission().equals("Deleted") &&
+                vehicle.getFuelType().equals("Deleted") &&
+                vehicle.getSeatingCapacity() == 0 &&
+                vehicle.getAvailability() == false &&
+                vehicle.getFeatures().equals("Deleted")))
+            {
+                vehicles.add(vehicle);
+            }
+        }
 
         return vehicles;
     }
 
     public static List<Vehicle> getAllBikesfromDAO() {
 
-        List<Vehicle> vehicles = new ArrayList<>(VehicleDAO.getAllBikes());
+        List<Vehicle> allVehicles = new ArrayList<>(VehicleDAO.getAllBikes());
+        List<Vehicle> vehicles = new ArrayList<>();
+        for (Vehicle vehicle : allVehicles) {
+            if (!(vehicle.getBrand().equals("Deleted") && 
+                vehicle.getModel().equals("Deleted") && 
+                vehicle.getYear() == 0 && 
+                vehicle.getCapacity() == 0 &&
+                vehicle.getHorsepower() == 0 &&
+                vehicle.getColor().equals("Deleted") &&
+                vehicle.getMpg() == 0 &&
+                vehicle.getVinNumber().equals("Deleted") &&
+                vehicle.getRegistrationNumber().equals("Deleted") &&
+                vehicle.getRentalPriceDay() == 0 &&
+                vehicle.getTransmission().equals("Deleted") &&
+                vehicle.getFuelType().equals("Deleted") &&
+                vehicle.getSeatingCapacity() == 0 &&
+                vehicle.getAvailability() == false &&
+                vehicle.getFeatures().equals("Deleted")))
+            {
+                vehicles.add(vehicle);
+            }
+        }
 
         return vehicles;
     }
@@ -412,7 +475,7 @@ public class VehicleService {
     }
 
     public static boolean validateRegistrationNumber(String registrationNumber) {
-        return registrationNumber != null && !registrationNumber.isEmpty() && !registrationNumber.matches("[A-HJ-NPR-Z0-9 ]+");
+        return registrationNumber != null && !registrationNumber.isEmpty() && !registrationNumber.matches("[A-Z ]+") || !registrationNumber.matches("[0-9 ]+");
     }
 
     public static boolean validateRentalPriceDay(String rentalPriceDay) {
