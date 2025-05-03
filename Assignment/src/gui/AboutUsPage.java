@@ -20,7 +20,8 @@ public class AboutUsPage extends JPanel {
     private JPanel panel;
 
     AboutUsPage() {
-        this(new JFrame(), new JPanel());
+        this.frame = new JFrame();
+        this.panel = new JPanel();
     }
 
     AboutUsPage(JFrame frame, JPanel panel) {

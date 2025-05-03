@@ -1,11 +1,8 @@
 package services;
 
-import datamodels.BikeDiscount;
-import datamodels.CarDiscount;
 import datamodels.Rental;
 import datamodels.User;
 import datamodels.Vehicle;
-import datamodels.VehicleDiscount;
 import database.RentalDAO;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,9 +10,8 @@ import java.util.List;
 
 public class RentalService {
     // add Rental
-    public static int addRental(Rental rental) {
-        int rentalId = RentalDAO.addRental(rental);
-        return rentalId;
+    public static void addRental(Rental rental) {
+        RentalDAO.addRental(rental);
     }
 
     // updateRentalStatus ( rental : Rental, status : RentalStatus )
@@ -77,32 +73,10 @@ public class RentalService {
                 return RentalDAO.getRentalsByVehicle((Vehicle) value);
             }
             case RENTAL_STATUS -> {
-                return RentalDAO.getRentalsByStatus((Rental.RentalStatus) value, (Rental.RentalStatus) value,
-                        (Rental.RentalStatus) value);
+                return RentalDAO.getRentalsByStatus((Rental.RentalStatus) value);
             }
             case PAYMENT_STATUS -> {
                 return RentalDAO.getRentalsByPaymentStatus((Rental.PaymentStatus) value);
-            }
-            default -> {
-                throw new IllegalArgumentException("Unsupported filter type: " + type);
-            }
-        }
-    }
-
-    public static List<Rental> getRentalHistory(FilterType type, Object value1, Object value2, Object value3) {
-        switch (type) {
-            case USER -> {
-                return RentalDAO.getRentalsByUser((User) value1);
-            }
-            case VEHICLE -> {
-                return RentalDAO.getRentalsByVehicle((Vehicle) value1);
-            }
-            case RENTAL_STATUS -> {
-                return RentalDAO.getRentalsByStatus((Rental.RentalStatus) value1, (Rental.RentalStatus) value2,
-                        (Rental.RentalStatus) value3);
-            }
-            case PAYMENT_STATUS -> {
-                return RentalDAO.getRentalsByPaymentStatus((Rental.PaymentStatus) value1);
             }
             default -> {
                 throw new IllegalArgumentException("Unsupported filter type: " + type);
@@ -114,23 +88,16 @@ public class RentalService {
         return RentalDAO.getRentalsByDateRange(startDate, endDate);
     }
 
-    private static long daysBetween;
-
     // calculateBaseRentalCost : daysbetween * rentalpriceday
     public static double calculateBaseRentalCost(Rental rental) {
-        daysBetween = java.time.temporal.ChronoUnit.DAYS.between(rental.getRentStartDate(),
-                rental.getRentEndDate());
-
-        if (daysBetween >= 0)
-            daysBetween = daysBetween + 1;
-        else
-            daysBetween = 1;
+        long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(rental.getRentStartDate(),
+                rental.getRentEndDate()) + 1; // inclusive
 
         double rentalPricePerDay = rental.getRentVehicle().getRentalPriceDay();
 
         double baseRentalCost = daysBetween * rentalPricePerDay;
 
-        return baseRentalCost;
+        return Math.round(baseRentalCost * 100.0) / 100.0;
     }
 
     // calculateDepositCost : 120% of base rental cost
@@ -139,7 +106,7 @@ public class RentalService {
 
         double depositCost = baseRentalCost * 1.20;
 
-        return depositCost;
+        return Math.round(depositCost * 100.0) / 100.0;
     }
 
     // calculateInsuranceCost : 15% of base rental cost
@@ -148,7 +115,7 @@ public class RentalService {
 
         double insuranceCost = baseRentalCost * 0.15;
 
-        return insuranceCost;
+        return Math.round(insuranceCost * 100.0) / 100.0;
     }
 
     // calculateTaxCost : 5% of base rental cost
@@ -157,7 +124,7 @@ public class RentalService {
 
         double taxCost = baseRentalCost * 0.05;
 
-        return taxCost;
+        return Math.round(taxCost * 100.0) / 100.0;
     }
 
     // calculateSubtotalRentalCost without deposit cost
@@ -168,41 +135,17 @@ public class RentalService {
 
         double subtotalRentalCost = baseRentalCost + insuranceCost + taxCost;
 
-        return subtotalRentalCost;
-    }
-
-    // calculate discount amount
-    public static double calculateDiscount(Rental rental) {
-        double subtotalRentalCost = calculateSubtotalRentalCost(rental);
-        double discountAmount = 0;
-
-        Vehicle vehicle = rental.getRentVehicle();
-        VehicleDiscount discount = null;
-
-        if (daysBetween > 3) {
-            if (vehicle instanceof datamodels.Car) {
-                discount = new CarDiscount();
-            } else if (vehicle instanceof datamodels.Bike) {
-                discount = new BikeDiscount();
-            }
-
-            if (discount != null) {
-                discountAmount = discount.calculateDiscountPrice(subtotalRentalCost);
-            }
-        }
-
-        return discountAmount;
+        return Math.round(subtotalRentalCost * 100.0) / 100.0;
     }
 
     // calculateTotalRentalCost with deposit cost
     public static double calculateTotalRentalCost(Rental rental) {
         double subtotalRentalCost = calculateSubtotalRentalCost(rental);
         double depositCost = calculateDepositCost(rental);
-        double discountCost = calculateDiscount(rental);
 
-        double totalRentalCost = subtotalRentalCost - discountCost + depositCost;
+        double totalRentalCost = subtotalRentalCost + depositCost;
 
-        return totalRentalCost;
+        return Math.round(totalRentalCost * 100.0) / 100.0;
     }
 
 }

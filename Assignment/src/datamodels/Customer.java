@@ -24,7 +24,9 @@ public class Customer extends User {
 
     public Customer(int userId, String fullName, String gender, String phoneNumber, String userEmail,
             String username, String password, String address, String license, List<Rental> rentalHistory) {
-        this(userId, fullName, gender, phoneNumber, userEmail, username, password, address, license);
+        super(userId, fullName, gender, phoneNumber, userEmail, username, password);
+        this.address = address;
+        this.license = license;
         this.rentalHistory = rentalHistory; // No need pass to User class
     }
 
@@ -52,19 +54,5 @@ public class Customer extends User {
     // Add Rental to History
     public void addRental(Rental rental) {
         this.rentalHistory.add(rental);
-    }
-
-    @Override
-    public String toString() {
-        return " Customer { " +
-                "userId = " + userId +
-                ", fullName = '" + fullName + '\'' +
-                ", gender = '" + gender + '\'' +
-                ", phoneNumber = '" + phoneNumber + '\'' +
-                ", userEmail = '" + userEmail + '\'' +
-                ", username = '" + username + '\'' +
-                ", address = '" + address + '\'' +
-                ", license = '" + license + '\'' +
-                " }";
     }
 }

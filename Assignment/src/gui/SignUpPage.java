@@ -36,7 +36,9 @@ public class SignUpPage extends AuthenticationPage {
     private JLabel confirmPasswordValidationLabel;
 
     public SignUpPage() {
-        this(new JFrame(), new JPanel(), new User());
+        this.frame = new JFrame();
+        this.panel = new JPanel();
+        this.user = new User();
     }
 
     public SignUpPage(JFrame frame, JPanel panel, User user) {

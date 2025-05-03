@@ -24,17 +24,4 @@ public class Admin extends User {
     public void setAdminRole(String position) {
         this.position = position;
     }
-
-    @Override
-    public String toString() {
-        return " Admin { " +
-                "userId = " + userId +
-                ", fullName = '" + fullName + '\'' +
-                ", gender = '" + gender + '\'' +
-                ", phoneNumber = '" + phoneNumber + '\'' +
-                ", userEmail = '" + userEmail + '\'' +
-                ", username = '" + username + '\'' +
-                ", position = '" + position + '\'' +
-                " }";
-    }
 }

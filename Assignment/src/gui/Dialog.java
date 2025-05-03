@@ -22,7 +22,7 @@ public class Dialog extends JDialog {
     private static JDialog adminDialog;
 
     public Dialog() {
-        this(new JFrame());
+        this.frame = new JFrame();
     }
 
     public Dialog(JFrame frame) {
@@ -106,7 +106,7 @@ public class Dialog extends JDialog {
         label.setFont(CustomFonts.INSTRUMENT_SANS_SEMI_BOLD.deriveFont(15f));
 
         RoundedButton getPassKeyButton = new RoundedButton(10, Theme.getSuccess());
-        getPassKeyButton.setText("Get Pass-Key");
+        getPassKeyButton.setText("Get Pass Key");
         getPassKeyButton.setForeground(Theme.getSuccessForeground());
         getPassKeyButton.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(20f));
         getPassKeyButton.setPreferredSize(new Dimension(160, 50));
@@ -140,7 +140,7 @@ public class Dialog extends JDialog {
 
             if(position.equals("MANAGER")|| position.equals("EMPLOYEE")) {
                 warningLabel.setText("Do not close this window and overflow menu.");
-                label.setText("If closed, generate a new pass-key.");
+                label.setText("If closed, generate a new pass key.");
 
                 UUID uuid = UUID.randomUUID();
                 String uuidString = uuid.toString();

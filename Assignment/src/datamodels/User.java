@@ -29,7 +29,13 @@ public class User {
 
     public User(int userId, String fullName, String gender, String phoneNumber, String userEmail, String username,
             String password, String userType) {
-        this(userId, fullName, gender, phoneNumber, userEmail, username, password);
+        this.userId = userId;
+        this.fullName = fullName;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.username = username;
+        this.userEmail = userEmail;
+        this.password = password;
         this.userType = userType;
     }
 

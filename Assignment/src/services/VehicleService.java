@@ -3,19 +3,9 @@ package services;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
-import javax.imageio.ImageIO;
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 
 import datamodels.Vehicle;
 import database.VehicleDAO;
@@ -24,25 +14,6 @@ public class VehicleService {
     // filters
     // methods that pass in cars and return them with filtered cars
     // check car.getbrand
-    private static final Map<String, Color> standardColors = new HashMap<>();
-    private final static String IMAGE_DIR = "images/cars/";
-
-    static {
-        // Add standard colors
-        standardColors.put("Black", Color.BLACK);
-        standardColors.put("Blue", Color.BLUE);
-        standardColors.put("Cyan", Color.CYAN);
-        standardColors.put("Dark Gray", Color.DARK_GRAY);
-        standardColors.put("Gray", Color.GRAY);
-        standardColors.put("Green", Color.GREEN);
-        standardColors.put("Light Gray", Color.LIGHT_GRAY);
-        standardColors.put("Magenta", Color.MAGENTA);
-        standardColors.put("Orange", Color.ORANGE);
-        standardColors.put("Pink", Color.PINK);
-        standardColors.put("Red", Color.RED);
-        standardColors.put("White", Color.WHITE);
-        standardColors.put("Yellow", Color.YELLOW);
-    }
 
     public static List<String> getDistinctBrands(List<Vehicle> vehicles) {
         Set<String> distinctBrands = new HashSet<>();
@@ -75,20 +46,6 @@ public class VehicleService {
     public static List<Vehicle> getAllVehiclesfromDAO() {
 
         List<Vehicle> vehicles = new ArrayList<>(VehicleDAO.getAllVehicles());
-
-        return vehicles;
-    }
-
-    public static List<Vehicle> getAllCarsfromDAO() {
-
-        List<Vehicle> vehicles = new ArrayList<>(VehicleDAO.getAllCars());
-
-        return vehicles;
-    }
-
-    public static List<Vehicle> getAllBikesfromDAO() {
-
-        List<Vehicle> vehicles = new ArrayList<>(VehicleDAO.getAllBikes());
 
         return vehicles;
     }
@@ -176,7 +133,7 @@ public class VehicleService {
             return car;
         }
         for (Vehicle c : car) {
-            if (c.getAvailability() == availability) {
+            if (c.isAvailability() == availability) {
                 filteredCars.add(c);
             }
         }
@@ -237,27 +194,6 @@ public class VehicleService {
         return filteredCars;
     }
 
-    // check search bar
-    public static List<Vehicle> searchCar(List<Vehicle> car, String searchInput) {
-        List<Vehicle> filteredCars = new ArrayList<>();
-
-        searchInput = searchInput.toUpperCase();
-
-        if (searchInput.equals("SEARCH FOR VEHICLES") || searchInput.equals("")) {
-            return car;
-        }
-        else {
-            for (Vehicle c : car) {
-                if (c.getBrand().toUpperCase().contains(searchInput) || c.getModel().toUpperCase().contains(searchInput) || Integer.toString(c.getYear()).contains(searchInput) || c.getTransmission().toUpperCase().contains(searchInput) || 
-                c.getFuelType().toUpperCase().contains(searchInput) || c.getVehicleType().toUpperCase().contains(searchInput) || c.getFeatures().toUpperCase().contains(searchInput)) {
-                        filteredCars.add(c);
-                }
-            }
-            return filteredCars;
-        }
-
-    }
-
     public static List<Vehicle> sortByYearNewestFirst(List<Vehicle> cars) {
         List<Vehicle> sortedCars = new ArrayList<>(cars);
         Collections.sort(sortedCars, new Comparator<Vehicle>() {
@@ -306,158 +242,4 @@ public class VehicleService {
         return sortedCars;
     }
 
-    public static String getClosestColorName(Color color) {
-        try {
-            if (color.equals(Color.BLACK)) return "Black";
-            if (color.equals(Color.BLUE)) return "Blue";
-            if (color.equals(Color.CYAN)) return "Cyan";
-            if (color.equals(Color.DARK_GRAY)) return "Dark Gray";
-            if (color.equals(Color.GRAY)) return "Gray";
-            if (color.equals(Color.GREEN)) return "Green";
-            if (color.equals(Color.LIGHT_GRAY)) return "Light Gray";
-            if (color.equals(Color.MAGENTA)) return "Magenta";
-            if (color.equals(Color.ORANGE)) return "Orange";
-            if (color.equals(Color.PINK)) return "Pink";
-            if (color.equals(Color.RED)) return "Red";
-            if (color.equals(Color.WHITE)) return "White";
-            if (color.equals(Color.YELLOW)) return "Yellow";
-            
-            String customName = "Custom ";
-            String colorName = "";
-            double closestDistance = Double.MAX_VALUE;
-
-            for (Map.Entry<String, Color> entry : standardColors.entrySet()) {
-                double distance = colorDistance(color, entry.getValue());
-                if (distance < closestDistance) {
-                    closestDistance = distance;
-                    colorName = entry.getKey();
-                }
-            }
-
-            return customName.concat(colorName);
-        }
-        catch(NullPointerException e) {
-            return "Pick A Color";
-        }
-    }
-
-    private static double colorDistance(Color c1, Color c2) {
-        int rDiff = c1.getRed() - c2.getRed();
-        int gDiff = c1.getGreen() - c2.getGreen();
-        int bDiff = c1.getBlue() - c2.getBlue();
-        return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
-    }
-
-    //validate vinNumber (18digit)
-    public static boolean validateVinNumber(String vinNumber) {
-        return vinNumber.length() == 17 && vinNumber.matches("[A-HJ-NPR-Z0-9]+");
-    }
-
-    //validate color (color cannot be null)
-    public static boolean validateColor(Color color) {
-        return color != null;
-    }
-
-    //all cannot be null except features
-    public static boolean validateStrings(String registrationNumber, String brand, String model) {
-        return registrationNumber != null && !registrationNumber.isEmpty()
-        && brand != null && !brand.isEmpty()
-        && model != null && !model.isEmpty();
-    }
-
-    public static boolean validateRentalPriceDay(String rentalPriceDay) {
-        try {
-            double value = Double.parseDouble(rentalPriceDay);
-            return value > 0;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    public static boolean validateYear(String year) {
-        return !year.equals("Select Year");
-    }
-
-    public static boolean validateMpg(String mpg) {
-        try {
-            double value = Double.parseDouble(mpg);
-            return value >= 0;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    public static boolean validateCapacity(String capacity) {
-        try {
-            int value = Integer.parseInt(capacity);
-            return value >= 0;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    public static boolean validateHorsepower(String horsepower) {
-        try {
-            int value = Integer.parseInt(horsepower);
-            return value > 0;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    public static boolean validateTransmission(String transmission) {
-        return !transmission.equals("Select Transmission");
-    }
-
-    public static boolean validateFuelType(String fuelType) {
-        return !fuelType.equals("Select Fuel Type");
-    }
-
-    public static boolean validateVehicleType(String vehicleType) {
-        return !vehicleType.equals("Select Vehicle Type");
-    }
-
-    public static boolean validateImage(File selectedImageFile, BufferedImage selectedImagePreview) {
-        return selectedImageFile != null || selectedImagePreview != null;
-    }
-
-    public static boolean imageSaving(File selectedImageFile, BufferedImage selectedImagePreview){
-        File imagesDir = new File(IMAGE_DIR);
-        imagesDir.mkdirs();
-
-        String newFileName = VehicleService.getImage_Path(selectedImageFile);
-        File targetFile = new File(imagesDir, newFileName);
-
-        try {
-            ImageIO.write(selectedImagePreview, "jpg", targetFile); //save
-            return true;
-        } catch (IOException e) {
-            return false;
-        } 
-    }
-
-    public static String getImage_Path(File selectedImageFile) {
-        String fileName = selectedImageFile.getName();
-        String baseName = fileName.substring(0, fileName.lastIndexOf('.'));
-        String uniqueID = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-
-        String newFileName = baseName + uniqueID + ".jpg";
-        return newFileName;
-    }
-
-    public static void addVehiclestoDAO(Vehicle vehicle) {
-
-        VehicleDAO.addVehicle(vehicle);
-    }
-
-    public static void deleteVehiclefromDAO(Vehicle vehicle) {
-
-        VehicleDAO.deleteVehicle(vehicle);
-    }
-
-    public static void updateVehiclefromDAO(Vehicle updatedVehicle) {
-
-        VehicleDAO.updateVehicle(updatedVehicle);
-
-    }
 }

@@ -7,17 +7,13 @@ import javax.swing.JOptionPane;
 public class IconLoader extends Theme {
 
     // shared icons
-    // window-icon
     private static final File APP_ICON;
-    // authentication-page
     private static final File X_ICON;
     private static final File EYE_ON_ICON;
     private static final File EYE_OFF_ICON;
-    // dialog
     private static final File DIALOG_SUCCESS;
     private static final File DIALOG_ERROR;
     private static final File DIALOG_HAZARD;
-    // profile
     private static final File BIG_MALE_PROFILE_ICON;
     private static final File BIG_FEMALE_PROFILE_ICON;
     private static final File SMALL_MALE_PROFILE_ICON;
@@ -29,14 +25,10 @@ public class IconLoader extends Theme {
     private static final File GITHUB_ICON;
     private static final File CONTACT_ICON;
     private static final File EMAIL_ICON;
-    private static final File LOCATION_ICON;
-    // vehicle-page
     private static final File SEARCH_ICON;
-    private static final File ADD_ICON;
-    private static final File DELETE_ICON;
+    private static final File LOCATION_ICON;
     
     // light theme icons
-    // overflow-menu
     private static final File BLACK_CLOSE_ICON;
     private static final File BLACK_EDIT_PROFILE_ICON;
     private static final File BLACK_SIGN_IN_ICON;
@@ -48,25 +40,13 @@ public class IconLoader extends Theme {
     private static final File BLACK_PLUS_ICON;
     private static final File BLACK_SWITCH_ICON;
     private static final File BLACK_TRASH_ICON;
-    // vehicle-details-page
     private static final File BLACK_UP_ICON;
     private static final File BLACK_DOWN_ICON;
     private static final File BLACK_RIGHT_ICON;
-    // vehicle-page
     private static final File BLACK_CAR_ICON;
     private static final File BLACK_BIKE_ICON;
-    private static final File BLACK_MANUAL_TRANSMISSION_ICON;
-    private static final File BLACK_SPEEDOMETER_ICON;
-    private static final File BLACK_CAR_SEAT_ICON;
-    private static final File BLACK_CHASSIS_ICON;
-    private static final File BLACK_ENGINE_ICON;
-    private static final File BLACK_FUEL_GAUGE_ICON;
-    private static final File BLACK_GAS_ICON;
-    private static final File BLACK_HORSE_ICON;
-    private static final File BLACK_CIRCLE_ICON;
     
     // dark theme icons
-    // overflow-menu
     private static final File WHITE_CLOSE_ICON;
     private static final File WHITE_EDIT_PROFILE_ICON;
     private static final File WHITE_SIGN_IN_ICON;
@@ -78,22 +58,11 @@ public class IconLoader extends Theme {
     private static final File WHITE_PLUS_ICON;
     private static final File WHITE_SWITCH_ICON;
     private static final File WHITE_TRASH_ICON;
-    // vehicle-details-page
     private static final File WHITE_UP_ICON;
     private static final File WHITE_DOWN_ICON;
     private static final File WHITE_RIGHT_ICON;
-    // vehicle-page
     private static final File WHITE_CAR_ICON;
     private static final File WHITE_BIKE_ICON;
-    private static final File WHITE_MANUAL_TRANSMISSION_ICON;
-    private static final File WHITE_SPEEDOMETER_ICON;
-    private static final File WHITE_CAR_SEAT_ICON;
-    private static final File WHITE_CHASSIS_ICON;
-    private static final File WHITE_ENGINE_ICON;
-    private static final File WHITE_FUEL_GAUGE_ICON;
-    private static final File WHITE_GAS_ICON;
-    private static final File WHITE_HORSE_ICON;
-    private static final File WHITE_CIRCLE_ICON;
     
     static {
         String mainPath = "images/icons/";
@@ -111,6 +80,7 @@ public class IconLoader extends Theme {
         X_ICON = new File(String.format("%s" + "x.png", lightThemePath));
         EYE_ON_ICON = new File(String.format("%s" + "eye-on.png", lightThemePath));
         EYE_OFF_ICON = new File(String.format("%s" + "eye-off.png", lightThemePath));
+        SEARCH_ICON = new File(String.format("%s" + "search.png", vehiclePath));
 
         DIALOG_SUCCESS = new File(String.format("%s" + "success.png", dialogPath));
         DIALOG_ERROR = new File(String.format("%s" + "error.png", dialogPath));
@@ -129,10 +99,6 @@ public class IconLoader extends Theme {
         EMAIL_ICON = new File(String.format("%s" + "email.png", profilePath));
         LOCATION_ICON = new File(String.format("%s" + "location.png", profilePath));
 
-        SEARCH_ICON = new File(String.format("%s" + "search.png", vehiclePath));
-        ADD_ICON = new File(String.format("%s" + "add.png", vehiclePath));
-        DELETE_ICON = new File(String.format("%s" + "delete.png", vehiclePath));
-
         File[] generalIcons = {
             X_ICON,
             EYE_ON_ICON,
@@ -143,18 +109,14 @@ public class IconLoader extends Theme {
             BIG_MALE_PROFILE_ICON,
             BIG_FEMALE_PROFILE_ICON,
             SMALL_MALE_PROFILE_ICON,
-            SMALL_FEMALE_PROFILE_ICON,
+            SMALL_MALE_PROFILE_ICON,
             AVATAR_1_ICON,
             AVATAR_2_ICON,
             AVATAR_3_ICON,
             INSTAGRAM_ICON,
             GITHUB_ICON,
             CONTACT_ICON,
-            EMAIL_ICON,
-            LOCATION_ICON,
-            SEARCH_ICON,
-            ADD_ICON,
-            DELETE_ICON
+            EMAIL_ICON
         };
 
         // light theme icons
@@ -169,21 +131,11 @@ public class IconLoader extends Theme {
         BLACK_PLUS_ICON = new File(String.format("%s" + "plus.png", lightThemePath));
         BLACK_SWITCH_ICON = new File(String.format("%s" + "switch.png", lightThemePath));
         BLACK_TRASH_ICON = new File(String.format("%s" + "trash.png", lightThemePath));
-
         BLACK_UP_ICON = new File(String.format("%s" + "chevron-up.png", vehicleLightThemePath));
         BLACK_DOWN_ICON = new File(String.format("%s" + "chevron-down.png", vehicleLightThemePath));
         BLACK_RIGHT_ICON = new File(String.format("%s" + "chevron-right.png", vehicleLightThemePath));
         BLACK_CAR_ICON = new File(String.format("%s" + "car.png", vehicleLightThemePath));
         BLACK_BIKE_ICON = new File(String.format("%s" + "bike.png", vehicleLightThemePath));
-        BLACK_MANUAL_TRANSMISSION_ICON = new File(String.format("%s" + "manual-transmission.png", vehicleLightThemePath));
-        BLACK_SPEEDOMETER_ICON = new File(String.format("%s" + "speedometer.png", vehicleLightThemePath));
-        BLACK_CAR_SEAT_ICON = new File(String.format("%s" + "car-seat.png", vehicleLightThemePath));
-        BLACK_CHASSIS_ICON = new File(String.format("%s" + "chassis.png", vehicleLightThemePath));
-        BLACK_ENGINE_ICON = new File(String.format("%s" + "engine.png", vehicleLightThemePath));
-        BLACK_FUEL_GAUGE_ICON = new File(String.format("%s" + "fuel-gauge.png", vehicleLightThemePath));
-        BLACK_GAS_ICON = new File(String.format("%s" + "gas-station.png", vehicleLightThemePath));
-        BLACK_HORSE_ICON = new File(String.format("%s" + "horse.png", vehicleLightThemePath));
-        BLACK_CIRCLE_ICON = new File(String.format("%s" + "circle.png", vehicleLightThemePath));
 
         File[] blackIcons = {
             BLACK_CLOSE_ICON,
@@ -201,16 +153,7 @@ public class IconLoader extends Theme {
             BLACK_DOWN_ICON,
             BLACK_RIGHT_ICON,
             BLACK_CAR_ICON,
-            BLACK_BIKE_ICON,
-            BLACK_MANUAL_TRANSMISSION_ICON,
-            BLACK_SPEEDOMETER_ICON,
-            BLACK_CAR_SEAT_ICON,
-            BLACK_CHASSIS_ICON,
-            BLACK_ENGINE_ICON,
-            BLACK_FUEL_GAUGE_ICON,
-            BLACK_GAS_ICON,
-            BLACK_HORSE_ICON,
-            BLACK_CIRCLE_ICON
+            BLACK_BIKE_ICON
         };
         
         // dark theme icons
@@ -225,21 +168,11 @@ public class IconLoader extends Theme {
         WHITE_PLUS_ICON = new File(String.format("%s" + "plus.png", darkThemePath));
         WHITE_SWITCH_ICON = new File(String.format("%s" + "switch.png", darkThemePath));
         WHITE_TRASH_ICON = new File(String.format("%s" + "trash.png", darkThemePath));
-
         WHITE_UP_ICON = new File(String.format("%s" + "chevron-up.png", vehicleDarkThemePath));
         WHITE_DOWN_ICON = new File(String.format("%s" + "chevron-down.png", vehicleDarkThemePath));
         WHITE_RIGHT_ICON = new File(String.format("%s" + "chevron-right.png", vehicleDarkThemePath));
         WHITE_CAR_ICON = new File(String.format("%s" + "car.png", vehicleDarkThemePath));
         WHITE_BIKE_ICON = new File(String.format("%s" + "bike.png", vehicleDarkThemePath));
-        WHITE_MANUAL_TRANSMISSION_ICON = new File(String.format("%s" + "manual-transmission.png", vehicleDarkThemePath));
-        WHITE_SPEEDOMETER_ICON = new File(String.format("%s" + "speedometer.png", vehicleDarkThemePath));
-        WHITE_CAR_SEAT_ICON = new File(String.format("%s" + "car-seat.png", vehicleDarkThemePath));
-        WHITE_CHASSIS_ICON = new File(String.format("%s" + "chassis.png", vehicleDarkThemePath));
-        WHITE_ENGINE_ICON = new File(String.format("%s" + "engine.png", vehicleDarkThemePath));
-        WHITE_FUEL_GAUGE_ICON = new File(String.format("%s" + "fuel-gauge.png", vehicleDarkThemePath));
-        WHITE_GAS_ICON = new File(String.format("%s" + "gas-station.png", vehicleDarkThemePath));
-        WHITE_HORSE_ICON = new File(String.format("%s" + "horse.png", vehicleDarkThemePath));
-        WHITE_CIRCLE_ICON = new File(String.format("%s" + "circle.png", vehicleDarkThemePath));
 
         File[] whiteIcons = {
             WHITE_CLOSE_ICON,
@@ -257,16 +190,7 @@ public class IconLoader extends Theme {
             WHITE_DOWN_ICON,
             WHITE_RIGHT_ICON,
             WHITE_CAR_ICON,
-            WHITE_BIKE_ICON,
-            WHITE_MANUAL_TRANSMISSION_ICON,
-            WHITE_SPEEDOMETER_ICON,
-            WHITE_CAR_SEAT_ICON,
-            WHITE_CHASSIS_ICON,
-            WHITE_ENGINE_ICON,
-            WHITE_FUEL_GAUGE_ICON,
-            WHITE_GAS_ICON,
-            WHITE_HORSE_ICON,
-            WHITE_CIRCLE_ICON
+            WHITE_BIKE_ICON
         };
 
         // check if every file exists
@@ -306,6 +230,10 @@ public class IconLoader extends Theme {
 
     public static ImageIcon getEyeOffIcon() {
         return new ImageIcon(EYE_OFF_ICON.toString());
+    }
+
+    public static ImageIcon getSearchIcon() {
+        return new ImageIcon(SEARCH_ICON.toString());
     }
 
     public static ImageIcon getDialogSuccessIcon() {
@@ -357,18 +285,6 @@ public class IconLoader extends Theme {
 
     public static ImageIcon getLocationIcon() {
         return new ImageIcon(LOCATION_ICON.toString());
-    }
-
-    public static ImageIcon getSearchIcon() {
-        return new ImageIcon(SEARCH_ICON.toString());
-    }
-
-    public static ImageIcon getAddIcon() {
-        return new ImageIcon(ADD_ICON.toString());
-    }
-
-    public static ImageIcon getDeleteIcon() {
-        return new ImageIcon(DELETE_ICON.toString());
     }
 
     public static ImageIcon getCloseIcon() {
@@ -433,41 +349,5 @@ public class IconLoader extends Theme {
 
     public static ImageIcon getBikeIcon() {
         return Theme.isDarkMode()? new ImageIcon(WHITE_BIKE_ICON.toString()) : new ImageIcon(BLACK_BIKE_ICON.toString());
-    }
-
-    public static ImageIcon getTransmissionIcon() {
-        return Theme.isDarkMode()? new ImageIcon(WHITE_MANUAL_TRANSMISSION_ICON.toString()) : new ImageIcon(BLACK_MANUAL_TRANSMISSION_ICON.toString());
-    }
-
-    public static ImageIcon getSpeedometerIcon() {
-        return Theme.isDarkMode()? new ImageIcon(WHITE_SPEEDOMETER_ICON.toString()) : new ImageIcon(BLACK_SPEEDOMETER_ICON.toString());
-    }
-
-    public static ImageIcon getSeatIcon() {
-        return Theme.isDarkMode()? new ImageIcon(WHITE_CAR_SEAT_ICON.toString()) : new ImageIcon(BLACK_CAR_SEAT_ICON.toString());
-    }
-
-    public static ImageIcon getChassisIcon() {
-        return Theme.isDarkMode()? new ImageIcon(WHITE_CHASSIS_ICON.toString()) : new ImageIcon(BLACK_CHASSIS_ICON.toString());
-    }
-
-    public static ImageIcon getEngineIcon() {
-        return Theme.isDarkMode()? new ImageIcon(WHITE_ENGINE_ICON.toString()) : new ImageIcon(BLACK_ENGINE_ICON.toString());
-    }
-
-    public static ImageIcon getFuelGaugeIcon() {
-        return Theme.isDarkMode()? new ImageIcon(WHITE_FUEL_GAUGE_ICON.toString()) : new ImageIcon(BLACK_FUEL_GAUGE_ICON.toString());
-    }
-
-    public static ImageIcon getGasIcon() {
-        return Theme.isDarkMode()? new ImageIcon(WHITE_GAS_ICON.toString()) : new ImageIcon(BLACK_GAS_ICON.toString());
-    }
-
-    public static ImageIcon getHorseIcon() {
-        return Theme.isDarkMode()? new ImageIcon(WHITE_HORSE_ICON.toString()) : new ImageIcon(BLACK_HORSE_ICON.toString());
-    }
-
-    public static ImageIcon getCircleIcon() {
-        return Theme.isDarkMode()? new ImageIcon(WHITE_CIRCLE_ICON.toString()) : new ImageIcon(BLACK_CIRCLE_ICON.toString());
     }
 }

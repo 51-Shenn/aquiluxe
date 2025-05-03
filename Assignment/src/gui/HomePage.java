@@ -24,7 +24,9 @@ public class HomePage extends JPanel {
     private final File ACCOUNTS_FILE = new File("files/settings/accounts.txt");
 
     HomePage() {
-        this(new JFrame(), new JPanel(), new User());
+        this.frame = new JFrame();
+        this.panel = new JPanel();
+        this.user = new User();
     }
 
     HomePage(JFrame frame, JPanel panel, User user, GUIComponents guiComponents) {
@@ -305,8 +307,7 @@ public class HomePage extends JPanel {
                 if (proceed) {
                     UserController.removeUserFromFile(this.user.getUserId(), ACCOUNTS_FILE);
 
-                    this.user = UserController.loadCurrentUser(ACCOUNTS_FILE);
-                    GUIComponents.refreshHomePage(this.frame, this.panel, this.user, guiComponents);
+                    this.user = new User();
                     GUIComponents.cardLayout.show(GUIComponents.cardPanel, "HomePage");
                 }
             });

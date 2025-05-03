@@ -3,7 +3,7 @@ package datamodels;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Vehicle {
+public class Vehicle {
     protected int vehicleId;
     protected String imagePath;
     protected String brand;
@@ -23,7 +23,7 @@ public abstract class Vehicle {
     protected boolean availability;
     protected String features;
 
-    protected static List<Vehicle> vehicles = new ArrayList<>();
+    protected static List<Vehicle> vehicles = new ArrayList<Vehicle>();
 
     // Default Constructor
     public Vehicle() {
@@ -31,10 +31,11 @@ public abstract class Vehicle {
     }
 
     // Parameterized Constructor
-    public Vehicle( String imagePath, String brand, String model, int year, int capacity,
+    public Vehicle(int vehicleId, String imagePath, String brand, String model, int year, int capacity,
             int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
             double rentalPriceDay, String transmission, String fuelType, String vehicleType, int seatingCapacity,
             boolean availability, String features) {
+        this.vehicleId = vehicleId;
         this.imagePath = imagePath;
         this.brand = brand;
         this.model = model;
@@ -52,15 +53,6 @@ public abstract class Vehicle {
         this.seatingCapacity = seatingCapacity;
         this.availability = availability;
         this.features = features;
-    }
-
-    // Parameterized Constructor
-    public Vehicle(int vehicleId, String imagePath, String brand, String model, int year, int capacity,
-            int horsepower, String color, double mpg, String vinNumber, String registrationNumber,
-            double rentalPriceDay, String transmission, String fuelType, String vehicleType, int seatingCapacity,
-            boolean availability, String features) {
-        this(imagePath, brand, model, year, capacity, horsepower, color, mpg, vinNumber, registrationNumber, rentalPriceDay, transmission, fuelType, vehicleType, seatingCapacity, availability, features);
-        this.vehicleId = vehicleId;
     }
 
     // Getters and Setters
@@ -86,6 +78,7 @@ public abstract class Vehicle {
         this.seatingCapacity = seatingCapacity;
         this.availability = availability;
         this.features = features;
+        this.vehicleType = vehicleType;
     }
 
     public int getVehicleId() {
@@ -216,7 +209,7 @@ public abstract class Vehicle {
         this.seatingCapacity = seatingCapacity;
     }
 
-    public boolean getAvailability() {
+    public boolean isAvailability() {
         return availability;
     }
 
@@ -240,27 +233,11 @@ public abstract class Vehicle {
         vehicles = setVehicle;
     }
 
-    @Override
-    public String toString() {
-        return " Vehicle { " +
-                "vehicleId = " + vehicleId +
-                ", imagePath = '" + imagePath + '\'' +
-                ", brand = '" + brand + '\'' +
-                ", model = '" + model + '\'' +
-                ", year = '" + year + '\'' +
-                ", capacity = '" + capacity + '\'' +
-                ", horsepower = '" + horsepower + '\'' +
-                ", color = '" + color + '\'' +
-                ", mpg = '" + mpg + '\'' +
-                ", vinNumber = '" + vinNumber + '\'' +
-                ", registrationNumber = '" + registrationNumber + '\'' +
-                ", rentalPriceDay = '" + rentalPriceDay + '\'' +
-                ", transmission = '" + transmission + '\'' +
-                ", fuelType = '" + fuelType + '\'' +
-                ", vehicleType = '" + vehicleType + '\'' +
-                ", seatingCapacity = '" + seatingCapacity + '\'' +
-                ", availability = '" + availability + '\'' +
-                ", features = '" + features + '\'' +
-                " }";
+    public String getVehicletype() {
+        return vehicleType;
+    }
+
+    public void setVehicletype(String vehicleType) {
+        this.vehicleType = vehicleType;
     }
 }

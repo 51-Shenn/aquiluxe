@@ -75,7 +75,7 @@ public class UserService {
     public static boolean validateForgotPasswordDetails(String email, String phone, JLabel emailValidationLabel,
             JLabel phoneValidationLabel) {
         if (email.isEmpty()) {
-            emailValidationLabel.setText("Email Address / Username cannot be blank");
+            emailValidationLabel.setText("Username / Email Address cannot be blank");
             return false;
         } else if (phone.isEmpty()) {
             phoneValidationLabel.setText("Please enter your phone number.");
@@ -113,7 +113,7 @@ public class UserService {
         String userPassword = new String(password);
 
         if (email.isEmpty()) {
-            emailValidationLabel.setText("Email Address / Username Address cannot be blank");
+            emailValidationLabel.setText("Username / Email Address cannot be blank");
             return false;
         } else {
             emailValidationLabel.setText("‎");
@@ -687,8 +687,8 @@ public class UserService {
     }
 
     public static String adminPasswordValidation(String password, JTextField uuidField) {
-        final String MANAGER_PASSWORD = "Manager@Aquiluxe-LuxurY";
-        final String EMPLOYEE_PASSWORD = "Employee@Aquiluxe-ClasS";
+        final String MANAGER_PASSWORD = "Manager";
+        final String EMPLOYEE_PASSWORD = "Employee";
 
         switch (password) {
             case MANAGER_PASSWORD -> {
@@ -719,10 +719,5 @@ public class UserService {
 
     public static Admin getAdminByObject(User user) {
         return UserDAO.getAdminById(user);
-    }
-
-    public static void saveCustomerAddress(Customer customer) {
-        UserDAO.addCustomerDetails(customer, customer.getUserAddress(),
-                customer.getLicense());
     }
 }
