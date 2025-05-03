@@ -17,7 +17,7 @@ public class Rental {
 
     // Default Constructor
     public Rental() {
-        this(0, new Customer(),null, LocalDate.now(), LocalDate.now(), LocalTime.now(), LocalTime.now(), 0.0,
+        this(0, new Customer(), null, LocalDate.now(), LocalDate.now(), LocalTime.now(), LocalTime.now(), 0.0,
                 RentalStatus.PENDING, PaymentStatus.PENDING); // Default values
     }
 
@@ -49,7 +49,7 @@ public class Rental {
     }
 
     public enum PaymentStatus {
-        PENDING, PAID, FAILED
+        PENDING, PAID, FAILED, REFUNDED
     }
 
     // Getters and Setters

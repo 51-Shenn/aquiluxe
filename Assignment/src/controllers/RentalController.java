@@ -1,15 +1,20 @@
 package controllers;
 
+import java.util.List;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import datamodels.Vehicle;
+import datamodels.Rental.PaymentStatus;
+import datamodels.Rental.RentalStatus;
 import gui.RentalPage;
 import datamodels.Rental;
 import datamodels.Customer;
 import datamodels.Payment;
 import services.PaymentService;
 import services.RentalService;
+import services.RentalService.FilterType;
 import services.UserService;
 
 public class RentalController {
@@ -63,6 +68,26 @@ public class RentalController {
         // call service save to db
         PaymentService.assignPaymentToken(payment, PaymentService.generateRandomToken());
         PaymentService.addPayment(rental, payment);
+    }
+
+    public List<Rental> getRentalHistoryOfUser(FilterType type, Object value) {
+        return RentalService.getRentalHistory(type, value);
+    }
+
+    public List<Rental> getRentalHistoryOfUser(FilterType type, Object value1, Object value2, Object value3) {
+        return RentalService.getRentalHistory(type, value1, value2, value3);
+    }
+
+    public void updateRental(Rental rental, RentalStatus status) {
+        if (rental.getPaymentStatus() == PaymentStatus.PAID) {
+            RentalService.updatePaymentStatus(rental, PaymentStatus.REFUNDED);
+        }
+
+        if (rental.getPaymentStatus() == PaymentStatus.PENDING) {
+            RentalService.updatePaymentStatus(rental, PaymentStatus.FAILED);
+        }
+
+        RentalService.updateRentalStatus(rental, status);
     }
 
     // called by gui to get rental details
