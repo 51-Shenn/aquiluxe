@@ -252,7 +252,6 @@ public class GUIComponents extends JPanel {
         homePanel.revalidate();
         homePanel.repaint();
         cardPanel.add(homePanel, "HomePage");
-        // cardLayout.show(cardPanel, "HomePage");
         System.out.println(cardPanel.getComponents().length);
         cardPanel.revalidate();
         cardPanel.repaint();
@@ -280,6 +279,8 @@ public class GUIComponents extends JPanel {
         System.out.println(cardPanel.getComponents().length);
         cardPanel.revalidate();
         cardPanel.repaint();
+
+        cardLayout.show(cardPanel, "HomePage");
 
         System.out.println(user.getFullName());
     }

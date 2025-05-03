@@ -307,7 +307,6 @@ public class HomePage extends JPanel {
 
                     this.user = UserController.loadCurrentUser(ACCOUNTS_FILE);
                     GUIComponents.refreshPages(this.frame, this.panel, this.user, guiComponents);
-                    GUIComponents.cardLayout.show(GUIComponents.cardPanel, "HomePage");
                 }
             });
             signOutButton.addMouseListener(new MouseAdapter() {
