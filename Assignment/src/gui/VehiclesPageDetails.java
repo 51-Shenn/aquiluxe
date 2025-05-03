@@ -312,6 +312,33 @@ public class VehiclesPageDetails extends JPanel {
             rentButton.setBackground(Color.GRAY);
             rentButton.setForeground(Theme.getSpecialForeground());
         }
+        if(VehiclesPage.getUser().getUserType().equals("Admin") && VehiclesPage.getAdmin().getAdminRole().equals("Manager")) {
+            rentButton.setEnabled(true);
+            rentButton.setBackground(Theme.getSpecial());
+            rentButton.setForeground(Theme.getSpecialForeground());
+            rentButton.setText("Edit");
+                    
+            rentButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    rentButton.setBackground(Theme.getHoverSpecial());
+                }
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    rentButton.setBackground(Theme.getSpecial());
+                }
+                @Override
+                public void mousePressed(MouseEvent evt) {
+                    rentButton.setBackground(Theme.getPressedSpecial());
+                }
+                @Override
+                public void mouseReleased(MouseEvent evt) {
+                    rentButton.setBackground(Theme.getSpecial());
+                    VehiclesPage vehiclesPage = new VehiclesPage(frame, panel, VehiclesPage.getUser());
+                    vehiclesPage.showEditCarPopup(vehicle);
+                }
+            });
+        }
         rentPanel.add(rentButton);
         buttonsPanel.add(rentPanel, BorderLayout.EAST);
 

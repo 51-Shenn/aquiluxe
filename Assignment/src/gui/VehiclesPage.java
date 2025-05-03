@@ -1181,6 +1181,10 @@ public class VehiclesPage extends JPanel implements ActionListener {
         return user;
     }
 
+    public static Admin getAdmin() {
+        return admin;
+    }
+
     public void setVehicles(List<Vehicle> vehicles) {
         this.vehicles = vehicles;
     }
@@ -1517,7 +1521,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         addCar.setVisible(true);
     }
 
-    private void showEditCarPopup(Vehicle vehicle) {
+    public void showEditCarPopup(Vehicle vehicle) {
         // Create the dialog
         JDialog editCar = new JDialog(frame, "Edit Vehicle", true); // true for modal
         editCar.setPreferredSize(new Dimension(1600, 900));
