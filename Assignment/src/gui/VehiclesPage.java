@@ -117,6 +117,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         carDetails.setBorderPainted(false);
         carDetails.setContentAreaFilled(false);
         carDetails.setOpaque(true);
+        carDetails.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         RoundedButton carRent = new RoundedButton(10, Theme.getSpecial());
         carRent.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
@@ -428,6 +429,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         carEverythingPanel.add(carInfoNameRentPanel, BorderLayout.CENTER);
         carEverythingPanel.add(carInfoPanel, BorderLayout.SOUTH);
         carEverythingPanel.setBackground(Theme.getBackground());
+        carEverythingPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         carEverythingPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -473,6 +475,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 carDetails.setForeground(Theme.getErrorForeground());
                 carDetails.setBackground(Theme.getError());
                 carDetails.setOpaque(true);
+                carDetails.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
                 carDetails.addMouseListener(new MouseAdapter() {
                     @Override
