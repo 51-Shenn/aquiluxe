@@ -101,7 +101,7 @@ public class RentalPage extends JPanel {
 
         } catch (Exception e) {
             Dialog dialogError = new Dialog();
-            GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
+            GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehiclesPage");
             dialogError.showDialog("ERROR",
                     "Account",
                     "Account Error",
@@ -427,17 +427,17 @@ public class RentalPage extends JPanel {
                             false);
 
                     // update vehicle availability
-                    System.out.println(GUIComponents.cardPanel.getComponents().length);
-                    GUIComponents.cardPanel.remove(GUIComponents.vehiclesPanel);
-                    System.out.println(GUIComponents.cardPanel.getComponents().length);
+                    System.out.println(GUIComponents.subCardPanel.getComponents().length);
+                    GUIComponents.subCardPanel.remove(GUIComponents.vehiclesPanel);
+                    System.out.println(GUIComponents.subCardPanel.getComponents().length);
                     GUIComponents.vehiclesPanel = new VehiclesPage(frame, panel, user);
-                    GUIComponents.cardPanel.add(GUIComponents.vehiclesPanel, "VehiclesPage");
+                    GUIComponents.subCardPanel.add(GUIComponents.vehiclesPanel, "VehiclesPage");
                     GUIComponents.vehiclesPanel.revalidate();
                     GUIComponents.vehiclesPanel.repaint();
-                    System.out.println(GUIComponents.cardPanel.getComponents().length);
-                    GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
-                    GUIComponents.cardPanel.revalidate();
-                    GUIComponents.cardPanel.repaint();
+                    System.out.println(GUIComponents.subCardPanel.getComponents().length);
+                    GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehiclesPage");
+                    GUIComponents.subCardPanel.revalidate();
+                    GUIComponents.subCardPanel.repaint();
 
                     validDetails = false;
                 }

@@ -404,16 +404,16 @@ public class RentalHistory extends JPanel {
             viewVehicleButton.setFocusPainted(false);
             viewVehicleButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             viewVehicleButton.addActionListener(e -> {
-                System.out.println(GUIComponents.cardPanel.getComponents().length);
+                System.out.println(GUIComponents.subCardPanel.getComponents().length);
                 JPanel vehicleDetailsPanel = new VehiclesPageDetails(frame, panel, rental.getRentVehicle(),
                         Vehicle.getVehicles());
-                GUIComponents.cardPanel.add(vehicleDetailsPanel, "VehicleDetailsPage");
+                GUIComponents.subCardPanel.add(vehicleDetailsPanel, "VehicleDetailsPage");
                 vehicleDetailsPanel.revalidate();
                 vehicleDetailsPanel.repaint();
-                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
-                GUIComponents.cardPanel.revalidate();
-                GUIComponents.cardPanel.repaint();
-                System.out.println(GUIComponents.cardPanel.getComponents().length);
+                GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehicleDetailsPage");
+                GUIComponents.subCardPanel.revalidate();
+                GUIComponents.subCardPanel.repaint();
+                System.out.println(GUIComponents.subCardPanel.getComponents().length);
             });
 
             JPanel spacing = new JPanel();
@@ -535,16 +535,16 @@ public class RentalHistory extends JPanel {
             viewVehicleButton.setFocusPainted(false);
             viewVehicleButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             viewVehicleButton.addActionListener(e -> {
-                System.out.println(GUIComponents.cardPanel.getComponents().length);
+                System.out.println(GUIComponents.subCardPanel.getComponents().length);
                 JPanel vehicleDetailsPanel = new VehiclesPageDetails(frame, panel, rental.getRentVehicle(),
                         Vehicle.getVehicles());
-                GUIComponents.cardPanel.add(vehicleDetailsPanel, "VehicleDetailsPage");
+                GUIComponents.subCardPanel.add(vehicleDetailsPanel, "VehicleDetailsPage");
                 vehicleDetailsPanel.revalidate();
                 vehicleDetailsPanel.repaint();
-                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehicleDetailsPage");
-                GUIComponents.cardPanel.revalidate();
-                GUIComponents.cardPanel.repaint();
-                System.out.println(GUIComponents.cardPanel.getComponents().length);
+                GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehicleDetailsPage");
+                GUIComponents.subCardPanel.revalidate();
+                GUIComponents.subCardPanel.repaint();
+                System.out.println(GUIComponents.subCardPanel.getComponents().length);
             });
 
             if (rental.getRentalStatus().equals(RentalStatus.PENDING)) {

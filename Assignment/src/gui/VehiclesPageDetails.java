@@ -305,8 +305,8 @@ public class VehiclesPageDetails extends JPanel {
                 public void mouseReleased(MouseEvent evt) {
                     rentButton.setBackground(Theme.getSpecial());
                     JPanel rentalPanel = new RentalPage(frame, panel, vehicle);
-                    GUIComponents.cardPanel.add(rentalPanel, "RentalPage");
-                    GUIComponents.cardLayout.show(GUIComponents.cardPanel, "RentalPage");
+                    GUIComponents.subCardPanel.add(rentalPanel, "RentalPage");
+                    GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "RentalPage");
                 }
             });
         } else {
@@ -441,7 +441,7 @@ public class VehiclesPageDetails extends JPanel {
         viewAllButton.setVerticalAlignment(JButton.CENTER);
         viewAllButton.addActionListener(e -> {
             if (e.getActionCommand().equals("View All")) {
-                GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
+                GUIComponents.subCardLayout.show(GUIComponents.subCardPanel, "VehiclesPage");
             }
         });
 
@@ -545,8 +545,7 @@ public class VehiclesPageDetails extends JPanel {
             gbc.insets = new Insets(0, 0, 5, 0);
             gbc.gridy++;
             featuresContainer.add(featuresContent, gbc);
-        }
-        else {
+        } else {
             String[] features = this.vehicle.getFeatures().split(",");
             for (String feature : features) {
                 feature = "- " + feature;

@@ -175,11 +175,11 @@ public class ForgotPasswordPage extends AuthenticationPage {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = container.getWidth();
         gbc.anchor = GridBagConstraints.WEST;
-        
+
         container.add(createPasswordContainer(), gbc);
         gbc.insets = new Insets(5, 0, 50, 0);
         container.add(passwordValidationLabel, gbc);
-        
+
         gbc.insets = new Insets(0, 0, 0, 0);
         container.add(createConfirmPasswordContainer(), gbc);
         gbc.insets = new Insets(5, 0, 50, 0);
@@ -270,7 +270,7 @@ public class ForgotPasswordPage extends AuthenticationPage {
         linkButton.setContentAreaFilled(false);
         linkButton.setBorder(new EmptyBorder(0, 0, 0, 0));
         linkButton.addActionListener(e -> {
-            this.frame.setContentPane(new SignInPage(this.frame, this.panel, this.user));
+            GUIComponents.mainCardLayout.show(GUIComponents.mainCardPanel, "SignInPage");
             this.frame.revalidate();
             this.frame.repaint();
         });
@@ -290,30 +290,31 @@ public class ForgotPasswordPage extends AuthenticationPage {
         nextButton.addActionListener(e -> {
             boolean isValidForgotPasswordDetails;
             if (currentPage.equals("USER")) {
-                isValidForgotPasswordDetails = UserController.passForgotPasswordDetails(emailInput.getText(), phoneInput.getText(), emailValidationLabel, phoneValidationLabel);
-                if(isValidForgotPasswordDetails) {
+                isValidForgotPasswordDetails = UserController.passForgotPasswordDetails(emailInput.getText(),
+                        phoneInput.getText(), emailValidationLabel, phoneValidationLabel);
+                if (isValidForgotPasswordDetails) {
                     currentPage = "PASSWORD";
                     panel.removeAll();
                     panel.revalidate();
                     panel.repaint();
                     panel.add(createPasswordInputContainer());
                 }
-            }
-            else {
-                isValidForgotPasswordDetails = UserController.passForgotPasswordDetails(emailInput.getText(), phoneInput.getText(), passwordInput.getPassword(), confirmPasswordInput.getPassword(), passwordValidationLabel, confirmPasswordValidationLabel);
-                if(isValidForgotPasswordDetails) {
+            } else {
+                isValidForgotPasswordDetails = UserController.passForgotPasswordDetails(emailInput.getText(),
+                        phoneInput.getText(), passwordInput.getPassword(), confirmPasswordInput.getPassword(),
+                        passwordValidationLabel, confirmPasswordValidationLabel);
+                if (isValidForgotPasswordDetails) {
                     currentPage = "USER";
                     this.frame.setContentPane(new SignInPage(this.frame, this.panel, this.user));
                     this.frame.validate();
 
                     Dialog dialog = new Dialog(this.frame);
                     dialog.showDialog(
-                        "SUCCESS",
-                        "Password Updated",
-                        "Password Changed Successfully",
-                        "You can now use your new password to log in.",
-                        false
-                    );
+                            "SUCCESS",
+                            "Password Updated",
+                            "Password Changed Successfully",
+                            "You can now use your new password to log in.",
+                            false);
                 }
             }
         });
@@ -335,7 +336,7 @@ public class ForgotPasswordPage extends AuthenticationPage {
         logo.setFont(CustomFonts.CINZEL_DECORATIVE_BOLD.deriveFont(30f));
         logo.setForeground(Color.DARK_GRAY);
 
-        String[] texts = {"Drive in Style,", "Rent with Ease."};
+        String[] texts = { "Drive in Style,", "Rent with Ease." };
         for (String text : texts) {
             JLabel lines = new JLabel(text);
             if (text.equals(texts[0]))

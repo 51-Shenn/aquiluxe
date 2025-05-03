@@ -24,13 +24,23 @@ public class GUIComponents extends JPanel {
     private static JButton[] topBarButtons = new JButton[5];
     private String[] topBarButtonsLabels = { "Home", "Vehicles", "About", "Contact", "Rentals" };
 
+    public static JPanel topBarPanel;
+    public static CardLayout mainCardLayout;
+    public static JPanel mainCardPanel;
+
+    public static JPanel signInPanel;
+    public static JPanel signUpPanel;
+    public static JPanel forgotPasswordPanel;
+    public static JPanel currentMainPanel;
+
+    public static CardLayout subCardLayout;
+    public static JPanel subCardPanel;
+
     public static JPanel homePanel;
     public static JPanel vehiclesPanel;
     public static JPanel aboutUsPanel;
     public static JPanel contactUsPanel;
     public static JPanel rentalHistoryPanel;
-    public static CardLayout cardLayout;
-    public static JPanel cardPanel;
 
     public GUIComponents() {
         this(new JFrame(), new JPanel(), new User());
@@ -48,9 +58,27 @@ public class GUIComponents extends JPanel {
         setLayout(new BorderLayout());
         setBorder(new LineBorder(Theme.getTransparencyColor(), 1));
 
-        cardLayout = new CardLayout();
-        cardPanel = new JPanel(cardLayout);
-        cardPanel.setBackground(Theme.getBackground());
+        // main pages
+        mainCardLayout = new CardLayout();
+        mainCardPanel = new JPanel(mainCardLayout);
+        mainCardPanel.setBackground(Theme.getBackground());
+
+        signInPanel = new SignInPage(this.frame, this.panel, this.user);
+        signUpPanel = new SignUpPage(this.frame, this.panel, this.user);
+        forgotPasswordPanel = new ForgotPasswordPage(this.frame, this.panel, this.user);
+        Navigation.setWindowsLookAndFeel();
+        currentMainPanel = new JPanel();
+        currentMainPanel.setLayout(new BorderLayout());
+
+        mainCardPanel.add(signInPanel, "SignInPage");
+        mainCardPanel.add(signUpPanel, "SignUpPage");
+        mainCardPanel.add(forgotPasswordPanel, "ForgotPasswordPage");
+        mainCardPanel.add(currentMainPanel, "MainPage");
+
+        // sub pages of renting
+        subCardLayout = new CardLayout();
+        subCardPanel = new JPanel(subCardLayout);
+        subCardPanel.setBackground(Theme.getBackground());
 
         homePanel = new HomePage(this.frame, this.panel, this.user, this);
         vehiclesPanel = new VehiclesPage(this.frame, this.panel, this.user);
@@ -58,17 +86,20 @@ public class GUIComponents extends JPanel {
         contactUsPanel = new ContactUsPage(this.frame, this.panel);
         rentalHistoryPanel = new RentalHistory(this.frame, this.panel, this.user);
 
-        cardPanel.add(homePanel, "HomePage");
-        cardPanel.add(vehiclesPanel, "VehiclesPage");
-        cardPanel.add(aboutUsPanel, "AboutUsPage");
-        cardPanel.add(contactUsPanel, "ContactUsPage");
-        cardPanel.add(rentalHistoryPanel, "RentalHistoryPage");
-        // switch user, sign out - remove rentalhistory - add back with current user
+        subCardPanel.add(homePanel, "HomePage");
+        subCardPanel.add(vehiclesPanel, "VehiclesPage");
+        subCardPanel.add(aboutUsPanel, "AboutUsPage");
+        subCardPanel.add(contactUsPanel, "ContactUsPage");
+        subCardPanel.add(rentalHistoryPanel, "RentalHistoryPage");
 
-        add(createTopBar(), BorderLayout.WEST);
+        currentMainPanel.add(subCardPanel, BorderLayout.CENTER);
+
+        topBarPanel = createTopBar();
+        add(topBarPanel, BorderLayout.WEST);
         add(menuButton(), BorderLayout.EAST);
-        this.panel.add(cardPanel, BorderLayout.CENTER);
-        cardLayout.show(cardPanel, "HomePage");
+        this.panel.add(mainCardPanel, BorderLayout.CENTER);
+        mainCardLayout.show(mainCardPanel, "MainPage");
+        subCardLayout.show(subCardPanel, "HomePage");
     }
 
     public JFrame getFrame() {
@@ -133,7 +164,7 @@ public class GUIComponents extends JPanel {
             }
             topBarButtons[0].setForeground(Theme.getSpecial());
             topBarButtons[0].setFont(CustomFonts.CINZEL_DECORATIVE_BLACK.deriveFont(20f));
-            cardLayout.show(cardPanel, "HomePage");
+            subCardLayout.show(subCardPanel, "HomePage");
         });
 
         return logo;
@@ -180,27 +211,27 @@ public class GUIComponents extends JPanel {
 
         topBarButtons[0].addActionListener(e -> {
             pageIndicator(0);
-            cardLayout.show(cardPanel, "HomePage");
+            subCardLayout.show(subCardPanel, "HomePage");
         });
 
         topBarButtons[1].addActionListener(e -> {
             pageIndicator(1);
-            cardLayout.show(cardPanel, "VehiclesPage");
+            subCardLayout.show(subCardPanel, "VehiclesPage");
         });
 
         topBarButtons[2].addActionListener(e -> {
             pageIndicator(2);
-            cardLayout.show(cardPanel, "AboutUsPage");
+            subCardLayout.show(subCardPanel, "AboutUsPage");
         });
 
         topBarButtons[3].addActionListener(e -> {
             pageIndicator(3);
-            cardLayout.show(cardPanel, "ContactUsPage");
+            subCardLayout.show(subCardPanel, "ContactUsPage");
         });
 
         topBarButtons[4].addActionListener(e -> {
             pageIndicator(4);
-            cardLayout.show(cardPanel, "RentalHistoryPage");
+            subCardLayout.show(subCardPanel, "RentalHistoryPage");
         });
 
         return topBarButtons;
@@ -247,42 +278,44 @@ public class GUIComponents extends JPanel {
     }
 
     public static void refreshPages(JFrame frame, JPanel panel, User user, GUIComponents guiComponents) {
-        cardPanel.remove(homePanel);
-        System.out.println(cardPanel.getComponents().length);
+        Navigation.setWindowsLookAndFeel();
+
+        subCardPanel.remove(homePanel);
+        System.out.println(subCardPanel.getComponents().length);
         homePanel = new HomePage(frame, panel, user, guiComponents);
         homePanel.revalidate();
         homePanel.repaint();
-        cardPanel.add(homePanel, "HomePage");
-        System.out.println(cardPanel.getComponents().length);
-        cardPanel.revalidate();
-        cardPanel.repaint();
+        subCardPanel.add(homePanel, "HomePage");
+        System.out.println(subCardPanel.getComponents().length);
+        subCardPanel.revalidate();
+        subCardPanel.repaint();
 
         // refresh vehicle page
-        cardPanel.remove(vehiclesPanel);
-        System.out.println(cardPanel.getComponents().length);
+        subCardPanel.remove(vehiclesPanel);
+        System.out.println(subCardPanel.getComponents().length);
         vehiclesPanel = new VehiclesPage(frame, panel, user);
         vehiclesPanel.revalidate();
         vehiclesPanel.repaint();
-        cardPanel.add(vehiclesPanel, "VehiclesPage");
-        // cardLayout.show(cardPanel, "VehiclesPage");
-        System.out.println(cardPanel.getComponents().length);
-        cardPanel.revalidate();
-        cardPanel.repaint();
+        subCardPanel.add(vehiclesPanel, "VehiclesPage");
+        // subCardLayout.show(subCardPanel, "VehiclesPage");
+        System.out.println(subCardPanel.getComponents().length);
+        subCardPanel.revalidate();
+        subCardPanel.repaint();
 
         // refresh rental history page
-        cardPanel.remove(rentalHistoryPanel);
-        System.out.println(cardPanel.getComponents().length);
+        subCardPanel.remove(rentalHistoryPanel);
+        System.out.println(subCardPanel.getComponents().length);
         rentalHistoryPanel = new RentalHistory(frame, panel, user);
         rentalHistoryPanel.revalidate();
         rentalHistoryPanel.repaint();
-        cardPanel.add(rentalHistoryPanel, "RentalHistoryPage");
-        // cardLayout.show(cardPanel, "VehiclesPage");
-        System.out.println(cardPanel.getComponents().length);
-        cardPanel.revalidate();
-        cardPanel.repaint();
+        subCardPanel.add(rentalHistoryPanel, "RentalHistoryPage");
+        // subCardLayout.show(subCardPanel, "VehiclesPage");
+        System.out.println(subCardPanel.getComponents().length);
+        subCardPanel.revalidate();
+        subCardPanel.repaint();
 
         pageIndicator(0);
-        cardLayout.show(cardPanel, "HomePage");
+        subCardLayout.show(subCardPanel, "HomePage");
 
         System.out.println(user.getFullName());
     }
