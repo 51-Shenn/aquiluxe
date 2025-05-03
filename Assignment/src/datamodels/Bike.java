@@ -37,9 +37,13 @@ public class Bike extends Vehicle {
         return allBikes;
     }
 
+    public String getVehicleCategory() {
+        return "Bike";
+    }
+
     @Override
     public String toString() {
-        return " Bike { " +
+        return getVehicleCategory() + " { " +
                 "vehicleId = " + vehicleId +
                 ", imagePath = '" + imagePath + '\'' +
                 ", brand = '" + brand + '\'' +

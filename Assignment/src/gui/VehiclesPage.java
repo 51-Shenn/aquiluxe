@@ -1611,28 +1611,10 @@ public class VehiclesPage extends JPanel implements ActionListener {
         rightContainer.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
         rightContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        String vehicleType = "";
-
-        for (String cartype : Car.getCarTypes()) {
-            if (vehicle.getVehicleType().equalsIgnoreCase(cartype)) {
-                vehicleType = "CAR";
-                vehicleTypes = Car.getCarTypes();
-                break;
-            }
-        }
-
-        for (String biketype : Bike.getBikeTypes()) {
-            if (vehicle.getVehicleType().equalsIgnoreCase(biketype)) {
-                vehicleType = "BIKE";
-                vehicleTypes = Bike.getBikeTypes();
-                break;
-            }
-        }
-
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
-        rightContainer.add(createVehicleSelectionInputContainer(vehicleType), gbc);
+        rightContainer.add(createVehicleSelectionInputContainer(vehicle.getVehicleCategory()), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -1805,7 +1787,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             public void mouseReleased(MouseEvent evt) {
                 selectCarButton.setBackground(Theme.getHoverBackground());
                 selectBikeButton.setBackground(Theme.getBackground());
-                selectedVehicle = "CAR";
+                selectedVehicle = "Car";
                 updateVehicleTypeDropdown(Car.getCarTypes());
             }
         });
@@ -1829,23 +1811,23 @@ public class VehiclesPage extends JPanel implements ActionListener {
             public void mouseReleased(MouseEvent evt) {
                 selectBikeButton.setBackground(Theme.getHoverBackground());
                 selectCarButton.setBackground(Theme.getBackground());
-                selectedVehicle = "BIKE";
+                selectedVehicle = "Bike";
                 updateVehicleTypeDropdown(Bike.getBikeTypes());
             }
         });
 
-        if (input.equals("CAR")) {
+        if (input.equals("Car")) {
             selectBikeButton.setBackgroundColor(Theme.getBackground());
             selectCarButton.setBackground(Theme.getHoverBackground());
-            selectedVehicle = "CAR";
-        } else if (input.equals("BIKE")) {
+            selectedVehicle = "Car";
+        } else if (input.equals("Bike")) {
             selectBikeButton.setBackgroundColor(Theme.getHoverBackground());
             selectCarButton.setBackground(Theme.getBackground());
-            selectedVehicle = "BIKE";
+            selectedVehicle = "Bike";
         } else {
             selectBikeButton.setBackgroundColor(Theme.getBackground());
             selectCarButton.setBackground(Theme.getHoverBackground());
-            selectedVehicle = "CAR";
+            selectedVehicle = "Car";
         }
 
         vehicleSelectionInputPanel.add(vehicleSelectionLabel, gbc);
@@ -2546,7 +2528,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             dialog.showDialog("ERROR", "Image Saving Error", "Image Saving Error", "Failed to save image", true);
             return;
         }
-        if (selectedVehicle.equals("CAR")) {
+        if (selectedVehicle.equals("Car")) {
             Vehicle newVehicle = new Car("images/cars/" + VehicleController.processGetImagePath(selectedImageFile),
                     brandInput.getText(), modelInput.getText(), Integer.parseInt((String) yearInput.getSelectedItem()),
                     Integer.parseInt(capacityInput.getText()), Integer.parseInt(horsepowerInput.getText()),
@@ -2601,7 +2583,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
         Vehicle newVehicle;
 
-        if (selectedVehicle.equals("CAR")) {
+        if (selectedVehicle.equals("Car")) {
             newVehicle = new Car(vehicle.getVehicleId(), vehicle.getImagePath(), brandInput.getText(),
                     modelInput.getText(), Integer.parseInt((String) yearInput.getSelectedItem()),
                     Integer.parseInt(capacityInput.getText()), Integer.parseInt(horsepowerInput.getText()),

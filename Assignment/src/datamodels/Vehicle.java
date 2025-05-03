@@ -240,6 +240,8 @@ public abstract class Vehicle {
         vehicles = setVehicle;
     }
 
+    public abstract String getVehicleCategory();
+
     @Override
     public String toString() {
         return " Vehicle { " +
