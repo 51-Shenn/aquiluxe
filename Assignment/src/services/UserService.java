@@ -647,12 +647,21 @@ public class UserService {
     }
 
     public static void deleteUser(User user) {
-        if (user.getUserType().equals("Customer"))
-            UserDAO.deleteCustomer(user);
-        else if (user.getUserType().equals("Admin"))
+        if (user.getUserType().equals("Customer")) {
+            String deletedUser = "Deleted User";
+            UserDAO.updateUserColumnValue(user.getUserId(), "full_name", deletedUser);
+            UserDAO.updateUserColumnValue(user.getUserId(), "username", deletedUser);
+            UserDAO.updateUserColumnValue(user.getUserId(), "user_email", deletedUser);
+            UserDAO.updateUserColumnValue(user.getUserId(), "phone_number", deletedUser);
+            UserDAO.updateUserColumnValue(user.getUserId(), "password", "");
+            UserDAO.updateCustomerColumnValue(user.getUserId(), "address", deletedUser);
+            UserDAO.updateCustomerColumnValue(user.getUserId(), "license", "");
+        }
+        else if (user.getUserType().equals("Admin")) {
             UserDAO.deleteAdmin(user);
+            UserDAO.deleteUser(user);
+        }
 
-        UserDAO.deleteUser(user);
     }
 
     public static String loadThemeFromFile(File themeFile) {
