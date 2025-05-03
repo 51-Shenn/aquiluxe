@@ -267,14 +267,16 @@ public class RentalDAO {
     }
 
     // get rentals by status
-    public static List<Rental> getRentalsByStatus(RentalStatus status) {
-        String sql = "SELECT * FROM rentals WHERE rental_status = ?";
+    public static List<Rental> getRentalsByStatus(RentalStatus status1, RentalStatus status2, RentalStatus status3) {
+        String sql = "SELECT * FROM rentals WHERE rental_status IN (?,?,?)";
         List<Rental> rentals = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, status.toString());
+            stmt.setString(1, status1.toString());
+            stmt.setString(2, status2.toString());
+            stmt.setString(3, status3.toString());
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -284,7 +286,7 @@ public class RentalDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("\nFAILED TO GET RENTALS BY STATUS\n");
+            throw new RuntimeException("\nFAILED TO GET RENTALS BY STATUSES\n");
         }
         return rentals;
     }

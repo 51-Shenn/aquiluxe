@@ -74,10 +74,19 @@ public class RentalController {
         return RentalService.getRentalHistory(type, value);
     }
 
+    public List<Rental> getRentalHistoryOfUser(FilterType type, Object value1, Object value2, Object value3) {
+        return RentalService.getRentalHistory(type, value1, value2, value3);
+    }
+
     public void updateRental(Rental rental, RentalStatus status) {
         if (rental.getPaymentStatus() == PaymentStatus.PAID) {
             RentalService.updatePaymentStatus(rental, PaymentStatus.REFUNDED);
         }
+
+        if (rental.getPaymentStatus() == PaymentStatus.PENDING) {
+            RentalService.updatePaymentStatus(rental, PaymentStatus.FAILED);
+        }
+
         RentalService.updateRentalStatus(rental, status);
     }
 
