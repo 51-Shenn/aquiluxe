@@ -362,6 +362,7 @@ public class VehiclesPageDetails extends JPanel {
         showMoreButton.setForeground(Theme.getForeground());
         showMoreButton.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(20f));
         showMoreButton.setIcon(downIcon);
+        showMoreButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         showMoreButton.addActionListener(e -> {
             if (e.getActionCommand().equals("Show More") || e.getActionCommand().equals("Hide")) {
                 if (isFeaturesVisible) {
@@ -439,6 +440,7 @@ public class VehiclesPageDetails extends JPanel {
         viewAllButton.setIcon(rightArrowIcon);
         viewAllButton.setHorizontalTextPosition(JButton.LEFT);
         viewAllButton.setVerticalAlignment(JButton.CENTER);
+        viewAllButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         viewAllButton.addActionListener(e -> {
             if (e.getActionCommand().equals("View All")) {
                 GUIComponents.cardLayout.show(GUIComponents.cardPanel, "VehiclesPage");
