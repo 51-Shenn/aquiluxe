@@ -316,7 +316,7 @@ public class VehiclesPageDetails extends JPanel {
             rentButton.setEnabled(true);
             rentButton.setBackground(Theme.getSpecial());
             rentButton.setForeground(Theme.getSpecialForeground());
-            rentButton.setText("Edit");
+            rentButton.setText("EDIT");
                     
             rentButton.addMouseListener(new MouseAdapter() {
                 @Override
