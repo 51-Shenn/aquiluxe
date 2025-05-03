@@ -5,7 +5,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -182,7 +181,7 @@ public class RentalHistory extends JPanel {
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error loading images: " + e.getMessage());
+            System.err.println(e.getMessage());
         }
         Image rImage = image.getImage().getScaledInstance(225, 225, java.awt.Image.SCALE_SMOOTH);
         image = new ImageIcon(rImage);
