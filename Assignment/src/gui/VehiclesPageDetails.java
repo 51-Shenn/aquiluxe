@@ -459,7 +459,7 @@ public class VehiclesPageDetails extends JPanel {
 
         JPanel moreCarsContainer = new JPanel(new BorderLayout());
         moreCarsContainer.setBackground(Theme.getBackground());
-        moreCarsContainer.setPreferredSize(new Dimension(800, 400));
+        moreCarsContainer.setPreferredSize(new Dimension(800, 425));
         moreCarsContainer.add(carsContainer, BorderLayout.CENTER);
         moreCarsContainer.add(otherCarsTitlePanel, BorderLayout.NORTH);
         moreCarsContainer.add(emptyBottomPanel, BorderLayout.SOUTH);
@@ -473,7 +473,7 @@ public class VehiclesPageDetails extends JPanel {
         emptyRightPanel.setPreferredSize(new Dimension(300, 1000));
 
         JPanel moreCarsPanel = new JPanel(new BorderLayout());
-        moreCarsPanel.setPreferredSize(new Dimension(1600, 580));
+        moreCarsPanel.setPreferredSize(new Dimension(1600, 605));
         moreCarsPanel.add(moreCarsContainer, BorderLayout.CENTER);
         moreCarsPanel.add(emptyRightPanel, BorderLayout.EAST);
         moreCarsPanel.add(emptyLeftPanel, BorderLayout.WEST);

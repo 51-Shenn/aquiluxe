@@ -104,7 +104,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         JPanel carCard = new JPanel();
         carCard.setLayout(new BorderLayout());
         carCard.setBackground(Theme.getBackground());
-        carCard.setPreferredSize(new Dimension(350, 450));
+        carCard.setPreferredSize(new Dimension(350, 425));
         carCard.setBorder(BorderFactory.createLineBorder(Theme.getBackground(), 3, true));
 
         // create buttons on the bottom
@@ -551,23 +551,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
         carButton.addActionListener(this);
         carButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(MouseEvent evt) {
-                carButton.setBackground(Theme.getPressedBackground());
-            }
-
-            @Override
-            public void mouseExited(MouseEvent evt) {
-                carButton.setBackground(Theme.getHoverBackground());
-            }
-
-            @Override
             public void mousePressed(MouseEvent evt) {
-                carButton.setBackground(Theme.getBackground());
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent evt) {
-                carButton.setBackground(Theme.getHoverBackground());
+                carButton.setBackground(Theme.getPressedBackground());
             }
         });
 
@@ -580,27 +565,12 @@ public class VehiclesPage extends JPanel implements ActionListener {
         bikeButton.addActionListener(this);
         bikeButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(MouseEvent evt) {
-                bikeButton.setBackground(Theme.getPressedBackground());
-            }
-
-            @Override
-            public void mouseExited(MouseEvent evt) {
-                bikeButton.setBackground(Theme.getHoverBackground());
-            }
-
-            @Override
             public void mousePressed(MouseEvent evt) {
-                bikeButton.setBackground(Theme.getBackground());
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent evt) {
-                bikeButton.setBackground(Theme.getHoverBackground());
+                bikeButton.setBackground(Theme.getPressedBackground());
             }
         });
 
-        allButton = new RoundedButton(10, Theme.getHoverBackground());
+        allButton = new RoundedButton(10, Theme.getBackground());
         allButton.setText("ALL");
         allButton.setOpaque(true);
         allButton.setBorderPainted(false);
@@ -611,23 +581,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
         allButton.addActionListener(this);
         allButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(MouseEvent evt) {
-                allButton.setBackground(Theme.getPressedBackground());
-            }
-
-            @Override
-            public void mouseExited(MouseEvent evt) {
-                allButton.setBackground(Theme.getHoverBackground());
-            }
-
-            @Override
             public void mousePressed(MouseEvent evt) {
-                allButton.setBackground(Theme.getBackground());
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent evt) {
-                allButton.setBackground(Theme.getHoverBackground());
+                allButton.setBackground(Theme.getPressedBackground());
             }
         });
 
@@ -1015,6 +970,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
             for (String type : vehicleType) {
                 carTypeComboBox.addItem(type);
             }
+            bikeButton.setBackground(Theme.getBackground());
+            allButton.setBackground(Theme.getHoverBackground());
+            carButton.setBackground(Theme.getHoverBackground());
         } else if (e.getSource() == carButton) {
             this.vehicles = new ArrayList<>(VehicleController.processCars());
             this.sortedVehicles = this.vehicles;
@@ -1025,6 +983,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
             for (String type : vehicleType) {
                 carTypeComboBox.addItem(type);
             }
+            bikeButton.setBackground(Theme.getHoverBackground());
+            allButton.setBackground(Theme.getHoverBackground());
+            carButton.setBackground(Theme.getBackground());
         } else if (e.getSource() == allButton) {
             this.vehicles = new ArrayList<>(VehicleController.processVehicles());
             this.sortedVehicles = this.vehicles;
@@ -1035,6 +996,9 @@ public class VehiclesPage extends JPanel implements ActionListener {
             for (String type : vehicleType) {
                 carTypeComboBox.addItem(type);
             }
+            bikeButton.setBackground(Theme.getHoverBackground());
+            allButton.setBackground(Theme.getBackground());
+            carButton.setBackground(Theme.getHoverBackground());
         }
         if (e.getSource() == sortComboBox) {
             handleSorting();
@@ -1138,13 +1102,13 @@ public class VehiclesPage extends JPanel implements ActionListener {
                     JLabel noResultsLabel = new JLabel("No results found!");
                     noResultsLabel.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(20f));
                     noResultsLabel.setHorizontalAlignment(JLabel.CENTER);
-                    empty.setPreferredSize(new Dimension(350, 400));
+                    empty.setPreferredSize(new Dimension(350, 425));
                     empty.setBackground(Theme.getBackground());
                     empty.add(noResultsLabel, BorderLayout.NORTH);
                     vehicleCards.add(empty);
                 } else {
                     JPanel empty = new JPanel();
-                    empty.setPreferredSize(new Dimension(350, 400));
+                    empty.setPreferredSize(new Dimension(350, 425));
                     empty.setBackground(Theme.getBackground());
                     vehicleCards.add(empty);
                 }
@@ -1384,11 +1348,12 @@ public class VehiclesPage extends JPanel implements ActionListener {
         addCar.setLayout(new BorderLayout());
         addCar.setBackground(Theme.getBackground());
 
-        JLabel title = new JLabel("Add New Vehicle", JLabel.CENTER);
-        title.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
+        JLabel title = new JLabel("New Vehicle", JLabel.CENTER);
+        title.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(30f));
         title.setBackground(Theme.getBackground());
         title.setForeground(Theme.getForeground());
         title.setOpaque(true);
+        title.setPreferredSize(new Dimension(600, 100));
         addCar.add(title, BorderLayout.NORTH);
 
         // Add form components
@@ -1418,7 +1383,6 @@ public class VehiclesPage extends JPanel implements ActionListener {
         gbc.gridx = 0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.gridwidth = rightContainer.getWidth();
         gbc.weightx = 1.0;
         gbc.insets = new Insets(10, 5, 10, 5);
 
@@ -1442,89 +1406,96 @@ public class VehiclesPage extends JPanel implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 2;
-        rightContainer.add(createVinNumberInputContainer(""), gbc);
+        rightContainer.add(selectButton, gbc);
 
         gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
-        rightContainer.add(createRegistrationNumberInputContainer(""), gbc);
+        rightContainer.add(removeButton, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        rightContainer.add(createVinNumberInputContainer(""), gbc);
+
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        rightContainer.add(createRegistrationNumberInputContainer(""), gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
         gbc.gridwidth = 3;
         rightContainer.add(createBrandInputContainer(""), gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 2;
         rightContainer.add(createModelInputContainer(""), gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 1;
         rightContainer.add(createYearInputContainer("Select Year"), gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.gridwidth = 2;
         rightContainer.add(createPriceInputContainer(""), gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.gridwidth = 1;
         rightContainer.add(createColorInputContainer(Color.WHITE, "Pick A Color"), gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 1;
         rightContainer.add(createCapacityInputContainer(""), gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 1;
         rightContainer.add(createHorsepowerInputContainer(""), gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 1;
         rightContainer.add(createMpgInputContainer(""), gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         gbc.gridwidth = 1;
         rightContainer.add(createTransmissionInputContainer("Select Transmission"), gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         gbc.gridwidth = 1;
         rightContainer.add(createFuelTypeInputContainer("Select Fuel Type"), gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         gbc.gridwidth = 1;
         rightContainer.add(createVehicleTypeInputContainer("Select Vehicle Type"), gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 8;
         gbc.gridwidth = 3;
         rightContainer.add(createSeatInputContainer(1), gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 9;
         gbc.gridwidth = 3;
         rightContainer.add(createInputContainer("Features", 3, ""), gbc);
 
-        formPanel.add(informationPanel);
-
-        addCar.add(formPanel, BorderLayout.CENTER);
-
         // Add submit button
-        RoundedButton submitButton = new RoundedButton(20, Theme.getSpecial());
+        RoundedButton submitButton = new RoundedButton(10, Theme.getSpecial());
         submitButton.setText("Submit");
         submitButton.setForeground(Theme.getSpecialForeground());
-        submitButton.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
+        submitButton.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(20f));
         submitButton.setFocusable(false);
-        submitButton.setPreferredSize(new Dimension(1600, 100));
+        submitButton.setBorderPainted(false);
+        submitButton.setPreferredSize(new Dimension(150, 75));
         submitButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
@@ -1547,7 +1518,14 @@ public class VehiclesPage extends JPanel implements ActionListener {
             }
         });
         submitButton.addActionListener(this::handleSubmit);
-        addCar.add(submitButton, BorderLayout.SOUTH);
+        gbc.gridx = 2;
+        gbc.gridy = 10;
+        gbc.gridwidth = 1;
+        rightContainer.add(submitButton, gbc);
+
+        formPanel.add(informationPanel);
+
+        addCar.add(formPanel, BorderLayout.CENTER);
 
         // Finalize and show the dialog
         addCar.pack();
@@ -1563,10 +1541,11 @@ public class VehiclesPage extends JPanel implements ActionListener {
         editCar.setBackground(Theme.getBackground());
 
         JLabel title = new JLabel("Edit Vehicle", JLabel.CENTER);
-        title.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
+        title.setFont(CustomFonts.INSTRUMENT_SANS_BOLD.deriveFont(30f));
         title.setBackground(Theme.getBackground());
         title.setForeground(Theme.getForeground());
         title.setOpaque(true);
+        title.setPreferredSize(new Dimension(600, 100));
         editCar.add(title, BorderLayout.NORTH);
 
         // Add form components
@@ -1620,90 +1599,97 @@ public class VehiclesPage extends JPanel implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 2;
-        rightContainer.add(createVinNumberInputContainer(vehicle.getVinNumber()), gbc);
+        rightContainer.add(selectButton, gbc);
 
         gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
+        rightContainer.add(removeButton, gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        rightContainer.add(createVinNumberInputContainer(vehicle.getVinNumber()), gbc);
+
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
         rightContainer.add(createRegistrationNumberInputContainer(vehicle.getRegistrationNumber()), gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.gridwidth = 3;
         rightContainer.add(createBrandInputContainer(vehicle.getBrand()), gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 2;
         rightContainer.add(createModelInputContainer(vehicle.getModel()), gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 1;
         rightContainer.add(createYearInputContainer(Integer.toString(vehicle.getYear())), gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.gridwidth = 2;
         rightContainer.add(createPriceInputContainer(Double.toString(vehicle.getRentalPriceDay())), gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.gridwidth = 1;
         rightContainer.add(createColorInputContainer(Color.decode(vehicle.getColor()),
                 VehicleController.processClosestColorName(Color.decode(vehicle.getColor()))), gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 1;
         rightContainer.add(createCapacityInputContainer(Integer.toString(vehicle.getCapacity())), gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 1;
         rightContainer.add(createHorsepowerInputContainer(Integer.toString(vehicle.getHorsepower())), gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 1;
         rightContainer.add(createMpgInputContainer(Double.toString(vehicle.getMpg())), gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         gbc.gridwidth = 1;
         rightContainer.add(createTransmissionInputContainer(vehicle.getTransmission().toUpperCase()), gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         gbc.gridwidth = 1;
         rightContainer.add(createFuelTypeInputContainer(vehicle.getFuelType().toUpperCase()), gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         gbc.gridwidth = 1;
         rightContainer.add(createVehicleTypeInputContainer(vehicle.getVehicleType()), gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 8;
         gbc.gridwidth = 3;
         rightContainer.add(createSeatInputContainer(vehicle.getSeatingCapacity()), gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 9;
         gbc.gridwidth = 3;
         rightContainer.add(createInputContainer("Features", 3, vehicle.getFeatures()), gbc);
 
-        formPanel.add(informationPanel);
-
-        editCar.add(formPanel, BorderLayout.CENTER);
-
         // Add submit button
-        RoundedButton submitButton = new RoundedButton(20, Theme.getSpecial());
+        RoundedButton submitButton = new RoundedButton(10, Theme.getSpecial());
         submitButton.setText("Submit");
         submitButton.setForeground(Theme.getSpecialForeground());
-        submitButton.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(30f));
+        submitButton.setFont(CustomFonts.OPEN_SANS_BOLD.deriveFont(20f));
         submitButton.setFocusable(false);
-        submitButton.setPreferredSize(new Dimension(1600, 100));
+        submitButton.setBorderPainted(false);
+        submitButton.setPreferredSize(new Dimension(150, 75));
         submitButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent evt) {
@@ -1726,7 +1712,14 @@ public class VehiclesPage extends JPanel implements ActionListener {
             }
         });
         submitButton.addActionListener(e -> handleEdit(vehicle));
-        editCar.add(submitButton, BorderLayout.SOUTH);
+        gbc.gridx = 2;
+        gbc.gridy = 10;
+        gbc.gridwidth = 1;
+        rightContainer.add(submitButton, gbc);
+
+        formPanel.add(informationPanel);
+
+        editCar.add(formPanel, BorderLayout.CENTER);
 
         // Finalize and show the dialog
         editCar.pack();
@@ -2066,6 +2059,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         yearInput.setForeground(Color.BLACK);
         yearInput.setBorder(new LineBorder(Color.BLACK, 2));
         yearInput.setSelectedItem(selectItem);
+        yearInput.setFocusable(false);
 
         yearInputPanel.add(yearLabel, gbc);
         yearInputPanel.add(yearInput, gbc);
@@ -2169,6 +2163,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
             selectedItem = "MANUAL";
         }
         transmissionInput.setSelectedItem(selectedItem);
+        transmissionInput.setFocusable(false);
 
         transmissionInputPanel.add(transmissionLabel, gbc);
         transmissionInputPanel.add(transmissionInput, gbc);
@@ -2199,6 +2194,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         fuelTypeInput.setForeground(Color.BLACK);
         fuelTypeInput.setBorder(new LineBorder(Color.BLACK, 2));
         fuelTypeInput.setSelectedItem(selectedItem);
+        fuelTypeInput.setFocusable(false);
 
         fuelTypeInputPanel.add(fuelTypeLabel, gbc);
         fuelTypeInputPanel.add(fuelTypeInput, gbc);
@@ -2228,6 +2224,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         vehicleTypeInput.setForeground(Color.BLACK);
         vehicleTypeInput.setBorder(new LineBorder(Color.BLACK, 2));
         vehicleTypeInput.setSelectedItem(selectedItem);
+        vehicleTypeInput.setFocusable(false);
 
         vehicleTypeInputPanel.add(vehicleTypeLabel, gbc);
         vehicleTypeInputPanel.add(vehicleTypeInput, gbc);
@@ -2428,25 +2425,31 @@ public class VehiclesPage extends JPanel implements ActionListener {
         // Image Upload Components
         JPanel imageUploadPanel = new JPanel(new BorderLayout());
 
+        selectButton = new RoundedButton(10,Theme.getBackground());
+        selectButton.setText("Select Image");
+        selectButton.setFocusable(false);
+        selectButton.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        selectButton.setPreferredSize(new Dimension(400, 50));
+        selectButton.setMinimumSize(new Dimension(400, 50));
+        selectButton.setForeground(Theme.getForeground());
+        selectButton.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(10, 15, 10, 15)));
+        
+        removeButton = new RoundedButton(10,Theme.getBackground());
+        removeButton.setText("Remove");
+        removeButton.setFocusable(false);
+        removeButton.setFont(CustomFonts.ROBOTO_SEMI_BOLD.deriveFont(15f));
+        removeButton.setPreferredSize(new Dimension(200, 50));
+        removeButton.setMinimumSize(new Dimension(200, 50));
+        removeButton.setForeground(Theme.getForeground());
+        removeButton.setBorder(new CompoundBorder(new LineBorder(Color.BLACK, 2), new EmptyBorder(10, 15, 10, 15)));
+        selectButton.addActionListener(this::handleImageSelect);
+        removeButton.addActionListener(this::handleImageRemove);
+
         // Label for image preview
         imageLabel = new JLabel("No Image Selected", JLabel.CENTER);
         imageLabel.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(15f));
         imageLabel.setBorder(BorderFactory.createLineBorder(Theme.getTransparencyColor()));
         imageLabel.setPreferredSize(new Dimension(500, 500));
-
-        // Buttons
-        JPanel buttonPanel = new JPanel(new FlowLayout());
-        buttonPanel.setBackground(Theme.getBackground());
-        selectButton = new JButton("Select Image");
-        selectButton.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(20f));
-        selectButton.setPreferredSize(new Dimension(250, 100));
-        selectButton.setFocusable(false);
-
-        removeButton = new JButton("Remove");
-        removeButton.setFont(CustomFonts.OPEN_SANS_SEMI_BOLD.deriveFont(20f));
-        removeButton.setPreferredSize(new Dimension(250, 100));
-        removeButton.setFocusable(false);
-        removeButton.setEnabled(false);
 
         if (existingImagePath != null && !existingImagePath.isEmpty()) {
             try {
@@ -2462,16 +2465,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
             }
         }
 
-        buttonPanel.add(selectButton);
-        buttonPanel.add(removeButton);
-
         // Add to panel
         imageUploadPanel.add(imageLabel, BorderLayout.CENTER);
-        imageUploadPanel.add(buttonPanel, BorderLayout.SOUTH);
-
-        // Event Listeners
-        selectButton.addActionListener(this::handleImageSelect);
-        removeButton.addActionListener(this::handleImageRemove);
 
         return imageUploadPanel;
     }
@@ -2511,6 +2506,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         selectedImageFile = null;
         selectedImagePreview = null;
         imageLabel.setIcon(null);
+        imageLabel.setText("No Image Selected");
         removeButton.setEnabled(false);
     }
 
