@@ -549,12 +549,6 @@ public class VehiclesPage extends JPanel implements ActionListener {
         carButton.setFocusable(false);
         carButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(12.5f));
         carButton.addActionListener(this);
-        carButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent evt) {
-                carButton.setBackground(Theme.getPressedBackground());
-            }
-        });
 
         bikeButton = new RoundedButton(10, Theme.getHoverBackground());
         bikeButton.setIcon(IconLoader.getBikeIcon());
@@ -563,12 +557,6 @@ public class VehiclesPage extends JPanel implements ActionListener {
         bikeButton.setFocusable(false);
         bikeButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(12.5f));
         bikeButton.addActionListener(this);
-        bikeButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent evt) {
-                bikeButton.setBackground(Theme.getPressedBackground());
-            }
-        });
 
         allButton = new RoundedButton(10, Theme.getBackground());
         allButton.setText("ALL");
@@ -579,12 +567,6 @@ public class VehiclesPage extends JPanel implements ActionListener {
         allButton.setForeground(Theme.getForeground());
         allButton.setFont(CustomFonts.ROBOTO_BOLD.deriveFont(15f));
         allButton.addActionListener(this);
-        allButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent evt) {
-                allButton.setBackground(Theme.getPressedBackground());
-            }
-        });
 
         searchBar.setFont(CustomFonts.ROBOTO_REGULAR.deriveFont(20f));
         searchBar.setForeground(Theme.getSecondaryForeground());
@@ -1869,7 +1851,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
 
             @Override
             public void mousePressed(MouseEvent evt) {
-                availableButton.setBackground(Theme.getHoverBackground());
+                availableButton.setBackground(Theme.getBackground());
             }
 
             @Override
