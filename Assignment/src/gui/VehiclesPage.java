@@ -680,7 +680,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
     private JComboBox<String> yearComboBox;
     private JComboBox<String> carTypeComboBox;
     private JLabel carTypeLabel;
-    private String[] vehicleType = { "ALL", "suv", "mpv", "sedan", "convertible", "coupe", "pickup truck", "hatchback",
+    private String[] vehicleType = { "suv", "mpv", "sedan", "convertible", "coupe", "pickup truck", "hatchback",
             "wagon", "touring", "cruiser", "superbike" };
     private JComboBox<String> transTypeComboBox;
     private JComboBox<String> fuelTypeComboBox;
@@ -823,6 +823,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         carTypeLabel.setForeground(Theme.getForeground());
 
         carTypeComboBox = new JComboBox<>(vehicleType);
+        carTypeComboBox.insertItemAt("ALL", 0);
         carTypeComboBox.setForeground(Color.BLACK);
         carTypeComboBox.setFocusable(false);
         carTypeComboBox.addActionListener(this);
@@ -923,6 +924,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
         priceFilterPanel.add(pricePanel);
 
         yearComboBox.setSelectedIndex(0);
+        carTypeComboBox.setSelectedIndex(0);
 
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 15));
@@ -1475,6 +1477,8 @@ public class VehiclesPage extends JPanel implements ActionListener {
         gbc.gridwidth = 3;
         rightContainer.add(createInputContainer("Features", 3, ""), gbc);
 
+        updateVehicleTypeDropdown(Car.getCarTypes());
+
         // Add submit button
         RoundedButton submitButton = new RoundedButton(10, Theme.getSpecial());
         submitButton.setText("Submit");
@@ -1574,6 +1578,12 @@ public class VehiclesPage extends JPanel implements ActionListener {
         rightContainer.setPreferredSize(null);
         rightContainer.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
         rightContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        if (vehicle instanceof Car) {
+            updateVehicleTypeDropdown(Car.getCarTypes());
+        } else {
+            updateVehicleTypeDropdown(Bike.getBikeTypes());
+        }
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -2526,6 +2536,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                     ((String) vehicleTypeInput.getSelectedItem()).toLowerCase(), (int) seatInput.getValue(),
                     availabilitySelection, inputField.getText());
             VehicleController.processAddVehiclestoDAO(newVehicle);
+            ImageLoader.cacheImageIfNeeded(newVehicle);
             dialog.showDialog("SUCCESS", "Submission Successful", "Added Successfully", "Successfully added a vehicle",
                     false);
         } else {
@@ -2543,6 +2554,7 @@ public class VehiclesPage extends JPanel implements ActionListener {
                     ((String) vehicleTypeInput.getSelectedItem()).toLowerCase(), (int) seatInput.getValue(),
                     availabilitySelection, inputField.getText());
             VehicleController.processAddVehiclestoDAO(newVehicle);
+            ImageLoader.cacheImageIfNeeded(newVehicle);
             dialog.showDialog("SUCCESS", "Submission Successful", "Added Successfully", "Successfully added a vehicle",
                     false);
         }
@@ -2602,10 +2614,13 @@ public class VehiclesPage extends JPanel implements ActionListener {
                 return;
             }
             newVehicle.setImagePath("images/cars/" + VehicleController.processGetImagePath(selectedImageFile));
+            File imageFile = new File(vehicle.getImagePath());
+            imageFile.delete();
         }
         VehicleController.processUpdateVehiclefromDAO(newVehicle);
         dialog.showDialog("SUCCESS", "Editing Successful", "Updated Successfully", "Successfully updated the vehicle",
                 false);
+        ImageLoader.cacheImageIfNeeded(newVehicle);
 
         vehicles = new ArrayList<>(VehicleController.processVehicles());
         sortedVehicles = vehicles;
