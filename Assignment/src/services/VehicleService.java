@@ -475,7 +475,7 @@ public class VehicleService {
     }
 
     public static boolean validateRegistrationNumber(String registrationNumber) {
-        return registrationNumber != null && !registrationNumber.isEmpty() && !registrationNumber.matches("[A-Z0-9 ]+")
+        return registrationNumber != null && !registrationNumber.isEmpty() && registrationNumber.matches("[A-Z0-9 ]+");
     }
 
     public static boolean validateRentalPriceDay(String rentalPriceDay) {
