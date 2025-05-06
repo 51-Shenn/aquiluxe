@@ -75,6 +75,7 @@ public class RentalPage extends JPanel {
     private User user = new User();
 
     private boolean validDetails = false;
+    private boolean validBilling = false;
 
     private JLabel rentalPriceLabel;
     private JLabel insurancePriceLabel;
@@ -414,7 +415,7 @@ public class RentalPage extends JPanel {
                 getPaymentDetails();
 
                 // process data
-                if (validDetails) {
+                if (validDetails && validBilling) {
                     int rentalId = rentalController.processRental(rental);
                     rental.setRentalId(rentalId);
                     rentalController.processPayment(rental, payment);
@@ -440,6 +441,7 @@ public class RentalPage extends JPanel {
                     GUIComponents.subCardPanel.repaint();
 
                     validDetails = false;
+                    validBilling = false;
                 }
             } catch (Exception ex) {
                 System.err.println(ex.getMessage());
@@ -511,6 +513,8 @@ public class RentalPage extends JPanel {
 
         rental.getRentCustomer().setAddress(getInputValue("BillingAddress"));
         rentalController.processCustomerAddress(rental.getRentCustomer());
+
+        validBilling = true;
     }
 
     // Rental Details

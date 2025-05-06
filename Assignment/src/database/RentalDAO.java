@@ -80,28 +80,6 @@ public class RentalDAO {
         return customerId;
     }
 
-    // overloaded method to get customer ID by user ID
-    private static int getCustomerIdbyUserId(User user) {
-        String sql = "SELECT customer_id FROM customers WHERE user_id = ? ORDER BY created_at DESC LIMIT 1;";
-        int customerId = -1;
-
-        try (Connection conn = DatabaseConnection.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, user.getUserId());
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    customerId = rs.getInt("customer_id");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("\nFAILED TO GET CUSTOMER ID\n");
-        }
-        return customerId;
-    }
-
     // get user ID by rental
     public static int getUserbyRental(Rental rental) {
         String sql = "SELECT user_id FROM customers WHERE customer_id = ? ORDER BY created_at DESC LIMIT 1;";
@@ -222,13 +200,13 @@ public class RentalDAO {
 
     // get rentals by user ID
     public static List<Rental> getRentalsByUser(User user) {
-        String sql = "SELECT * FROM rentals WHERE customer_id = ?";
+        String sql = "SELECT * FROM rentals WHERE customer_id IN (SELECT customer_id FROM customers WHERE user_id = ?)";
         List<Rental> rentals = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, getCustomerIdbyUserId(user));
+            stmt.setInt(1, user.getUserId());
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
