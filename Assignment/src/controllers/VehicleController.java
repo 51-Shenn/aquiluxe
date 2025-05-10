@@ -217,7 +217,6 @@ public class VehicleController {
         vehicle.setRentalPriceDay(0);
         vehicle.setTransmission("Deleted");
         vehicle.setFuelType("Deleted");
-        vehicle.setVehicleType("Deleted");
         vehicle.setSeatingCapacity(0);
         vehicle.setAvailability(false);
         vehicle.setFeatures("Deleted");

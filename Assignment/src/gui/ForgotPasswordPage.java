@@ -305,8 +305,16 @@ public class ForgotPasswordPage extends AuthenticationPage {
                         passwordValidationLabel, confirmPasswordValidationLabel);
                 if (isValidForgotPasswordDetails) {
                     currentPage = "USER";
-                    this.frame.setContentPane(new SignInPage(this.frame, this.panel, this.user));
-                    this.frame.validate();
+                    // GUIComponents.refreshPages(frame, panel, user, OverflowMenu.getGuiComponents());
+                    // MainApp.getGuiComponents().setVisible(true);
+                    // GUIComponents.topBarPanel.setVisible(true);
+                    GUIComponents.mainCardLayout.show(GUIComponents.mainCardPanel, "SignInPage");
+                    GUIComponents.signInPanel.revalidate();
+                    GUIComponents.signInPanel.repaint();
+                    GUIComponents.mainCardPanel.revalidate();
+                    GUIComponents.mainCardPanel.repaint();
+
+
 
                     Dialog dialog = new Dialog(this.frame);
                     dialog.showDialog(
